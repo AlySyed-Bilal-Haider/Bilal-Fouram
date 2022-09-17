@@ -12,15 +12,15 @@ const web3 = new Web3(
 function App() {
   const [open, setOpen] = useState(false);
 
-  // useEffect(() => {
-  //   let chain = async () => {
-  //     const chainid = await web3.eth.getChainId();
-  //     if (chainid !== 97) {
-  //       setOpen(true);
-  //     }
-  //   };
-  //   chain();
-  // }, []);
+  useEffect(() => {
+    let chain = async () => {
+      const chainid = await web3.eth.getChainId();
+      if (chainid !== 97) {
+        setOpen(true);
+      }
+    };
+    chain();
+  }, []);
 
   return (
     <>
