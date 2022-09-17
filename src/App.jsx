@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Home from './components/Home';
 import Web3 from "web3";
 import "./App.css";
 import Header from "./components/Header";
@@ -25,6 +26,7 @@ function App() {
     <>
       <NetworkChange open={open} setOpen={setOpen} />
       <Header />
+      <Home/>
     </>
   );
 }

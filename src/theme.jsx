@@ -3,9 +3,9 @@ import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 let theme = createTheme({
   palette: {
     primary: {
-      main: "#0C0C0C",
-      light: "#313439",
-      contrastText: "#fff",
+      main: "#BA995B",
+      light: "#A78A52",
+      lightmain: "#D8BB81",
     },
     secondary: {
       main: "#06044a",
@@ -13,9 +13,14 @@ let theme = createTheme({
       contrastText: "#000000",
     },
     text: {
-      primary: "#fff",
-      secondary: "#35343f",
+      main:"#ffffff",
+      primary: "#E3D6BD",
+      secondary: "#A78A52",
+      lightcolor:"#EEE8C8"
     },
+    hover:{
+      main:'#CDB17A'
+    }
   },
 });
 

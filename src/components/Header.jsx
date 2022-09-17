@@ -10,9 +10,12 @@ import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import MenuIcon from "@mui/icons-material/Menu";
+import InputBase from "@mui/material/InputBase";
 import clsx from "clsx";
 import { AppContext } from "../utils";
 import { Paper } from "@mui/material";
+import logo from '../images/logo.png';
+import SearchIcon from '@mui/icons-material/Search';
 import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
 
 const useStyles = makeStyles({
@@ -73,7 +76,7 @@ export default function Header() {
         <img width="100px" src="/logo.png" alt="" />
       </Box>
       <List>
-        {["About", "Services", "Roadmap", "FAQ", "Statistic"].map(
+        {[ "Log in", "Sign up"].map(
           (text, index) => (
             <ListItem
               button
@@ -84,12 +87,13 @@ export default function Header() {
               key={text}
             >
               <ListItemText
-                style={{
+                sx={{
                   textTransform: "capitalize",
                   textAlign: "center",
                   textDecoration: "none",
                   cursor: "pointer",
-                  color: "#ffffff",
+                  color: "text.primary",
+                  fontSize:"13px"
                 }}
                 primary={text}
               />
@@ -98,7 +102,7 @@ export default function Header() {
         )}
       </List>
       <Box mb={1} display="flex" justifyContent="center">
-        {account ? (
+        {/* {account ? (
           <Box
             width="90%"
             height="42px"
@@ -108,7 +112,7 @@ export default function Header() {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            color="#ffffff"
+            color="primary.main"
             fontWeight="500"
             fontSize="16px"
             onClick={() => disconnect()}
@@ -119,10 +123,10 @@ export default function Header() {
         ) : (
           <Box
             zIndex={1}
-            style={{
+            sx={{
               cursor: "pointer",
+              bgcolor:"primary.main"
             }}
-            bgcolor="#098CDC"
             width="90%"
             height="42px"
             fontWeight="500"
@@ -136,31 +140,31 @@ export default function Header() {
           >
             Connect
           </Box>
-        )}
+        )} */}
       </Box>
     </div>
   );
   return (
     <>
       <ToastNotify alertState={alertState} setAlertState={setAlertState} />
-      <Box
+       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        style={{
-          background: "transparent",
+        sx={{
+          backgroundColor: "primary.main",
           zIndex: "100px",
+          py:1
         }}
-        height="92px"
+        height="52px"
         width="100%"
       >
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            pl={matches ? 0 : 5}
-            pr={matches ? 0 : 5}
+
           >
             <Box
               display="flex"
@@ -169,14 +173,14 @@ export default function Header() {
               // flexBasis="20%"
             >
               <Box
-                style={{
+                sx={{
                   textDecoration: "none",
                   cursor: "pointer",
-                  color: "#000000",
+                 
                   fontSize: "20px",
                 }}
               >
-                Logo
+                <img src={logo} alt="Miner dwo" style={{width:"30px",height:"30px"}}/>
               </Box>
             </Box>
             <Box
@@ -192,67 +196,53 @@ export default function Header() {
                 alignItems="center"
               >
                 <Hidden mdDown>
-                  <Box
-                    mr={6}
-                    fontSize="20px"
-                    style={{
-                      textDecoration: "none",
-                      cursor: "pointer",
-                      color: "#000000",
-                    }}
-                  >
-                    About
-                  </Box>
-                  <Box
-                    mr={6}
-                    fontSize="20px"
-                    zIndex="1"
-                    style={{
-                      textDecoration: "none",
-                      cursor: "pointer",
-                      color: "#000000",
-                    }}
-                  >
-                    Services
-                  </Box>
+                 
 
                   <Box
                     mr={6}
                     fontSize="20px"
                     zIndex="1"
-                    style={{
+                    sx={{
+                      display:'flex',
+                      justifyContent:"center",
+                      alignItems:'center',
                       textDecoration: "none",
                       cursor: "pointer",
-                      color: "#000000",
+                      color: "text.primary",
+                      backgroundColor:"primary.light",
+                      borderRadius:"4px"
                     }}
                   >
-                    Roadmap
+                    <SearchIcon sx={{ml:2}}/>
+                    <input style={{height:"36px",padding:"10px 20px 8px 10px",
+                  backgroundColor:"#A78A52",border:"none",outline:"none",
+               }} type="text" name="search" placeholder="search"/>
                   </Box>
                   <Box
                     mr={6}
-                    fontSize="20px"
+                    fontSize="13px"
                     zIndex="1"
-                    style={{
+                    sx={{
                       textDecoration: "none",
                       cursor: "pointer",
-                      color: "#000000",
+                      color: "text.primary",
                     }}
                   >
-                    FAQ
+                    Log in
                   </Box>
                   <Box
                     mr={6}
-                    fontSize="20px"
+                    fontSize="13px"
                     zIndex="1"
-                    style={{
+                    sx={{
                       textDecoration: "none",
                       cursor: "pointer",
-                      color: "#000000",
+                      color: "text.primary",
                     }}
                   >
-                    Statistic
+                    Sign up
                   </Box>
-                  {account ? (
+                  {/* {account ? (
                     <Box
                       width="130px"
                       height="42px"
@@ -290,7 +280,7 @@ export default function Header() {
                     >
                       Connect
                     </Box>
-                  )}
+                  )} */}
                 </Hidden>
               </Box>
 
@@ -326,7 +316,7 @@ export default function Header() {
             </Box>
           </Box>
         </Container>
-      </Box>
+      </Box> 
     </>
   );
 }
