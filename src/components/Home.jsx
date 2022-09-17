@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button, Box, Container, Typography, Grid } from "@mui/material";
 import CloudOffIcon from "@mui/icons-material/CloudOff";
-import useMediaQuery from '@mui/material/useMediaQuery';
+import useMediaQuery from "@mui/material/useMediaQuery";
 import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 const discussion = [
   {
@@ -19,7 +19,7 @@ const discussion = [
     icons: <CloudOffIcon />,
     maintext: "Support",
     subtext: "How do I get any help on here?",
-    color:"white"
+    color: "white",
   },
   {
     icons: <CloudOffIcon />,
@@ -46,17 +46,17 @@ const discussion = [
   },
 ];
 export default function Home() {
-    const matches = useMediaQuery('(max-width:750px)');
+  const matches = useMediaQuery("(max-width:750px)");
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Container maxWidth="lg" sx={{ mt:{md:4,xs:0} }}>
+      <Container maxWidth="lg" sx={{ mt: { md: 4, xs: 0 } }}>
         <Box
           sx={{
             display: "flex",
             justifyContent: "flex-start",
             alignItems: "center",
-            display:{md:'block',xs:'none'}
+            display: { md: "block", xs: "none" },
           }}
         >
           <Button
@@ -87,7 +87,7 @@ export default function Home() {
           </Button>
         </Box>
       </Container>
-      <Container maxWidth="lg" sx={{ mt:{md:4,xs:0.1} }}>
+      <Container maxWidth="lg" sx={{ mt: { md: 4, xs: 0.1 } }}>
         <Grid container>
           {discussion?.map((items, index) => {
             return (
@@ -96,10 +96,14 @@ export default function Home() {
                 md={4}
                 xs={12}
                 sx={{
-                    mt:{md:0,xs:1},
+                  mt: { md: 0, xs: 1 },
                   height: "200px",
                   backgroundColor:
-                    index == 0 ? "primary.main" :  index==2 ?"text.main":"primary.lightmain",
+                    index == 0
+                      ? "primary.main"
+                      : index == 2
+                      ? "text.main"
+                      : "primary.lightmain",
                 }}
               >
                 <Box
@@ -120,21 +124,30 @@ export default function Home() {
                       py: 2,
                     }}
                   >
-                    <Box  sx={{ color:  index==2 ?"primary.main":"text.main",mt:0.5 }}>{items.icons}</Box> 
+                    <Box
+                      sx={{
+                        color: index == 2 ? "primary.main" : "text.main",
+                        mt: 0.5,
+                      }}
+                    >
+                      {items.icons}
+                    </Box>
                     <Typography
                       sx={{
                         ml: 1,
                         fontSize: "18px",
                         fontWeight: 700,
-                        color:  index==2 ?"primary.main":"text.main",
-                    
+                        color: index == 2 ? "primary.main" : "text.main",
                       }}
                     >
-                    {items.maintext}
+                      {items.maintext}
                     </Typography>
                   </Box>
                   <Typography
-                    sx={{ fontSize: "12px",  color:  index==2 ?"primary.main":"text.lightcolor" }}
+                    sx={{
+                      fontSize: "12px",
+                      color: index == 2 ? "primary.main" : "text.lightcolor",
+                    }}
                   >
                     {items.subtext}
                   </Typography>

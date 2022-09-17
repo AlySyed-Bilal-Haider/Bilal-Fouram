@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Home from './components/Home';
+import Home from "./components/Home";
 import Web3 from "web3";
 import "./App.css";
 import Header from "./components/Header";
@@ -12,21 +12,21 @@ const web3 = new Web3(
 function App() {
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    let chain = async () => {
-      const chainid = await web3.eth.getChainId();
-      if (chainid !== 97) {
-        setOpen(true);
-      }
-    };
-    chain();
-  }, []);
+  // useEffect(() => {
+  //   let chain = async () => {
+  //     const chainid = await web3.eth.getChainId();
+  //     if (chainid !== 97) {
+  //       setOpen(true);
+  //     }
+  //   };
+  //   chain();
+  // }, []);
 
   return (
     <>
       <NetworkChange open={open} setOpen={setOpen} />
       <Header />
-      <Home/>
+      <Home />
     </>
   );
 }
