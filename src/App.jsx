@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Home from './components/Home';
+import {Box} from "@mui/material";
 import Web3 from "web3";
 import "./App.css";
 import Header from "./components/Header";
-import NetworkChange from "./networkSwitch";
+import NetworkChange from "./networkSwitch"; 
+import AllDiscussions from './components/AllDiscussions';
+import Knowledgebase from './components/Knowledgebase';
+import {Routes,Route} from 'react-router-dom';
 const web3 = new Web3(
   Web3.givenProvider
     ? Web3.givenProvider
@@ -25,8 +29,15 @@ function App() {
   return (
     <>
       <NetworkChange open={open} setOpen={setOpen} />
+      <Box sx={{backgroundColor:"body.main"}}>
       <Header />
-      <Home/>
+      {/* <Home/> */}
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/AllDiscussions" element={<AllDiscussions/>}/>
+        <Route path="/Knowledgebase" element={<AllDiscussions/>}/>
+      </Routes>
+      </Box>
     </>
   );
 }

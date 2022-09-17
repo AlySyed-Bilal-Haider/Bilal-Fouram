@@ -14,8 +14,8 @@ import InputBase from "@mui/material/InputBase";
 import clsx from "clsx";
 import { AppContext } from "../utils";
 import { Paper } from "@mui/material";
-import logo from '../images/logo.png';
-import SearchIcon from '@mui/icons-material/Search';
+import logo from "../images/logo.png";
+import SearchIcon from "@mui/icons-material/Search";
 import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
 
 const useStyles = makeStyles({
@@ -27,7 +27,7 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   paper: {
-    background: "#1C0D38 !important",
+    // background: "primary.main !important",
     justifyContent: "center",
   },
   hover: {
@@ -40,6 +40,7 @@ const useStyles = makeStyles({
 export default function Header() {
   const { account, connect, disconnect, signer } = useContext(AppContext);
   const tokenContract = useTokenContract(signer);
+  const [searchstate, setsearchstate] = useState(true);
   const [alertState, setAlertState] = useState({
     open: false,
     message: "",
@@ -76,30 +77,28 @@ export default function Header() {
         <img width="100px" src="/logo.png" alt="" />
       </Box>
       <List>
-        {[ "Log in", "Sign up"].map(
-          (text, index) => (
-            <ListItem
-              button
-              style={{
-                justifyContent: "center",
-                borderBottom: "1px solid #bbb8b8",
+        {["Log in", "Sign up"].map((text, index) => (
+          <ListItem
+            button
+            style={{
+              justifyContent: "center",
+              borderBottom: "1px solid #bbb8b8",
+            }}
+            key={text}
+          >
+            <ListItemText
+              sx={{
+                textTransform: "capitalize",
+                textAlign: "center",
+                textDecoration: "none",
+                cursor: "pointer",
+                color: "text.primary",
+                fontSize: "13px",
               }}
-              key={text}
-            >
-              <ListItemText
-                sx={{
-                  textTransform: "capitalize",
-                  textAlign: "center",
-                  textDecoration: "none",
-                  cursor: "pointer",
-                  color: "text.primary",
-                  fontSize:"13px"
-                }}
-                primary={text}
-              />
-            </ListItem>
-          )
-        )}
+              primary={text}
+            />
+          </ListItem>
+        ))}
       </List>
       <Box mb={1} display="flex" justifyContent="center">
         {/* {account ? (
@@ -147,14 +146,14 @@ export default function Header() {
   return (
     <>
       <ToastNotify alertState={alertState} setAlertState={setAlertState} />
-       <Box
+      <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         sx={{
           backgroundColor: "primary.main",
           zIndex: "100px",
-          py:1
+          py: 1,
         }}
         height="52px"
         width="100%"
@@ -164,7 +163,6 @@ export default function Header() {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-
           >
             <Box
               display="flex"
@@ -176,11 +174,15 @@ export default function Header() {
                 sx={{
                   textDecoration: "none",
                   cursor: "pointer",
-                 
+
                   fontSize: "20px",
                 }}
               >
-                <img src={logo} alt="Miner dwo" style={{width:"30px",height:"30px"}}/>
+                <img
+                  src={logo}
+                  alt="Miner dwo"
+                  style={{ width: "30px", height: "30px" }}
+                />
               </Box>
             </Box>
             <Box
@@ -196,27 +198,46 @@ export default function Header() {
                 alignItems="center"
               >
                 <Hidden mdDown>
-                 
-
                   <Box
                     mr={6}
                     fontSize="20px"
                     zIndex="1"
                     sx={{
-                      display:'flex',
-                      justifyContent:"center",
-                      alignItems:'center',
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                       textDecoration: "none",
                       cursor: "pointer",
                       color: "text.primary",
-                      backgroundColor:"primary.light",
-                      borderRadius:"4px"
+                      backgroundColor: "primary.light",
+                      borderRadius: "4px",
                     }}
                   >
-                    <SearchIcon sx={{ml:2}}/>
-                    <input style={{height:"36px",padding:"10px 20px 8px 10px",
-                  backgroundColor:"#A78A52",border:"none",outline:"none",
-               }} type="text" name="search" placeholder="search"/>
+                    <SearchIcon sx={{ ml: 2 }} />
+                    <input
+                      style={{
+                        height: "36px",
+                        padding: searchstate
+                          ? "10px 20px 8px 10px"
+                          : "10px 100px 8px 10px",
+                        backgroundColor: "#A78A52",
+                        border: "none",
+                        outline: "none",
+                        transitionProperty: "padding",
+                        transitionDuration: "0.5s",
+                        transitionTimingFunction: "linear",
+                        transitionDelay: "0s",
+                      }}
+                      type="text"
+                      name="search"
+                      placeholder="search"
+                      onClick={() => {
+                        setsearchstate(false);
+                      }}
+                      onMouseLeave={() => {
+                        setsearchstate(true);
+                      }}
+                    />
                   </Box>
                   <Box
                     mr={6}
@@ -299,8 +320,9 @@ export default function Header() {
                         }}
                       ></MenuIcon>
                     </Button>
-                    <Paper style={{ background: "#1C0D38" }}>
+                    <Paper sx={{ backgroundColor: "primary.main" }}>
                       <SwipeableDrawer
+                        sx={{ backgroundColor: "primary.main" }}
                         classes={{ paper: classes.paper }}
                         anchor={anchor}
                         open={state[anchor]}
@@ -316,7 +338,7 @@ export default function Header() {
             </Box>
           </Box>
         </Container>
-      </Box> 
+      </Box>
     </>
   );
 }

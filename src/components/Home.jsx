@@ -3,6 +3,7 @@ import { Button, Box, Container, Typography, Grid } from "@mui/material";
 import CloudOffIcon from "@mui/icons-material/CloudOff";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
+import { Link } from "react-router-dom";
 const discussion = [
   {
     icons: <CloudOffIcon />,
@@ -49,7 +50,7 @@ export default function Home() {
     const matches = useMediaQuery('(max-width:750px)');
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%"  }}>
       <Container maxWidth="lg" sx={{ mt:{md:4,xs:0} }}>
         <Box
           sx={{
@@ -83,7 +84,7 @@ export default function Home() {
               },
             }}
           >
-            All Discussions
+           <Link to="/AllDiscussions" style={{textDecoration:'none'}}>All Discussions</Link> 
           </Button>
         </Box>
       </Container>
