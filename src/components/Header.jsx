@@ -261,7 +261,7 @@ export default function Header() {
                       color: "text.primary",
                     }}
                   >
-                    Sign up
+                    <Link to="/signup" style={{textDecoration:'none'}}>Sign up </Link>
                   </Box>
                   {/* {account ? (
                     <Box
