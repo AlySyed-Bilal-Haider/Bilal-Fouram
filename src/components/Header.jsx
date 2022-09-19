@@ -17,7 +17,7 @@ import { Paper } from "@mui/material";
 import logo from "../images/logo.png";
 import SearchIcon from "@mui/icons-material/Search";
 import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
-
+import { Link } from "react-router-dom";
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -258,7 +258,7 @@ export default function Header() {
                     sx={{
                       textDecoration: "none",
                       cursor: "pointer",
-                      color: "text.primary",
+                      color: "text.primary"
                     }}
                   >
                     <Link to="/signup" style={{textDecoration:'none'}}>Sign up </Link>

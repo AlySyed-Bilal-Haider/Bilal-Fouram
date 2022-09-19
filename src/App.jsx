@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-<<<<<<< HEAD
 import Home from './components/Home';
 import {Box} from "@mui/material";
-=======
-import Home from "./components/Home";
->>>>>>> 2e9e08d91ff9f20ead33e727c576646f72d3775c
 import Web3 from "web3";
 import "./App.css";
 import Header from "./components/Header";
 import NetworkChange from "./networkSwitch"; 
 import AllDiscussions from './components/AllDiscussions';
-import Knowledgebase from './components/Knowledgebase';
 import {Routes,Route} from 'react-router-dom';
 import MainPage from './components/UserPenal/MainPage';
 const web3 = new Web3(
@@ -41,6 +36,12 @@ function App() {
         <Route path="/signup" element={<MainPage/>}/>
         <Route path="/AllDiscussions" element={<AllDiscussions/>}/>
         <Route path="/Knowledgebase" element={<AllDiscussions/>}/>
+        <Route path="/general" element={<AllDiscussions/>}/>
+        <Route path="/support" element={<AllDiscussions/>}/>
+        <Route path="/community" element={<AllDiscussions/>}/>
+        <Route path="/proposal" element={<AllDiscussions/>}/>
+        <Route path="/projectpropsal" element={<AllDiscussions/>}/>
+        <Route path="/feedback" element={<AllDiscussions/>}/>
       </Routes>
       </Box>
     </>
