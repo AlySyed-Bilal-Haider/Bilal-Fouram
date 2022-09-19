@@ -6,6 +6,7 @@ import {
   Button,
   useMediaQuery,
   Container,
+  Typography,
   Hidden,
   SwipeableDrawer,
   List,

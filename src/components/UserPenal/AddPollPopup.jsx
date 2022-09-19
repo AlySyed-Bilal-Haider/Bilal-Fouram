@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { withStyles, styled } from "@mui/styles";
 
-const StyleTextInput = styled(InputBase)(() => ({
+const StyleTextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
     borderRadius: "5px",
@@ -22,7 +22,7 @@ const StyleTextInput = styled(InputBase)(() => ({
       margin: 0,
     },
   },
-}));
+});
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
