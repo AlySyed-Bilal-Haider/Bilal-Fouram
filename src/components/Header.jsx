@@ -13,7 +13,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import InputBase from "@mui/material/InputBase";
 import clsx from "clsx";
 import { AppContext } from "../utils";
-import { Paper } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import logo from "../images/logo.png";
 import SearchIcon from "@mui/icons-material/Search";
 import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header() {
+export default function Header({setOpensign}) {
   const { account, connect, disconnect, signer } = useContext(AppContext);
   const tokenContract = useTokenContract(signer);
   const [searchstate, setsearchstate] = useState(true);
@@ -249,7 +249,7 @@ export default function Header() {
                       color: "text.primary",
                     }}
                   >
-                    Log in
+                    <Typography>Log in</Typography>
                   </Box>
                   <Box
                     mr={6}
@@ -261,7 +261,9 @@ export default function Header() {
                       color: "text.primary"
                     }}
                   >
-                    <Link to="/signup" style={{textDecoration:'none'}}>Sign up </Link>
+                    <Typography onClick={()=>{
+                      setOpensign(true);
+                    }}>Sign up </Typography>
                   </Box>
                   {/* {account ? (
                     <Box

@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Box, Container, Typography, Grid } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import {  useLocation,NavLink } from "react-router-dom";
+import Signup from './Signup';
 import MainHeader from './Common/MainHeader';
 import Knowledgebase from "./Knowledgebase";
 import General from "./General";
@@ -77,7 +78,7 @@ const mainHeader=(locationpath)=>{
 function AllDiscussions() {
   const location = useLocation();
   return (<>
-  {mainHeader(location.pathname)}
+   { location?.pathname && mainHeader(location?.pathname)} 
   
     <Box
       sx={{ width: "100%", backgroundColor: "body.main", minHeight: "100vh" }}
@@ -133,10 +134,11 @@ function AllDiscussions() {
               })}
             </Box>
           </Grid>
-          {renderComponent(location.pathname)}
+         { location?.pathname && renderComponent(location?.pathname)} 
         </Grid>
       </Container>
     </Box>
+   
     </>
   );
 }

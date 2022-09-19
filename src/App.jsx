@@ -8,6 +8,7 @@ import NetworkChange from "./networkSwitch";
 import AllDiscussions from './components/AllDiscussions';
 import {Routes,Route} from 'react-router-dom';
 import MainPage from './components/UserPenal/MainPage';
+import Signup from './components/Signup';
 const web3 = new Web3(
   Web3.givenProvider
     ? Web3.givenProvider
@@ -15,7 +16,7 @@ const web3 = new Web3(
 );
 function App() {
  const [open, setOpen] = useState(false);
-
+const [opensign,setOpensign]=useState(false);
   // useEffect(() => {
   //   let chain = async () => {
   //     const chainid = await web3.eth.getChainId();
@@ -28,9 +29,10 @@ function App() {
 
   return (
     <>
+    <Signup open={opensign} setOpensign={setOpensign}/>
       <NetworkChange open={open} setOpen={setOpen} />
       <Box sx={{backgroundColor:"body.main"}}>
-      <Header />
+      <Header open={opensign} setOpensign={setOpensign}/>
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/signup" element={<MainPage/>}/>
@@ -42,6 +44,7 @@ function App() {
         <Route path="/proposal" element={<AllDiscussions/>}/>
         <Route path="/projectpropsal" element={<AllDiscussions/>}/>
         <Route path="/feedback" element={<AllDiscussions/>}/>
+     
       </Routes>
       </Box>
     </>
