@@ -1,9 +1,10 @@
 import React from 'react'
 import Commompage from './Common/Commonpage';
-function Knowledgebase({title}) {
+function Proposal({title}) {
+    console.log("Proposal");
   return (
    <Commompage title={title}/>
   )
 }
 
-export default Knowledgebase;
+export default Proposal;

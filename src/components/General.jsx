@@ -1,9 +1,11 @@
 import React from 'react'
 import Commompage from './Common/Commonpage';
-function Knowledgebase({title}) {
+function General({title}) {
+    console.log("Genral");
+
   return (
    <Commompage title={title}/>
   )
 }
 
-export default Knowledgebase;
+export default General;

@@ -1,9 +1,10 @@
 import React from 'react'
 import Commompage from './Common/Commonpage';
-function Knowledgebase({title}) {
+function Feed({title}) {
+    console.log("Feed");
   return (
    <Commompage title={title}/>
   )
 }
 
-export default Knowledgebase;
+export default React.memo(Feed);
