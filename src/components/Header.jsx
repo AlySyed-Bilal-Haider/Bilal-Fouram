@@ -1,22 +1,27 @@
 import React, { useContext, useState } from "react";
-import Container from "@mui/material/Container";
-import Hidden from "@mui/material/Hidden";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import Box from "@mui/material/Box";
+import { Link } from "react-router-dom";
+import {
+  Paper,
+  Box,
+  Button,
+  useMediaQuery,
+  Container,
+  Hidden,
+  SwipeableDrawer,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
+// import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
-import InputBase from "@mui/material/InputBase";
-import clsx from "clsx";
-import { AppContext } from "../utils";
-import { Paper } from "@mui/material";
-import logo from "../images/logo.png";
 import SearchIcon from "@mui/icons-material/Search";
+import clsx from "clsx";
+
+import { AppContext } from "../utils";
 import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
+
+import logo from "../images/logo.png";
 
 const useStyles = makeStyles({
   list: {
@@ -261,7 +266,9 @@ export default function Header() {
                       color: "text.primary",
                     }}
                   >
-                    <Link to="/signup" style={{textDecoration:'none'}}>Sign up </Link>
+                    <Link to="/signup" style={{ textDecoration: "none" }}>
+                      Sign up{" "}
+                    </Link>
                   </Box>
                   {/* {account ? (
                     <Box
