@@ -1,18 +1,25 @@
 import React from "react";
-import { Typography, Box, InputBase, Button } from "@mui/material";
-import { styled } from "@mui/styles";
 import { NavLink } from "react-router-dom";
-import CloseIcon from '@mui/icons-material/Close';
-import "./Signup.css";
-import { Dialog, DialogContent, Slide } from "@mui/material";
+import {
+  Typography,
+  Dialog,
+  DialogContent,
+  Slide,
+  Box,
+  InputBase,
+  Button,
+} from "@mui/material";
+import { styled } from "@mui/styles";
 import { withStyles } from "@mui/styles";
+import CloseIcon from "@mui/icons-material/Close";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="bottom" ref={ref} {...props} />;
+  return <Slide direction="down" ref={ref} {...props} />;
 });
 const StyledModal = withStyles(() => ({
   root: {
-    "& .MuiDialog-paper":{
-     width:"25% !important"
+    "& .MuiDialog-paper": {
+      width: "350px !important",
     },
     "& .MuiDialog-root": {
       zIndex: "1301 !important",
@@ -20,6 +27,9 @@ const StyledModal = withStyles(() => ({
     },
     "&.MuiDialog-container": {
       overflowY: "hidden !important",
+    },
+    "& .MuiDialogContent-root": {
+      padding: "15px 0px !important",
     },
     "& .MuiDialog-paperScrollPaper": {
       backgroundColor: "#ffffff !important",
@@ -31,12 +41,16 @@ const StyledModal = withStyles(() => ({
     },
   },
 }))(Dialog);
-const TextInput = styled(InputBase)((theme) => ({
+
+const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
     borderRadius: "5px",
     color: "primary.main",
+    backgroundColor: "#fff",
     fontSize: "18px",
+    padding: "12px 20px",
+    marginTop: "10px",
     textAlign: "center",
     "&::-webkit-outer-spin-button": {
       WebkitAppearance: "none",
@@ -47,7 +61,7 @@ const TextInput = styled(InputBase)((theme) => ({
       margin: 0,
     },
   },
-}));
+});
 
 function Signup({ open, setOpensign }) {
   const handleClose = () => {
@@ -63,9 +77,9 @@ function Signup({ open, setOpensign }) {
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogContent className="dialoge__content__section">
-      <Box sx={{float:"right",p:1,cursor:'pointer'}}>
-       <CloseIcon sx={{color:"text.detail"}} onClick={handleClose}/>
-      </Box>
+        <Box sx={{ float: "right", p: 1, cursor: "pointer" }}>
+          <CloseIcon sx={{ color: "text.detail" }} onClick={handleClose} />
+        </Box>
         <Box
           sx={{
             width: "100%",
@@ -81,7 +95,7 @@ function Signup({ open, setOpensign }) {
                 fontSize: "20px",
                 paddingBottom: "20px",
                 color: "text.detail",
-                fontWeight:700
+                fontWeight: 700,
               }}
             >
               Sign up
@@ -93,50 +107,19 @@ function Signup({ open, setOpensign }) {
                 backgroundColor: "formscheme.main",
               }}
             >
-              <TextInput
-                type="text"
-                sx={{
-                  width: "100%",
-                  my: 1,
-                  color: "primary.main",
-                  backgroundColor: "white",
-                  padding: "3px 20px",
-                }}
-                placeholder="Username"
-              />
-              <br />
-              <TextInput
-                type="text"
-                sx={{
-                  width: "100%",
-                  my: 1,
-                  color: "primary.main",
-                  backgroundColor: "white",
-                  padding: "3px 20px",
-                }}
-                placeholder="Email"
-              />
-              <br />
-              <TextInput
-                type="text"
-                sx={{
-                  width: "100%",
-                  my: 1,
-                  color: "primary.main",
-                  backgroundColor: "white",
-                  padding: "3px 20px",
-                }}
-                placeholder="Password"
-              />
-              <br />
+              <TextInput fullWidth type="text" placeholder="Username" />
+
+              <TextInput fullWidth type="text" placeholder="Email" />
+
+              <TextInput fullWidth type="text" placeholder="Password" />
+
               <Button
                 type="submit"
                 sx={{
                   width: "100%",
                   my: 1,
+                  py: 1.5,
                   color: "text.main",
-                  p: 2,
-                  mt: 2,
                   backgroundColor: "primary.main",
                   "&:hover": {
                     backgroundColor: "primary.main",
@@ -146,7 +129,6 @@ function Signup({ open, setOpensign }) {
               >
                 Submit
               </Button>
-              <br />
             </Box>
             <Box
               sx={{
@@ -157,21 +139,24 @@ function Signup({ open, setOpensign }) {
               }}
             >
               <Typography
+                variant="body1"
+                component="span"
                 sx={{
-                  fontSize: "16px",
-                  fontWeight: 700,
                   padding: "20px",
-                  color: "text.lightcolor",
+                  color: "text.secondary",
                   backgroundColor: "white",
                 }}
               >
-                Already have an account ?
+                Already have an account?
               </Typography>
-              <NavLink
-                to="/"
-                style={{ color: "#BA995B", textDecoration: "none" }}
-              >
-                login
+              <NavLink to="/" style={{ textDecoration: "none" }}>
+                <Typography
+                  variant="body1"
+                  component="span"
+                  color="primary.lightmain"
+                >
+                  Log In
+                </Typography>
               </NavLink>
             </Box>
           </Box>

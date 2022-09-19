@@ -3,7 +3,6 @@ import { Typography, Box, InputBase, Button } from "@mui/material";
 import { styled } from "@mui/styles";
 import { NavLink } from "react-router-dom";
 import CloseIcon from '@mui/icons-material/Close';
-import "./Signup.css";
 import { Dialog, DialogContent, Slide } from "@mui/material";
 import { withStyles } from "@mui/styles";
 const Transition = React.forwardRef(function Transition(props, ref) {

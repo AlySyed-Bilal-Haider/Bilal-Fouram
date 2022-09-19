@@ -1,24 +1,29 @@
 import React, { useContext, useState } from "react";
-import Container from "@mui/material/Container";
-import Hidden from "@mui/material/Hidden";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import Box from "@mui/material/Box";
-import Login from './Login';
+import {
+  Paper,
+  Box,
+  Button,
+  useMediaQuery,
+  Container,
+  Typography,
+  Hidden,
+  SwipeableDrawer,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
+// import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
-import InputBase from "@mui/material/InputBase";
-import clsx from "clsx";
-import { AppContext } from "../utils";
-import { Paper, Typography } from "@mui/material";
-import logo from "../images/logo.png";
 import SearchIcon from "@mui/icons-material/Search";
+import clsx from "clsx";
+
+import { AppContext } from "../utils";
 import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
-import { Link } from "react-router-dom";
+import Login from './Login';
+
+import logo from "../images/logo.png";
+
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -38,7 +43,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header({setOpensign}) {
+export default function Header({ setOpensign }) {
   const { account, connect, disconnect, signer } = useContext(AppContext);
   const tokenContract = useTokenContract(signer);
   const [searchstate, setsearchstate] = useState(true);
@@ -262,12 +267,16 @@ export default function Header({setOpensign}) {
                     sx={{
                       textDecoration: "none",
                       cursor: "pointer",
-                      color: "text.primary"
+                      color: "text.primary",
                     }}
                   >
-                    <Typography onClick={()=>{
-                      setOpensign(true);
-                    }}>Sign up </Typography>
+                    <Typography
+                      onClick={() => {
+                        setOpensign(true);
+                      }}
+                    >
+                      Sign up{" "}
+                    </Typography>
                   </Box>
                   {/* {account ? (
                     <Box
