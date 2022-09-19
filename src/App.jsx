@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import Home from './components/Home';
 import {Box} from "@mui/material";
 import Web3 from "web3";
@@ -17,6 +17,7 @@ const web3 = new Web3(
 function App() {
  const [open, setOpen] = useState(false);
 const [opensign,setOpensign]=useState(false);
+
   // useEffect(() => {
   //   let chain = async () => {
   //     const chainid = await web3.eth.getChainId();
@@ -30,6 +31,7 @@ const [opensign,setOpensign]=useState(false);
   return (
     <>
     <Signup open={opensign} setOpensign={setOpensign}/>
+  
       <NetworkChange open={open} setOpen={setOpen} />
       <Box sx={{backgroundColor:"body.main"}}>
       <Header open={opensign} setOpensign={setOpensign}/>

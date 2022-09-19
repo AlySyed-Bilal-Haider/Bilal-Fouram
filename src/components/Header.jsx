@@ -8,6 +8,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
+import Login from './Login';
 import { makeStyles } from "@mui/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import InputBase from "@mui/material/InputBase";
@@ -41,6 +42,7 @@ export default function Header({setOpensign}) {
   const { account, connect, disconnect, signer } = useContext(AppContext);
   const tokenContract = useTokenContract(signer);
   const [searchstate, setsearchstate] = useState(true);
+  const [loginstate,setloginstate]=useState(false);
   const [alertState, setAlertState] = useState({
     open: false,
     message: "",
@@ -249,7 +251,9 @@ export default function Header({setOpensign}) {
                       color: "text.primary",
                     }}
                   >
-                    <Typography>Log in</Typography>
+                    <Typography onClick={()=>{
+                      setloginstate(true);
+                    }}>Log in</Typography>
                   </Box>
                   <Box
                     mr={6}
@@ -341,6 +345,7 @@ export default function Header({setOpensign}) {
           </Box>
         </Container>
       </Box>
+     {loginstate && <Login setloginstate={setloginstate} open={loginstate}/>}
     </>
   );
 }

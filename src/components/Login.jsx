@@ -49,9 +49,9 @@ const TextInput = styled(InputBase)((theme) => ({
   },
 }));
 
-function Signup({ open, setOpensign }) {
+function Login({open, setloginstate }) {
   const handleClose = () => {
-    setOpensign(false);
+    setloginstate(false);
   };
   return (
     <StyledModal
@@ -84,7 +84,7 @@ function Signup({ open, setOpensign }) {
                 fontWeight:700
               }}
             >
-              Sign up
+              Log in
             </Typography>
             <Box
               sx={{
@@ -93,38 +93,27 @@ function Signup({ open, setOpensign }) {
                 backgroundColor: "formscheme.main",
               }}
             >
+             
               <TextInput
-                type="text"
+                type="email"
                 sx={{
                   width: "100%",
                   my: 1,
                   color: "primary.main",
                   backgroundColor: "white",
-                  padding: "3px 20px",
-                }}
-                placeholder="Username"
-              />
-              <br />
-              <TextInput
-                type="text"
-                sx={{
-                  width: "100%",
-                  my: 1,
-                  color: "primary.main",
-                  backgroundColor: "white",
-                  padding: "3px 20px",
+                  padding: "15px 20px",
                 }}
                 placeholder="Email"
               />
               <br />
               <TextInput
-                type="text"
+                type="password"
                 sx={{
                   width: "100%",
                   my: 1,
                   color: "primary.main",
                   backgroundColor: "white",
-                  padding: "3px 20px",
+                  padding: "15px 20px",
                 }}
                 placeholder="Password"
               />
@@ -138,6 +127,7 @@ function Signup({ open, setOpensign }) {
                   p: 2,
                   mt: 2,
                   backgroundColor: "primary.main",
+                  padding: "15px 20px",
                   "&:hover": {
                     backgroundColor: "primary.main",
                   },
@@ -154,8 +144,21 @@ function Signup({ open, setOpensign }) {
                 alignItems: "center",
                 justifyContent: "center",
                 textAlign: "center",
+                flexDirection:"column"
               }}
             >
+                 <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                  color: "text.lightcolor",
+                  backgroundColor: "white",
+
+                }}
+              >
+                Password Forget
+              </Typography>
+              <Box> 
               <Typography
                 sx={{
                   fontSize: "16px",
@@ -165,14 +168,16 @@ function Signup({ open, setOpensign }) {
                   backgroundColor: "white",
                 }}
               >
-                Already have an account ?
+               
+                Don't have an account? 
               </Typography>
               <NavLink
                 to="/"
                 style={{ color: "#BA995B", textDecoration: "none" }}
               >
-                login
+                Sign up
               </NavLink>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -181,4 +186,4 @@ function Signup({ open, setOpensign }) {
   );
 }
 
-export default Signup;
+export default Login;
