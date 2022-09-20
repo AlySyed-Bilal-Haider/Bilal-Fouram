@@ -43,9 +43,10 @@ function Commonpage({ title }) {
       </Box>
       {/* 
       .........start main sections here ............. */}
-      {[1, 2, 3, 4, 5, 6, 7].map(() => {
+      {[1, 2, 3, 4, 5, 6, 7].map((i) => {
         return (
           <Box
+            key={i}
             sx={{
               mt: 2,
               pt: 0.5,

@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import router from './Routes/Signup.js';
+import router from './Routes/routes.js';
 import connectDB from './Database/ConnectDB.js';
 const url="mongodb+srv://bilal:minerdao12345@cluster0.flytvry.mongodb.net/?retryWrites=true&w=majority";
 const app=express();

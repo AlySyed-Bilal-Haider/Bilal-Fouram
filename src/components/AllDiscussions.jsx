@@ -107,6 +107,7 @@ function AllDiscussions() {
                 {sidebardata?.map(({ text, link }, index) => {
                   return (
                     <Box
+                      key={index}
                       sx={{
                         width: "100%",
                         cursor: "pointer",
@@ -145,4 +146,4 @@ function AllDiscussions() {
   );
 }
 
-export default AllDiscussions;
+export default React.memo(AllDiscussions);
