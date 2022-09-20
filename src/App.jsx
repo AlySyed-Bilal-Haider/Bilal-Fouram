@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Box } from "@mui/material";
 import Web3 from "web3";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 
 import "./App.css";
 import Header from "./components/Header";
@@ -12,6 +12,11 @@ import NetworkChange from "./networkSwitch";
 import AllDiscussions from "./components/AllDiscussions";
 import MainPage from "./components/UserPenal/MainPage";
 import Signup from "./components/Signup";
+import Likes from "./components/UserPenal/Likes";
+import Discussions from "./components/UserPenal/Discussion";
+import Post from "./components/UserPenal/Post";
+import Vote from "./components/UserPenal/Votes";
+import Mention from "./components/UserPenal/Mention";
 
 const web3 = new Web3(
   Web3.givenProvider
@@ -34,17 +39,17 @@ function App() {
 
   return (
     <>
-    <ToastContainer
-position="top-right"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-/>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
       <Signup open={opensign} setOpensign={setOpensign} />
       <NetworkChange open={open} setOpen={setOpen} />
@@ -61,6 +66,11 @@ pauseOnHover
           <Route path="/proposal" element={<AllDiscussions />} />
           <Route path="/projectpropsal" element={<AllDiscussions />} />
           <Route path="/feedback" element={<AllDiscussions />} />
+          <Route path="/signup/posts" element={<Post />} />
+          <Route path="/signup/discussions" element={<Discussions />} />
+          <Route path="/signup/likes" element={<Likes />} />
+          <Route path="/signup/votes" element={<Vote />} />
+          <Route path="/signup/mentions" element={<Mention />} />
         </Routes>
       </Box>
     </>

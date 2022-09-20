@@ -12,6 +12,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.active {
+  color: #282439;
+  font-weight: 700;
+}
+
+.inactive {
+  color: #3f385b;
+}
+
 /* .circle {
   position: fixed;
   transform: translate(-50%, -50%);

@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import {
   Box,
   Button,
@@ -14,17 +15,15 @@ import { FaRibbon } from "react-icons/fa";
 import { BiMessageRounded, BiMenu, BiLike } from "react-icons/bi";
 import { AiTwotoneLike } from "react-icons/ai";
 import { MdAlternateEmail } from "react-icons/md";
-import avtar from "../../images/avtar.png";
 import { makeStyles } from "@mui/styles";
+
+import avtar from "../../images/avtar.png";
 
 const useStyles = makeStyles({
   paperMenu: {
-    background: "#D8BB81 !important",
+    background: "#3f385b !important",
     justifyContent: "center",
     width: "92%",
-    "&:hover": {
-      color: "#ffffff",
-    },
   },
 });
 export default function MainPage() {
@@ -42,7 +41,7 @@ export default function MainPage() {
 
   return (
     <>
-      <Box bgcolor="primary.lightmain">
+      <Box bgcolor="primary.light">
         <Container maxWidth="lg">
           <Box display="flex" flexDirection="column">
             <Box
@@ -59,7 +58,7 @@ export default function MainPage() {
                 alignItems={matches ? "center" : "flex-start"}
               >
                 <Box
-                  color="text.paragraph"
+                  color="text.main"
                   fontSize="22px"
                   fontWeight={600}
                   fontFamily="Open Sans"
@@ -76,7 +75,7 @@ export default function MainPage() {
                 >
                   <Box display="flex" alignItems="center">
                     <Box
-                      color="text.paragraph"
+                      color="text.light"
                       fontSize="15px"
                       fontWeight={400}
                       fontFamily="Open Sans"
@@ -84,7 +83,7 @@ export default function MainPage() {
                       Online
                     </Box>
                     <Box
-                      color="text.paragraph"
+                      color="text.light"
                       ml={3}
                       fontSize="15px"
                       fontWeight={400}
@@ -95,7 +94,7 @@ export default function MainPage() {
                   </Box>
                   <Box display="flex" alignItems="center">
                     <Box
-                      color="text.paragraph"
+                      color="text.light"
                       ml={3}
                       fontSize="15px"
                       fontWeight={400}
@@ -107,7 +106,7 @@ export default function MainPage() {
                       answers
                     </Box>
                     <Box
-                      color="text.paragraph"
+                      color="text.light"
                       ml={3}
                       fontSize="15px"
                       fontWeight={400}
@@ -155,11 +154,8 @@ export default function MainPage() {
                   }
                   sx={{
                     width: "100%",
-                    bgcolor: "primary.lightmain",
-                    color: "#ffffff",
-                    "&:hover": {
-                      bgcolor: "primary.main",
-                    },
+                    bgcolor: "primary.main",
+                    color: "text.main",
                   }}
                   onClick={handleClick}
                 >
@@ -179,6 +175,7 @@ export default function MainPage() {
                       justifyContent="center"
                       fontFamily="Open Sans"
                       fontSize="17px"
+                      color="text.main"
                       width="100%"
                       onClick={() => settabText("Post")}
                     >
@@ -195,6 +192,7 @@ export default function MainPage() {
                       alignItems="center"
                       justifyContent="center"
                       fontFamily="Open Sans"
+                      color="text.main"
                       fontSize="17px"
                       width="100%"
                       onClick={() => settabText("Discussions")}
@@ -211,6 +209,7 @@ export default function MainPage() {
                       alignItems="center"
                       justifyContent="center"
                       fontFamily="Open Sans"
+                      color="text.main"
                       fontSize="17px"
                       width="100%"
                       onClick={() => settabText("Likes")}
@@ -226,6 +225,7 @@ export default function MainPage() {
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
+                      color="text.main"
                       fontFamily="Open Sans"
                       fontSize="17px"
                       width="100%"
@@ -242,6 +242,7 @@ export default function MainPage() {
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
+                      color="text.main"
                       fontFamily="Open Sans"
                       fontSize="17px"
                       width="100%"
@@ -262,84 +263,124 @@ export default function MainPage() {
               <Grid item xs={0} md={3}>
                 <Box display="flex" flexDirection="column">
                   <Box display="flex" alignItems="center">
-                    <Box
-                      color="primary.light"
-                      ml={3}
-                      fontSize="17px"
-                      fontWeight={500}
-                      fontFamily="Open Sans"
-                      display="flex"
-                      alignItems="center"
+                    <NavLink
+                      to="posts"
+                      style={{ textDecoration: "none" }}
+                      className={({ isActive }) =>
+                        isActive ? "active" : "inactive"
+                      }
                     >
-                      <BiMessageRounded
-                        style={{ marginRight: "10px", fontSize: "20px" }}
-                      />{" "}
-                      Post 0
-                    </Box>
+                      <Box
+                        // color="primary.light"
+                        ml={3}
+                        fontSize="17px"
+                        fontWeight={500}
+                        fontFamily="Open Sans"
+                        display="flex"
+                        alignItems="center"
+                      >
+                        <BiMessageRounded
+                          style={{ marginRight: "10px", fontSize: "20px" }}
+                        />
+                        Post 0
+                      </Box>
+                    </NavLink>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
-                    <Box
-                      color="primary.light"
-                      ml={3}
-                      fontSize="17px"
-                      fontWeight={500}
-                      fontFamily="Open Sans"
-                      display="flex"
-                      alignItems="center"
+                    <NavLink
+                      to="discussions"
+                      style={{ textDecoration: "none" }}
+                      className={({ isActive }) =>
+                        isActive ? "active" : "inactive"
+                      }
                     >
-                      <BiMenu
-                        style={{ marginRight: "10px", fontSize: "20px" }}
-                      />{" "}
-                      Discussions 0
-                    </Box>
+                      <Box
+                        // color="primary.light"
+                        ml={3}
+                        fontSize="17px"
+                        fontWeight={500}
+                        fontFamily="Open Sans"
+                        display="flex"
+                        alignItems="center"
+                      >
+                        <BiMenu
+                          style={{ marginRight: "10px", fontSize: "20px" }}
+                        />{" "}
+                        Discussions 0
+                      </Box>
+                    </NavLink>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
-                    <Box
-                      color="primary.light"
-                      ml={3}
-                      fontSize="17px"
-                      fontWeight={500}
-                      fontFamily="Open Sans"
-                      display="flex"
-                      alignItems="center"
+                    <NavLink
+                      to="likes"
+                      style={{ textDecoration: "none" }}
+                      className={({ isActive }) =>
+                        isActive ? "active" : "inactive"
+                      }
                     >
-                      <BiLike
-                        style={{ marginRight: "10px", fontSize: "20px" }}
-                      />{" "}
-                      Likes 0
-                    </Box>
+                      <Box
+                        // color="primary.light"
+                        ml={3}
+                        fontSize="17px"
+                        fontWeight={500}
+                        fontFamily="Open Sans"
+                        display="flex"
+                        alignItems="center"
+                      >
+                        <BiLike
+                          style={{ marginRight: "10px", fontSize: "20px" }}
+                        />{" "}
+                        Likes 0
+                      </Box>
+                    </NavLink>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
-                    <Box
-                      color="primary.light"
-                      ml={3}
-                      fontSize="17px"
-                      fontWeight={500}
-                      fontFamily="Open Sans"
-                      display="flex"
-                      alignItems="center"
+                    <NavLink
+                      to="votes"
+                      style={{ textDecoration: "none" }}
+                      className={({ isActive }) =>
+                        isActive ? "active" : "inactive"
+                      }
                     >
-                      <AiTwotoneLike
-                        style={{ marginRight: "10px", fontSize: "20px" }}
-                      />{" "}
-                      Votes 0
-                    </Box>
+                      <Box
+                        // color="primary.light"
+                        ml={3}
+                        fontSize="17px"
+                        fontWeight={500}
+                        fontFamily="Open Sans"
+                        display="flex"
+                        alignItems="center"
+                      >
+                        <AiTwotoneLike
+                          style={{ marginRight: "10px", fontSize: "20px" }}
+                        />
+                        Votes 0
+                      </Box>
+                    </NavLink>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
-                    <Box
-                      color="primary.light"
-                      ml={3}
-                      fontSize="17px"
-                      fontWeight={500}
-                      fontFamily="Open Sans"
-                      display="flex"
-                      alignItems="center"
+                    <NavLink
+                      to="mentions"
+                      style={{ textDecoration: "none" }}
+                      className={({ isActive }) =>
+                        isActive ? "active" : "inactive"
+                      }
                     >
-                      <MdAlternateEmail
-                        style={{ marginRight: "10px", fontSize: "20px" }}
-                      />{" "}
-                      Mentions 0
-                    </Box>
+                      <Box
+                        // color="primary.light"
+                        ml={3}
+                        fontSize="17px"
+                        fontWeight={500}
+                        fontFamily="Open Sans"
+                        display="flex"
+                        alignItems="center"
+                      >
+                        <MdAlternateEmail
+                          style={{ marginRight: "10px", fontSize: "20px" }}
+                        />
+                        Mentions 0
+                      </Box>
+                    </NavLink>
                   </Box>
                 </Box>
               </Grid>

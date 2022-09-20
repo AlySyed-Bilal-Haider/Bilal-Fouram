@@ -12,8 +12,8 @@ import Community from "./Community";
 import Feed from "./Feed";
 import Support from "./Support";
 import Commonpage from "./Common/Commonpage";
-import "./Alldiscussion.css";
 import { sidebardata } from "./Common/Links";
+
 const renderComponent = (locationpath) => {
   switch (locationpath) {
     case "/AllDiscussions":
