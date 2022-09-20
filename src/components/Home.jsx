@@ -128,10 +128,10 @@ export default function Home() {
               fontSize: "10px",
               fontWeight: 700,
               padding: "8px 35px 8px 35px",
-              backgroundColor: "secondary.main",
+              backgroundColor: "primary.main",
               color: "text.main",
               "&:hover": {
-                backgroundColor: "secondary.main",
+                backgroundColor: "primary.main",
               },
             }}
           >

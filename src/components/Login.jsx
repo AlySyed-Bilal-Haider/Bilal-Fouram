@@ -1,17 +1,26 @@
+
 import React from "react";
-import { Typography, Box, InputBase, Button } from "@mui/material";
-import { styled } from "@mui/styles";
 import { NavLink } from "react-router-dom";
-import CloseIcon from '@mui/icons-material/Close';
-import { Dialog, DialogContent, Slide } from "@mui/material";
+import {
+  Typography,
+  Dialog,
+  DialogContent,
+  Slide,
+  Box,
+  InputBase,
+  Button,
+} from "@mui/material";
+import { styled } from "@mui/styles";
 import { withStyles } from "@mui/styles";
+import CloseIcon from "@mui/icons-material/Close";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="bottom" ref={ref} {...props} />;
+  return <Slide direction="down" ref={ref} {...props} />;
 });
 const StyledModal = withStyles(() => ({
   root: {
-    "& .MuiDialog-paper":{
-     width:"25% !important"
+    "& .MuiDialog-paper": {
+      width: "350px !important",
     },
     "& .MuiDialog-root": {
       zIndex: "1301 !important",
@@ -19,6 +28,9 @@ const StyledModal = withStyles(() => ({
     },
     "&.MuiDialog-container": {
       overflowY: "hidden !important",
+    },
+    "& .MuiDialogContent-root": {
+      padding: "15px 0px !important",
     },
     "& .MuiDialog-paperScrollPaper": {
       backgroundColor: "#ffffff !important",
@@ -30,12 +42,16 @@ const StyledModal = withStyles(() => ({
     },
   },
 }))(Dialog);
-const TextInput = styled(InputBase)((theme) => ({
+
+const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
     borderRadius: "5px",
     color: "primary.main",
+    backgroundColor: "#fff",
     fontSize: "18px",
+    padding: "12px 20px",
+    marginTop: "10px",
     textAlign: "center",
     "&::-webkit-outer-spin-button": {
       WebkitAppearance: "none",
@@ -46,7 +62,8 @@ const TextInput = styled(InputBase)((theme) => ({
       margin: 0,
     },
   },
-}));
+});
+
 
 function Login({open, setloginstate }) {
   const handleClose = () => {
@@ -62,9 +79,9 @@ function Login({open, setloginstate }) {
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogContent className="dialoge__content__section">
-      <Box sx={{float:"right",p:1,cursor:'pointer'}}>
-       <CloseIcon sx={{color:"text.detail"}} onClick={handleClose}/>
-      </Box>
+        <Box sx={{ float: "right", p: 1, cursor: "pointer" }}>
+          <CloseIcon sx={{ color: "text.detail" }} onClick={handleClose} />
+        </Box>
         <Box
           sx={{
             width: "100%",
@@ -80,7 +97,7 @@ function Login({open, setloginstate }) {
                 fontSize: "20px",
                 paddingBottom: "20px",
                 color: "text.detail",
-                fontWeight:700
+                fontWeight: 700,
               }}
             >
               Log in
@@ -92,41 +109,18 @@ function Login({open, setloginstate }) {
                 backgroundColor: "formscheme.main",
               }}
             >
-             
-              <TextInput
-                type="email"
-                sx={{
-                  width: "100%",
-                  my: 1,
-                  color: "primary.main",
-                  backgroundColor: "white",
-                  padding: "15px 20px",
-                }}
-                placeholder="Email"
-              />
-              <br />
-              <TextInput
-                type="password"
-                sx={{
-                  width: "100%",
-                  my: 1,
-                  color: "primary.main",
-                  backgroundColor: "white",
-                  padding: "15px 20px",
-                }}
-                placeholder="Password"
-              />
-              <br />
+              <TextInput fullWidth type="email" placeholder="Email" />
+
+              <TextInput fullWidth type="password" placeholder="Password" />
+
               <Button
                 type="submit"
                 sx={{
                   width: "100%",
                   my: 1,
+                  py: 1.5,
                   color: "text.main",
-                  p: 2,
-                  mt: 2,
                   backgroundColor: "primary.main",
-                  padding: "15px 20px",
                   "&:hover": {
                     backgroundColor: "primary.main",
                   },
@@ -135,7 +129,6 @@ function Login({open, setloginstate }) {
               >
                 Submit
               </Button>
-              <br />
             </Box>
             <Box
               sx={{
@@ -143,40 +136,28 @@ function Login({open, setloginstate }) {
                 alignItems: "center",
                 justifyContent: "center",
                 textAlign: "center",
-                flexDirection:"column"
               }}
             >
-                 <Typography
-                sx={{
-                  fontSize: "12px",
-                  fontWeight: "bold",
-                  color: "text.lightcolor",
-                  backgroundColor: "white",
-
-                }}
-              >
-                Password Forget
-              </Typography>
-              <Box> 
               <Typography
+                variant="body1"
+                component="span"
                 sx={{
-                  fontSize: "16px",
-                  fontWeight: 700,
                   padding: "20px",
-                  color: "text.lightcolor",
+                  color: "text.secondary",
                   backgroundColor: "white",
                 }}
               >
-               
-                Don't have an account? 
+               Don't have an account? 
               </Typography>
-              <NavLink
-                to="/"
-                style={{ color: "#BA995B", textDecoration: "none" }}
-              >
-                Sign up
+              <NavLink to="/" style={{ textDecoration: "none" }}>
+                <Typography
+                  variant="body1"
+                  component="span"
+                  color="primary.lightmain"
+                >
+                  Sign up
+                </Typography>
               </NavLink>
-              </Box>
             </Box>
           </Box>
         </Box>

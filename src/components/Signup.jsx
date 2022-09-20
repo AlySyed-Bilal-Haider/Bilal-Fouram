@@ -13,6 +13,7 @@ import { styled } from "@mui/styles";
 import { withStyles } from "@mui/styles";
 import CloseIcon from "@mui/icons-material/Close";
 
+import axios from "axios";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -64,6 +65,29 @@ const TextInput = styled(InputBase)({
 });
 
 function Signup({ open, setOpensign }) {
+  const url = "http://localhost:4000";
+  const [userstate, setUserstate] = React.useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const changeHandler = (e) => {
+    setUserstate({ ...userstate, [e.target.name]: e.target.value });
+  };
+  const submitHandler = async() => {
+    try{
+    await  axios.post(`${url}/usersignup`,userstate);
+    //  console.log('data',data);
+    }catch(error){
+
+    }
+    // console.log("userstate:", userstate);
+    setUserstate({
+      name: "",
+      email: "",
+      password: "",
+    });
+  };
   const handleClose = () => {
     setOpensign(false);
   };
@@ -107,13 +131,41 @@ function Signup({ open, setOpensign }) {
                 backgroundColor: "formscheme.main",
               }}
             >
-              <TextInput fullWidth type="text" placeholder="Username" />
+              <TextInput
+              autoComplete="off"
+                fullWidth
+                value={userstate.name || ""}
+                type="text"
+                name="name"
+                placeholder="Username"
+                onChange={changeHandler}
+                required
+              />
 
-              <TextInput fullWidth type="text" placeholder="Email" />
+              <TextInput
+                fullWidth
+                autoComplete="off"
+                value={userstate.email || ""}
+                type="email"
+                name="email"
+                placeholder="Email"
+                onChange={changeHandler}
+                required
+              />
 
-              <TextInput fullWidth type="text" placeholder="Password" />
+              <TextInput
+                fullWidth
+                autoComplete="off"
+                value={userstate.password || ""}
+                type="text"
+                name="password"
+                placeholder="Password"
+                onChange={changeHandler}
+                required
+              />
 
               <Button
+                onClick={submitHandler}
                 type="submit"
                 sx={{
                   width: "100%",

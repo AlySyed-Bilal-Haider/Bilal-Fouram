@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import {
   Paper,
   Box,
@@ -12,6 +11,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  InputBase
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 // import InputBase from "@mui/material/InputBase";
@@ -19,9 +19,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import clsx from "clsx";
 
-// import { AppContext } from "../utils";
-// import { ToastNotify, } from "../ConnectivityAssets/hooks";
-import Login from "./Login";
+import { AppContext } from "../utils";
+import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
+import Login from './Login';
 
 import logo from "../images/logo.png";
 
@@ -34,27 +34,32 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   paper: {
-    background: "#282439 !important",
+    // background: "primary.main !important",
     justifyContent: "center",
+  },
+  hover: {
+    "&:hover": {
+      color: "#FFB800",
+    },
   },
 });
 
 export default function Header({ setOpensign }) {
-  // const { account, connect, disconnect, signer } = useContext(AppContext);
-  // const tokenContract = useTokenContract(signer);
+  const { account, connect, disconnect, signer } = useContext(AppContext);
+  const tokenContract = useTokenContract(signer);
   const [searchstate, setsearchstate] = useState(true);
-  const [loginstate, setloginstate] = useState(false);
-  // const [alertState, setAlertState] = useState({
-  //   open: false,
-  //   message: "",
-  //   severity: undefined,
-  // });
+  const [loginstate,setloginstate]=useState(false);
+  const [alertState, setAlertState] = useState({
+    open: false,
+    message: "",
+    severity: undefined,
+  });
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
   });
 
-  // const matches = useMediaQuery("(max-width:960px)");
+  const matches = useMediaQuery("(max-width:960px)");
   const matches1 = useMediaQuery("(max-width:1279px)");
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -76,21 +81,26 @@ export default function Header({ setOpensign }) {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <Box mt={-30} mb={5} display="flex" justifyContent="center">
-        <Link to="/">
-          <img width="160px" src={logo} alt="" />
-        </Link>
+      <Box mt={-20} display="flex" justifyContent="center">
+        <img width="100px" src="/logo.png" alt="" />
       </Box>
       <List>
         {["Log in", "Sign up"].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem
+            button
+            style={{
+              justifyContent: "center",
+              borderBottom: "1px solid #bbb8b8",
+            }}
+            key={text}
+          >
             <ListItemText
               sx={{
                 textTransform: "capitalize",
                 textAlign: "center",
                 textDecoration: "none",
                 cursor: "pointer",
-                color: "text.main",
+                color: "text.primary",
                 fontSize: "13px",
               }}
               primary={text}
@@ -98,8 +108,8 @@ export default function Header({ setOpensign }) {
           </ListItem>
         ))}
       </List>
-      {/* <Box mb={1} display="flex" justifyContent="center">
-        {account ? (
+      <Box mb={1} display="flex" justifyContent="center">
+        {/* {account ? (
           <Box
             width="90%"
             height="42px"
@@ -137,13 +147,13 @@ export default function Header({ setOpensign }) {
           >
             Connect
           </Box>
-        )}
-      </Box> */}
+        )} */}
+      </Box>
     </div>
   );
   return (
     <>
-      {/* <ToastNotify alertState={alertState} setAlertState={setAlertState} /> */}
+      <ToastNotify alertState={alertState} setAlertState={setAlertState} />
       <Box
         display="flex"
         justifyContent="space-between"
@@ -168,20 +178,31 @@ export default function Header({ setOpensign }) {
               alignItems="center"
               // flexBasis="20%"
             >
-              <Link to="/">
-                <Box>
-                  <img src={logo} alt="Miner dao" style={{ width: "130px" }} />
-                </Box>
-              </Link>
+              <Box
+                sx={{
+                  textDecoration: "none",
+                  cursor: "pointer",
+
+                  fontSize: "20px",
+                }}
+              >
+                <img
+                  src={logo}
+                  alt="Miner dwo"
+                  style={{ width: "30px", height: "30px" }}
+                />
+              </Box>
             </Box>
             <Box
               display="flex"
               justifyContent={matches1 ? "end" : "space-between"}
               alignItems="center"
+              // flexBasis={matches1 ? "45px" : "78%"}
             >
               <Box
                 display="flex"
                 justifyContent="space-around"
+                // flexBasis={matches1 ? "0px" : "70%"}
                 alignItems="center"
               >
                 <Hidden mdDown>
@@ -196,18 +217,20 @@ export default function Header({ setOpensign }) {
                       textDecoration: "none",
                       cursor: "pointer",
                       color: "text.primary",
-                      backgroundColor: "secondary.main",
+                      backgroundColor: "primary.light",
                       borderRadius: "4px",
                     }}
                   >
                     <SearchIcon sx={{ ml: 2 }} />
-                    <input
-                      style={{
+                    <InputBase
+                    autoFocus
+                    autoComplete="off"
+                      sx={{
+                        backgroundColor: "primary.light",
                         height: "36px",
                         padding: searchstate
                           ? "10px 20px 8px 10px"
                           : "10px 100px 8px 10px",
-                        backgroundColor: "#A78A52",
                         border: "none",
                         outline: "none",
                         transitionProperty: "padding",
@@ -226,36 +249,38 @@ export default function Header({ setOpensign }) {
                       }}
                     />
                   </Box>
-                  <Typography
+                  <Box
                     mr={6}
-                    variant="body1"
+                    fontSize="13px"
+                    zIndex="1"
                     sx={{
                       textDecoration: "none",
                       cursor: "pointer",
-                      color: "text.main",
+                      color: "text.primary",
                     }}
-                    onClick={() => {
+                  >
+                    <Typography onClick={()=>{
                       setloginstate(true);
-                    }}
-                  >
-                    Log in
-                  </Typography>
-
-                  <Typography
+                    }}>Log in</Typography>
+                  </Box>
+                  <Box
                     mr={6}
-                    variant="body1"
+                    fontSize="13px"
+                    zIndex="1"
                     sx={{
                       textDecoration: "none",
                       cursor: "pointer",
-                      color: "text.main",
-                    }}
-                    onClick={() => {
-                      setOpensign(true);
+                      color: "text.primary",
                     }}
                   >
-                    Sign up{" "}
-                  </Typography>
-
+                    <Typography
+                      onClick={() => {
+                        setOpensign(true);
+                      }}
+                    >
+                      Sign up{" "}
+                    </Typography>
+                  </Box>
                   {/* {account ? (
                     <Box
                       width="130px"
@@ -309,12 +334,13 @@ export default function Header({ setOpensign }) {
                         style={{
                           fontSize: "38px",
                           cursor: "pointer",
-                          color: "#fff",
+                          color: "#000000",
                         }}
                       ></MenuIcon>
                     </Button>
-                    <Paper>
+                    <Paper sx={{ backgroundColor: "primary.main" }}>
                       <SwipeableDrawer
+                        sx={{ backgroundColor: "primary.main" }}
                         classes={{ paper: classes.paper }}
                         anchor={anchor}
                         open={state[anchor]}
@@ -331,7 +357,7 @@ export default function Header({ setOpensign }) {
           </Box>
         </Container>
       </Box>
-      {loginstate && <Login setloginstate={setloginstate} open={loginstate} />}
+     {loginstate && <Login setloginstate={setloginstate} open={loginstate}/>}
     </>
   );
 }
