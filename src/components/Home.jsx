@@ -128,10 +128,10 @@ export default function Home() {
               fontSize: "10px",
               fontWeight: 700,
               padding: "8px 35px 8px 35px",
-              backgroundColor: "primary.main",
+              backgroundColor: "secondary.main",
               color: "text.main",
               "&:hover": {
-                backgroundColor: "primary.main",
+                backgroundColor: "secondary.main",
               },
             }}
           >
@@ -196,7 +196,7 @@ export default function Home() {
                 >
                   <CloseIcon
                     fontSize="small"
-                    sx={{ color: "primary.main", marginTop: "-15px" }}
+                    sx={{ color: "primary.light", marginTop: "-15px" }}
                   />
                 </IconButton>
               </Toolbar>
@@ -209,7 +209,7 @@ export default function Home() {
                 mb={2}
                 variant="body1"
                 component="div"
-                color="secondary.contrastText"
+                color="text.paragraph"
               >
                 Before you post this:
               </Typography>
@@ -218,7 +218,7 @@ export default function Home() {
                 suppressContentEditableWarning={true}
                 variant="body1"
                 component="div"
-                color="secondary.contrastText"
+                color="text.paragraph"
               >
                 i. The forum is intended for in-depth discussion only. For
                 support tickets or general queries, please head to our Discord
@@ -230,7 +230,7 @@ export default function Home() {
                 mt={2}
                 variant="body1"
                 component="div"
-                color="secondary.contrastText"
+                color="text.paragraph"
               >
                 ii. If this proposal is going to the Proposal section, make sure
                 you have read the Proposal guidelines:
@@ -241,14 +241,14 @@ export default function Home() {
             <Button
               disableRipple={true}
               sx={{
-                backgroundColor: "primary.main",
+                backgroundColor: "secondary.main",
                 color: "text.main",
                 textTransform: "capitalize",
                 width: "150px",
                 marginTop: "20px",
                 marginLeft: "20px",
                 "&:hover": {
-                  backgroundColor: "primary.main",
+                  backgroundColor: "secondary.main",
                 },
               }}
             >
@@ -256,19 +256,21 @@ export default function Home() {
             </Button>
           </Dialog>
           {/* ------------------------------------- */}
-          <Button
-            startIcon={<CloudOffIcon />}
-            sx={{
-              ml: 2,
-              "&:hover": {
-                backgroundColor: "text.main",
-              },
-            }}
-          >
-            <Link to="/AllDiscussions" style={{ textDecoration: "none" }}>
+          <Link to="/AllDiscussions" style={{ textDecoration: "none" }}>
+            <Button
+              startIcon={<CloudOffIcon />}
+              sx={{
+                ml: 2,
+                color: "text.paragraph",
+                "&:hover": {
+                  backgroundColor: "secondary.light",
+                  color: "text.main",
+                },
+              }}
+            >
               All Discussions
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </Box>
       </Container>
       <Container maxWidth="lg" sx={{ mt: { md: 4, xs: 0.1 } }}>
@@ -284,11 +286,7 @@ export default function Home() {
                   mt: { md: 0, xs: 1 },
                   height: "200px",
                   backgroundColor:
-                    index == 0
-                      ? "primary.main"
-                      : index == 2
-                      ? "text.main"
-                      : "primary.lightmain",
+                    index == 0 ? "primary.main" : "primary.light",
                 }}
               >
                 <Box
@@ -311,7 +309,7 @@ export default function Home() {
                   >
                     <Box
                       sx={{
-                        color: index == 2 ? "primary.main" : "text.main",
+                        color: "text.main",
                         mt: 0.5,
                       }}
                     >
@@ -322,7 +320,7 @@ export default function Home() {
                         ml: 1,
                         fontSize: "18px",
                         fontWeight: 700,
-                        color: index == 2 ? "primary.main" : "text.main",
+                        color: "text.main",
                       }}
                     >
                       {items.maintext}
@@ -331,7 +329,7 @@ export default function Home() {
                   <Typography
                     sx={{
                       fontSize: "12px",
-                      color: index == 2 ? "primary.main" : "text.lightcolor",
+                      color: "text.light",
                     }}
                   >
                     {items.subtext}

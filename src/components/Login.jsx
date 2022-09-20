@@ -1,4 +1,3 @@
-
 import React from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -17,7 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
-const StyledModal = withStyles(() => ({
+const StyledModal = withStyles((theme) => ({
   root: {
     "& .MuiDialog-paper": {
       width: "350px !important",
@@ -33,7 +32,7 @@ const StyledModal = withStyles(() => ({
       padding: "15px 0px !important",
     },
     "& .MuiDialog-paperScrollPaper": {
-      backgroundColor: "#ffffff !important",
+      backgroundColor: `${theme.palette.primary.light} !important`,
       boxShadow: "black 0px 0px 8px 1px",
       borderRadius: "5px",
     },
@@ -47,8 +46,8 @@ const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
     borderRadius: "5px",
-    color: "primary.main",
-    backgroundColor: "#fff",
+    color: "#000",
+    backgroundColor: "#D9D9D9",
     fontSize: "18px",
     padding: "12px 20px",
     marginTop: "10px",
@@ -64,8 +63,7 @@ const TextInput = styled(InputBase)({
   },
 });
 
-
-function Login({open, setloginstate }) {
+function Login({ open, setloginstate }) {
   const handleClose = () => {
     setloginstate(false);
   };
@@ -80,7 +78,7 @@ function Login({open, setloginstate }) {
     >
       <DialogContent className="dialoge__content__section">
         <Box sx={{ float: "right", p: 1, cursor: "pointer" }}>
-          <CloseIcon sx={{ color: "text.detail" }} onClick={handleClose} />
+          <CloseIcon sx={{ color: "text.main" }} onClick={handleClose} />
         </Box>
         <Box
           sx={{
@@ -90,13 +88,13 @@ function Login({open, setloginstate }) {
             align: "center",
           }}
         >
-          <Box sx={{ width: "100%", backgroundColor: "text.main" }}>
+          <Box sx={{ width: "100%" }}>
             <Typography
               sx={{
                 textAlign: "center",
                 fontSize: "20px",
                 paddingBottom: "20px",
-                color: "text.detail",
+                color: "text.main",
                 fontWeight: 700,
               }}
             >
@@ -120,9 +118,9 @@ function Login({open, setloginstate }) {
                   my: 1,
                   py: 1.5,
                   color: "text.main",
-                  backgroundColor: "primary.main",
+                  backgroundColor: "secondary.main",
                   "&:hover": {
-                    backgroundColor: "primary.main",
+                    backgroundColor: "secondary.main",
                   },
                 }}
                 value="submit"
@@ -143,17 +141,18 @@ function Login({open, setloginstate }) {
                 component="span"
                 sx={{
                   padding: "20px",
-                  color: "text.secondary",
-                  backgroundColor: "white",
+                  color: "text.light",
                 }}
               >
-               Don't have an account? 
+                Don't have an account?
               </Typography>
               <NavLink to="/" style={{ textDecoration: "none" }}>
                 <Typography
                   variant="body1"
                   component="span"
-                  color="primary.lightmain"
+                  fontWeight="700"
+                  color="text.main"
+                  borderBottom="1px solid #D9D9D9"
                 >
                   Sign up
                 </Typography>

@@ -59,7 +59,7 @@ export default function MainPage() {
                 alignItems={matches ? "center" : "flex-start"}
               >
                 <Box
-                  color="text.main"
+                  color="text.paragraph"
                   fontSize="22px"
                   fontWeight={600}
                   fontFamily="Open Sans"
@@ -76,7 +76,7 @@ export default function MainPage() {
                 >
                   <Box display="flex" alignItems="center">
                     <Box
-                      color="text.main"
+                      color="text.paragraph"
                       fontSize="15px"
                       fontWeight={400}
                       fontFamily="Open Sans"
@@ -84,7 +84,7 @@ export default function MainPage() {
                       Online
                     </Box>
                     <Box
-                      color="text.main"
+                      color="text.paragraph"
                       ml={3}
                       fontSize="15px"
                       fontWeight={400}
@@ -95,7 +95,7 @@ export default function MainPage() {
                   </Box>
                   <Box display="flex" alignItems="center">
                     <Box
-                      color="text.main"
+                      color="text.paragraph"
                       ml={3}
                       fontSize="15px"
                       fontWeight={400}
@@ -107,7 +107,7 @@ export default function MainPage() {
                       answers
                     </Box>
                     <Box
-                      color="text.main"
+                      color="text.paragraph"
                       ml={3}
                       fontSize="15px"
                       fontWeight={400}

@@ -2,33 +2,25 @@ import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 let theme = createTheme({
   palette: {
-    body:{
- main:'#EEE5D4'
+    body: {
+      main: "#d7d6f7",
     },
     primary: {
-      main: "#BA995B",
-      light: "#A78A52",
-      lightmain: "#D8BB81",
+      main: "#282439",
+      light: "#3f385b",
     },
     secondary: {
-      main: "#06044a",
-      light: "#4c02f1",
-      contrastText: "#000000",
+      main: "#4905B4",
+      light: "#4905B4a1",
     },
     text: {
-      main:"#ffffff",
-      primary: "#E3D6BD",
-      secondary: "#A78A52",
-      lightcolor:"#EEE8C8",
-      detail:'black',
-      lightgray:"#AAAAAA"
+      main: "#ffffff",
+      light: "#D9D9D9",
+      paragraph: "#000",
     },
-    hover:{
-      main:'#CDB17A'
+    hover: {
+      main: "#3a285a",
     },
-    formscheme:{
-      main:'#F4EFE6'
-    }
   },
 });
 

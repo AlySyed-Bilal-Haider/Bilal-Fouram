@@ -10,7 +10,7 @@ const StyleTextInput = styled(InputBase)({
     position: "relative",
     borderRadius: "5px",
     color: "#000",
-    backgroundColor: "#fff",
+    backgroundColor: "#D9D9D9",
     fontSize: "14px",
     padding: "8px",
     "&::-webkit-outer-spin-button": {
@@ -28,7 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const StyledModal = withStyles(() => ({
+const StyledModal = withStyles((theme) => ({
   root: {
     "& .MuiDialog-root": {
       zIndex: "1301 !important",
@@ -37,7 +37,7 @@ const StyledModal = withStyles(() => ({
       overflowY: "hidden !important",
     },
     "& .MuiDialog-paperScrollPaper": {
-      backgroundColor: "#F4EFE6 !important",
+      backgroundColor: `${theme.palette.primary.light} !important`,
       height: "auto",
       width: "350px",
       borderRadius: "5px",
@@ -66,7 +66,7 @@ function PopUp({ open, setOpen }) {
               onClick={handleClose}
               aria-label="close"
             >
-              <CloseIcon fontSize="small" sx={{ color: "primary.main" }} />
+              <CloseIcon fontSize="small" sx={{ color: "text.main" }} />
             </IconButton>
           </Box>
           <Typography
@@ -76,7 +76,7 @@ function PopUp({ open, setOpen }) {
             component="div"
             textAlign="center"
             fontSize="20px"
-            color="#000"
+            color="text.main"
           >
             Add a Poll
           </Typography>
@@ -84,7 +84,7 @@ function PopUp({ open, setOpen }) {
           <Typography
             variant="body1"
             component="div"
-            color="#000"
+            color="text.main"
             fontWeight="700"
             mb={1}
           >
@@ -97,7 +97,7 @@ function PopUp({ open, setOpen }) {
             mb={1}
             variant="body1"
             component="div"
-            color="#000"
+            color="text.main"
             fontWeight="700"
           >
             Answers
@@ -112,7 +112,7 @@ function PopUp({ open, setOpen }) {
             mb={1}
             variant="body1"
             component="div"
-            color="#000"
+            color="text.main"
             fontWeight="700"
           >
             Poll end date (Optional)
@@ -122,13 +122,13 @@ function PopUp({ open, setOpen }) {
           <Button
             disableRipple={true}
             sx={{
-              backgroundColor: "primary.main",
+              backgroundColor: "secondary.main",
               color: "text.main",
               textTransform: "capitalize",
               width: "100px",
               marginTop: "25px",
               "&:hover": {
-                backgroundColor: "primary.main",
+                backgroundColor: "secondary.main",
               },
             }}
           >
