@@ -1,5 +1,6 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
+import React,{useEffect} from "react";
+import { Link,useNavigate } from "react-router-dom";
+import jsonwebtoken from "jsonwebtoken";
 import {
   Button,
   Box,
@@ -90,6 +91,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Home() {
+  const navigate=useNavigate();
   const matches = useMediaQuery("(max-width:750px)");
   const theme = useTheme();
 
@@ -107,7 +109,39 @@ export default function Home() {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const url = "http://localhost:4000";
+  // ..........Token verfications ...........
+  const tokenVerfiy = async () => {
+    try {
+      const req = await fetch(`${url}/verifytoken`, {
+        method: "post",
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      });
+      const data = req.json(req);
+      console.log("data check token verify:", data);
+      if (data.status == "error") {
+        navigate("/login");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const user = jsonwebtoken.decode(token);
+      if (!user) {
+        localStorage.removeItem("token");
+        navigate("/");
+      } else {
+        tokenVerfiy();
+      }
+    }
+  
+  }, []);
+  // ..........end token verfication........
   return (
     <Box sx={{ width: "100%" }}>
       <PopUp open={open1} setOpen={setOpen1} />

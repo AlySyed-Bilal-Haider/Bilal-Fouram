@@ -1,6 +1,9 @@
-
 import React from "react";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import {  toast } from 'react-toastify';
+
 import {
   Typography,
   Dialog,
@@ -64,11 +67,39 @@ const TextInput = styled(InputBase)({
   },
 });
 
+function Login({ open, setloginstate }) {
+  const url = "http://localhost:4000";
+  const [userstate, setUserstate] = React.useState({
+    email: "",
+    password: "",
+  });
+  //input filed change handler;
+  const changeHandler = (e) => {
+    setUserstate({ ...userstate, [e.target.name]: e.target.value });
+  };
 
-function Login({open, setloginstate }) {
+  //Submit form, after filling the user form;
+  const loginHandler = async () => {
+    try {
+      const { data } = await axios.post(`${url}/login`, userstate);
+      toast.success(data.message);
+      localStorage.setItem("token", data.user);
+    } catch (error) {
+      toast.error(error.message);
+    }
+    setUserstate({
+      name: "",
+      email: "",
+      password: "",
+    });
+  };
+
   const handleClose = () => {
     setloginstate(false);
   };
+
+
+
   return (
     <StyledModal
       open={open}
@@ -109,11 +140,30 @@ function Login({open, setloginstate }) {
                 backgroundColor: "formscheme.main",
               }}
             >
-              <TextInput fullWidth type="email" placeholder="Email" />
+              <TextInput
+                fullWidth
+                type="email"
+                value={userstate.email || ""}
+                onChange={changeHandler}
+                placeholder="Email"
+                name="email"
+                autoComplete="off"
+                autoFocus
+              />
 
-              <TextInput fullWidth type="password" placeholder="Password" />
+              <TextInput
+                fullWidth
+                type="text"
+                value={userstate.password || ""}
+                onChange={changeHandler}
+                placeholder="Password"
+                name="password"
+                autoComplete="off"
+                autoFocus
+              />
 
               <Button
+                onClick={loginHandler}
                 type="submit"
                 sx={{
                   width: "100%",
@@ -147,7 +197,7 @@ function Login({open, setloginstate }) {
                   backgroundColor: "white",
                 }}
               >
-               Don't have an account? 
+                Don't have an account?
               </Typography>
               <NavLink to="/" style={{ textDecoration: "none" }}>
                 <Typography

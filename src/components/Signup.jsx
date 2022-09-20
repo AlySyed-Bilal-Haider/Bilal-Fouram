@@ -14,6 +14,8 @@ import { withStyles } from "@mui/styles";
 import CloseIcon from "@mui/icons-material/Close";
 
 import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import {  toast } from 'react-toastify';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -71,23 +73,26 @@ function Signup({ open, setOpensign }) {
     email: "",
     password: "",
   });
+  //input filed change handler;
   const changeHandler = (e) => {
     setUserstate({ ...userstate, [e.target.name]: e.target.value });
   };
+
+  //Submit form, after filling the user form;
   const submitHandler = async() => {
     try{
-    await  axios.post(`${url}/usersignup`,userstate);
-    //  console.log('data',data);
+    const {data}=await  axios.post(`${url}/usersignup`,userstate);
+    toast.success(data.message);
     }catch(error){
-
+      toast.error(error.message);
     }
-    // console.log("userstate:", userstate);
     setUserstate({
       name: "",
       email: "",
       password: "",
     });
   };
+
   const handleClose = () => {
     setOpensign(false);
   };

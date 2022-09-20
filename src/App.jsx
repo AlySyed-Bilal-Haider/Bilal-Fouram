@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Box } from "@mui/material";
 import Web3 from "web3";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from 'react-toastify';
 
 import "./App.css";
 import Header from "./components/Header";
@@ -32,8 +34,19 @@ function App() {
 
   return (
     <>
-      <Signup open={opensign} setOpensign={setOpensign} />
+    <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+/>
 
+      <Signup open={opensign} setOpensign={setOpensign} />
       <NetworkChange open={open} setOpen={setOpen} />
       <Box sx={{ backgroundColor: "body.main" }}>
         <Header open={opensign} setOpensign={setOpensign} />
