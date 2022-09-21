@@ -27,7 +27,7 @@ function Commonpage(props) {
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
-        setdescussionstate(data.allDiscussion);
+        setDetailsState(data.allDiscussion);
       } catch (error) {
         console.log(error);
       }
@@ -37,18 +37,18 @@ function Commonpage(props) {
 
   // filter data from available data
 
-   useEffect(()=>{
-    if(props.tage && alldetailsstate){
-      FilterHandler(alldetailsstate);
-    }
-   },[props.tage]);
+  //  useEffect(()=>{
+  //   if(props.tage && alldetailsstate){
+  //     FilterHandler(alldetailsstate);
+  //   }
+  //  },[props.tage]);
 
   
-    if(filterrecord){
-      setDetailsState(filterrecord);
-    }else{
-      setDetailsState(alldescussion);
-    }
+    // if(filterrecord){
+    //   setDetailsState(filterrecord);
+    // }else{
+    //   setDetailsState(alldescussion);
+    // }
   return (
     <Grid item md={10} xs={12}>
       <Box

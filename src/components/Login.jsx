@@ -1,5 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { 
+ NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
@@ -68,6 +69,7 @@ const TextInput = styled(InputBase)({
 });
 
 function Login({ open, setloginstate }) {
+  const navigate=useNavigate();
   const url = "http://localhost:4000";
   const [userstate, setUserstate] = React.useState({
     email: "",
@@ -78,12 +80,20 @@ function Login({ open, setloginstate }) {
     setUserstate({ ...userstate, [e.target.name]: e.target.value });
   };
 
+
+  const handleClose = () => {
+    setloginstate(false);
+  };
+
   //Submit form, after filling the user form;
   const loginHandler = async () => {
     try {
       const { data } = await axios.post(`${url}/login`, userstate);
+      console.log("data login",data);
       toast.success(data.message);
       localStorage.setItem("token", data.user);
+      navigate('/signup');
+      handleClose();
     } catch (error) {
       toast.error(error.message);
     }
@@ -94,9 +104,7 @@ function Login({ open, setloginstate }) {
     });
   };
 
-  const handleClose = () => {
-    setloginstate(false);
-  };
+  
 
   return (
     <StyledModal
