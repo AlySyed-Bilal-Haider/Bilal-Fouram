@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const Addpost = new mongoose.Schema({
-  tag:[String],
+  tag:String,
   title : {
     type: String,
     trim: true,
@@ -15,7 +15,8 @@ const Addpost = new mongoose.Schema({
   question:String,
   ans1:String,
   ans2:String,
-  enddate:{type: Date, default: Date.now}
+  enddate:{type: Date, default: Date.now},
+  username:String
 });
 const postmodal=mongoose.model("Addpost", Addpost);
 export default postmodal;

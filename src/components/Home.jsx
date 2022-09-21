@@ -1,5 +1,5 @@
-import React,{useEffect} from "react";
-import { Link,useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import jsonwebtoken from "jsonwebtoken";
 import {
   Button,
@@ -23,14 +23,16 @@ import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 import { styled } from "@mui/styles";
 
 import PopUp from "./UserPenal/AddPollPopup";
-
-const TextInput = styled(InputBase)(() => ({
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
     borderRadius: "5px",
     color: "primary.main",
     backgroundColor: "transparent",
-    fontSize: "18px",
+    fontSize: "16px",
     padding: "5px",
     "&::-webkit-outer-spin-button": {
       WebkitAppearance: "none",
@@ -41,7 +43,7 @@ const TextInput = styled(InputBase)(() => ({
       margin: 0,
     },
   },
-}));
+});
 
 const discussion = [
   {
@@ -91,13 +93,55 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Home() {
-  const navigate=useNavigate();
+  const url = "http://localhost:4000";
+  const navigate = useNavigate();
   const matches = useMediaQuery("(max-width:750px)");
   const theme = useTheme();
-
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
+  const [addpoststate, setPoststate] = React.useState({
+    tags:'wow',
+    title: "",
+    despone:
+      "Before you post this: 1. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines 2. If this proposal is going to the Proposal section, make sure you have read the Proposal  guidelines:  https://discord.com/invite/olympusdao ",
+  });
 
+  const discussionHandler = (e) => {
+    setPoststate({ ...addpoststate, [e.target.name]: e.target.value });
+  };
+
+  // post discussion record here
+  const postSubmitHandler = async () => {
+    const polldata = localStorage.getItem("poll");
+    let checkstatus = false;
+    let updatedata;
+    if (polldata) {
+      const pollrecord = JSON.parse(polldata);
+      updatedata = { ...addpoststate, ...pollrecord };
+      checkstatus = true;
+    }
+    try {
+      if (checkstatus) {
+        const { data } = await axios.post(`${url}/posts`, updatedata);
+        if (data.status == "ok") {
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        const { data } = await axios.post(`${url}/posts`, addpoststate);
+        if (data.status == "ok") {
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+
+  // end post discussion here
   const handleClickOpen1 = () => {
     setOpen1(true);
   };
@@ -109,12 +153,12 @@ export default function Home() {
   const handleClose = () => {
     setOpen(false);
   };
-  const url = "http://localhost:4000";
+
   // ..........Token verfications ...........
   const tokenVerfiy = async () => {
     try {
       const req = await fetch(`${url}/verifytoken`, {
-        method: "post",
+        method: "POST",
         headers: {
           "x-access-token": localStorage.getItem("token"),
         },
@@ -134,12 +178,11 @@ export default function Home() {
       const user = jsonwebtoken.decode(token);
       if (!user) {
         localStorage.removeItem("token");
-        navigate("/");
+        navigate("/login");
       } else {
         tokenVerfiy();
       }
     }
-  
   }, []);
   // ..........end token verfication........
   return (
@@ -219,7 +262,17 @@ export default function Home() {
                   </Typography>
 
                   <Box>
-                    <TextInput placeholder="Discussion Title" type="text" />
+                    <InputBase
+                      placeholder="Discussion Title"
+                      type="text"
+                      name="title"
+                      value={addpoststate.title || ""}
+                      sx={{
+                        fontSize: "18px",
+                        width: { xs: "100%", md: "40%" },
+                      }}
+                      onChange={discussionHandler}
+                    />
                   </Box>
                 </Box>
 
@@ -230,49 +283,27 @@ export default function Home() {
                 >
                   <CloseIcon
                     fontSize="small"
-                    sx={{ color: "primary.light", marginTop: "-15px" }}
+                    sx={{ color: "primary.light", marginTop: "-45px" }}
                   />
                 </IconButton>
               </Toolbar>
             </AppBar>
 
-            <Box mb={5} mx={5}>
-              <Typography
-                contentEditable={true}
-                suppressContentEditableWarning={true}
-                mb={2}
-                variant="body1"
-                component="div"
-                color="text.paragraph"
-              >
-                Before you post this:
-              </Typography>
-              <Typography
-                contentEditable={true}
-                suppressContentEditableWarning={true}
-                variant="body1"
-                component="div"
-                color="text.paragraph"
-              >
-                i. The forum is intended for in-depth discussion only. For
-                support tickets or general queries, please head to our Discord
-                channel: https://discord.com/invite/olympusdao
-              </Typography>
-              <Typography
-                contentEditable={true}
-                suppressContentEditableWarning={true}
-                mt={2}
-                variant="body1"
-                component="div"
-                color="text.paragraph"
-              >
-                ii. If this proposal is going to the Proposal section, make sure
-                you have read the Proposal guidelines:
-                https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines
-              </Typography>
+            <Box mt={-2} mb={5} mx={4.5}>
+              <TextInput
+                type="text"
+                name="despone"
+                value={addpoststate.despone}
+                onChange={discussionHandler}
+                fullWidth
+                multiline
+                rows={10}
+              />
             </Box>
             <Divider />
             <Button
+              type="submit"
+              onClick={postSubmitHandler}
               disableRipple={true}
               sx={{
                 backgroundColor: "secondary.main",

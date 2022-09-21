@@ -124,7 +124,7 @@ setAddpollstate({
           >
             Question
           </Typography>
-          <StyleTextInput fullWidth type="text" name="question"  value={addpoll.question} onChange={pollHandler} />
+          <StyleTextInput fullWidth type="text" name="question"  value={addpoll.question || ''} onChange={pollHandler} />
 
           <Typography
             mt={3}
@@ -136,9 +136,9 @@ setAddpollstate({
           >
             Answers
           </Typography>
-          <StyleTextInput fullWidth type="text" placeholder="Answer #1"  value={addpoll.ans1}  name="ans1"   onChange={pollHandler} />
+          <StyleTextInput fullWidth type="text" placeholder="Answer #1"  value={addpoll.ans1 || ''}  name="ans1"   onChange={pollHandler} />
           <Box mt={2}>
-            <StyleTextInput fullWidth type="text" placeholder="Answer #2" value={addpoll.ans2}  name="ans2"  onChange={pollHandler}/>
+            <StyleTextInput fullWidth type="text" placeholder="Answer #2" value={addpoll.ans2 || ''}  name="ans2"  onChange={pollHandler}/>
           </Box>
 
           <Typography

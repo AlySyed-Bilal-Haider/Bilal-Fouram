@@ -12,35 +12,25 @@ import Community from "./Community";
 import Feed from "./Feed";
 import Support from "./Support";
 import Commonpage from "./Common/Commonpage";
-import "./Alldiscussion.css";
 import { sidebardata } from "./Common/Links";
 const renderComponent = (locationpath) => {
   switch (locationpath) {
     case "/AllDiscussions":
       return <Commonpage />;
-      break;
     case "/general":
       return <General title="General" />;
-      break;
     case "/proposal":
       return <Proposal title="Proposal" />;
-      break;
     case "/support":
       return <Support title="Support" />;
-      break;
     case "/Knowledgebase":
       return <Knowledgebase title="Knowledgebase" />;
-      break;
     case "/community":
       return <Community title="Community" />;
-      break;
     case "/feedback":
       return <Feed title="Feed" />;
-      break;
     case "/projectpropsal":
       return <Projectprosal title="Project propsal" />;
-      break;
-
     default:
       <h1> Page Not Found</h1>;
       break;
@@ -50,29 +40,21 @@ const mainHeader = (locationpath) => {
   switch (locationpath) {
     case "/general":
       return <MainHeader title="General" />;
-      break;
     case "/proposal":
       return <MainHeader title="Proposal" />;
-      break;
     case "/support":
       return <MainHeader title="Support" />;
-      break;
     case "/Knowledgebase":
       return <MainHeader title="Knowledgebase" />;
-      break;
     case "/community":
       return <MainHeader title="Community" />;
-      break;
     case "/feedback":
       return <MainHeader title="Feed" />;
-      break;
     case "/projectpropsal":
       return <MainHeader title="Project propsal" />;
-      break;
 
     default:
       return null;
-      break;
   }
 };
 function AllDiscussions() {
