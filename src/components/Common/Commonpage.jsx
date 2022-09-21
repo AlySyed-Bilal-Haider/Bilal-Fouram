@@ -1,10 +1,28 @@
-import React from "react";
+import React,{useEffect} from "react";
+import axios from "axios";
+import Moment from 'moment';
 import { Button, Box, Container, Typography, Grid } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { deepPurple } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
 import UndoIcon from "@mui/icons-material/Undo";
-function Commonpage({ title }) {
+
+function Commonpage(props) {
+  const url = "http://localhost:4000";
+  const [alldetailsstate, setDetailsState] = React.useState([]);
+  useEffect(() => {
+    const fetchdetails = async () => {
+      try {
+        const { data } = await axios.get(`${url}/alldiscussion`);
+        setDetailsState(data.allDiscussion);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchdetails();
+  }, []);
+
+  console.log("alldetailsstate", alldetailsstate);
   return (
     <Grid item md={10} xs={12}>
       <Box
@@ -43,7 +61,7 @@ function Commonpage({ title }) {
       </Box>
       {/* 
       .........start main sections here ............. */}
-      {[1, 2, 3, 4, 5, 6, 7].map((i) => {
+      {alldetailsstate?.map((items, i) => {
         return (
           <Box
             key={i}
@@ -94,7 +112,7 @@ function Commonpage({ title }) {
                       fontSize: { md: "16px", xs: "12px" },
                     }}
                   >
-                    Please Use Our Discord for General Enquiry
+                    {items.title}
                   </Typography>
                   <Box
                     sx={{
@@ -107,7 +125,7 @@ function Commonpage({ title }) {
                     <Typography
                       sx={{ color: "text.paragraph", fontSize: "11px" }}
                     >
-                      <strong> kschan</strong> started December 26, 2021
+                      <strong> kschan</strong> {items.enddate? (items?.enddate.toString()):new Date()}
                     </Typography>
                   </Box>
                 </Box>
@@ -132,7 +150,7 @@ function Commonpage({ title }) {
                       },
                     }}
                   >
-                    {title ? title : "All descussion"}
+                    {props.title ? props.title : "All descussion"}
                   </Button>
                   <Button
                     startIcon={
@@ -159,9 +177,10 @@ function Commonpage({ title }) {
                 display: { md: "block", xs: "none" },
               }}
             >
-              If you have any questions regarding how the protocol works and its
+              {items.description}
+              {/* If you have any questions regarding how the protocol works and its
               various mechanisms, please head to the Olympus Discord, you are
-              more likely to get immediate support there. ...
+              more likely to get immediate support there. ... */}
             </Typography>
           </Box>
         );

@@ -1,4 +1,5 @@
 import mongomodal from "../Schema/Signupschema.js";
+import postmodal from "../Schema/Postschema.js";
 import jsonwebtoken from "jsonwebtoken";
 
 // ......Signup here routes start..............
@@ -41,18 +42,19 @@ export const login = async (req, res) => {
         status: "ok",
         message: "User login Successfully!",
         user: token,
+        name:data.name
       });
     } else {
       res.json({
-        status: "erorr",
-        message: "User signin Successfully!",
+        status: "error",
+        message: "Please try gain!",
         user: false,
       });
     }
   } catch (error) {
     res.status(404).json({
       status: "error",
-      message: "Please try again!",
+      message: "Please try again, server error!",
       user: false,
     });
   }
@@ -65,12 +67,13 @@ export const tokenVerifyHandler = async (req, res) => {
   try {
     const decoded = jsonwebtoken.verify(token, "secret123");
     const email = decoded.email;
-    const data = await jsonwebtoken.findOne({
+    const data = await mongomodal.findOne({
       email: email,
     });
     if (data) {
       res.json({
         status: "ok",
+        name:data.name
       });
     } else {
       res.json({
@@ -86,3 +89,61 @@ export const tokenVerifyHandler = async (req, res) => {
     });
   }
 };
+
+
+// ....Add discussion and Questions ,answer..........
+export const discussion = async (req, res) => {
+  try {
+    const addpost = await new postmodal({
+      tag: req.body.tags,
+      title: req.body.title,
+      description: req.body.despone,
+      status: req.body.status,
+      question: req.body.question,
+      ans1: req.body.ans1,
+      ans2: req.body.ans2,
+      enddate: req.body.enddate,
+    });
+    await addpost.save();
+    if(addpost){
+    res.json({
+      status: "ok",
+      success: true,
+      message: "post add Successfully!",
+    });}else{
+      res.json({
+        status: "error",
+        success: false,
+        message: "Please add agian and carefully!",
+      });
+    }
+  } catch (error) {
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+      user: false,
+    });
+  }
+};
+
+// fetch all discusions from server , then send on front end
+export const fetchAlldiscussion=async(req,res)=>{
+  try{
+    const data=await postmodal.find({});
+    console.log("data",data);
+    if(data){
+      res.json({
+        status: "ok",
+        success: true,
+        message: "post add Successfully!",
+        allDiscussion:data
+      })
+    }
+  }catch(error){
+      res.status(404).json({
+        status: "error",
+        success: false,
+        message: error
+  })
+}
+}

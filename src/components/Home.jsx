@@ -25,6 +25,9 @@ import { styled } from "@mui/styles";
 import PopUp from "./UserPenal/AddPollPopup";
 import ChooseTag from "./UserPenal/ChooseTag";
 
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
@@ -92,14 +95,56 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Home() {
+  const url = "http://localhost:4000";
   const navigate = useNavigate();
-  const matches = useMediaQuery("(max-width:750px)");
+  // const matches = useMediaQuery("(max-width:750px)");
   const theme = useTheme();
-
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
+  const [addpoststate, setPoststate] = React.useState({
+    tags: "wow",
+    title: "",
+    despone:
+      "Before you post this: 1. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines 2. If this proposal is going to the Proposal section, make sure you have read the Proposal  guidelines:  https://discord.com/invite/olympusdao ",
+  });
 
+  const discussionHandler = (e) => {
+    setPoststate({ ...addpoststate, [e.target.name]: e.target.value });
+  };
+
+  // post discussion record here
+  const postSubmitHandler = async () => {
+    const polldata = localStorage.getItem("poll");
+    let checkstatus = false;
+    let updatedata;
+    if (polldata) {
+      const pollrecord = JSON.parse(polldata);
+      updatedata = { ...addpoststate, ...pollrecord };
+      checkstatus = true;
+    }
+    try {
+      if (checkstatus) {
+        const { data } = await axios.post(`${url}/posts`, updatedata);
+        if (data.status == "ok") {
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        const { data } = await axios.post(`${url}/posts`, addpoststate);
+        if (data.status == "ok") {
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      console.log(error, "error");
+    }
+  };
+
+  // end post discussion here
   const handleClickOpen1 = () => {
     setOpen1(true);
   };
@@ -114,12 +159,12 @@ export default function Home() {
   const handleClose = () => {
     setOpen(false);
   };
-  const url = "http://localhost:4000";
+
   // ..........Token verfications ...........
   const tokenVerfiy = async () => {
     try {
       const req = await fetch(`${url}/verifytoken`, {
-        method: "post",
+        method: "POST",
         headers: {
           "x-access-token": localStorage.getItem("token"),
         },
@@ -139,7 +184,7 @@ export default function Home() {
       const user = jsonwebtoken.decode(token);
       if (!user) {
         localStorage.removeItem("token");
-        navigate("/");
+        navigate("/login");
       } else {
         tokenVerfiy();
       }
@@ -229,10 +274,13 @@ export default function Home() {
                     <InputBase
                       placeholder="Discussion Title"
                       type="text"
+                      name="title"
+                      value={addpoststate.title || ""}
                       sx={{
                         fontSize: "18px",
                         width: { xs: "100%", md: "40%" },
                       }}
+                      onChange={discussionHandler}
                     />
                   </Box>
                 </Box>
@@ -252,25 +300,19 @@ export default function Home() {
 
             <Box mt={-2} mb={5} mx={4.5}>
               <TextInput
+                type="text"
+                name="despone"
+                value={addpoststate.despone}
+                onChange={discussionHandler}
                 fullWidth
                 multiline
-                defaultValue="Before you post this:"
-              />
-
-              <TextInput
-                fullWidth
-                multiline
-                defaultValue="i. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://discord.com/invite/olympusdao"
-              />
-
-              <TextInput
-                fullWidth
-                multiline
-                defaultValue="ii. If this proposal is going to the Proposal section, make sure you have read the Proposal guidelines: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines"
+                rows={5}
               />
             </Box>
             <Divider />
             <Button
+              type="submit"
+              onClick={postSubmitHandler}
               disableRipple={true}
               sx={{
                 backgroundColor: "secondary.main",
