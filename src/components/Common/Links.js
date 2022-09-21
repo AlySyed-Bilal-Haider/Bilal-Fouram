@@ -31,24 +31,4 @@ export const sidebardata = [
     text: "Project Proposal",
     link: "/projectpropsal",
   },
-  // {
-  //   text: "Posts",
-  //   link: "/posts",
-  // },
-  // {
-  //   text: "Discussions",
-  //   link: "/discussions",
-  // },
-  // {
-  //   text: "Likes",
-  //   link: "/likes",
-  // },
-  // {
-  //   text: "Votes",
-  //   link: "/votes",
-  // },
-  // {
-  //   text: "Mentions",
-  //   link: "/mentions",
-  // },
 ];

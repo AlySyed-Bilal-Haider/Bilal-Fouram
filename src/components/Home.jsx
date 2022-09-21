@@ -1,5 +1,5 @@
-import React,{useEffect} from "react";
-import { Link,useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import jsonwebtoken from "jsonwebtoken";
 import {
   Button,
@@ -24,13 +24,13 @@ import { styled } from "@mui/styles";
 
 import PopUp from "./UserPenal/AddPollPopup";
 
-const TextInput = styled(InputBase)(() => ({
+const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
     borderRadius: "5px",
     color: "primary.main",
     backgroundColor: "transparent",
-    fontSize: "18px",
+    fontSize: "16px",
     padding: "5px",
     "&::-webkit-outer-spin-button": {
       WebkitAppearance: "none",
@@ -41,7 +41,7 @@ const TextInput = styled(InputBase)(() => ({
       margin: 0,
     },
   },
-}));
+});
 
 const discussion = [
   {
@@ -91,7 +91,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Home() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const matches = useMediaQuery("(max-width:750px)");
   const theme = useTheme();
 
@@ -139,7 +139,6 @@ export default function Home() {
         tokenVerfiy();
       }
     }
-  
   }, []);
   // ..........end token verfication........
   return (
@@ -219,7 +218,14 @@ export default function Home() {
                   </Typography>
 
                   <Box>
-                    <TextInput placeholder="Discussion Title" type="text" />
+                    <InputBase
+                      placeholder="Discussion Title"
+                      type="text"
+                      sx={{
+                        fontSize: "18px",
+                        width: { xs: "100%", md: "40%" },
+                      }}
+                    />
                   </Box>
                 </Box>
 
@@ -230,46 +236,30 @@ export default function Home() {
                 >
                   <CloseIcon
                     fontSize="small"
-                    sx={{ color: "primary.light", marginTop: "-15px" }}
+                    sx={{ color: "primary.light", marginTop: "-45px" }}
                   />
                 </IconButton>
               </Toolbar>
             </AppBar>
 
-            <Box mb={5} mx={5}>
-              <Typography
-                contentEditable={true}
-                suppressContentEditableWarning={true}
-                mb={2}
-                variant="body1"
-                component="div"
-                color="text.paragraph"
-              >
-                Before you post this:
-              </Typography>
-              <Typography
-                contentEditable={true}
-                suppressContentEditableWarning={true}
-                variant="body1"
-                component="div"
-                color="text.paragraph"
-              >
-                i. The forum is intended for in-depth discussion only. For
-                support tickets or general queries, please head to our Discord
-                channel: https://discord.com/invite/olympusdao
-              </Typography>
-              <Typography
-                contentEditable={true}
-                suppressContentEditableWarning={true}
-                mt={2}
-                variant="body1"
-                component="div"
-                color="text.paragraph"
-              >
-                ii. If this proposal is going to the Proposal section, make sure
-                you have read the Proposal guidelines:
-                https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines
-              </Typography>
+            <Box mt={-2} mb={5} mx={4.5}>
+              <TextInput
+                fullWidth
+                multiline
+                defaultValue="Before you post this:"
+              />
+
+              <TextInput
+                fullWidth
+                multiline
+                defaultValue="i. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://discord.com/invite/olympusdao"
+              />
+
+              <TextInput
+                fullWidth
+                multiline
+                defaultValue="ii. If this proposal is going to the Proposal section, make sure you have read the Proposal guidelines: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines"
+              />
             </Box>
             <Divider />
             <Button
