@@ -18,19 +18,19 @@ const renderComponent = (locationpath) => {
     case "/AllDiscussions":
       return <Commonpage />;
     case "/general":
-      return <General title="General" />;
+      return <General title="General" tage="General" />;
     case "/proposal":
-      return <Proposal title="Proposal" />;
+      return <Proposal title="Proposal" tage="Proposal"/>;
     case "/support":
-      return <Support title="Support" />;
+      return <Support title="Support" tage="Support" />;
     case "/Knowledgebase":
-      return <Knowledgebase title="Knowledgebase" />;
+      return <Knowledgebase title="Knowledgebase" tage="Knowledge Base" />;
     case "/community":
-      return <Community title="Community" />;
+      return <Community title="Community" tage="Community Development"/>;
     case "/feedback":
-      return <Feed title="Feed" />;
+      return <Feed title="Feed" tage="Feedback"/>;
     case "/projectpropsal":
-      return <Projectprosal title="Project propsal" />;
+      return <Projectprosal title="Project propsal" tage="Project Proposals" />;
     default:
       <h1> Page Not Found</h1>;
       break;

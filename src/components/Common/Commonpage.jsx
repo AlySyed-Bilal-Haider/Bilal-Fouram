@@ -1,6 +1,6 @@
-import React,{useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Moment from 'moment';
+import Moment from "moment";
 import { Button, Box, Container, Typography, Grid } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { deepPurple } from "@mui/material/colors";
@@ -9,12 +9,25 @@ import UndoIcon from "@mui/icons-material/Undo";
 
 function Commonpage(props) {
   const url = "http://localhost:4000";
+  const [namestate,setnamestate]=useState(localStorage.getItem("name"));
   const [alldetailsstate, setDetailsState] = React.useState([]);
+  const [filterrecord,setFilterstate]=useState([]);
+  const [alldescussion,setdescussionstate]=useState([]);
+  // filter data according to tages
+  const FilterHandler=(record)=>{
+   const result=record.filter((items)=>{
+      return items.tag?.toLowerCase().trim().includes(props.tage?.toLowerCase().trim());
+    });
+    setFilterstate(result);
+  }
+
+
+  // fetch all details from sever
   useEffect(() => {
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
-        setDetailsState(data.allDiscussion);
+        setdescussionstate(data.allDiscussion);
       } catch (error) {
         console.log(error);
       }
@@ -22,7 +35,20 @@ function Commonpage(props) {
     fetchdetails();
   }, []);
 
-  console.log("alldetailsstate", alldetailsstate);
+  // filter data from available data
+
+   useEffect(()=>{
+    if(props.tage && alldetailsstate){
+      FilterHandler(alldetailsstate);
+    }
+   },[props.tage]);
+
+  
+    if(filterrecord){
+      setDetailsState(filterrecord);
+    }else{
+      setDetailsState(alldescussion);
+    }
   return (
     <Grid item md={10} xs={12}>
       <Box
@@ -125,7 +151,12 @@ function Commonpage(props) {
                     <Typography
                       sx={{ color: "text.paragraph", fontSize: "11px" }}
                     >
-                      <strong> kschan</strong> {items.enddate? (items?.enddate.toString()):new Date()}
+                      <strong>
+                        {namestate
+                          ? namestate 
+                          : "Usman Shab"}
+                      </strong>{" "}
+                      {items.enddate ? items?.enddate.toString() : new Date()}
                     </Typography>
                   </Box>
                 </Box>
@@ -178,9 +209,6 @@ function Commonpage(props) {
               }}
             >
               {items.description}
-              {/* If you have any questions regarding how the protocol works and its
-              various mechanisms, please head to the Olympus Discord, you are
-              more likely to get immediate support there. ... */}
             </Typography>
           </Box>
         );

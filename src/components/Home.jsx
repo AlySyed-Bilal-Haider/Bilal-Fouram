@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import jsonwebtoken from "jsonwebtoken";
 import {
@@ -18,7 +18,6 @@ import {
 import CloudOffIcon from "@mui/icons-material/CloudOff";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 import { styled } from "@mui/styles";
 
@@ -102,6 +101,8 @@ export default function Home() {
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
+  const [username,setusernameState]=React.useState('');
+  const [tagsvalue,setTagsvalue]=useState('');
   const [addpoststate, setPoststate] = React.useState({
     tags: "wow",
     title: "",
@@ -118,9 +119,10 @@ export default function Home() {
     const polldata = localStorage.getItem("poll");
     let checkstatus = false;
     let updatedata;
+    if(!!tagsvalue){
     if (polldata) {
       const pollrecord = JSON.parse(polldata);
-      updatedata = { ...addpoststate, ...pollrecord };
+      updatedata = { ...addpoststate, ...pollrecord,tag:tagsvalue};
       checkstatus = true;
     }
     try {
@@ -141,6 +143,8 @@ export default function Home() {
       }
     } catch (error) {
       console.log(error, "error");
+    }}else{
+      toast.error("Please add Tages sections");
     }
   };
 
@@ -159,21 +163,18 @@ export default function Home() {
   const handleClose = () => {
     setOpen(false);
   };
-
   // ..........Token verfications ...........
   const tokenVerfiy = async () => {
     try {
-      const req = await fetch(`${url}/verifytoken`, {
+      await fetch(`${url}/verifytoken`, {
         method: "POST",
         headers: {
           "x-access-token": localStorage.getItem("token"),
         },
-      });
-      const data = req.json(req);
-      console.log("data check token verify:", data);
-      if (data.status == "error") {
-        navigate("/login");
-      }
+      }).then(response => response.json())
+      .then(data => {
+        localStorage.setItem('name',data.name);
+      })
     } catch (error) {
       alert(error);
     }
@@ -194,7 +195,7 @@ export default function Home() {
   return (
     <Box sx={{ width: "100%" }}>
       <PopUp open={open1} setOpen={setOpen1} />
-      <ChooseTag open={open2} setOpen={setOpen2} />
+      <ChooseTag open={open2} setOpen={setOpen2}  setTagsvalue={setTagsvalue}/>
 
       <Container maxWidth="lg" sx={{ mt: { md: 4, xs: 0 } }}>
         <Box

@@ -1,9 +1,9 @@
 import React from 'react'
 import Commompage from './Common/Commonpage';
-function Proposal({title}) {
+function Proposal({title,tage}) {
     console.log("Proposal");
   return (
-   <Commompage title={title}/>
+   <Commompage title={title} tage={tage}/>
   )
 }
 

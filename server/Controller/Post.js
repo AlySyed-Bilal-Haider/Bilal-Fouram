@@ -95,7 +95,7 @@ export const tokenVerifyHandler = async (req, res) => {
 export const discussion = async (req, res) => {
   try {
     const addpost = await new postmodal({
-      tag: req.body.tags,
+      tag: req.body.tag,
       title: req.body.title,
       description: req.body.despone,
       status: req.body.status,

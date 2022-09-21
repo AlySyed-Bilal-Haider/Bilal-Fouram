@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { Dialog, DialogContent, Slide } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -10,7 +10,6 @@ import { BiMessageRounded } from "react-icons/bi";
 import { FaChalkboardTeacher, FaBook } from "react-icons/fa";
 import { MdGroup, MdFeed } from "react-icons/md";
 import { RiCheckboxBlankFill } from "react-icons/ri";
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -31,8 +30,10 @@ const StyledModal = withStyles((theme) => ({
     },
   },
 }))(Dialog);
+function ChooseTag({ open, setOpen,setTagsvalue }) {
 
-function ChooseTag({ open, setOpen }) {
+const [tagestate,settageState]=useState('');
+
   const tagsData = [
     {
       Icon: BiMessageRounded,
@@ -69,12 +70,25 @@ function ChooseTag({ open, setOpen }) {
       descrp: "Project Proposals within the DAO",
     },
   ];
+
+  const getvalueHandler=(event, value)=>{
+
+      settageState(value.label);
+  }
+
+  const selectValueHandler=(e)=>{
+    settageState(e.target.value);
+  }
+
+  const addTagsHandler=()=>{
+    setTagsvalue(tagestate);
+  }
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <>
+
       <StyledModal
         open={open}
         TransitionComponent={Transition}
@@ -105,12 +119,12 @@ function ChooseTag({ open, setOpen }) {
               <CloseIcon fontSize="small" sx={{ color: "text.main" }} />
             </IconButton>
           </Box>
-
           <Box display="flex" alignItems="center">
             <Autocomplete
               fullWidth
               size="small"
               options={tagsData}
+              onChange={getvalueHandler}
               autoHighlight
               //   getOptionLabel={(option) => option.label}
               renderOption={(props, { Icon, label, descrp }) => (
@@ -134,6 +148,8 @@ function ChooseTag({ open, setOpen }) {
               )}
               renderInput={(params) => (
                 <TextField
+                value={tagestate || ''}
+                onChange={selectValueHandler}
                   {...params}
                   inputProps={{
                     ...params.inputProps,
@@ -171,6 +187,7 @@ function ChooseTag({ open, setOpen }) {
             />
 
             <Button
+            onClick={addTagsHandler}
               disableRipple={true}
               sx={{
                 backgroundColor: "secondary.main",
