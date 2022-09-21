@@ -12,11 +12,6 @@ import NetworkChange from "./networkSwitch";
 import AllDiscussions from "./components/AllDiscussions";
 import MainPage from "./components/UserPenal/MainPage";
 import Signup from "./components/Signup";
-import Likes from "./components/UserPenal/Likes";
-import Discussions from "./components/UserPenal/Discussion";
-import Post from "./components/UserPenal/Post";
-import Vote from "./components/UserPenal/Votes";
-import Mention from "./components/UserPenal/Mention";
 
 const web3 = new Web3(
   Web3.givenProvider
@@ -66,11 +61,6 @@ function App() {
           <Route path="/proposal" element={<AllDiscussions />} />
           <Route path="/projectpropsal" element={<AllDiscussions />} />
           <Route path="/feedback" element={<AllDiscussions />} />
-          <Route path="/signup/posts" element={<Post />} />
-          <Route path="/signup/discussions" element={<Discussions />} />
-          <Route path="/signup/likes" element={<Likes />} />
-          <Route path="/signup/votes" element={<Vote />} />
-          <Route path="/signup/mentions" element={<Mention />} />
         </Routes>
       </Box>
     </>

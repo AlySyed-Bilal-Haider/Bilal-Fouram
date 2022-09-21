@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import {
   Box,
   Button,
@@ -10,12 +9,18 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React, { useState } from "react";
+import { makeStyles } from "@mui/styles";
 import { BsCheckLg } from "react-icons/bs";
 import { FaRibbon } from "react-icons/fa";
 import { BiMessageRounded, BiMenu, BiLike } from "react-icons/bi";
 import { AiTwotoneLike } from "react-icons/ai";
 import { MdAlternateEmail } from "react-icons/md";
-import { makeStyles } from "@mui/styles";
+
+import Post from "./Post";
+import Discussion from "./Discussion";
+import Vote from "./Votes";
+import Like from "./Likes";
+import Mention from "./Mention";
 
 import avtar from "../../images/avtar.png";
 
@@ -30,6 +35,7 @@ export default function MainPage() {
   const classes = useStyles();
   const matches = useMediaQuery("(max-width:700px)");
   const [tabText, settabText] = useState("Post");
+  const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -263,130 +269,112 @@ export default function MainPage() {
               <Grid item xs={0} md={3}>
                 <Box display="flex" flexDirection="column">
                   <Box display="flex" alignItems="center">
-                    <NavLink
-                      to="posts"
-                      style={{ textDecoration: "none" }}
-                      className={({ isActive }) =>
-                        isActive ? "active" : "inactive"
-                      }
+                    <Box
+                      color={show === 0 ? "primary.main" : "primary.light"}
+                      fontWeight={show === 0 ? 700 : 500}
+                      ml={3}
+                      fontSize="17px"
+                      fontFamily="Open Sans"
+                      display="flex"
+                      alignItems="center"
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => setShow(0)}
                     >
-                      <Box
-                        // color="primary.light"
-                        ml={3}
-                        fontSize="17px"
-                        fontWeight={500}
-                        fontFamily="Open Sans"
-                        display="flex"
-                        alignItems="center"
-                      >
-                        <BiMessageRounded
-                          style={{ marginRight: "10px", fontSize: "20px" }}
-                        />
-                        Post 0
-                      </Box>
-                    </NavLink>
+                      <BiMessageRounded
+                        style={{ marginRight: "10px", fontSize: "20px" }}
+                      />
+                      Post 0
+                    </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
-                    <NavLink
-                      to="discussions"
-                      style={{ textDecoration: "none" }}
-                      className={({ isActive }) =>
-                        isActive ? "active" : "inactive"
-                      }
+                    <Box
+                      color={show === 1 ? "primary.main" : "primary.light"}
+                      fontWeight={show === 1 ? 700 : 500}
+                      ml={3}
+                      fontSize="17px"
+                      fontFamily="Open Sans"
+                      display="flex"
+                      alignItems="center"
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => setShow(1)}
                     >
-                      <Box
-                        // color="primary.light"
-                        ml={3}
-                        fontSize="17px"
-                        fontWeight={500}
-                        fontFamily="Open Sans"
-                        display="flex"
-                        alignItems="center"
-                      >
-                        <BiMenu
-                          style={{ marginRight: "10px", fontSize: "20px" }}
-                        />{" "}
-                        Discussions 0
-                      </Box>
-                    </NavLink>
+                      <BiMenu
+                        style={{ marginRight: "10px", fontSize: "20px" }}
+                      />{" "}
+                      Discussions 0
+                    </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
-                    <NavLink
-                      to="likes"
-                      style={{ textDecoration: "none" }}
-                      className={({ isActive }) =>
-                        isActive ? "active" : "inactive"
-                      }
+                    <Box
+                      color={show === 2 ? "primary.main" : "primary.light"}
+                      fontWeight={show === 2 ? 700 : 500}
+                      ml={3}
+                      fontSize="17px"
+                      fontFamily="Open Sans"
+                      display="flex"
+                      alignItems="center"
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => setShow(2)}
                     >
-                      <Box
-                        // color="primary.light"
-                        ml={3}
-                        fontSize="17px"
-                        fontWeight={500}
-                        fontFamily="Open Sans"
-                        display="flex"
-                        alignItems="center"
-                      >
-                        <BiLike
-                          style={{ marginRight: "10px", fontSize: "20px" }}
-                        />{" "}
-                        Likes 0
-                      </Box>
-                    </NavLink>
+                      <BiLike
+                        style={{ marginRight: "10px", fontSize: "20px" }}
+                      />
+                      Likes 0
+                    </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
-                    <NavLink
-                      to="votes"
-                      style={{ textDecoration: "none" }}
-                      className={({ isActive }) =>
-                        isActive ? "active" : "inactive"
-                      }
+                    <Box
+                      color={show === 3 ? "primary.main" : "primary.light"}
+                      fontWeight={show === 3 ? 700 : 500}
+                      ml={3}
+                      fontSize="17px"
+                      fontFamily="Open Sans"
+                      display="flex"
+                      alignItems="center"
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => setShow(3)}
                     >
-                      <Box
-                        // color="primary.light"
-                        ml={3}
-                        fontSize="17px"
-                        fontWeight={500}
-                        fontFamily="Open Sans"
-                        display="flex"
-                        alignItems="center"
-                      >
-                        <AiTwotoneLike
-                          style={{ marginRight: "10px", fontSize: "20px" }}
-                        />
-                        Votes 0
-                      </Box>
-                    </NavLink>
+                      <AiTwotoneLike
+                        style={{ marginRight: "10px", fontSize: "20px" }}
+                      />
+                      Votes 0
+                    </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
-                    <NavLink
-                      to="mentions"
-                      style={{ textDecoration: "none" }}
-                      className={({ isActive }) =>
-                        isActive ? "active" : "inactive"
-                      }
+                    <Box
+                      color={show === 4 ? "primary.main" : "primary.light"}
+                      fontWeight={show === 4 ? 700 : 500}
+                      ml={3}
+                      fontSize="17px"
+                      fontFamily="Open Sans"
+                      display="flex"
+                      alignItems="center"
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => setShow(4)}
                     >
-                      <Box
-                        // color="primary.light"
-                        ml={3}
-                        fontSize="17px"
-                        fontWeight={500}
-                        fontFamily="Open Sans"
-                        display="flex"
-                        alignItems="center"
-                      >
-                        <MdAlternateEmail
-                          style={{ marginRight: "10px", fontSize: "20px" }}
-                        />
-                        Mentions 0
-                      </Box>
-                    </NavLink>
+                      <MdAlternateEmail
+                        style={{ marginRight: "10px", fontSize: "20px" }}
+                      />
+                      Mentions 0
+                    </Box>
                   </Box>
                 </Box>
               </Grid>
             )}
 
-            <Grid item xs={12} sm={12} md={9}></Grid>
+            <Grid item xs={12} sm={12} md={9}>
+              {show === 0 ? (
+                <Post />
+              ) : show === 1 ? (
+                <Discussion />
+              ) : show === 2 ? (
+                <Like />
+              ) : show === 3 ? (
+                <Vote />
+              ) : (
+                <Mention />
+              )}
+            </Grid>
           </Grid>
         </Box>
       </Container>

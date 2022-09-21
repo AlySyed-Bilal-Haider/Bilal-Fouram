@@ -23,6 +23,7 @@ import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 import { styled } from "@mui/styles";
 
 import PopUp from "./UserPenal/AddPollPopup";
+import ChooseTag from "./UserPenal/ChooseTag";
 
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -97,9 +98,13 @@ export default function Home() {
 
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
 
   const handleClickOpen1 = () => {
     setOpen1(true);
+  };
+  const handleClickOpen2 = () => {
+    setOpen2(true);
   };
 
   const handleClickOpen = () => {
@@ -144,6 +149,7 @@ export default function Home() {
   return (
     <Box sx={{ width: "100%" }}>
       <PopUp open={open1} setOpen={setOpen1} />
+      <ChooseTag open={open2} setOpen={setOpen2} />
 
       <Container maxWidth="lg" sx={{ mt: { md: 4, xs: 0 } }}>
         <Box
@@ -188,6 +194,7 @@ export default function Home() {
               <Toolbar>
                 <Box sx={{ ml: 2, flex: 1 }}>
                   <Typography
+                    onClick={handleClickOpen2}
                     color="primary.main"
                     variant="subtitle2"
                     component="span"
@@ -196,6 +203,7 @@ export default function Home() {
                       borderRadius: "5px",
                       px: "6px",
                       py: "2px",
+                      cursor: "pointer",
                     }}
                   >
                     Choose Tags
