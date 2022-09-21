@@ -4,6 +4,7 @@ import { Dialog, DialogContent, Slide } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { withStyles, styled } from "@mui/styles";
+import { useState } from "react";
 
 const StyleTextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -46,6 +47,39 @@ const StyledModal = withStyles((theme) => ({
 }))(Dialog);
 
 function PopUp({ open, setOpen }) {
+  const [addpoll,setAddpollstate]=useState({
+    question:"",
+    ans1:"",
+    ans2:"",
+    enddate:"",
+    status:true
+  })
+
+  const pollHandler=(e)=>{
+    setAddpollstate({...addpoll,[e.target.name]:e.target.value});
+
+
+  }
+
+  const addPollHandler=()=>{
+  const polldata=localStorage.getItem('poll');
+  if(polldata){
+    console.log("first");
+    localStorage.removeItem('poll');
+    localStorage.setItem('poll',JSON.stringify(addpoll));
+  }else{
+    console.log("second condtions");
+    localStorage.setItem('poll',JSON.stringify(addpoll));
+  }
+
+setAddpollstate({
+  question:"",
+  ans1:"",
+  ans2:"",
+  enddate:"",
+  status:true
+})
+  }
   const handleClose = () => {
     setOpen(false);
   };
@@ -90,7 +124,7 @@ function PopUp({ open, setOpen }) {
           >
             Question
           </Typography>
-          <StyleTextInput fullWidth type="text" />
+          <StyleTextInput fullWidth type="text" name="question"  value={addpoll.question} onChange={pollHandler} />
 
           <Typography
             mt={3}
@@ -102,9 +136,9 @@ function PopUp({ open, setOpen }) {
           >
             Answers
           </Typography>
-          <StyleTextInput fullWidth type="text" placeholder="Answer #1" />
+          <StyleTextInput fullWidth type="text" placeholder="Answer #1"  value={addpoll.ans1}  name="ans1"   onChange={pollHandler} />
           <Box mt={2}>
-            <StyleTextInput fullWidth type="text" placeholder="Answer #2" />
+            <StyleTextInput fullWidth type="text" placeholder="Answer #2" value={addpoll.ans2}  name="ans2"  onChange={pollHandler}/>
           </Box>
 
           <Typography
@@ -117,9 +151,11 @@ function PopUp({ open, setOpen }) {
           >
             Poll end date (Optional)
           </Typography>
-          <StyleTextInput fullWidth type="text" />
+          <StyleTextInput fullWidth type="date" value={addpoll.enddate} name="enddate" onChange={pollHandler} />
 
           <Button
+          onClick={addPollHandler}
+          type="submit"
             disableRipple={true}
             sx={{
               backgroundColor: "secondary.main",

@@ -1,4 +1,5 @@
 import mongomodal from "../Schema/Signupschema.js";
+import postmodal from "../Schema/Postschema.js";
 import jsonwebtoken from "jsonwebtoken";
 
 // ......Signup here routes start..............
@@ -78,6 +79,35 @@ export const tokenVerifyHandler = async (req, res) => {
         message: " invaild token",
       });
     }
+  } catch (error) {
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+      user: false,
+    });
+  }
+};
+
+
+// ....Add discussion and Questions ,answer..........
+export const discussion = async (req, res) => {
+  try {
+    const addpost = await new postmodal({
+      tag: req.body.tag,
+      title: req.body.title,
+      description: req.body.description,
+      status: req.body.status,
+      question: req.body.question,
+      ans1: req.body.ans1,
+      ans2: req.body.ans2,
+      enddate: req.body.enddate,
+    });
+    await addpost.save();
+    res.json({
+      status: "ok",
+      success: true,
+      message: "post add Successfully!",
+    });
   } catch (error) {
     res.status(404).json({
       status: "error",
