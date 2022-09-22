@@ -147,3 +147,15 @@ export const fetchAlldiscussion=async(req,res)=>{
   })
 }
 }
+
+// fetch specifc data from server
+
+export const fetchcategory=async (req, res) => {
+  const tag = req.params.tag;
+  try {
+    const data = await postmodal.find({tag:tag});
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+  }
+}

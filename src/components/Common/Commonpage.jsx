@@ -10,24 +10,30 @@ import UndoIcon from "@mui/icons-material/Undo";
 function Commonpage(props) {
   const url = "http://localhost:4000";
   const [namestate,setnamestate]=useState(localStorage.getItem("name"));
-  const [alldetailsstate, setDetailsState] = React.useState([]);
-  const [filterrecord,setFilterstate]=useState([]);
-  const [alldescussion,setdescussionstate]=useState([]);
-  // filter data according to tages
-  const FilterHandler=(record)=>{
-   const result=record.filter((items)=>{
-      return items.tag?.toLowerCase().trim().includes(props.tage?.toLowerCase().trim());
-    });
-    setFilterstate(result);
-  }
+  const [alldetailsstate, setDetailsState] = React.useState();
+  const [categorystate,setCategorystate]=useState([]);
+  const [allDescussions,setAlldescussionsstate]=useState([]);
 
+  // fetch specific details from server
+  useEffect(() => {
+    const fetchcategory = async () => {
+      try {
+        const { data } = await axios.get(`${url}/category/${props.tage}`);
+        console.log("data",data);
+       setCategorystate(data)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchcategory();
+  }, [props.tage]);
 
   // fetch all details from sever
   useEffect(() => {
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
-        setDetailsState(data.allDiscussion);
+        setAlldescussionsstate(data.allDiscussion);
       } catch (error) {
         console.log(error);
       }
@@ -35,20 +41,13 @@ function Commonpage(props) {
     fetchdetails();
   }, []);
 
-  // filter data from available data
-
-  //  useEffect(()=>{
-  //   if(props.tage && alldetailsstate){
-  //     FilterHandler(alldetailsstate);
-  //   }
-  //  },[props.tage]);
-
-  
-    // if(filterrecord){
-    //   setDetailsState(filterrecord);
-    // }else{
-    //   setDetailsState(alldescussion);
-    // }
+  useEffect(()=>{
+ if(categorystate){
+  setDetailsState(categorystate);
+ }else{
+  setDetailsState(allDescussions);
+ }
+  },[categorystate])
   return (
     <Grid item md={10} xs={12}>
       <Box
