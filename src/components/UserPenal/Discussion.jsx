@@ -1,6 +1,4 @@
-import React,{useEffect} from 'react';
-import axios from "axios";
-
+import React from 'react';
 import { Box, Typography } from "@mui/material";
 import { FaRegComment } from "react-icons/fa";
 

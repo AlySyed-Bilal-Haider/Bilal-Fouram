@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Moment from "moment";
+import { useNavigate } from "react-router-dom";
+
 import { Button, Box, Container, Typography, Grid } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { deepPurple } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
 import UndoIcon from "@mui/icons-material/Undo";
-
+// /detail
 function Commonpage(props) {
+  const naviagte=useNavigate();
   const url = "http://localhost:4000";
   const [namestate,setnamestate]=useState(localStorage.getItem("name"));
   const [alldetailsstate, setDetailsState] = React.useState();
   const [categorystate,setCategorystate]=useState([]);
   const [allDescussionsstate,setAlldescussionsstate]=useState([]);
-
   // fetch specific details from server
   useEffect(() => {
     const fetchcategory = async () => {
@@ -48,7 +49,11 @@ function Commonpage(props) {
  }else{
   setDetailsState(allDescussionsstate);
  }
-  },[categorystate])
+  },[categorystate]);
+
+ const detailsHandler=(id)=>{
+  naviagte(`/detail/${id}`)
+ }
   return (
     <Grid item md={10} xs={12}>
       <Box
@@ -91,7 +96,11 @@ function Commonpage(props) {
         props.title && categorystate.length ==0 ? (<Typography variant="h4" mt={2} fontWeight={700} align="center">Upcoming as soon {  props.title } !</Typography>):(
           alldetailsstate?.map((items, i) => {
             return (
+             
               <Box
+              onClick={()=>{
+                detailsHandler(items?._id);
+              }}
                 key={i}
                 sx={{
                   mt: 2,
@@ -213,6 +222,7 @@ function Commonpage(props) {
                   {items.description}
                 </Typography>
               </Box>
+              
             );
           })
         )

@@ -5,6 +5,8 @@ import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import axios from "axios";
 const StyledMenu = styled((props) => (
   <Menu
@@ -64,6 +66,22 @@ const StyledMenu = styled((props) => (
        console.log("Discussions error:", error);
      }
    };
+
+    // post remove from server
+  const removeHandler=async(id)=>{
+    try{
+          const {data}=await axios.delete(`${url}/removePost/${id}`);
+          console.log("data",data);
+          if(data.status=='ok'){
+            toast.success(data.message);
+            fetchPost();
+          }else{
+            toast.error(data.message);
+          }
+    }catch(error){
+         toast.error(error.message);
+    }
+  }
   return (
     <>
       <Box pb={10}>
@@ -159,7 +177,9 @@ const StyledMenu = styled((props) => (
                       sx={{ fontSize: "16px" }}
                     >
                       <RiDeleteBin5Line style={{ marginRight: "15px" }} />
-                      Delete
+                     <Typography onClick={()=>{
+                      removeHandler(item?._id);
+                     }}>Delete</Typography> 
                     </MenuItem>
                   </StyledMenu>
                 </Box>

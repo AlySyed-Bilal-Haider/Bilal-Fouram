@@ -189,3 +189,44 @@ export const getSpecificdescussion=async(req,res)=>{
       message: error
 })
 }}
+
+//fetch fetchPostDetails from MongoDB 
+
+export const fetchPostDetails=async(req,res)=>{
+  const id = req.params.id;
+  try {
+    const data = await postmodal.findOne({_id:id});
+    res.send(data);
+  } catch (error) {
+    res.status(404).json({
+      status: "error",
+      success: false,
+      message: error
+})
+}}
+
+export const removepost=async(req,res)=>{
+  const id=req.params.id.trim();
+  try{
+    const data = await postmodal.findByIdAndDelete({_id:id});
+    if(data){
+      res.status(200).json({
+        status: "ok",
+        success: true,
+        message: "Post remove successfully !"
+  })
+    }else{
+      res.status(404).json({
+        status: "error",
+        success: false,
+        message: "please try again ,post not delete !"
+  })
+    }
+  }catch(error){
+    res.status(505).json({
+      status: "error",
+      success: false,
+      message: error
+})
+  }
+}

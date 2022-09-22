@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import jsonwebtoken from "jsonwebtoken";
 
+
 import { makeStyles } from "@mui/styles";
 import { BsCheckLg } from "react-icons/bs";
 import { FaRibbon } from "react-icons/fa";
@@ -66,8 +67,7 @@ export default function MainPage() {
     if (userProfile?.email) {
       userProfileHandler();
     }
-  }, [userProfile?.email]);
-
+  }, [userProfile?.email]);  
   return (
     <>
       <Box bgcolor="primary.light">

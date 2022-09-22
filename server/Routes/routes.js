@@ -1,6 +1,6 @@
 import express from 'express';
 import {post,login,tokenVerifyHandler,discussion,fetchAlldiscussion,fetchcategory,
-    fetchuser,getSpecificdescussion
+    fetchuser,getSpecificdescussion,fetchPostDetails,removepost
 } from '../Controller/Post.js';
 const router=express.Router();
 router.get('/',(req,res)=>{
@@ -10,8 +10,12 @@ router.post("/usersignup", post);
 router.post("/login",login);
 router.post("/verifytoken",tokenVerifyHandler);
 router.post('/posts',discussion);
+
 router.get('/alldiscussion',fetchAlldiscussion);
 router.get("/category/:tag",fetchcategory);
 router.get("/fetchuser/:email",fetchuser);
 router.get("/fetchspecificpost/:email",getSpecificdescussion);
+router.get("/fetchPostDetails/:id",fetchPostDetails);
+
+router.delete("/removePost/:id",removepost)
 export default router;
