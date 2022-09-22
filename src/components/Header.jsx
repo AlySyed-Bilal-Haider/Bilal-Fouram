@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
+import AccountMenu from './MenuItem';
 import {
   Paper,
   Box,
@@ -15,11 +16,11 @@ import {
   InputBase,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-// import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import clsx from "clsx";
 
+import axios from "axios";
 // import { AppContext } from "../utils";
 // import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
 import Login from "./Login";
@@ -43,8 +44,28 @@ const useStyles = makeStyles({
 export default function Header({ setOpensign }) {
   // const { account, connect, disconnect, signer } = useContext(AppContext);
   // const tokenContract = useTokenContract(signer);
+  const [namestate,setnamestate]=useState('');
   const [searchstate, setsearchstate] = useState(true);
   const [loginstate, setloginstate] = useState(false);
+  const [filterstate,setfilterstate]=useState('');
+  const [options,setOptionsstate]=useState([]);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  // fetch all details from sever
+  const url = "http://localhost:4000";
+  useEffect(() => {
+    const fetchdetails = async () => {
+      try {
+        const { data } = await axios.get(`${url}/alldiscussion`);
+        setOptionsstate(data.allDiscussion)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const username=localStorage.getItem("name");
+    setnamestate(username);
+    fetchdetails();
+  }, []);
   // const [alertState, setAlertState] = useState({
   //   open: false,
   //   message: "",
@@ -214,35 +235,39 @@ export default function Header({ setOpensign }) {
                       }}
                     />
                   </Box>
-                  <Typography
-                    ml={4}
-                    variant="body1"
-                    sx={{
-                      textDecoration: "none",
-                      cursor: "pointer",
-                      color: "text.main",
-                    }}
-                    onClick={() => {
-                      setloginstate(true);
-                    }}
-                  >
-                    Log in
-                  </Typography>
-
-                  <Typography
-                    ml={4}
-                    variant="body1"
-                    sx={{
-                      textDecoration: "none",
-                      cursor: "pointer",
-                      color: "text.main",
-                    }}
-                    onClick={() => {
-                      setOpensign(true);
-                    }}
-                  >
-                    Sign up
-                  </Typography>
+                  { namestate ? ( <AccountMenu/>):( <>
+                      <Typography
+                      ml={4}
+                      variant="body1"
+                      sx={{
+                        textDecoration: "none",
+                        cursor: "pointer",
+                        color: "text.main",
+                      }}
+                      onClick={() => {
+                        setloginstate(true);
+                      }}
+                    >
+                      Log in
+                    </Typography>
+  
+                    <Typography
+                      ml={4}
+                      variant="body1"
+                      sx={{
+                        textDecoration: "none",
+                        cursor: "pointer",
+                        color: "text.main",
+                      }}
+                      onClick={() => {
+                        setOpensign(true);
+                      }}
+                    >
+                      Sign up
+                    </Typography>
+                    </>
+                  )}
+                
                   {/* {account ? (
                     <Box
                       width="130px"

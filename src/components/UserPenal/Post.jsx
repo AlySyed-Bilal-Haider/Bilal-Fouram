@@ -1,10 +1,11 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import { Box, Typography, Menu, styled, MenuItem } from "@mui/material";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
+import axios from "axios";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -32,9 +33,11 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function Post() {
+ function Post({email}) {
   //close menu tag on click
+  const name = localStorage.getItem("name");
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [userposts,setPoststate]=useState();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -43,15 +46,32 @@ export default function Post() {
     setAnchorEl(null);
   };
   ///////////////////////////
-
+  // fetch post of specific users
+  const url = "http://localhost:4000";
+  console.log("email",email);
+   useEffect(() => {
+     if (email) {
+       fetchPost();
+     }
+   }, [email]);
+ 
+   const fetchPost = async () => {
+     try {
+       const { data } = await axios.get(`${url}/fetchspecificpost/${email}`);
+      //  console.log("data descussion",);
+       setPoststate(data);
+     } catch (error) {
+       console.log("Discussions error:", error);
+     }
+   };
   return (
     <>
       <Box pb={10}>
-        {["In TestPool", "In Testing"].map((item, i) => {
+        {userposts?.map((item, i) => {
           return (
             <Box mt={i === 0 ? 0 : 2} key={i}>
               <Typography variant="body1" color="primary.main" fontWeight="700">
-                {item}
+                {/* {item} */}
               </Typography>
 
               <Box pl={8} pb={3} borderBottom="1px solid #fff">
@@ -61,7 +81,7 @@ export default function Post() {
                     color="primary.main"
                     fontWeight="700"
                   >
-                    MajorSaab
+                   {name}
                   </Typography>
                   <Typography
                     ml={2}
@@ -69,7 +89,7 @@ export default function Post() {
                     color="primary.light"
                     fontSize="13px"
                   >
-                    2 days ago
+                    {item?.enddate}
                   </Typography>
                   <Typography
                     ml={2}
@@ -82,17 +102,11 @@ export default function Post() {
                 </Box>
 
                 <Box fontSize="14px" color="text.paragraph">
-                  Before you post this:
+                {item?.title}
                   <br />
                   <br />
-                  i. The forum is intended for in-depth discussion only. For
-                  support tickets or general queries, please head to our Discord
-                  channel: https://discord.com/invite/olympusdao
+                 {item?.description}
                   <br />
-                  <br />
-                  ii. If this proposal is going to the Proposal section, make
-                  sure you have read the Proposal guidelines:
-                  https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines
                 </Box>
 
                 <Box
@@ -157,3 +171,5 @@ export default function Post() {
     </>
   );
 }
+
+export default React.memo(Post)

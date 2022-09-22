@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import Web3 from "web3";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-
+import Logout from './components/Logout';
 import "./App.css";
 import Header from "./components/Header";
 import Home from "./components/Home";
@@ -52,7 +52,7 @@ pauseOnHover
         <Header open={opensign} setOpensign={setOpensign} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<MainPage />} />
+          <Route path="/profile" element={<MainPage />} />
           <Route path="/AllDiscussions" element={<AllDiscussions />} />
           <Route path="/Knowledgebase" element={<AllDiscussions />} />
           <Route path="/general" element={<AllDiscussions />} />
@@ -61,6 +61,7 @@ pauseOnHover
           <Route path="/proposal" element={<AllDiscussions />} />
           <Route path="/projectpropsal" element={<AllDiscussions />} />
           <Route path="/feedback" element={<AllDiscussions />} />
+          <Route path="/logout" element={<Logout/>}/>
         </Routes>
       </Box>
     </>

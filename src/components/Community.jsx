@@ -1,9 +1,9 @@
 import React from 'react'
 import Commompage from './Common/Commonpage';
-function Community({title}) {
+function Community({title,tage}) {
     console.log("Community");
   return (
-   <Commompage title={title}/>
+   <Commompage title={title} tage={tage}/>
   )
 }
 

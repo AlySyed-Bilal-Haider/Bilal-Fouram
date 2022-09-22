@@ -1,7 +1,10 @@
+import React,{useEffect} from 'react';
+import axios from "axios";
+
 import { Box, Typography } from "@mui/material";
 import { FaRegComment } from "react-icons/fa";
 
-export default function Discussion() {
+function Discussion({ email }) {
   return (
     <Box pb={10}>
       {["TestPool", "Testing"].map((item, i) => {
@@ -83,3 +86,4 @@ export default function Discussion() {
     </Box>
   );
 }
+export default React.memo(Discussion);

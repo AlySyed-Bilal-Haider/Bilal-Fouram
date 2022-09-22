@@ -1,10 +1,10 @@
-import React from "react";
+import React,{useState} from "react";
 import { 
  NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-
+import Signup from './Signup';
 import {
   Typography,
   Dialog,
@@ -75,6 +75,7 @@ function Login({ open, setloginstate }) {
     email: "",
     password: "",
   });
+  const [opensign, setOpensign] =React.useState(false);
   //input filed change handler;
   const changeHandler = (e) => {
     setUserstate({ ...userstate, [e.target.name]: e.target.value });
@@ -89,11 +90,15 @@ function Login({ open, setloginstate }) {
   const loginHandler = async () => {
     try {
       const { data } = await axios.post(`${url}/login`, userstate);
-      console.log("data login",data);
+      console.log("data",data);
+      if(data.status=='ok'){
       toast.success(data.message);
       localStorage.setItem("token", data.user);
-      navigate('/signup');
+      navigate('/profile');
       handleClose();
+      }else{
+        toast.error(data.message);
+      }
     } catch (error) {
       toast.error(error.message);
     }
@@ -103,10 +108,12 @@ function Login({ open, setloginstate }) {
       password: "",
     });
   };
-
-  
-
+const signupHandler=()=>{
+  // setOpensign(true);
+  setloginstate(false);
+}
   return (
+    <>
     <StyledModal
       open={open}
       keepMounted
@@ -204,22 +211,27 @@ function Login({ open, setloginstate }) {
               >
                 Don't have an account?
               </Typography>
-              <NavLink to="/" style={{ textDecoration: "none" }}>
+             
                 <Typography
+                cursor="pointer"
+                onClick={signupHandler}
                   variant="body1"
                   component="span"
                   fontWeight="700"
                   color="text.main"
                   borderBottom="1px solid #D9D9D9"
+                  textDecoration="none"
                 >
                   Sign up
                 </Typography>
-              </NavLink>
+  
             </Box>
           </Box>
         </Box>
       </DialogContent>
     </StyledModal>
+    {/* {opensign && <Signup setOpensign={setOpensign} opensign={opensign} />} */}
+    </>
   );
 }
 

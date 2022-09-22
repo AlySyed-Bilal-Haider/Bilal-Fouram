@@ -19,7 +19,7 @@ function Commonpage(props) {
     const fetchcategory = async () => {
       try {
         const { data } = await axios.get(`${url}/category/${props.tage}`);
-        console.log("data",data);
+        console.log("data category",data);
        setCategorystate(data)
       } catch (error) {
         console.log("commonpage category error:",error);
@@ -183,7 +183,7 @@ function Commonpage(props) {
                           },
                         }}
                       >
-                        {props.title ? props.title : "All descussion"}
+                        {items?.tag ? items?.tag : "All descussion"}
                       </Button>
                       <Button
                         startIcon={

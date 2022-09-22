@@ -24,6 +24,7 @@ import { styled } from "@mui/styles";
 import PopUp from "./UserPenal/AddPollPopup";
 import ChooseTag from "./UserPenal/ChooseTag";
 
+import Login from "./Login";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
@@ -100,8 +101,10 @@ export default function Home() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
+  const [loginstate, setloginstate] = useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [username,setusernameState]=React.useState('');
+  const [emailState,setEmailstate]=React.useState('');
   const [tagsvalue,setTagsvalue]=useState('');
   const [addpoststate, setPoststate] = React.useState({
     tags: "wow",
@@ -119,10 +122,11 @@ export default function Home() {
     const polldata = localStorage.getItem("poll");
     let checkstatus = false;
     let updatedata;
+    const addnameAndemail={...addpoststate,username:username,email:emailState};
     if(!!tagsvalue){
     if (polldata) {
       const pollrecord = JSON.parse(polldata);
-      updatedata = { ...addpoststate, ...pollrecord,tag:tagsvalue};
+      updatedata = { ...addnameAndemail, ...pollrecord,tag:tagsvalue,};
       checkstatus = true;
     }
     try {
@@ -130,11 +134,12 @@ export default function Home() {
         const { data } = await axios.post(`${url}/posts`, updatedata);
         if (data.status == "ok") {
           toast.success(data.message);
+          setTagsvalue('');
         } else {
           toast.error(data.message);
         }
       } else {
-        const { data } = await axios.post(`${url}/posts`, addpoststate);
+        const { data } = await axios.post(`${url}/posts`, addnameAndemail);
         if (data.status == "ok") {
           toast.success(data.message);
         } else {
@@ -163,6 +168,15 @@ export default function Home() {
   const handleClose = () => {
     setOpen(false);
   };
+  const CheckloginHandler=()=>{
+    const token = localStorage.getItem("token");
+    if(token){
+      handleClickOpen();
+    }else{
+      setloginstate(true);
+    }
+    
+  }
   // ..........Token verfications ...........
   const tokenVerfiy = async () => {
     try {
@@ -173,6 +187,7 @@ export default function Home() {
         },
       }).then(response => response.json())
       .then(data => {
+        console.log("all data",data);
         localStorage.setItem('name',data.name);
       })
     } catch (error) {
@@ -183,6 +198,8 @@ export default function Home() {
     const token = localStorage.getItem("token");
     if (token) {
       const user = jsonwebtoken.decode(token);
+      setusernameState(user?.name);
+      setEmailstate(user?.email);
       if (!user) {
         localStorage.removeItem("token");
         navigate("/login");
@@ -191,6 +208,8 @@ export default function Home() {
       }
     }
   }, []);
+
+
   // ..........end token verfication........
   return (
     <Box sx={{ width: "100%" }}>
@@ -207,7 +226,7 @@ export default function Home() {
           }}
         >
           <Button
-            onClick={handleClickOpen}
+            onClick={CheckloginHandler}
             sx={{
               height: "36px",
               fontSize: "10px",
@@ -415,6 +434,7 @@ export default function Home() {
           })}
         </Grid>
       </Container>
+      {loginstate && <Login setloginstate={setloginstate} open={loginstate} />}
     </Box>
   );
 }

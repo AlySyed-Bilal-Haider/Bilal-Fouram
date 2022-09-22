@@ -1,10 +1,8 @@
 import React from 'react'
 import Commompage from './Common/Commonpage';
-function General({title}) {
-    console.log("Genral");
-
+function General({title,tage}) {
   return (
-   <Commompage title={title}/>
+   <Commompage title={title} tage={tage}/>
   )
 }
 

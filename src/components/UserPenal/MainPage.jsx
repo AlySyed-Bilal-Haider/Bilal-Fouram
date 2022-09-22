@@ -8,7 +8,9 @@ import {
   Paper,
   useMediaQuery,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import jsonwebtoken from "jsonwebtoken";
+
 import { makeStyles } from "@mui/styles";
 import { BsCheckLg } from "react-icons/bs";
 import { FaRibbon } from "react-icons/fa";
@@ -23,6 +25,7 @@ import Like from "./Likes";
 import Mention from "./Mention";
 
 import avtar from "../../images/avtar.png";
+import axios from "axios";
 
 const useStyles = makeStyles({
   paperMenu: {
@@ -32,9 +35,14 @@ const useStyles = makeStyles({
   },
 });
 export default function MainPage() {
+  const url = "http://localhost:4000";
   const classes = useStyles();
   const matches = useMediaQuery("(max-width:700px)");
   const [tabText, settabText] = useState("Post");
+  const [userProfilestate, setProfilestate] = useState("");
+  const [userToken, setuserTokenstate] = useState(
+    localStorage.getItem("token")
+  );
   const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -44,6 +52,21 @@ export default function MainPage() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const userProfile = jsonwebtoken.decode(userToken);
+
+  const userProfileHandler = async () => {
+    try {
+      const { data } = await axios.get(`${url}/fetchuser/${userProfile?.email}`);
+      setProfilestate(data);
+    } catch (error) {
+      console.log("user profile issues", error);
+    }
+  };
+  useEffect(() => {
+    if (userProfile?.email) {
+      userProfileHandler();
+    }
+  }, [userProfile?.email]);
 
   return (
     <>
@@ -70,7 +93,7 @@ export default function MainPage() {
                   fontFamily="Open Sans"
                   mt={matches ? 2 : 0}
                 >
-                  MajorSaab143
+                  {userProfilestate?.name}
                 </Box>
                 <Box
                   mt={2}
@@ -364,9 +387,9 @@ export default function MainPage() {
 
             <Grid item xs={12} sm={12} md={9}>
               {show === 0 ? (
-                <Post />
+                <Post email={userProfile?.email}/>
               ) : show === 1 ? (
-                <Discussion />
+                <Discussion email={userProfile?.email}/>
               ) : show === 2 ? (
                 <Like />
               ) : show === 3 ? (

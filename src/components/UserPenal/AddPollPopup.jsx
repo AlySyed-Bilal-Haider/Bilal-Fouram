@@ -57,18 +57,15 @@ function PopUp({ open, setOpen }) {
 
   const pollHandler=(e)=>{
     setAddpollstate({...addpoll,[e.target.name]:e.target.value});
-
-
   }
 
   const addPollHandler=()=>{
   const polldata=localStorage.getItem('poll');
   if(polldata){
-    console.log("first");
     localStorage.removeItem('poll');
     localStorage.setItem('poll',JSON.stringify(addpoll));
   }else{
-    console.log("second condtions");
+
     localStorage.setItem('poll',JSON.stringify(addpoll));
   }
 

@@ -28,23 +28,26 @@ export const post = async (req, res) => {
 // ........Login routes start...jsonwebtoken.....
 
 export const login = async (req, res) => {
+  let token;
   try {
     const data = await mongomodal.findOne({
       email: req.body.email,
       password: req.body.password,
     });
     if (data) {
-      const token = jsonwebtoken.sign(
+       token = jsonwebtoken.sign(
         { email: data.email, name: data.name },
         "secret123"
-      );
-      res.json({
-        status: "ok",
-        message: "User login Successfully!",
-        user: token,
-        name:data.name
-      });
-    } else {
+      );}
+      if(token){
+        res.json({
+          status: "ok",
+          message: "User login Successfully!",
+          user: token,
+          name:data.name
+        });
+      }
+      else {
       res.json({
         status: "error",
         message: "Please try gain!",
@@ -103,6 +106,8 @@ export const discussion = async (req, res) => {
       ans1: req.body.ans1,
       ans2: req.body.ans2,
       enddate: req.body.enddate,
+      username:req.body.name,
+      email:req.body.email
     });
     await addpost.save();
     if(addpost){
@@ -130,7 +135,6 @@ export const discussion = async (req, res) => {
 export const fetchAlldiscussion=async(req,res)=>{
   try{
     const data=await postmodal.find({});
-    console.log("data",data);
     if(data){
       res.json({
         status: "ok",
@@ -159,3 +163,29 @@ export const fetchcategory=async (req, res) => {
     console.log(error);
   }
 }
+
+//fetch specific data from server of user
+
+export const fetchuser=async(req,res)=>{
+  const email = req.params.email;
+  try {
+    const data = await mongomodal.findOne({email:email});
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// fetch specific detials from discussion, according to user Email
+export const getSpecificdescussion=async(req,res)=>{
+  const email = req.params.email;
+  try {
+    const data = await postmodal.find({email:email});
+    res.send(data);
+  } catch (error) {
+    res.status(404).json({
+      status: "error",
+      success: false,
+      message: error
+})
+}}

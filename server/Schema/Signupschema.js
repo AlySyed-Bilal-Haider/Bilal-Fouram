@@ -15,7 +15,12 @@ const Adduser = new mongoose.Schema({
     type: String,
     trim: true,
     required:true,
-  }
+  },
+  img:
+    {
+        data: Buffer,
+        contentType: String
+    }
 });
 const mongomodal=mongoose.model("mindao", Adduser);
 export default mongomodal;

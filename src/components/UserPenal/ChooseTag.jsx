@@ -82,6 +82,7 @@ const [tagestate,settageState]=useState('');
 
   const addTagsHandler=()=>{
     setTagsvalue(tagestate);
+    settageState('');
   }
   const handleClose = () => {
     setOpen(false);

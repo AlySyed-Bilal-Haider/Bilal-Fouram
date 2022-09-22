@@ -1,9 +1,9 @@
 import React from 'react'
 import Commompage from './Common/Commonpage';
-function Feed({title}) {
+function Feed({title,tage}) {
     console.log("Feed");
   return (
-   <Commompage title={title}/>
+   <Commompage title={title} tage={tage}/>
   )
 }
 
