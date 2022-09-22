@@ -12,6 +12,7 @@ import NetworkChange from "./networkSwitch";
 import AllDiscussions from "./components/AllDiscussions";
 import MainPage from "./components/UserPenal/MainPage";
 import Signup from "./components/Signup";
+import Detail from "./components/Detail";
 
 const web3 = new Web3(
   Web3.givenProvider
@@ -34,17 +35,17 @@ function App() {
 
   return (
     <>
-    <ToastContainer
-position="top-right"
-autoClose={2000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-/>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
 
       <Signup open={opensign} setOpensign={setOpensign} />
       <NetworkChange open={open} setOpen={setOpen} />
@@ -61,6 +62,7 @@ pauseOnHover
           <Route path="/proposal" element={<AllDiscussions />} />
           <Route path="/projectpropsal" element={<AllDiscussions />} />
           <Route path="/feedback" element={<AllDiscussions />} />
+          <Route path="/detail" element={<Detail />} />
         </Routes>
       </Box>
     </>
