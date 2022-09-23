@@ -7,6 +7,8 @@ import {
   MenuItem,
   Paper,
   useMediaQuery,
+  InputBase
+  ,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import jsonwebtoken from "jsonwebtoken";
@@ -41,6 +43,7 @@ export default function MainPage() {
   const matches = useMediaQuery("(max-width:700px)");
   const [tabText, settabText] = useState("Post");
   const [userProfilestate, setProfilestate] = useState("");
+  const [file,setFilestate]=useState('');
   const [userToken, setuserTokenstate] = useState(
     localStorage.getItem("token")
   );
@@ -63,6 +66,10 @@ export default function MainPage() {
       console.log("user profile issues", error);
     }
   };
+
+  const handlerFile=(e)=>{
+ console.log(e.target.file[0]);
+  }
   useEffect(() => {
     if (userProfile?.email) {
       userProfileHandler();
@@ -79,7 +86,18 @@ export default function MainPage() {
               alignItems="center"
               flexDirection={matches ? "column" : "row"}
             >
-              <img width="120px" src={avtar} alt="" />
+            <Box sx={{width:'40px',height:"40px"}}>
+            <InputBase
+                      type="file"
+                      name="file"
+                      value={file || ""}
+                      sx={{
+                        fontSize: "18px",
+                        width: { xs: "100%", md: "40%" },
+                      }}
+                      onChange={handlerFile}
+                    />
+            </Box>
               <Box
                 ml={3}
                 display="flex"

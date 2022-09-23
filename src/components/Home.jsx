@@ -149,7 +149,7 @@ export default function Home() {
     } catch (error) {
       console.log(error, "error");
     }}else{
-      toast.error("Please add Tages sections");
+      setOpen2(true);
     }
   };
 

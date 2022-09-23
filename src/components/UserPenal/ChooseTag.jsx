@@ -81,7 +81,11 @@ const [tagestate,settageState]=useState('');
   }
 
   const addTagsHandler=()=>{
-    setTagsvalue(tagestate);
+    if(tagestate){
+      handleClose();
+      setTagsvalue(tagestate);
+    }
+
     settageState('');
   }
   const handleClose = () => {
