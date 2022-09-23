@@ -89,11 +89,14 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <Divider />
+
         <MenuItem>
+  <Link to="/profile" style={{textDecoration:'none',color:"black"}}>
           <ListItemIcon>
             <PersonAdd fontSize="small" />
           </ListItemIcon>
-         <Link to="/profile" style={{textDecoration:'none',color:"black"}}> Profile </Link>
+        Profile 
+        </Link>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
@@ -102,10 +105,12 @@ export default function AccountMenu() {
           Settings
         </MenuItem>
         <MenuItem>
+        <Link to="/logout"  style={{textDecoration:'none',color:"black"}} >
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-        <Link to="/logout"  style={{textDecoration:'none',color:"black"}} >Logout</Link>
+       Logout
+       </Link>
         </MenuItem>
       </Menu>
     </React.Fragment>

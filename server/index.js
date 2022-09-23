@@ -9,6 +9,7 @@ app.use(cors("*"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 connectDB(url);
+
 app.get("/",(req,res)=>{
     res.send("server file");
 })

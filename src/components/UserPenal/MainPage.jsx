@@ -7,12 +7,10 @@ import {
   MenuItem,
   Paper,
   useMediaQuery,
-  InputBase
-  ,
+  InputBase,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import jsonwebtoken from "jsonwebtoken";
-
 
 import { makeStyles } from "@mui/styles";
 import { BsCheckLg } from "react-icons/bs";
@@ -38,12 +36,13 @@ const useStyles = makeStyles({
   },
 });
 export default function MainPage() {
+  const formData = new FormData();
   const url = "http://localhost:4000";
   const classes = useStyles();
   const matches = useMediaQuery("(max-width:700px)");
   const [tabText, settabText] = useState("Post");
   const [userProfilestate, setProfilestate] = useState("");
-  const [file,setFilestate]=useState('');
+  const [userid, setIDstate] = useState("");
   const [userToken, setuserTokenstate] = useState(
     localStorage.getItem("token")
   );
@@ -60,21 +59,39 @@ export default function MainPage() {
 
   const userProfileHandler = async () => {
     try {
-      const { data } = await axios.get(`${url}/fetchuser/${userProfile?.email}`);
+      const { data } = await axios.get(
+        `${url}/fetchuser/${userProfile?.email}`
+      );
       setProfilestate(data);
+      setIDstate(data._id);
     } catch (error) {
       console.log("user profile issues", error);
     }
   };
 
-  const handlerFile=(e)=>{
- console.log(e.target.file[0]);
-  }
   useEffect(() => {
     if (userProfile?.email) {
       userProfileHandler();
     }
-  }, [userProfile?.email]);  
+  }, [userProfile?.email]);
+
+  const handleFile = async (event) => {
+    const file = event.target.files[0];
+    console.log("file", file);
+
+    formData.append("file", file);
+    // formData.append('id',userid);
+    // console.log("userid",userid);
+    try {
+      const res = await axios.put(`${url}/uploadimg/${userid}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log("response", res);
+    } catch (error) {
+      console.log("error upload", error);
+    }
+  };
+
   return (
     <>
       <Box bgcolor="primary.light">
@@ -86,18 +103,35 @@ export default function MainPage() {
               alignItems="center"
               flexDirection={matches ? "column" : "row"}
             >
-            <Box sx={{width:'40px',height:"40px"}}>
-            <InputBase
-                      type="file"
-                      name="file"
-                      value={file || ""}
-                      sx={{
-                        fontSize: "18px",
-                        width: { xs: "100%", md: "40%" },
-                      }}
-                      onChange={handlerFile}
-                    />
-            </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <Box
+                  sx={{
+                    width: "150px",
+                    height: "150px",
+                    borderRadius: "100%",
+                    backgroundColor: "white",
+                  }}
+                >
+                  <img src={avtar} alt="avtar" style={{ width: "100%" }} />
+                </Box>
+                <input
+                  type="file"
+                  name="file"
+                  sx={{
+                    fontSize: "18px",
+                    width: { xs: "100%", md: "33%", cursor: "pointer" },
+                  }}
+                  accept="image/*"
+                  onChange={handleFile}
+                />
+              </Box>
               <Box
                 ml={3}
                 display="flex"
@@ -405,9 +439,9 @@ export default function MainPage() {
 
             <Grid item xs={12} sm={12} md={9}>
               {show === 0 ? (
-                <Post email={userProfile?.email}/>
+                <Post email={userProfile?.email} />
               ) : show === 1 ? (
-                <Discussion email={userProfile?.email}/>
+                <Discussion email={userProfile?.email} />
               ) : show === 2 ? (
                 <Like />
               ) : show === 3 ? (

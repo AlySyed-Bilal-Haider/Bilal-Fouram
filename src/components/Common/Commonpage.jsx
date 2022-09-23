@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-import { Button, Box, Container, Typography, Grid } from "@mui/material";
+import moment from "moment";
+import { Button, Box, Typography, Grid } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { deepPurple } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
@@ -165,9 +165,10 @@ function Commonpage(props) {
                           <strong>
                             {namestate
                               ? namestate 
-                              : "Usman Shab"}
-                          </strong>{" "}
-                          {items.enddate ? items?.enddate.toString() : new Date()}
+                              : "Usman Shab" }
+                          </strong>
+                          {items?.addedAt ? moment(items?.addedAt).format("LL"): new Date()}
+
                         </Typography>
                       </Box>
                     </Box>

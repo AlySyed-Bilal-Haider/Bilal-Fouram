@@ -35,19 +35,19 @@ export const login = async (req, res) => {
       password: req.body.password,
     });
     if (data) {
-       token = jsonwebtoken.sign(
+      token = jsonwebtoken.sign(
         { email: data.email, name: data.name },
         "secret123"
-      );}
-      if(token){
-        res.json({
-          status: "ok",
-          message: "User login Successfully!",
-          user: token,
-          name:data.name
-        });
-      }
-      else {
+      );
+    }
+    if (token) {
+      res.json({
+        status: "ok",
+        message: "User login Successfully!",
+        user: token,
+        name: data.name,
+      });
+    } else {
       res.json({
         status: "error",
         message: "Please try gain!",
@@ -76,7 +76,7 @@ export const tokenVerifyHandler = async (req, res) => {
     if (data) {
       res.json({
         status: "ok",
-        name:data.name
+        name: data.name,
       });
     } else {
       res.json({
@@ -93,7 +93,6 @@ export const tokenVerifyHandler = async (req, res) => {
   }
 };
 
-
 // ....Add discussion and Questions ,answer..........
 export const discussion = async (req, res) => {
   try {
@@ -106,16 +105,17 @@ export const discussion = async (req, res) => {
       ans1: req.body.ans1,
       ans2: req.body.ans2,
       enddate: req.body.enddate,
-      username:req.body.name,
-      email:req.body.email
+      username: req.body.name,
+      email: req.body.email,
     });
     await addpost.save();
-    if(addpost){
-    res.json({
-      status: "ok",
-      success: true,
-      message: "post add Successfully!",
-    });}else{
+    if (addpost) {
+      res.json({
+        status: "ok",
+        success: true,
+        message: "post add Successfully!",
+      });
+    } else {
       res.json({
         status: "error",
         success: false,
@@ -132,101 +132,140 @@ export const discussion = async (req, res) => {
 };
 
 // fetch all discusions from server , then send on front end
-export const fetchAlldiscussion=async(req,res)=>{
-  try{
-    const data=await postmodal.find({});
-    if(data){
+export const fetchAlldiscussion = async (req, res) => {
+  try {
+    const data = await postmodal.find({});
+    if (data) {
       res.json({
         status: "ok",
         success: true,
         message: "post add Successfully!",
-        allDiscussion:data
-      })
+        allDiscussion: data,
+      });
     }
-  }catch(error){
-      res.status(404).json({
-        status: "error",
-        success: false,
-        message: error
-  })
-}
-}
+  } catch (error) {
+    res.status(404).json({
+      status: "error",
+      success: false,
+      message: error,
+    });
+  }
+};
 
 // fetch specifc data from server
 
-export const fetchcategory=async (req, res) => {
+export const fetchcategory = async (req, res) => {
   const tag = req.params.tag;
   try {
-    const data = await postmodal.find({tag:tag});
+    const data = await postmodal.find({ tag: tag });
     res.send(data);
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 //fetch specific data from server of user
 
-export const fetchuser=async(req,res)=>{
+export const fetchuser = async (req, res) => {
   const email = req.params.email;
   try {
-    const data = await mongomodal.findOne({email:email});
+    const data = await mongomodal.findOne({ email: email });
     res.send(data);
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 // fetch specific detials from discussion, according to user Email
-export const getSpecificdescussion=async(req,res)=>{
+export const getSpecificdescussion = async (req, res) => {
   const email = req.params.email;
   try {
-    const data = await postmodal.find({email:email});
+    const data = await postmodal.find({ email: email });
     res.send(data);
   } catch (error) {
     res.status(404).json({
       status: "error",
       success: false,
-      message: error
-})
-}}
+      message: error,
+    });
+  }
+};
 
-//fetch fetchPostDetails from MongoDB 
+//fetch fetchPostDetails from MongoDB
 
-export const fetchPostDetails=async(req,res)=>{
+export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await postmodal.findOne({_id:id});
+    const data = await postmodal.findOne({ _id: id });
     res.send(data);
   } catch (error) {
     res.status(404).json({
       status: "error",
       success: false,
-      message: error
-})
-}}
+      message: error,
+    });
+  }
+};
 
-export const removepost=async(req,res)=>{
-  const id=req.params.id.trim();
-  try{
-    const data = await postmodal.findByIdAndDelete({_id:id});
-    if(data){
+export const removepost = async (req, res) => {
+  const id = req.params.id.trim();
+  try {
+    const data = await postmodal.findByIdAndDelete({ _id: id });
+    if (data) {
       res.status(200).json({
         status: "ok",
         success: true,
-        message: "Post remove successfully !"
-  })
-    }else{
+        message: "Post remove successfully !",
+      });
+    } else {
       res.status(404).json({
         status: "error",
         success: false,
-        message: "please try again ,post not delete !"
-  })
+        message: "please try again ,post not delete !",
+      });
     }
-  }catch(error){
+  } catch (error) {
     res.status(505).json({
       status: "error",
       success: false,
-      message: error
-})
+      message: error,
+    });
   }
-}
+};
+
+export const uploadProfile = async (req, res) => {
+  console.log("req", req.file.path);
+  const id = req.params.id.trim();
+  console.log("id",id);
+  res.send(id);
+  // try {
+  //   console.log(_id);
+  //   const data = await mongomodal.findAndModify(
+  //     { _id: id },
+  //     {
+  //       img: req.file.path,
+  //     }
+  //   );
+
+  //   if (data) {
+  //     res.json({
+  //       status: "successfully",
+  //       success: true,
+  //       message: "your profile pic change successfully !",
+  //     });
+  //   } else {
+  //     res.json({
+  //       status: "error",
+  //       success: false,
+  //       message: "please try again !",
+  //     });
+  //   }
+  // } catch (error) {
+  //   console.log("error", error);
+  //   res.json({
+  //     status: "error",
+  //     success: false,
+  //     message: "your profile pic change successfully !",
+  //   });
+  // }
+};

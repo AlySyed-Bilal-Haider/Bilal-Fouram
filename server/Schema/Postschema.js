@@ -6,6 +6,10 @@ const Addpost = new mongoose.Schema({
     trim: true,
     required:true,
   },
+  addedAt: {
+    type: Date,
+    default: new Date(),
+  },
   description : {
     type: String,
     trim: true,
@@ -15,7 +19,7 @@ const Addpost = new mongoose.Schema({
   question:String,
   ans1:String,
   ans2:String,
-  enddate:{type: Date, default: Date.now},
+  enddate:{type: Date},
   username:String,
   email:String
 });
