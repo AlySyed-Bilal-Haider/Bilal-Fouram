@@ -1,13 +1,14 @@
-import React,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Menu, styled, MenuItem } from "@mui/material";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
-
+import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import axios from "axios";
+import EditPopUp from "./EditPopUp";
+
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -35,11 +36,12 @@ const StyledMenu = styled((props) => (
   },
 }));
 
- function Post({email}) {
+function Post({ email }) {
+  const [editPopOpen, setEditPopOpen] = useState(false);
   //close menu tag on click
   const name = localStorage.getItem("name");
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [userposts,setPoststate]=useState();
+  const [userposts, setPoststate] = useState();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -49,45 +51,47 @@ const StyledMenu = styled((props) => (
   };
   ///////////////////////////
   // fetch post of specific users
+
   const url = "http://localhost:4000";
-  console.log("email",email);
-   useEffect(() => {
-     if (email) {
-       fetchPost();
-     }
-   }, [email]);
- 
-   const fetchPost = async () => {
-     try {
-       const { data } = await axios.get(`${url}/fetchspecificpost/${email}`);
-      //  console.log("data descussion",);
-       setPoststate(data);
-     } catch (error) {
-       console.log("Discussions error:", error);
-     }
-   };
-
-    // post remove from server
-  const removeHandler=async(id)=>{
-    try{
-          const {data}=await axios.delete(`${url}/removePost/${id}`);
-          console.log("data",data);
-          if(data.status=='ok'){
-            toast.success(data.message);
-            fetchPost();
-          }else{
-            toast.error(data.message);
-          }
-    }catch(error){
-         toast.error(error.message);
+  console.log("email", email);
+  useEffect(() => {
+    if (email) {
+      fetchPost();
     }
-  }
+  }, [email]);
 
-  const arr1=[1,2,3,4];
-  arr1[50]=51;
+  const fetchPost = async () => {
+    try {
+      const { data } = await axios.get(`${url}/fetchspecificpost/${email}`);
+      //  console.log("data descussion",);
+      setPoststate(data);
+    } catch (error) {
+      console.log("Discussions error:", error);
+    }
+  };
+
+  // post remove from server
+  const removeHandler = async (id) => {
+    try {
+      const { data } = await axios.delete(`${url}/removePost/${id}`);
+      console.log("data", data);
+      if (data.status == "ok") {
+        toast.success(data.message);
+        fetchPost();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const arr1 = [1, 2, 3, 4];
+  arr1[50] = 51;
   console.log(arr1.length);
   return (
     <>
+      <EditPopUp open={editPopOpen} setOpen={setEditPopOpen} />
       <Box pb={10}>
         {userposts?.map((item, i) => {
           return (
@@ -103,7 +107,7 @@ const StyledMenu = styled((props) => (
                     color="primary.main"
                     fontWeight="700"
                   >
-                   {name}
+                    {name}
                   </Typography>
                   <Typography
                     ml={2}
@@ -124,10 +128,10 @@ const StyledMenu = styled((props) => (
                 </Box>
 
                 <Box fontSize="14px" color="text.paragraph">
-                {item?.title}
+                  {item?.title}
                   <br />
                   <br />
-                 {item?.description}
+                  {item?.description}
                   <br />
                 </Box>
 
@@ -167,7 +171,10 @@ const StyledMenu = styled((props) => (
                     onClose={handleClose}
                   >
                     <MenuItem
-                      onClick={handleClose}
+                      onClick={() => {
+                        setEditPopOpen(true);
+                        handleClose();
+                      }}
                       disableRipple
                       sx={{ fontSize: "16px" }}
                     >
@@ -181,9 +188,13 @@ const StyledMenu = styled((props) => (
                       sx={{ fontSize: "16px" }}
                     >
                       <RiDeleteBin5Line style={{ marginRight: "15px" }} />
-                     <Typography onClick={()=>{
-                      removeHandler(item?._id);
-                     }}>Delete</Typography> 
+                      <Typography
+                        onClick={() => {
+                          removeHandler(item?._id);
+                        }}
+                      >
+                        Delete
+                      </Typography>
                     </MenuItem>
                   </StyledMenu>
                 </Box>
@@ -196,4 +207,4 @@ const StyledMenu = styled((props) => (
   );
 }
 
-export default React.memo(Post)
+export default React.memo(Post);
