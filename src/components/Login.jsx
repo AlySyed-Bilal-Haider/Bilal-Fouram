@@ -169,7 +169,7 @@ const signupHandler=()=>{
 
               <TextInput
                 fullWidth
-                type="text"
+                type="password"
                 value={userstate.password || ""}
                 onChange={changeHandler}
                 placeholder="Password"

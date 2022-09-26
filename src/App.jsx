@@ -55,13 +55,13 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route path="/profile" element={<MainPage />} />
           <Route path="/AllDiscussions" element={<AllDiscussions />} />
-          <Route path="/Knowledgebase" element={<AllDiscussions />} />
-          <Route path="/general" element={<AllDiscussions />} />
-          <Route path="/support" element={<AllDiscussions />} />
-          <Route path="/community" element={<AllDiscussions />} />
-          <Route path="/proposal" element={<AllDiscussions />} />
-          <Route path="/projectpropsal" element={<AllDiscussions />} />
-          <Route path="/feedback" element={<AllDiscussions />} />
+          <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />
+          {/* <Route path="/general/:value" element={<AllDiscussions />} />
+          <Route path="/support/:value" element={<AllDiscussions />} />
+          <Route path="/community/:value" element={<AllDiscussions />} />
+          <Route path="/proposal/:value" element={<AllDiscussions />} />
+          <Route path="/projectpropsal/:value" element={<AllDiscussions />} />
+          <Route path="/feedback/:value" element={<AllDiscussions />} /> */}
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/logout" element={<Logout/>}/>
         </Routes>

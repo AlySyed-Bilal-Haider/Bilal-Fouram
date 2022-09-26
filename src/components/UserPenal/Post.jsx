@@ -55,7 +55,6 @@ function Post({ email }) {
   // fetch post of specific users
 
   const url = "http://localhost:4000";
-  console.log("email", email);
   useEffect(() => {
     if (email) {
       fetchPost();
@@ -150,6 +149,7 @@ function Post({ email }) {
                   display="flex"
                   alignItems="center"
                   justifyContent="flex-end"
+                  
                 >
                   <AiFillLike size="22px" />
                   <AiFillDislike size="22px" style={{ marginLeft: "30px" }} />

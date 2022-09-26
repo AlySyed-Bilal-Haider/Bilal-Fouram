@@ -237,8 +237,6 @@ export const removepost = async (req, res) => {
 // start update post code start here
 export const editepostHandler=async (req,res)=>{
   const _id = req.params.id;
-  console.log("edite body request",req.body);
-  console.log("_id",_id);
   try{
 
     const data = await postmodal.findByIdAndUpdate(_id, {
@@ -277,9 +275,7 @@ export const approveHandler=async(req,res)=>{
 let approve;
 try{
   const getpost=await voiting.findOne({postId:req.body.id});
-  console.log("getpost",getpost);
    if(getpost){
-    console.log("Id user");
     const approvevalue=getpost.approve+1;
      approve = await new voiting({
       useremail:req.body.email,
@@ -288,7 +284,6 @@ try{
     checkstatus:true,
     });
   }else{
-    console.log("First time run");
     approve = await new voiting({
       useremail:req.body.email,
     postId: req.body.id,
@@ -318,9 +313,7 @@ export const unapproveHandler=async(req,res)=>{
   let unapprove;
   try{
     const getpost=await voiting.findOne({postId:req.body.id});
-    console.log("getpost",getpost);
      if(getpost){
-      console.log("Id user");
       const unapprovevalue=getpost.unapprove+1;
       unapprove = await new voiting({
         useremail:req.body.email,
@@ -329,7 +322,6 @@ export const unapproveHandler=async(req,res)=>{
       checkstatus:true,
       });
     }else{
-      console.log("First time run");
       unapprove = await new voiting({
         useremail:req.body.email,
       postId: req.body.id,
@@ -355,29 +347,34 @@ export const unapproveHandler=async(req,res)=>{
 
 // check user is exist or not for this post
 
-export const handlecheckuser=async(req,res)=>{
+export const handlercheckuser=async(req,res)=>{
   console.log(req.body);
   try{
          const data= await voiting.findOne({postId:req.body.id,email:req.body.email});
+
          if(data){
           res.json({
             status: "ok",
             success: true,
-            message: "unprove not successfully  !",
+            message: "check approve and unapprove status!",
             votedetails:data
           })
          }else{
           res.json({
             status: "error",
             success: false,
-            message: "unprove not successfully  !",
+            message: "check approve and unapprove unsuccessfully !",
           })
          }
   }catch(error){
- console.log("check user exist or not");
+ console.log("check user exist or not,server issues !");
   }
 }
 
+
+export const commentHandler=async(req,res)=>{
+  console.log("comment data",req.body);
+}
 
 
 

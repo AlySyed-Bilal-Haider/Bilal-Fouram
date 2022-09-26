@@ -5,30 +5,30 @@ export const sidebardata = [
   },
   {
     text: "General",
-    link: "/general",
+    link: "/AllDiscussions/General",
   },
   {
     text: "Proposal",
-    link: "/proposal",
+    link: "/AllDiscussions/Proposal",
   },
   {
     text: "Support",
-    link: "/support",
+    link: "/AllDiscussions/Support",
   },
   {
     text: "Knowledge base",
-    link: "/Knowledgebase",
+    link: "/AllDiscussions/KnowledgeBase",
   },
   {
     text: "Community Development",
-    link: "/community",
+    link: "/AllDiscussions/CommunityDevelopment",
   },
   {
     text: "Feed",
-    link: "/feedback",
+    link: "/AllDiscussions/Feedback",
   },
   {
     text: "Project Proposal",
-    link: "/projectpropsal",
+    link: "/AllDiscussions/ProjectProposals",
   },
 ];
