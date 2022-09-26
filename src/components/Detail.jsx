@@ -1,5 +1,6 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import jsonwebtoken from "jsonwebtoken";
 import {
   Box,
   Container,
@@ -23,7 +24,7 @@ import {
 import { GoCheck } from "react-icons/go";
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import moment from "moment";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -101,36 +102,87 @@ const BpCheckbox = (props) => {
 };
 
 export default function Detail() {
-  const param=useParams();
+  const param = useParams();
   const url = "http://localhost:4000";
   //close menu tag on click
-  const [name,setNamestate]=useState(localStorage.getItem('name'));
+  const [userToken, setuserTokenstate] = useState(
+    localStorage.getItem("token")
+  );
+  const userProfile = jsonwebtoken.decode(userToken);
+  const [name, setNamestate] = useState(localStorage.getItem("name"));
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [postdetails,setPostdetails]=useState()
+  const [postdetails, setPostdetails] = useState();
+  const [postidstate, setPostIdstate] = useState("");
+  const [checkstate, setCheckstate] = useState(false);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClick = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
   // fetch post details from server
   useEffect(() => {
-    if(param.id){
-      fetchdetails()
+    if (param.id) {
+      fetchdetails();
     }
-  }, [param.id])
-  
-  const fetchdetails=async()=>{
-    try{
-      const {data}=await axios.get(`${url}/fetchPostDetails/${param.id}`);
-      setPostdetails(data);
+  }, [param.id]);
 
-    }catch(error){
-     console.log("error details pages",error);
+  const fetchdetails = async () => {
+    try {
+      const { data } = await axios.get(`${url}/fetchPostDetails/${param.id}`);
+      setPostdetails(data);
+      setPostIdstate(data._id);
+    } catch (error) {
+      console.log("error details pages", error);
     }
-  }
- 
+  };
+
+  // check this user is approveed or not
+
+  useEffect(() => {
+    if (postidstate && userProfile?.email) {
+      console.log("post id", postidstate);
+      approveORnotapproveCheck();
+    }
+  }, []);
+
+  const approveORnotapproveCheck = async () => {
+    const voteinfo = { id: postidstate, email: userProfile?.email };
+    try {
+      const { data } = await axios.post(`${url}/getvotesdetails`, voteinfo);
+      console.log("check user", data);
+      setCheckstate(data.votedetails.checkstatus);
+    } catch (error) {
+      console.log("check approve and unapprove", error);
+    }
+  };
+  //Approve Handler
+  const handleApprove = async (id) => {
+    let approveinfo = { id, email: userProfile?.email };
+    console.log("approveinfo", approveinfo);
+    try {
+      const { data } = await axios.post(`${url}/approve`, approveinfo);
+      console.log("approve data", data);
+      data.status == "ok" && approveORnotapproveCheck();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  //unapprove handler
+  const unapproveHandler = async (id) => {
+    let unapprove = { id, email: userProfile?.email };
+    console.log("approveinfo", unapprove);
+    try {
+      const { data } = await axios.post(`${url}/unapprove`, unapprove);
+      console.log("Unapprove data", data);
+      data.status == "ok" && approveORnotapproveCheck();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  console.log("checkstate", checkstate);
   return (
     <>
       <Box bgcolor="primary.light">
@@ -176,7 +228,7 @@ export default function Detail() {
           </Box>
 
           <Typography mt={2} variant="body1" fontSize="20px" color="text.main">
-           {postdetails?.title}
+            {postdetails?.title}
           </Typography>
         </Box>
       </Box>
@@ -185,7 +237,7 @@ export default function Detail() {
           <Box py={2.5} pl={6} borderBottom="1px solid #fff">
             <Box py={2} display="flex" alignItems="center">
               <Typography variant="body1" color="primary.main" fontWeight="700">
-                {name ? name: null}
+                {name ? name : null}
               </Typography>
               <Typography
                 ml={2}
@@ -193,12 +245,12 @@ export default function Detail() {
                 color="primary.light"
                 fontSize="13px"
               >
-               {postdetails?.enddate}
+                {moment(postdetails?.enddate).format("LL")}
               </Typography>
             </Box>
 
             <Box pr={4} fontSize="14px" color="text.paragraph">
-             {postdetails?.description}
+              {postdetails?.description}
             </Box>
 
             <Box
@@ -230,8 +282,8 @@ export default function Detail() {
           >
             <BsFillPinFill size="25px" style={{ marginRight: "20px" }} />
             <Typography variant="body1">
-              <span style={{ fontWeight: "800" }}>{name ? name: null}</span> stickied the
-              discussion.
+              <span style={{ fontWeight: "800" }}>{name ? name : null}</span>{" "}
+              stickied the discussion.
             </Typography>
           </Box>
 
@@ -245,121 +297,133 @@ export default function Detail() {
           >
             <FaLock size="23px" style={{ marginRight: "20px" }} />
             <Typography variant="body1">
-              <span style={{ fontWeight: "800" }}>{name ? name: null}</span> Locked the
-              discussion.
+              <span style={{ fontWeight: "800" }}>{name ? name : null}</span>{" "}
+              Locked the discussion.
             </Typography>
           </Box>
 
-       {postdetails?.status==true ?(
-        <Box mt={5} py={2} pl={6} borderBottom="1px solid #fff">
-        <Typography
-          variant="body1"
-          fontSize="25px"
-          fontWeight="700"
-          color="primary.main"
-        >
-          Poll
-        </Typography>
+          {postdetails?.status == true ? (
+            <Box mt={5} py={2} pl={6} borderBottom="1px solid #fff">
+              <Typography
+                variant="body1"
+                fontSize="25px"
+                fontWeight="700"
+                color="primary.main"
+              >
+                Poll
+              </Typography>
 
-        <Typography
-          mt={2}
-          variant="body1"
-          fontSize="14px"
-          color="primary.light"
-        >
-          {postdetails?.question}
-        </Typography>
+              <Typography
+                mt={2}
+                variant="body1"
+                fontSize="14px"
+                color="primary.light"
+              >
+                {postdetails?.question}
+              </Typography>
 
-        <Typography
-          mt={3}
-          variant="body1"
-          fontSize="16px"
-          fontWeight="700"
-          color="primary.main"
-        >
-          Approve Launch Plan and Base Rate?
-        </Typography>
+              <Typography
+                mt={3}
+                variant="body1"
+                fontSize="16px"
+                fontWeight="700"
+                color="primary.main"
+              >
+                Approve Launch Plan and Base Rate?
+              </Typography>
 
-        <Box
-          mt={1}
-          px={2}
-          display="flex"
-          alignItems="center"
-          justifyContent={{ xs: "center", md: "space-between" }}
-          flexWrap="wrap"
-        >
-          <Box>
-            <LinearProgressBox variant="determinate" value={5} />
-            <Typography
-              mt={-4.6}
-              variant="subtitle1"
-              display="flex"
-              alignItems="center"
-            >
-              <BpCheckbox />
-              Do not approve
-            </Typography>
-          </Box>
+              <Box
+                mt={1}
+                px={2}
+                display="flex"
+                alignItems="center"
+                justifyContent={{ xs: "center", md: "space-between" }}
+                flexWrap="wrap"
+              >
+                <Box>
+                  <LinearProgressBox variant="determinate" value={5} />
+                  <Typography
+                    mt={-4.6}
+                    variant="subtitle1"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    {checkstate == true ? null : (
+                      <BpCheckbox
+                        onClick={() => {
+                          unapproveHandler(postdetails?._id);
+                        }}
+                      />
+                    )}
+                    Do not approve
+                  </Typography>
+                </Box>
 
-          <Box>
-            <LinearProgressBox variant="determinate" value={70} />
-            <Typography
-              mt={-4.6}
-              variant="subtitle1"
-              display="flex"
-              alignItems="center"
-            >
-              <BpCheckbox />
-              Approve
-            </Typography>
-          </Box>
-        </Box>
+                <Box>
+                  <LinearProgressBox variant="determinate" value={70} />
+                  <Typography
+                    mt={-4.6}
+                    variant="subtitle1"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    {checkstate == true ? null : (
+                      <BpCheckbox
+                        onClick={() => {
+                          handleApprove(postdetails?._id);
+                        }}
+                      />
+                    )}
+                    Approve
+                  </Typography>
+                </Box>
+              </Box>
 
-        <Typography
-          px={2}
-          mt={2}
-          fontSize="12px"
-          variant="subtitle1"
-          color="primary.light"
-        >
-          Poll ends in 11 hours.
-        </Typography>
-        <Box
-          mt={2}
-          display="flex"
-          alignItems="center"
-          justifyContent="flex-end"
-        >
-          <AiFillLike size="22px" />
-          <AiFillDislike size="22px" style={{ marginLeft: "30px" }} />
-          <BsFillHeartFill
-            size="22px"
-            style={{ marginLeft: "30px", color: "#DD2E44" }}
-          />
+              <Typography
+                px={2}
+                mt={2}
+                fontSize="12px"
+                variant="subtitle1"
+                color="primary.light"
+              >
+                Poll ends in 11 hours.
+              </Typography>
+              <Box
+                mt={2}
+                display="flex"
+                alignItems="center"
+                justifyContent="flex-end"
+              >
+                <AiFillLike size="22px" />
+                <AiFillDislike size="22px" style={{ marginLeft: "30px" }} />
+                <BsFillHeartFill
+                  size="22px"
+                  style={{ marginLeft: "30px", color: "#DD2E44" }}
+                />
 
-          <Typography
-            ml="30px"
-            variant="body1"
-            fontSize="14px"
-            color="primary.light"
-          >
-            Reply
-          </Typography>
-          <Typography
-            ml="30px"
-            variant="body1"
-            fontSize="14px"
-            color="primary.light"
-          >
-            Like
-          </Typography>
-          <BsThreeDots
+                <Typography
+                  ml="30px"
+                  variant="body1"
+                  fontSize="14px"
+                  color="primary.light"
+                >
+                  Reply
+                </Typography>
+                <Typography
+                  ml="30px"
+                  variant="body1"
+                  fontSize="14px"
+                  color="primary.light"
+                >
+                  Like
+                </Typography>
+                {/* <BsThreeDots
             onClick={handleClick}
             size="22px"
             style={{ marginLeft: "30px", cursor: "pointer" }}
-          />
+          /> */}
 
-          <StyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
+                {/* <StyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
             <MenuItem
               onClick={handleClose}
               disableRipple
@@ -368,11 +432,10 @@ export default function Detail() {
               <BsFlagFill style={{ marginRight: "15px" }} />
               Flag
             </MenuItem>
-          </StyledMenu>
-        </Box>
-      </Box>
-       ):(null)}
-          
+          </StyledMenu> */}
+              </Box>
+            </Box>
+          ) : null}
         </Box>
       </Container>
     </>

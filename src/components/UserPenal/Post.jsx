@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
+
 import { Box, Typography, Menu, styled, MenuItem } from "@mui/material";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
@@ -8,7 +10,6 @@ import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import EditPopUp from "./EditPopUp";
-
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -42,6 +43,7 @@ function Post({ email }) {
   const name = localStorage.getItem("name");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userposts, setPoststate] = useState();
+  const [postIDstate, setPostIdstate] = useState();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -58,13 +60,14 @@ function Post({ email }) {
     if (email) {
       fetchPost();
     }
-  }, [email]);
+  }, [email,editPopOpen]);
 
   const fetchPost = async () => {
     try {
       const { data } = await axios.get(`${url}/fetchspecificpost/${email}`);
-      //  console.log("data descussion",);
-      setPoststate(data);
+       console.log("data descussion",data);
+
+      data && setPoststate(data);
     } catch (error) {
       console.log("Discussions error:", error);
     }
@@ -85,13 +88,20 @@ function Post({ email }) {
       toast.error(error.message);
     }
   };
-
-  const arr1 = [1, 2, 3, 4];
-  arr1[50] = 51;
-  console.log(arr1.length);
+  const editeHandler = (id) => {
+    setTimeout(() => {
+      setEditPopOpen(true);
+    }, 0);
+    setPostIdstate(id);
+    handleClose();
+  };
   return (
     <>
-      <EditPopUp open={editPopOpen} setOpen={setEditPopOpen} />
+      <EditPopUp
+        open={editPopOpen}
+        setOpen={setEditPopOpen}
+        postId={postIDstate}
+      />
       <Box pb={10}>
         {userposts?.map((item, i) => {
           return (
@@ -115,7 +125,7 @@ function Post({ email }) {
                     color="primary.light"
                     fontSize="13px"
                   >
-                    {item?.enddate}
+                    {item?.addedAt ? moment(item?.addedAt).format("LL") : null}
                   </Typography>
                   <Typography
                     ml={2}
@@ -172,8 +182,7 @@ function Post({ email }) {
                   >
                     <MenuItem
                       onClick={() => {
-                        setEditPopOpen(true);
-                        handleClose();
+                        editeHandler(item?._id);
                       }}
                       disableRipple
                       sx={{ fontSize: "16px" }}

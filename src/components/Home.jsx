@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import jsonwebtoken from "jsonwebtoken";
-import FileBase64 from 'react-file-base64';
+
 import {
   Button,
   Box,

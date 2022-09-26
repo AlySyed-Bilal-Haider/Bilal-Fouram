@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState, useRef } from "react";
 import jsonwebtoken from "jsonwebtoken";
-
 import { makeStyles } from "@mui/styles";
 import { BsCheckLg } from "react-icons/bs";
 import { FaRibbon } from "react-icons/fa";
@@ -25,8 +24,10 @@ import Vote from "./Votes";
 import Like from "./Likes";
 import Mention from "./Mention";
 
+import moment from 'moment';
 import avtar from "../../images/avtar.png";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const useStyles = makeStyles({
   paperMenu: {
@@ -43,6 +44,7 @@ export default function MainPage() {
   const [tabText, settabText] = useState("Post");
   const [userProfilestate, setProfilestate] = useState("");
   const [userid, setIDstate] = useState("");
+  const [userfile, setUserfile] = useState("");
   const [userToken, setuserTokenstate] = useState(
     localStorage.getItem("token")
   );
@@ -58,6 +60,7 @@ export default function MainPage() {
   const userProfile = jsonwebtoken.decode(userToken);
 
   const userProfileHandler = async () => {
+    console.log("user profile handler");
     try {
       const { data } = await axios.get(
         `${url}/fetchuser/${userProfile?.email}`
@@ -75,23 +78,31 @@ export default function MainPage() {
     }
   }, [userProfile?.email]);
 
+  // image upload from server
   const handleFile = async (event) => {
-    const file = event.target.files[0];
-    console.log("file", file);
-
-    formData.append("file", file);
-    // formData.append('id',userid);
-    // console.log("userid",userid);
+    let file = event.target.files[0];
+    setUserfile(file);
+  };
+  const handlerSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const res = await axios.put(`${url}/uploadimg/${userid}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log("response", res);
+      if (userfile) {
+        formData.append("file", userfile);
+        formData.append("id", userid);
+        const response = await axios.post(`${url}/uploadimg`, formData);
+        console.log("response", response);
+        if (userProfile?.email && response) {
+          userProfileHandler();
+        }
+        setUserfile("");
+      }else{
+        toast.error("Choose the file !");
+      }
     } catch (error) {
       console.log("error upload", error);
     }
   };
-
+  console.log(userProfilestate);
   return (
     <>
       <Box bgcolor="primary.light">
@@ -115,22 +126,38 @@ export default function MainPage() {
                   sx={{
                     width: "150px",
                     height: "150px",
-                    borderRadius: "100%",
+                    borderRadius: "50%",
                     backgroundColor: "white",
                   }}
                 >
-                  <img src={avtar} alt="avtar" style={{ width: "100%" }} />
+                  {userProfilestate?.img ? (
+                    <img
+                      src={`${url}/${userProfilestate?.img}`}
+                      alt="avtar"
+                      style={{
+                        width: "150px",
+                        height: "150px",
+                        borderRadius: "50%",
+                      }}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <img src={avtar} alt="avtar" style={{ width: "100%" }} loading="lazy" />
+                  )}
                 </Box>
-                <input
-                  type="file"
-                  name="file"
-                  sx={{
-                    fontSize: "18px",
-                    width: { xs: "100%", md: "33%", cursor: "pointer" },
-                  }}
-                  accept="image/*"
-                  onChange={handleFile}
-                />
+                <form onSubmit={handlerSubmit}>
+                  <input
+                    type="file"
+                    name="file"
+                    sx={{
+                      fontSize: "18px",
+                      width: { xs: "100%", md: "33%", cursor: "pointer" },
+                    }}
+                    accept="image/*"
+                    onChange={handleFile}
+                  />
+                  <Button type="submit">Upload</Button>
+                </form>
               </Box>
               <Box
                 ml={3}
@@ -170,7 +197,8 @@ export default function MainPage() {
                       fontWeight={400}
                       fontFamily="Open Sans"
                     >
-                      Joined 3 hours ago
+                      Joined Date {moment(userProfilestate ?.addedAt).format("LL")}
+                      
                     </Box>
                   </Box>
                   <Box display="flex" alignItems="center">

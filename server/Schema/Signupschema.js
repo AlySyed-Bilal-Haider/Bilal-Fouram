@@ -16,6 +16,10 @@ const Adduser = new mongoose.Schema({
     trim: true,
     required:true,
   },
+  addedAt: {
+    type: Date,
+    default: new Date(),
+  },
   img:
     {
         data: Buffer,

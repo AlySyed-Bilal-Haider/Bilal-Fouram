@@ -162,11 +162,12 @@ function Commonpage(props) {
                         <Typography
                           sx={{ color: "text.paragraph", fontSize: "11px" }}
                         >
-                          <strong>
+                          <strong style={{marginRight:'5px'}}>
                             {namestate
                               ? namestate 
                               : "Usman Shab" }
                           </strong>
+
                           {items?.addedAt ? moment(items?.addedAt).format("LL"): new Date()}
 
                         </Typography>

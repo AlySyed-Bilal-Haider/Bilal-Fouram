@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Box,
@@ -14,6 +14,9 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
@@ -36,10 +39,60 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditPopUp({ open, setOpen }) {
+export default function EditPopUp({ open, setOpen, postId }) {
+  const url = "http://localhost:4000";
+
   const [editPoll, setEditPoll] = React.useState(false);
+  const [editePoststate, setEditePostState] = useState({
+    description: "",
+    Question: "",
+    ans1: "",
+    ans2: "",
+  });
   const handleClose = () => {
     setOpen(false);
+  };
+
+  useEffect(() => {
+    postId && fetchuser();
+  }, [postId]);
+
+  const fetchuser = async () => {
+    try {
+      const { data } = await axios.get(`${url}/fetchPostDetails/${postId}`);
+      console.log("fetch post details:", data);
+      setEditePostState({
+        description: data?.description,
+        Question: data?.question,
+        ans1: data?.ans1,
+        ans2: data?.ans2,
+      });
+    } catch (error) {
+      console.log("Edite post error", error);
+    }
+  };
+
+  const handlerInput = (e) => {
+    setEditePostState({ ...editePoststate, [e.target.name]: e.target.value });
+  };
+
+  const handlerSubmit = async () => {
+    try {
+      const { data } = await axios.put(
+        `${url}/editepost/${postId}`,
+        editePoststate
+      );
+      // console.log("data upadte", data);
+      if (data.status == "ok") {
+        toast.success(data.message);
+        handleClose();
+      
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log("Edite post server error:", error);
+    }
   };
 
   return (
@@ -85,16 +138,13 @@ export default function EditPopUp({ open, setOpen }) {
         <Box mt={-3} mb={3} mx={4.5}>
           <TextInput
             type="text"
-            name="despone"
-            defaultValue="Before you post this:
-            i. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: 
-            https://discord.com/invite/olympus"
-            // value={addpoststate.despone}
-            // onChange={discussionHandler}
+            name="description"
+            value={editePoststate?.description}
             fullWidth
             multiline
-            // rows={5}
+            rows={2}
             sx={{ fontSize: "15px" }}
+            onChange={handlerInput}
           />
         </Box>
 
@@ -124,31 +174,27 @@ export default function EditPopUp({ open, setOpen }) {
             <Box mx={5}>
               <TextInput
                 type="text"
-                // name="despone"
-                defaultValue="Poll Question"
-                // value={addpoststate.despone}
-                // onChange={discussionHandler}
+                name="Question"
+                value={editePoststate?.Question}
                 fullWidth
                 sx={{ fontWeight: "700" }}
+                onChange={handlerInput}
               />
               <Box my={2} display="flex" justifyContent="space-around">
                 <TextInput
                   type="text"
-                  // name="despone"
-                  defaultValue="Answer # 1"
-                  // value={addpoststate.despone}
-                  // onChange={discussionHandler}
-
+                  name="ans1"
+                  value={editePoststate?.ans1}
                   sx={{ fontSize: "14px", width: "25%" }}
+                  onChange={handlerInput}
                 />
 
                 <TextInput
                   type="text"
-                  // name="despone"
-                  defaultValue="Answer # 2"
-                  // value={addpoststate.despone}
-                  // onChange={discussionHandler}
+                  name=" ans2"
+                  value={editePoststate?.ans2}
                   sx={{ fontSize: "14px", width: "25%" }}
+                  onChange={handlerInput}
                 />
               </Box>
             </Box>
@@ -158,9 +204,12 @@ export default function EditPopUp({ open, setOpen }) {
         <Divider />
         <Button
           type="submit"
-          //   onClick={postSubmitHandler}
+          onClick={() => {
+            handlerSubmit();
+          }}
           disableRipple={true}
           sx={{
+            cursor: "pointer",
             backgroundColor: "secondary.main",
             color: "text.main",
             textTransform: "capitalize",

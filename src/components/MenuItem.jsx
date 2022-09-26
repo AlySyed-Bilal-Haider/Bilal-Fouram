@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import jsonwebtoken from "jsonwebtoken";
 
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -24,7 +25,11 @@ export default function AccountMenu() {
     setAnchorEl(null);
   };
   useEffect(()=>{
-    setnamestate(localStorage.getItem("name"));
+    const token=localStorage?.getItem("token");
+    if(token){
+      const user = jsonwebtoken.decode(token);
+      setnamestate(user?.name);
+    }
   },[]);
   return (
     <React.Fragment>
@@ -37,9 +42,10 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>
-              {namestate.toUpperCase().slice(0, 1)}
-            </Avatar>
+
+           {namestate && <Avatar sx={{ width: 32, height: 32 }}>
+              { namestate.toUpperCase().slice(0, 1)}
+            </Avatar> }
             <Typography
                 ml={2}
                 variant="body1"
@@ -49,7 +55,7 @@ export default function AccountMenu() {
                   color: "text.main",
                 }}
               >
-                {namestate.toUpperCase()}
+                {namestate ? namestate :null}
               </Typography>
           </IconButton>
       </Box>

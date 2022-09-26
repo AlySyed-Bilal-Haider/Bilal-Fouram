@@ -1,7 +1,7 @@
 import mongomodal from "../Schema/Signupschema.js";
 import postmodal from "../Schema/Postschema.js";
 import jsonwebtoken from "jsonwebtoken";
-
+import voiting from "../Schema/Voting.js";
 // ......Signup here routes start..............
 export const post = async (req, res) => {
   try {
@@ -233,39 +233,155 @@ export const removepost = async (req, res) => {
   }
 };
 
-export const uploadProfile = async (req, res) => {
-  console.log("req", req.file.path);
-  const id = req.params.id.trim();
-  console.log("id",id);
-  res.send(id);
-  // try {
-  //   console.log(_id);
-  //   const data = await mongomodal.findAndModify(
-  //     { _id: id },
-  //     {
-  //       img: req.file.path,
-  //     }
-  //   );
 
-  //   if (data) {
-  //     res.json({
-  //       status: "successfully",
-  //       success: true,
-  //       message: "your profile pic change successfully !",
-  //     });
-  //   } else {
-  //     res.json({
-  //       status: "error",
-  //       success: false,
-  //       message: "please try again !",
-  //     });
-  //   }
-  // } catch (error) {
-  //   console.log("error", error);
-  //   res.json({
-  //     status: "error",
-  //     success: false,
-  //     message: "your profile pic change successfully !",
-  //   });
-  // }
-};
+// start update post code start here
+export const editepostHandler=async (req,res)=>{
+  const _id = req.params.id;
+  console.log("edite body request",req.body);
+  console.log("_id",_id);
+  try{
+
+    const data = await postmodal.findByIdAndUpdate(_id, {
+      description: req.body.description,
+      question: req.body.Question,
+      ans1: req.body.ans1,
+      ans2: req.body.ans2,
+    });
+    console.log("result value",data);
+    if(data){
+      res.status(202).json({
+        status: "ok",
+        success: true,
+        message: "Update successfully",
+      });
+    }else{
+      res.json({
+        status: "error",
+        success: false,
+        message: "Not successfully update",
+      });
+    }
+
+  }catch(error){
+    res.status(505).json({
+      status: "error",
+      success: false,
+      message: error,
+    });
+  }
+}
+
+// ........Approve and UpApprove approveHandler.apply............
+export const approveHandler=async(req,res)=>{
+// console.log(req.body,"Body data");
+let approve;
+try{
+  const getpost=await voiting.findOne({postId:req.body.id});
+  console.log("getpost",getpost);
+   if(getpost){
+    console.log("Id user");
+    const approvevalue=getpost.approve+1;
+     approve = await new voiting({
+      useremail:req.body.email,
+    postId: req.body.id,
+    approve: approvevalue,
+    checkstatus:true,
+    });
+  }else{
+    console.log("First time run");
+    approve = await new voiting({
+      useremail:req.body.email,
+    postId: req.body.id,
+    approve:1,
+    checkstatus:true,
+    });
+  }
+ 
+  await approve.save();
+  res.json({
+    status: "ok",
+    success: true,
+    message: "Approve successfully !",
+  });
+}catch(error){
+  res.status(505).json({
+    status: "error",
+    success: false,
+    message: "Approve not successfully  !",
+  });
+}
+}
+
+
+export const unapproveHandler=async(req,res)=>{
+  // console.log(req.body,"Body data");
+  let unapprove;
+  try{
+    const getpost=await voiting.findOne({postId:req.body.id});
+    console.log("getpost",getpost);
+     if(getpost){
+      console.log("Id user");
+      const unapprovevalue=getpost.unapprove+1;
+      unapprove = await new voiting({
+        useremail:req.body.email,
+      postId: req.body.id,
+      unapprove: unapprovevalue,
+      checkstatus:true,
+      });
+    }else{
+      console.log("First time run");
+      unapprove = await new voiting({
+        useremail:req.body.email,
+      postId: req.body.id,
+      unapprove:1,
+      checkstatus:true,
+      });
+    }
+   
+    await unapprove.save();
+    res.json({
+      status: "ok",
+      success: true,
+      message: "unprove successfully !",
+    });
+  }catch(error){
+    res.status(505).json({
+      status: "error",
+      success: false,
+      message: "unprove not successfully  !",
+    });
+  }
+  }
+
+// check user is exist or not for this post
+
+export const handlecheckuser=async(req,res)=>{
+  console.log(req.body);
+  try{
+         const data= await voiting.findOne({postId:req.body.id,email:req.body.email});
+         if(data){
+          res.json({
+            status: "ok",
+            success: true,
+            message: "unprove not successfully  !",
+            votedetails:data
+          })
+         }else{
+          res.json({
+            status: "error",
+            success: false,
+            message: "unprove not successfully  !",
+          })
+         }
+  }catch(error){
+ console.log("check user exist or not");
+  }
+}
+
+
+
+
+
+
+
+

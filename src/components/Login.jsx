@@ -4,7 +4,7 @@ import {
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import Signup from './Signup';
+import AccountMenu from './MenuItem';
 import {
   Typography,
   Dialog,
@@ -71,6 +71,7 @@ const TextInput = styled(InputBase)({
 function Login({ open, setloginstate }) {
   const navigate=useNavigate();
   const url = "http://localhost:4000";
+  const [menuItem,setMenuitem]=useState(false);
   const [userstate, setUserstate] = React.useState({
     email: "",
     password: "",
@@ -94,7 +95,9 @@ function Login({ open, setloginstate }) {
       if(data.status=='ok'){
       toast.success(data.message);
       localStorage.setItem("token", data.user);
-      navigate('/profile');
+      setTimeout(() => {
+        navigate('/profile');
+      }, 0);
       handleClose();
       }else{
         toast.error(data.message);
@@ -230,6 +233,7 @@ const signupHandler=()=>{
         </Box>
       </DialogContent>
     </StyledModal>
+    { menuItem &&  <AccountMenu/>}
     {/* {opensign && <Signup setOpensign={setOpensign} opensign={opensign} />} */}
     </>
   );

@@ -1,11 +1,12 @@
 import React, { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import AccountMenu from './MenuItem';
+import jsonwebtoken from "jsonwebtoken";
+
 import {
   Paper,
   Box,
   Button,
-  useMediaQuery,
   Container,
   Typography,
   Hidden,
@@ -54,6 +55,7 @@ export default function Header({ setOpensign }) {
   // fetch all details from sever
   const url = "http://localhost:4000";
   useEffect(() => {
+    console.log("Header functions");
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
@@ -62,10 +64,17 @@ export default function Header({ setOpensign }) {
         console.log(error);
       }
     };
-    const username=localStorage.getItem("name");
-    setnamestate(username);
+ 
     fetchdetails();
   }, []);
+
+  useEffect(()=>{
+    const token=localStorage?.getItem("token");
+    if(token){
+      const user = jsonwebtoken.decode(token);
+      setnamestate(user?.name);
+    }
+  },[])
   // const [alertState, setAlertState] = useState({
   //   open: false,
   //   message: "",
@@ -75,9 +84,6 @@ export default function Header({ setOpensign }) {
   const [state, setState] = React.useState({
     left: false,
   });
-
-  // const matches = useMediaQuery("(max-width:960px)");
-  const matches1 = useMediaQuery("(max-width:1279px)");
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (

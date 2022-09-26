@@ -21,7 +21,7 @@ const Addpost = new mongoose.Schema({
   ans2:String,
   enddate:{type: Date},
   username:String,
-  email:String
+  email:String,
 });
 const postmodal=mongoose.model("Addpost", Addpost);
 export default postmodal;
