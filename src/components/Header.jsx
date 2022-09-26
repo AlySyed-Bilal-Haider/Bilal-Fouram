@@ -109,21 +109,44 @@ export default function Header({ setOpensign, setOpenlogin }) {
         </Link>
       </Box>
       <List>
-        {["Log in", "Sign up"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemText
-              sx={{
-                textTransform: "capitalize",
-                textAlign: "center",
-                textDecoration: "none",
-                cursor: "pointer",
-                color: "text.main",
-                fontSize: "13px",
-              }}
-              primary={text}
-            />
-          </ListItem>
-        ))}
+        <ListItem
+          button
+          key="Log in"
+          onClick={() => {
+            setOpenlogin(true);
+          }}
+        >
+          <ListItemText
+            sx={{
+              textTransform: "capitalize",
+              textAlign: "center",
+              textDecoration: "none",
+              cursor: "pointer",
+              color: "text.main",
+              fontSize: "13px",
+            }}
+            primary="Log in"
+          />
+        </ListItem>
+        <ListItem
+          button
+          key="Sign up"
+          onClick={() => {
+            setOpensign(true);
+          }}
+        >
+          <ListItemText
+            sx={{
+              textTransform: "capitalize",
+              textAlign: "center",
+              textDecoration: "none",
+              cursor: "pointer",
+              color: "text.main",
+              fontSize: "13px",
+            }}
+            primary="Sign up"
+          />
+        </ListItem>
       </List>
       {/* <Box mb={1} display="flex" justifyContent="center">
         {account ? (

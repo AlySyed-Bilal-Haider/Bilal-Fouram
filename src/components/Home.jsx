@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import jsonwebtoken from "jsonwebtoken";
-
+import AllDiscussions from './AllDiscussions';
 import {
   Button,
   Box,
