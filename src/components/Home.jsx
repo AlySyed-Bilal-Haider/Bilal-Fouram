@@ -207,15 +207,16 @@ export default function Home() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      const user = jsonwebtoken.decode(token);
-      setusernameState(user?.name);
-      setEmailstate(user?.email);
-      if (!user) {
-        localStorage.removeItem("token");
-        navigate("/login");
-      } else {
-        tokenVerfiy();
-      }
+      tokenVerfiy();
+      // const user = jsonwebtoken.decode(token);
+      // setusernameState(user?.name);
+      // setEmailstate(user?.email);
+      // if (!user) {
+      //   localStorage.removeItem("token");
+      //   navigate("/login");
+      // } else {
+      //   tokenVerfiy();
+      // }
     }
   }, []);
   // ..........end token verfication........

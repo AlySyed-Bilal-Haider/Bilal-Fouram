@@ -1,24 +1,43 @@
 import mongomodal from "../Schema/Signupschema.js";
 import postmodal from "../Schema/Postschema.js";
 import jsonwebtoken from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import jwt_decode from "jwt-decode";
+import { config } from "./config.js";
+
 import voiting from "../Schema/Voting.js";
 // ......Signup here routes start..............
 
 
 export const post = async (req, res) => {
   try {
-    const usersignup = await new mongomodal({
-      name: req.body.name,
+    let user1 = await mongomodal.findOne({
       email: req.body.email,
-      password: req.body.password,
     });
-    await usersignup.save();
-    res.json({
-      status: "ok",
-      success: true,
-      message: "User register Successfully!",
-    });
+    if (user1) {
+      res.status(200).json({
+        status: "warning",
+        message: "Email Already Exist!",
+        user: false,
+      });
+    } else {
+      let userToken = { password: req.body.password };
+      let token = jwt.sign(userToken, config.secret);
+      const usersignup = await new mongomodal({
+        name: req.body.name,
+        email: req.body.email,
+        password: token,
+      });
+      await usersignup.save();
+      res.json({
+        status: "ok",
+        success: true,
+        message: "User register Successfully!",
+      });
+    }
+
   } catch (error) {
+    console.log(error);
     res.status(404).json({
       status: "error",
       message: "Please try again!",
@@ -30,33 +49,51 @@ export const post = async (req, res) => {
 // ........Login routes start...jsonwebtoken.....
 
 export const login = async (req, res) => {
-  let token;
+
   try {
-    const data = await mongomodal.findOne({
-      email: req.body.email,
-      password: req.body.password,
+    console.log(req.body);
+    let user = mongomodal.findOne({ email: req.body.email, }, function (err, docs) {
+      if (docs) {
+        console.log(docs._doc.name);
+        var decoded = jwt_decode(docs._doc.password);
+        console.log(decoded);
+        if (decoded.password == req.body.password) {
+          console.log("Password");
+
+          let userToken = { id: docs._doc._id };
+          jwt.sign(
+            userToken,
+            config.secret,
+            {
+              expiresIn: "6d",
+            },
+            (err, token) => {
+              res.json({
+                status: "ok",
+                message: "User login Successfully!",
+                user: token,
+                name: docs._doc.password,
+              });
+            }
+          );
+        } else {
+          res.json({
+            status: "error",
+            message: "Please try gain! Password  not match",
+            user: false,
+          });
+        }
+      } else {
+        res.status(404).json({
+          status: "error",
+          message: "SignUp First..!",
+          user: false,
+        });
+      }
     });
-    if (data) {
-      token = jsonwebtoken.sign(
-        { email: data.email, name: data.name },
-        "secret123"
-      );
-    }
-    if (token) {
-      res.json({
-        status: "ok",
-        message: "User login Successfully!",
-        user: token,
-        name: data.name,
-      });
-    } else {
-      res.json({
-        status: "error",
-        message: "Please try gain!",
-        user: false,
-      });
-    }
+
   } catch (error) {
+    console.log(error);
     res.status(404).json({
       status: "error",
       message: "Please try again, server error!",
@@ -68,19 +105,20 @@ export const login = async (req, res) => {
 // .........verify token here start here...........
 
 export const tokenVerifyHandler = async (req, res) => {
+
   const token = req.headers["x-access-token"];
   try {
-    const decoded = jsonwebtoken.verify(token, "secret123");
-    const email = decoded.email;
-    const data = await mongomodal.findOne({
-      email: email,
-    });
-    if (data) {
-      res.json({
-        status: "ok",
-        name: data.name,
+
+    var decoded = jwt_decode(token);
+    if (decoded.id) {
+      mongomodal.findOne({ _id: decoded.id }, function (err, docs) {
+        // console.log(docs);
+        res.json({
+          status: "ok",
+          name: docs.name,
+        });
       });
-    } else {
+    }else{
       res.json({
         status: "error",
         message: " invaild token",
@@ -237,9 +275,9 @@ export const removepost = async (req, res) => {
 
 
 // start update post code start here
-export const editepostHandler=async (req,res)=>{
+export const editepostHandler = async (req, res) => {
   const _id = req.params.id;
-  try{
+  try {
 
     const data = await postmodal.findByIdAndUpdate(_id, {
       description: req.body.description,
@@ -247,14 +285,14 @@ export const editepostHandler=async (req,res)=>{
       ans1: req.body.ans1,
       ans2: req.body.ans2,
     });
-    console.log("result value",data);
-    if(data){
+    console.log("result value", data);
+    if (data) {
       res.status(202).json({
         status: "ok",
         success: true,
         message: "Update successfully",
       });
-    }else{
+    } else {
       res.json({
         status: "error",
         success: false,
@@ -262,7 +300,7 @@ export const editepostHandler=async (req,res)=>{
       });
     }
 
-  }catch(error){
+  } catch (error) {
     res.status(505).json({
       status: "error",
       success: false,
@@ -272,110 +310,110 @@ export const editepostHandler=async (req,res)=>{
 }
 
 // ........Approve and UpApprove approveHandler.apply............
-export const approveHandler=async(req,res)=>{
-// console.log(req.body,"Body data");
-let approve;
-try{
-  const getpost=await voiting.findOne({postId:req.body.id});
-   if(getpost){
-    const approvevalue=getpost.approve+1;
-     approve = await new voiting({
-      useremail:req.body.email,
-    postId: req.body.id,
-    approve: approvevalue,
-    checkstatus:true,
-    });
-  }else{
-    approve = await new voiting({
-      useremail:req.body.email,
-    postId: req.body.id,
-    approve:1,
-    checkstatus:true,
-    });
-  }
- 
-  await approve.save();
-  res.json({
-    status: "ok",
-    success: true,
-    message: "Approve successfully !",
-  });
-}catch(error){
-  res.status(505).json({
-    status: "error",
-    success: false,
-    message: "Approve not successfully  !",
-  });
-}
-}
-
-
-export const unapproveHandler=async(req,res)=>{
+export const approveHandler = async (req, res) => {
   // console.log(req.body,"Body data");
-  let unapprove;
-  try{
-    const getpost=await voiting.findOne({postId:req.body.id});
-     if(getpost){
-      const unapprovevalue=getpost.unapprove+1;
-      unapprove = await new voiting({
-        useremail:req.body.email,
-      postId: req.body.id,
-      unapprove: unapprovevalue,
-      checkstatus:true,
+  let approve;
+  try {
+    const getpost = await voiting.findOne({ postId: req.body.id });
+    if (getpost) {
+      const approvevalue = getpost.approve + 1;
+      approve = await new voiting({
+        useremail: req.body.email,
+        postId: req.body.id,
+        approve: approvevalue,
+        checkstatus: true,
       });
-    }else{
-      unapprove = await new voiting({
-        useremail:req.body.email,
-      postId: req.body.id,
-      unapprove:1,
-      checkstatus:true,
+    } else {
+      approve = await new voiting({
+        useremail: req.body.email,
+        postId: req.body.id,
+        approve: 1,
+        checkstatus: true,
       });
     }
-   
+
+    await approve.save();
+    res.json({
+      status: "ok",
+      success: true,
+      message: "Approve successfully !",
+    });
+  } catch (error) {
+    res.status(505).json({
+      status: "error",
+      success: false,
+      message: "Approve not successfully  !",
+    });
+  }
+}
+
+
+export const unapproveHandler = async (req, res) => {
+  // console.log(req.body,"Body data");
+  let unapprove;
+  try {
+    const getpost = await voiting.findOne({ postId: req.body.id });
+    if (getpost) {
+      const unapprovevalue = getpost.unapprove + 1;
+      unapprove = await new voiting({
+        useremail: req.body.email,
+        postId: req.body.id,
+        unapprove: unapprovevalue,
+        checkstatus: true,
+      });
+    } else {
+      unapprove = await new voiting({
+        useremail: req.body.email,
+        postId: req.body.id,
+        unapprove: 1,
+        checkstatus: true,
+      });
+    }
+
     await unapprove.save();
     res.json({
       status: "ok",
       success: true,
       message: "unprove successfully !",
     });
-  }catch(error){
+  } catch (error) {
     res.status(505).json({
       status: "error",
       success: false,
       message: "unprove not successfully  !",
     });
   }
-  }
+}
 
 // check user is exist or not for this post
 
-export const handlercheckuser=async(req,res)=>{
+export const handlercheckuser = async (req, res) => {
   console.log(req.body);
-  try{
-         const data= await voiting.findOne({postId:req.body.id,email:req.body.email});
+  try {
+    const data = await voiting.findOne({ postId: req.body.id, email: req.body.email });
 
-         if(data){
-          res.json({
-            status: "ok",
-            success: true,
-            message: "check approve and unapprove status!",
-            votedetails:data
-          })
-         }else{
-          res.json({
-            status: "error",
-            success: false,
-            message: "check approve and unapprove unsuccessfully !",
-          })
-         }
-  }catch(error){
- console.log("check user exist or not,server issues !");
+    if (data) {
+      res.json({
+        status: "ok",
+        success: true,
+        message: "check approve and unapprove status!",
+        votedetails: data
+      })
+    } else {
+      res.json({
+        status: "error",
+        success: false,
+        message: "check approve and unapprove unsuccessfully !",
+      })
+    }
+  } catch (error) {
+    console.log("check user exist or not,server issues !");
   }
 }
 
 
-export const commentHandler=async(req,res)=>{
-  console.log("comment data",req.body);
+export const commentHandler = async (req, res) => {
+  console.log("comment data", req.body);
 }
 
 
