@@ -3,6 +3,8 @@ import postmodal from "../Schema/Postschema.js";
 import jsonwebtoken from "jsonwebtoken";
 import voiting from "../Schema/Voting.js";
 // ......Signup here routes start..............
+
+
 export const post = async (req, res) => {
   try {
     const usersignup = await new mongomodal({

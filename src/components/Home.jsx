@@ -451,6 +451,7 @@ export default function Home() {
         </Grid>
       </Container>
       {loginstate && <Login setloginstate={setloginstate} open={loginstate} />}
+      {open && <AllDiscussions setOpen={handleClickOpen}/>}
     </Box>
   );
 }

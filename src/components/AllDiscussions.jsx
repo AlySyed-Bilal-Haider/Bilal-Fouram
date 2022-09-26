@@ -73,7 +73,7 @@ function AllDiscussions({setOpen}) {
             <Grid item md={2} sx={{ display: { md: "block", xs: "none" } }}>
               <Button
               onClick={()=>{
-                setOpen(true);
+                setOpen();
               }}
                 sx={{
                   width: "100%",
