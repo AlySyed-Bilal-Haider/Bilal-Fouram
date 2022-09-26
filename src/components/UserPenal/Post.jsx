@@ -102,7 +102,8 @@ function Post({ email }) {
         postId={postIDstate}
       />
       <Box pb={10}>
-        {userposts?.map((item, i) => {
+        {userposts?.length > 0 ?
+        (userposts?.map((item, i) => {
           return (
             <Box mt={i === 0 ? 0 : 2} key={i}>
               <Typography variant="body1" color="primary.main" fontWeight="700">
@@ -210,7 +211,7 @@ function Post({ email }) {
               </Box>
             </Box>
           );
-        })}
+        })):(<Typography variant="h3" textAlign="center" fontWeight={700}>Post Coming Soon</Typography>)}
       </Box>
     </>
   );

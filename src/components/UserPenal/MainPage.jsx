@@ -130,41 +130,56 @@ export default function MainPage() {
                     backgroundColor: "#fff",
                   }}
                 >
-                  {console.log(userProfilestate?.img, "jjj")}
                   {userProfilestate?.img ? (
-                    <img
-                      src={`${url}/${userProfilestate?.img}`}
-                      alt="avtar"
-                      style={{
-                        width: "150px",
-                        height: "150px",
-                        borderRadius: "50%",
-                      }}
-                      loading="lazy"
-                    />
-                  ) : (
-                    // <img
-                    //   src={avtar}
-                    //   alt="avtar"
-                    //   style={{ width: "100%" }}
-                    //   loading="lazy"
-                    // />
-
                     <form onSubmit={handlerSubmit}>
-                      {/* <input
-                    type="file"
-                    name="file"
-                    sx={{
-                      fontSize: "18px",
-                      width: { xs: "100%", md: "33%", cursor: "pointer" },
-                    }}
-                    accept="image/*"
-                    onChange={handleFile}
-                  /> */}
+                      <div className="image-show">
+                        <label for="file-input">
+                          <img
+                            src={`${url}/upload/${userProfilestate?.img}`}
+                            alt="avtar"
+                            style={{
+                              width: "150px",
+                              height: "150px",
+                              borderRadius: "50%",
+                              cursor: "pointer",
+                            }}
+                            loading="lazy"
+                          />
+                        </label>
 
+                        <input
+                          id="file-input"
+                          type="file"
+                          name="file"
+                          accept="image/*"
+                          onChange={handleFile}
+                        />
+                      </div>
+                      <Box py={1} textAlign="center">
+                        <Button
+                          type="submit"
+                          sx={{
+                            color: "text.main",
+                            backgroundColor: "secondary.main",
+                            textTransform: "capitalize",
+                            width: "80px",
+                            "&:hover": {
+                              backgroundColor: "secondary.light",
+                            },
+                          }}
+                        >
+                          Save
+                        </Button>
+                      </Box>
+                    </form>
+                  ) : (
+                    <form onSubmit={handlerSubmit}>
                       <div className="image-upload">
                         <label for="file-input">
-                          <img src={avtar} style={{ width: "100%" }} />
+                          <img
+                            src={avtar}
+                            style={{ width: "100%", cursor: "pointer" }}
+                          />
                         </label>
 
                         <input
@@ -195,7 +210,7 @@ export default function MainPage() {
                   )}
                 </Box>
               </Box>
-              {/* <Box component="input"></Box> */}
+
               <Box
                 ml={3}
                 display="flex"

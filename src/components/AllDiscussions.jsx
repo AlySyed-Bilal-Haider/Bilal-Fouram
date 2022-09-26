@@ -57,7 +57,8 @@ const mainHeader = (locationpath) => {
       return null;
   }
 };
-function AllDiscussions() {
+function AllDiscussions({setOpen}) {
+  console.log("setOpen",setOpen);
   const location = useLocation();
   console.log("location", location.pathname);
   return (
@@ -71,6 +72,9 @@ function AllDiscussions() {
           <Grid container spacing={2}>
             <Grid item md={2} sx={{ display: { md: "block", xs: "none" } }}>
               <Button
+              onClick={()=>{
+                setOpen();
+              }}
                 sx={{
                   width: "100%",
                   height: "36px",

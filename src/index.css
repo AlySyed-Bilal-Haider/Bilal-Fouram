@@ -48,6 +48,14 @@ code {
 .image-upload > input {
   display: none;
 }
+
+.image-show > input {
+  display: none;
+}
+
+.image-show:hover {
+  opacity: 0.6;
+}
 /* .details-box {
   position: relative;
   overflow: hidden;

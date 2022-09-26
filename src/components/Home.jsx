@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import jsonwebtoken from "jsonwebtoken";
-
+import AllDiscussions from './AllDiscussions';
 import {
   Button,
   Box,
@@ -451,6 +451,7 @@ export default function Home() {
         </Grid>
       </Container>
       {loginstate && <Login setloginstate={setloginstate} open={loginstate} />}
+      {open && <AllDiscussions setOpen={handleClickOpen}/>}
     </Box>
   );
 }

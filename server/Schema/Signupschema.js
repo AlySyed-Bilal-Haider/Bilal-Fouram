@@ -22,8 +22,8 @@ const Adduser = new mongoose.Schema({
   },
   img:
     {
-        data: Buffer,
-        contentType: String
+        type:String,
+        default:""
     }
 });
 const mongomodal=mongoose.model("mindao", Adduser);
