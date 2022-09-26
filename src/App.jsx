@@ -56,12 +56,6 @@ function App() {
           <Route path="/profile" element={<MainPage />} />
           <Route path="/AllDiscussions" element={<AllDiscussions />} />
           <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />
-          {/* <Route path="/general/:value" element={<AllDiscussions />} />
-          <Route path="/support/:value" element={<AllDiscussions />} />
-          <Route path="/community/:value" element={<AllDiscussions />} />
-          <Route path="/proposal/:value" element={<AllDiscussions />} />
-          <Route path="/projectpropsal/:value" element={<AllDiscussions />} />
-          <Route path="/feedback/:value" element={<AllDiscussions />} /> */}
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/logout" element={<Logout/>}/>
         </Routes>

@@ -132,7 +132,7 @@ export default function MainPage() {
                 >
                   {userProfilestate?.img ? (
                     <img
-                      src={`${url}/${userProfilestate?.img}`}
+                      src={`${url}/upload/${userProfilestate?.img}`}
                       alt="avtar"
                       style={{
                         width: "150px",

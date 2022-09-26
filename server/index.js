@@ -7,8 +7,6 @@ import mongomodal from "./Schema/Signupschema.js";
 
 import fs from "fs";
 // import path from "path";
-
-
 const url =
   "mongodb+srv://bilal:minerdao12345@cluster0.flytvry.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
