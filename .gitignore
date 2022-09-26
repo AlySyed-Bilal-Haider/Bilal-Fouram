@@ -10,6 +10,7 @@
 
 # production
 /build
+/server/.git
 
 # misc
 .DS_Store
