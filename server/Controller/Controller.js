@@ -2,8 +2,8 @@ import mongomodal from "../Schema/Signupschema.js";
 import postmodal from "../Schema/Postschema.js";
 import jsonwebtoken from "jsonwebtoken";
 import voiting from "../Schema/Voting.js";
+import commentModal from "../Schema/comment.js";
 // ......Signup here routes start..............
-
 
 export const post = async (req, res) => {
   try {
@@ -52,14 +52,14 @@ export const login = async (req, res) => {
     } else {
       res.json({
         status: "error",
-        message: "Please try gain!",
+        message: "Please try gain! Password or Email not match",
         user: false,
       });
     }
   } catch (error) {
     res.status(404).json({
       status: "error",
-      message: "Please try again, server error!",
+      message: "Please wait server error!",
       user: false,
     });
   }
@@ -220,7 +220,7 @@ export const removepost = async (req, res) => {
         message: "Post remove successfully !",
       });
     } else {
-      res.status(404).json({
+      res.status(200).json({
         status: "error",
         success: false,
         message: "please try again ,post not delete !",
@@ -235,152 +235,165 @@ export const removepost = async (req, res) => {
   }
 };
 
-
 // start update post code start here
-export const editepostHandler=async (req,res)=>{
+export const editepostHandler = async (req, res) => {
   const _id = req.params.id;
-  try{
-
+  try {
     const data = await postmodal.findByIdAndUpdate(_id, {
       description: req.body.description,
       question: req.body.Question,
       ans1: req.body.ans1,
       ans2: req.body.ans2,
     });
-    console.log("result value",data);
-    if(data){
+    console.log("result value", data);
+    if (data) {
       res.status(202).json({
         status: "ok",
         success: true,
         message: "Update successfully",
       });
-    }else{
+    } else {
       res.json({
         status: "error",
         success: false,
         message: "Not successfully update",
       });
     }
-
-  }catch(error){
+  } catch (error) {
     res.status(505).json({
       status: "error",
       success: false,
       message: error,
     });
   }
-}
+};
 
 // ........Approve and UpApprove approveHandler.apply............
-export const approveHandler=async(req,res)=>{
-// console.log(req.body,"Body data");
-let approve;
-try{
-  const getpost=await voiting.findOne({postId:req.body.id});
-   if(getpost){
-    const approvevalue=getpost.approve+1;
-     approve = await new voiting({
-      useremail:req.body.email,
-    postId: req.body.id,
-    approve: approvevalue,
-    checkstatus:true,
-    });
-  }else{
-    approve = await new voiting({
-      useremail:req.body.email,
-    postId: req.body.id,
-    approve:1,
-    checkstatus:true,
-    });
-  }
- 
-  await approve.save();
-  res.json({
-    status: "ok",
-    success: true,
-    message: "Approve successfully !",
-  });
-}catch(error){
-  res.status(505).json({
-    status: "error",
-    success: false,
-    message: "Not approve,please try again  !",
-  });
-}
-}
-
-
-export const unapproveHandler=async(req,res)=>{
+export const approveHandler = async (req, res) => {
   // console.log(req.body,"Body data");
-  let unapprove;
-  try{
-    const getpost=await voiting.findOne({postId:req.body.id});
-     if(getpost){
-      const unapprovevalue=getpost.unapprove+1;
-      unapprove = await new voiting({
-        useremail:req.body.email,
-      postId: req.body.id,
-      unapprove: unapprovevalue,
-      checkstatus:true,
+  let approve;
+  try {
+    const getpost = await voiting.findOne({ postId: req.body.id });
+    if (getpost) {
+      const approvevalue = getpost.approve + 1;
+      approve = await new voiting({
+        useremail: req.body.email,
+        postId: req.body.id,
+        approve: approvevalue,
+        checkstatus: true,
       });
-    }else{
-      unapprove = await new voiting({
-        useremail:req.body.email,
-      postId: req.body.id,
-      unapprove:1,
-      checkstatus:true,
+    } else {
+      approve = await new voiting({
+        useremail: req.body.email,
+        postId: req.body.id,
+        approve: 1,
+        checkstatus: true,
       });
     }
-   
+
+    await approve.save();
+    res.json({
+      status: "ok",
+      success: true,
+      message: "Approve successfully !",
+    });
+  } catch (error) {
+    res.status(505).json({
+      status: "error",
+      success: false,
+      message: "Not approve,please try again  !",
+    });
+  }
+};
+
+export const unapproveHandler = async (req, res) => {
+  // console.log(req.body,"Body data");
+  let unapprove;
+  try {
+    const getpost = await voiting.findOne({ postId: req.body.id });
+    if (getpost) {
+      const unapprovevalue = getpost.unapprove + 1;
+      unapprove = await new voiting({
+        useremail: req.body.email,
+        postId: req.body.id,
+        unapprove: unapprovevalue,
+        checkstatus: true,
+      });
+    } else {
+      unapprove = await new voiting({
+        useremail: req.body.email,
+        postId: req.body.id,
+        unapprove: 1,
+        checkstatus: true,
+      });
+    }
+
     await unapprove.save();
     res.json({
       status: "ok",
       success: true,
       message: "unprove successfully !",
     });
-  }catch(error){
+  } catch (error) {
     res.status(505).json({
       status: "error",
       success: false,
       message: "unprove not successfully  !",
     });
   }
-  }
+};
 
 // check user is exist or not for this post
 
-export const handlercheckuser=async(req,res)=>{
+export const handlercheckuser = async (req, res) => {
   console.log(req.body);
-  try{
-         const data= await voiting.findOne({postId:req.body.id,email:req.body.email});
+  try {
+    const data = await voiting.findOne({
+      postId: req.body.id,
+      email: req.body.email,
+    });
 
-         if(data){
-          res.json({
-            status: "ok",
-            success: true,
-            message: "check approve and unapprove status!",
-            votedetails:data
-          })
-         }else{
-          res.json({
-            status: "error",
-            success: false,
-            message: " approve and unapprove not exist  !",
-          })
-         }
-  }catch(error){
- console.log("check user exist or not,server issues !");
+    if (data) {
+      res.json({
+        status: "ok",
+        success: true,
+        message: "check approve and unapprove status!",
+        votedetails: data,
+      });
+    } else {
+      res.json({
+        status: "error",
+        success: false,
+        message: " approve and unapprove not exist  !",
+      });
+    }
+  } catch (error) {
+    console.log("check user exist or not,server issues !");
   }
-}
+};
 
-
-export const commentHandler=async(req,res)=>{
-  console.log("comment data",req.body);
-}
-
-
-
-
-
-
-
+export const commentHandler = async (req, res, next) => {
+  const comment = req.body.comment;
+  const postId = req.body.postId;
+  let commentRecord;
+  console.log("Client request",req.body);
+  try {
+    if (postID && message) {
+      commentRecord = await new commentModal({
+        comment,
+        postId
+      });
+    }
+    await commentRecord.save();
+    res.json({
+      status: "ok",
+      success: true,
+      message: "Comment add Successfully!",
+    });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error,
+    });
+  }
+};

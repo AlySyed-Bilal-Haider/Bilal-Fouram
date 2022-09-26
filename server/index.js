@@ -67,7 +67,7 @@ app.post("/uploadimg", upload.single("file"), async (req, res) => {
     res.status(500).json({
       status: "error",
       success: false,
-      message: "Server error or routesis not match !",
+      message: "Server error or routes not match !",
     });
   }
 });

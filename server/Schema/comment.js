@@ -14,9 +14,6 @@ const commentAdd = new mongoose.Schema({
     type: String,
     default:0
   },
-  mention:{
-    type:String,
-  },
   postId:{
     type:String,
     required:true
@@ -27,5 +24,5 @@ const commentAdd = new mongoose.Schema({
   },
  
 });
-const mongomodal=mongoose.model("commentAdd", commentAdd);
-export default mongomodal;
+const commentModal=mongoose.model("commentAdd", commentAdd);
+export default commentModal;

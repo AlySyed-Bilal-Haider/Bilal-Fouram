@@ -114,7 +114,7 @@ export default function Detail() {
   const userProfile = jsonwebtoken.decode(userToken);
   const [name, setNamestate] = useState(localStorage.getItem("name"));
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [loginstate, setloginstate] = useState(false);
+  const [openstate, setOpenlogin] = useState(false);
   const [editPopOpen, setEditPopOpen] = useState(false);
   const [postdetails, setPostdetails] = useState();
   const [postidstate, setPostIdstate] = useState("");
@@ -191,7 +191,7 @@ export default function Detail() {
     if (token) {
       setEditPopOpen(true);
     } else {
-      setloginstate(true);
+      setOpenlogin(true);
     }
   };
   return (
@@ -418,6 +418,10 @@ export default function Detail() {
                 />
 
                 <Typography
+                cursor="pointer"
+                onClick={() => {
+                  CheckloginHandler();
+                }}
                   ml="30px"
                   variant="body1"
                   fontSize="14px"
@@ -454,7 +458,7 @@ export default function Detail() {
           ) : null}
         </Box>
       </Container>
-      {loginstate && <Login setloginstate={setloginstate} open={loginstate} />}
+      {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}
     </>
   );
 }
