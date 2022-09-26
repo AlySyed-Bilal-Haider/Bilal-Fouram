@@ -162,7 +162,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
                 fullWidth
                 autoComplete="off"
                 value={userstate.password || ""}
-                type="text"
+                type="password"
                 name="password"
                 placeholder="Password"
                 onChange={changeHandler}

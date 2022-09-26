@@ -17,19 +17,19 @@ const renderComponent = (locationpath) => {
   switch (locationpath) {
     case "/AllDiscussions":
       return <Commonpage />;
-    case "/general":
+    case "/AllDiscussions/General":
       return <General title="General" tage="General" />;
-    case "/proposal":
+    case "/AllDiscussions/Proposal":
       return <Proposal title="Proposal" tage="Proposal" />;
-    case "/support":
+    case "/AllDiscussions/Support":
       return <Support title="Support" tage="Support" />;
-    case "/Knowledgebase":
+    case "/AllDiscussions/KnowledgeBase":
       return <Knowledgebase title="Knowledgebase" tage="Knowledge Base" />;
-    case "/community":
+    case "/AllDiscussions/CommunityDevelopment":
       return <Community title="Community" tage="Community Development" />;
-    case "/feedback":
+    case "/AllDiscussions/Feedback":
       return <Feed title="Feed" tage="Feedback" />;
-    case "/projectpropsal":
+    case "/AllDiscussions/ProjectProposals":
       return <Projectprosal title="Project propsal" tage="Project Proposals" />;
     default:
       <h1> Page Not Found</h1>;
@@ -38,19 +38,19 @@ const renderComponent = (locationpath) => {
 };
 const mainHeader = (locationpath) => {
   switch (locationpath) {
-    case "/general":
+    case "/AllDiscussions/General":
       return <MainHeader title="General" />;
-    case "/proposal":
+    case "/AllDiscussions/Proposal":
       return <MainHeader title="Proposal" />;
-    case "/support":
+    case "/AllDiscussions/Support":
       return <MainHeader title="Support" />;
-    case "/Knowledgebase":
+    case "/AllDiscussions/KnowledgeBase":
       return <MainHeader title="Knowledgebase" />;
-    case "/community":
+    case "/AllDiscussions/CommunityDevelopment":
       return <MainHeader title="Community" />;
-    case "/feedback":
+    case "/AllDiscussions/Feedback":
       return <MainHeader title="Feed" />;
-    case "/projectpropsal":
+    case "/AllDiscussions/ProjectProposals":
       return <MainHeader title="Project propsal" />;
 
     default:
@@ -59,6 +59,7 @@ const mainHeader = (locationpath) => {
 };
 function AllDiscussions() {
   const location = useLocation();
+  console.log("location", location.pathname);
   return (
     <>
       {location?.pathname && mainHeader(location?.pathname)}

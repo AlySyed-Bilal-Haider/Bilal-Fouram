@@ -123,10 +123,10 @@ export default function Detail() {
   // };
   // fetch post details from server
   useEffect(() => {
-    if (param.id) {
+    if (param?.id) {
       fetchdetails();
     }
-  }, [param.id]);
+  }, [param?.id]);
 
   const fetchdetails = async () => {
     try {
@@ -151,8 +151,9 @@ export default function Detail() {
     const voteinfo = { id: postidstate, email: userProfile?.email };
     try {
       const { data } = await axios.post(`${url}/getvotesdetails`, voteinfo);
-      console.log("check user", data);
-      setCheckstate(data.votedetails.checkstatus);
+      if(data){
+      setCheckstate(data?.votedetails?.checkstatus);
+      }
     } catch (error) {
       console.log("check approve and unapprove", error);
     }
@@ -160,7 +161,6 @@ export default function Detail() {
   //Approve Handler
   const handleApprove = async (id) => {
     let approveinfo = { id, email: userProfile?.email };
-    console.log("approveinfo", approveinfo);
     try {
       const { data } = await axios.post(`${url}/approve`, approveinfo);
       console.log("approve data", data);
@@ -175,14 +175,11 @@ export default function Detail() {
     console.log("approveinfo", unapprove);
     try {
       const { data } = await axios.post(`${url}/unapprove`, unapprove);
-      console.log("Unapprove data", data);
       data.status == "ok" && approveORnotapproveCheck();
     } catch (error) {
       console.log("error", error);
     }
   };
-
-  console.log("checkstate", checkstate);
   return (
     <>
       <Box bgcolor="primary.light">

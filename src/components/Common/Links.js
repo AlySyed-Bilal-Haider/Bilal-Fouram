@@ -16,36 +16,36 @@ export const sidebardata = [
   {
     Icon: <FaRegComments size="20px" style={{ marginRight: "15px" }} />,
     text: "General",
-    link: "/general",
+    link: "/AllDiscussions/General",
   },
   {
     Icon: <FaChalkboardTeacher size="20px" style={{ marginRight: "15px" }} />,
     text: "Proposal",
-    link: "/proposal",
+    link: "/AllDiscussions/Proposal",
   },
   {
     Icon: <FaPhone size="19px" style={{ marginRight: "16px" }} />,
     text: "Support",
-    link: "/support",
+    link: "/AllDiscussions/Support",
   },
   {
     Icon: <FaBook size="19px" style={{ marginRight: "16px" }} />,
     text: "Knowledge base",
-    link: "/Knowledgebase",
+    link: "/AllDiscussions/KnowledgeBase",
   },
   {
     Icon: <RiGroupFill size="26px" style={{ marginRight: "15px" }} />,
     text: "Community Development",
-    link: "/community",
+    link: "/AllDiscussions/CommunityDevelopment",
   },
   {
     Icon: <CgNotes size="20px" style={{ marginRight: "15px" }} />,
     text: "Feed",
-    link: "/feedback",
+    link: "/AllDiscussions/Feedback",
   },
   {
     Icon: <RiCheckboxBlankFill size="20px" style={{ marginRight: "15px" }} />,
     text: "Project Proposal",
-    link: "/projectpropsal",
+    link: "/AllDiscussions/ProjectProposals",
   },
 ];
