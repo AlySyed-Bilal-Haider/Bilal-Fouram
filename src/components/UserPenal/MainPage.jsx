@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 });
 export default function MainPage() {
   const formData = new FormData();
-  const url = "http://localhost:4000";
+  const url =  process.env.URL || "http://localhost:4000";
   const classes = useStyles();
   const matches = useMediaQuery("(max-width:700px)");
   const [tabText, settabText] = useState("Post");

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import jsonwebtoken from "jsonwebtoken";
+import Comment from "./Comment";
+
 import {
   Box,
   Container,
@@ -25,6 +27,7 @@ import { GoCheck } from "react-icons/go";
 import axios from "axios";
 import { toast } from "react-toastify";
 import moment from "moment";
+import Login from "./Login";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -111,6 +114,8 @@ export default function Detail() {
   const userProfile = jsonwebtoken.decode(userToken);
   const [name, setNamestate] = useState(localStorage.getItem("name"));
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [loginstate, setloginstate] = useState(false);
+  const [editPopOpen, setEditPopOpen] = useState(false);
   const [postdetails, setPostdetails] = useState();
   const [postidstate, setPostIdstate] = useState("");
   const [checkstate, setCheckstate] = useState(false);
@@ -130,7 +135,7 @@ export default function Detail() {
 
   const fetchdetails = async () => {
     try {
-      const { data } = await axios.get(`${url}/fetchPostDetails/${param.id}`);
+      const { data } = await axios.get(`${url}/fetchPostDetails/${param?.id}`);
       setPostdetails(data);
       setPostIdstate(data._id);
     } catch (error) {
@@ -151,8 +156,8 @@ export default function Detail() {
     const voteinfo = { id: postidstate, email: userProfile?.email };
     try {
       const { data } = await axios.post(`${url}/getvotesdetails`, voteinfo);
-      if(data){
-      setCheckstate(data?.votedetails?.checkstatus);
+      if (data) {
+        setCheckstate(data?.votedetails?.checkstatus);
       }
     } catch (error) {
       console.log("check approve and unapprove", error);
@@ -180,8 +185,18 @@ export default function Detail() {
       console.log("error", error);
     }
   };
+  const CheckloginHandler = () => {
+    const token = localStorage.getItem("token");
+    console.log("token", token);
+    if (token) {
+      setEditPopOpen(true);
+    } else {
+      setloginstate(true);
+    }
+  };
   return (
     <>
+      <Comment open={editPopOpen} setOpen={setEditPopOpen} postId={param?.id} />
       <Box bgcolor="primary.light">
         <Box py={5} textAlign="center" display="flex" flexDirection="column">
           <Box
@@ -259,10 +274,14 @@ export default function Detail() {
               <AiFillLike size="22px" />
               <AiFillDislike size="22px" style={{ marginLeft: "30px" }} />
               <Typography
+                onClick={() => {
+                  CheckloginHandler();
+                }}
                 ml="30px"
                 variant="body1"
                 fontSize="14px"
                 color="primary.light"
+                sx={{ cursor: "pointer" }}
               >
                 Reply
               </Typography>
@@ -435,6 +454,7 @@ export default function Detail() {
           ) : null}
         </Box>
       </Container>
+      {loginstate && <Login setloginstate={setloginstate} open={loginstate} />}
     </>
   );
 }

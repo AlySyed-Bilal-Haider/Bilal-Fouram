@@ -54,7 +54,7 @@ function Post({ email }) {
   ///////////////////////////
   // fetch post of specific users
 
-  const url = "http://localhost:4000";
+  const url =  process.env.URL || "http://localhost:4000";
   useEffect(() => {
     if (email) {
       fetchPost();

@@ -67,7 +67,7 @@ const TextInput = styled(InputBase)({
 });
 
 function Signup({ open, setOpensign, setOpenlogin }) {
-  const url = "http://localhost:4000";
+  const url = process.env.URL || "http://localhost:4000";
   const [userstate, setUserstate] = React.useState({
     name: "",
     email: "",

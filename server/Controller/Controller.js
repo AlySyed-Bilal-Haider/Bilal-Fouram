@@ -304,7 +304,7 @@ try{
   res.status(505).json({
     status: "error",
     success: false,
-    message: "Approve not successfully  !",
+    message: "Not approve,please try again  !",
   });
 }
 }
@@ -365,7 +365,7 @@ export const handlercheckuser=async(req,res)=>{
           res.json({
             status: "error",
             success: false,
-            message: "check approve and unapprove unsuccessfully !",
+            message: " approve and unapprove not exist  !",
           })
          }
   }catch(error){

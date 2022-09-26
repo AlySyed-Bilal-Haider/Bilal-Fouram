@@ -104,10 +104,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Home() {
-  const url = "http://localhost:4000";
+  const url =  process.env.URL || "http://localhost:4000";
   const navigate = useNavigate();
   // const matches = useMediaQuery("(max-width:750px)");
   const theme = useTheme();
+  
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [loginstate, setloginstate] = useState(false);
@@ -223,6 +224,7 @@ export default function Home() {
  console.log("value",value);
  navigate(`/AllDiscussions/${value}`);
   }
+
   return (
     <Box sx={{ width: "100%" }}>
       <PopUp open={open1} setOpen={setOpen1} />
@@ -451,7 +453,7 @@ export default function Home() {
         </Grid>
       </Container>
       {loginstate && <Login setloginstate={setloginstate} open={loginstate} />}
-      {open && <AllDiscussions setOpen={handleClickOpen}/>}
+
     </Box>
   );
 }

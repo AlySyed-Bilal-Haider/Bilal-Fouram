@@ -40,7 +40,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function EditPopUp({ open, setOpen, postId }) {
-  const url = "http://localhost:4000";
+  const url = process.env.URL || "http://localhost:4000";
 
   const [editPoll, setEditPoll] = React.useState(false);
   const [editePoststate, setEditePostState] = useState({
@@ -86,7 +86,6 @@ export default function EditPopUp({ open, setOpen, postId }) {
       if (data.status == "ok") {
         toast.success(data.message);
         handleClose();
-      
       } else {
         toast.error(data.message);
       }
