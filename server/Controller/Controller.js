@@ -193,7 +193,7 @@ export const getSpecificdescussion = async (req, res) => {
   }
 };
 
-//fetch fetchPostDetails from MongoDB
+//fetch fetchPostDetails from MongoDB and server
 
 export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;

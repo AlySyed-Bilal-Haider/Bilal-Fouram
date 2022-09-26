@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { url } from "../utils";
 
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -39,7 +40,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function Comment({ open, setOpen, postId }) {
-  const url = "http://localhost:4000";
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
     setCommentstate('');

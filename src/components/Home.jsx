@@ -29,6 +29,7 @@ import Login from "./Login";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { url } from "../utils";
 
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -104,7 +105,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function Home() {
-  const url =  process.env.URL || "http://localhost:4000";
   const navigate = useNavigate();
   // const matches = useMediaQuery("(max-width:750px)");
   const theme = useTheme();

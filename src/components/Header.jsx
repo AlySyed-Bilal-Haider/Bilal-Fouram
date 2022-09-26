@@ -27,6 +27,7 @@ import axios from "axios";
 import Login from "./Login";
 
 import logo from "../images/logo.png";
+import { url } from "../utils";
 
 const useStyles = makeStyles({
   list: {
@@ -52,7 +53,7 @@ export default function Header({ setOpensign, setOpenlogin }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   // fetch all details from sever
-  const url = "http://localhost:4000";
+
   useEffect(() => {
     console.log("Header functions");
     const fetchdetails = async () => {

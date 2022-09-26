@@ -28,6 +28,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import moment from "moment";
 import Login from "./Login";
+import { url } from "../utils";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -106,7 +107,6 @@ const BpCheckbox = (props) => {
 
 export default function Detail() {
   const param = useParams();
-  const url = "http://localhost:4000";
   //close menu tag on click
   const [userToken, setuserTokenstate] = useState(
     localStorage.getItem("token")

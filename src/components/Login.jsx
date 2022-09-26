@@ -16,6 +16,7 @@ import {
 import { styled } from "@mui/styles";
 import { withStyles } from "@mui/styles";
 import CloseIcon from "@mui/icons-material/Close";
+import { url } from "../utils";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -69,7 +70,6 @@ const TextInput = styled(InputBase)({
 
 function Login({ open, setOpenlogin, setOpensign }) {
   const navigate = useNavigate();
-  const url = "http://localhost:4000";
   const [menuItem, setMenuitem] = useState(false);
   const [userstate, setUserstate] = React.useState({
     email: "",

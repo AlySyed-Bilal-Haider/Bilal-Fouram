@@ -7,10 +7,10 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { deepPurple } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
 import UndoIcon from "@mui/icons-material/Undo";
+import { url } from "../../utils";
 // /detail
 function Commonpage(props) {
   const naviagte = useNavigate();
-  const url = process.env.URL || "http://localhost:4000";
   const [namestate, setnamestate] = useState(localStorage.getItem("name"));
   const [alldetailsstate, setDetailsState] = React.useState();
   const [categorystate, setCategorystate] = useState([]);
