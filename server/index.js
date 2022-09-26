@@ -4,6 +4,11 @@ import multer from "multer";
 import router from "./Routes/routes.js";
 import connectDB from "./Database/ConnectDB.js";
 import mongomodal from "./Schema/Signupschema.js";
+
+import fs from "fs";
+// import path from "path";
+
+
 const url =
   "mongodb+srv://bilal:minerdao12345@cluster0.flytvry.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
@@ -29,11 +34,23 @@ app.post("/uploadimg", upload.single("file"), async (req, res) => {
   const _id = req.body.id;
   try {
     const previous = await mongomodal.findOne({ _id });
-    console.log("previous",previous)
-    console.log("req.file.path:",req.file.path);
+    console.log("previous", previous)
     const data = await mongomodal.findOneAndUpdate(_id, {
-      img: req.file.path,
+      img: req.file.filename,
     });
+    if (req.file && req.file.path) {
+      if (data.img !== req.file.path) {
+        console.log("not equal");
+        try{
+          fs.unlink(('upload/' + data.img), (err) => {
+            console.log(err);
+          })
+        } catch(error){
+          console.log(error);
+        }
+        
+      }
+    }
     if (data) {
       res.status(202).json({
         status: "ok",
