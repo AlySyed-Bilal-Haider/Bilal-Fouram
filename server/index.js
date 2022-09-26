@@ -32,11 +32,13 @@ app.post("/uploadimg", upload.single("file"), async (req, res) => {
   const _id = req.body.id;
   try {
     const previous = await mongomodal.findOne({ _id });
-    console.log("previous", previous)
-    const data = await mongomodal.findOneAndUpdate(_id, {
+    console.log("previous", previous);
+
+    const data = await mongomodal.findByIdAndUpdate(_id, {
       img: req.file.filename,
     });
-    if (req.file && req.file.path) {
+
+    if (previous.img !== "" && req.file && req.file.path) {
       if (data.img !== req.file.path) {
         console.log("not equal");
         try{
