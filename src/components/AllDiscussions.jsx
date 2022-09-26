@@ -20,15 +20,15 @@ const renderComponent = (locationpath) => {
     case "/general":
       return <General title="General" tage="General" />;
     case "/proposal":
-      return <Proposal title="Proposal" tage="Proposal"/>;
+      return <Proposal title="Proposal" tage="Proposal" />;
     case "/support":
       return <Support title="Support" tage="Support" />;
     case "/Knowledgebase":
       return <Knowledgebase title="Knowledgebase" tage="Knowledge Base" />;
     case "/community":
-      return <Community title="Community" tage="Community Development"/>;
+      return <Community title="Community" tage="Community Development" />;
     case "/feedback":
-      return <Feed title="Feed" tage="Feedback"/>;
+      return <Feed title="Feed" tage="Feedback" />;
     case "/projectpropsal":
       return <Projectprosal title="Project propsal" tage="Project Proposals" />;
     default:
@@ -86,26 +86,16 @@ function AllDiscussions() {
                 Start a Discussion
               </Button>
               <Box sx={{ mt: 2, width: "100%" }}>
-                {sidebardata?.map(({ text, link }, index) => {
+                {sidebardata?.map(({ text, link, Icon }, index) => {
                   return (
                     <Box
                       key={index}
                       sx={{
                         width: "100%",
                         cursor: "pointer",
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        alignItems: "center",
                         py: 1,
                       }}
                     >
-                      <AutorenewIcon
-                        sx={{
-                          width: "30%",
-                          mr: 1,
-                          color: index == 0 ? "primary.main" : "primary.light",
-                        }}
-                      />
                       <NavLink
                         to={link}
                         style={{ textDecoration: "none", fontSize: "16px" }}
@@ -113,7 +103,16 @@ function AllDiscussions() {
                           isActive ? "active" : "inactive"
                         }
                       >
-                        {text}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
+                        >
+                          {Icon}
+                          {text}
+                        </Box>
                       </NavLink>
                     </Box>
                   );

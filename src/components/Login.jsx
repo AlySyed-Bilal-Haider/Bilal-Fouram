@@ -1,10 +1,9 @@
-import React,{useState} from "react";
-import { 
- NavLink, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import AccountMenu from './MenuItem';
+import AccountMenu from "./MenuItem";
 import {
   Typography,
   Dialog,
@@ -68,38 +67,36 @@ const TextInput = styled(InputBase)({
   },
 });
 
-function Login({ open, setloginstate }) {
-  const navigate=useNavigate();
+function Login({ open, setOpenlogin, setOpensign }) {
+  const navigate = useNavigate();
   const url = "http://localhost:4000";
-  const [menuItem,setMenuitem]=useState(false);
+  const [menuItem, setMenuitem] = useState(false);
   const [userstate, setUserstate] = React.useState({
     email: "",
     password: "",
   });
-  const [opensign, setOpensign] =React.useState(false);
   //input filed change handler;
   const changeHandler = (e) => {
     setUserstate({ ...userstate, [e.target.name]: e.target.value });
   };
 
-
   const handleClose = () => {
-    setloginstate(false);
+    setOpenlogin(false);
   };
 
   //Submit form, after filling the user form;
   const loginHandler = async () => {
     try {
       const { data } = await axios.post(`${url}/login`, userstate);
-      console.log("data",data);
-      if(data.status=='ok'){
-      toast.success(data.message);
-      localStorage.setItem("token", data.user);
-      setTimeout(() => {
-        navigate('/profile');
-      }, 0);
-      handleClose();
-      }else{
+      console.log("data", data);
+      if (data.status == "ok") {
+        toast.success(data.message);
+        localStorage.setItem("token", data.user);
+        setTimeout(() => {
+          navigate("/profile");
+        }, 0);
+        handleClose();
+      } else {
         toast.error(data.message);
       }
     } catch (error) {
@@ -111,130 +108,132 @@ function Login({ open, setloginstate }) {
       password: "",
     });
   };
-const signupHandler=()=>{
-  // setOpensign(true);
-  setloginstate(false);
-}
+  // const signupHandler = () => {
+  //   // setOpensign(true);
+  //   setloginstate(false);
+  // };
   return (
     <>
-    <StyledModal
-      open={open}
-      keepMounted
-      TransitionComponent={Transition}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-slide-title"
-      aria-describedby="alert-dialog-slide-description"
-    >
-      <DialogContent className="dialoge__content__section">
-        <Box sx={{ float: "right", p: 1, cursor: "pointer" }}>
-          <CloseIcon sx={{ color: "text.main" }} onClick={handleClose} />
-        </Box>
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            align: "center",
-          }}
-        >
-          <Box sx={{ width: "100%" }}>
-            <Typography
-              sx={{
-                textAlign: "center",
-                fontSize: "20px",
-                paddingBottom: "20px",
-                color: "text.main",
-                fontWeight: 700,
-              }}
-            >
-              Log in
-            </Typography>
-            <Box
-              sx={{
-                width: "100%",
-                padding: "30px 25px",
-                backgroundColor: "formscheme.main",
-              }}
-            >
-              <TextInput
-                fullWidth
-                type="email"
-                value={userstate.email || ""}
-                onChange={changeHandler}
-                placeholder="Email"
-                name="email"
-                autoComplete="off"
-                autoFocus
-              />
-
-              <TextInput
-                fullWidth
-                type="text"
-                value={userstate.password || ""}
-                onChange={changeHandler}
-                placeholder="Password"
-                name="password"
-                autoComplete="off"
-                autoFocus
-              />
-
-              <Button
-                onClick={loginHandler}
-                type="submit"
+      <StyledModal
+        open={open}
+        keepMounted
+        TransitionComponent={Transition}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogContent className="dialoge__content__section">
+          <Box sx={{ float: "right", p: 1, cursor: "pointer" }}>
+            <CloseIcon sx={{ color: "text.main" }} onClick={handleClose} />
+          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              align: "center",
+            }}
+          >
+            <Box sx={{ width: "100%" }}>
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  fontSize: "20px",
+                  paddingBottom: "20px",
+                  color: "text.main",
+                  fontWeight: 700,
+                }}
+              >
+                Log in
+              </Typography>
+              <Box
                 sx={{
                   width: "100%",
-                  my: 1,
-                  py: 1.5,
-                  color: "text.main",
-                  backgroundColor: "secondary.main",
-                  "&:hover": {
+                  padding: "30px 25px",
+                  backgroundColor: "formscheme.main",
+                }}
+              >
+                <TextInput
+                  fullWidth
+                  type="email"
+                  value={userstate.email || ""}
+                  onChange={changeHandler}
+                  placeholder="Email"
+                  name="email"
+                  autoComplete="off"
+                  autoFocus
+                />
+
+                <TextInput
+                  fullWidth
+                  type="text"
+                  value={userstate.password || ""}
+                  onChange={changeHandler}
+                  placeholder="Password"
+                  name="password"
+                  autoComplete="off"
+                  autoFocus
+                />
+
+                <Button
+                  onClick={loginHandler}
+                  type="submit"
+                  sx={{
+                    width: "100%",
+                    my: 1,
+                    py: 1.5,
+                    color: "text.main",
                     backgroundColor: "secondary.main",
-                  },
-                }}
-                value="submit"
-              >
-                Submit
-              </Button>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <Typography
-                variant="body1"
-                component="span"
+                    "&:hover": {
+                      backgroundColor: "secondary.main",
+                    },
+                  }}
+                  value="submit"
+                >
+                  Submit
+                </Button>
+              </Box>
+              <Box
                 sx={{
-                  padding: "20px",
-                  color: "text.light",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
                 }}
               >
-                Don't have an account?
-              </Typography>
-             
                 <Typography
-                cursor="pointer"
-                onClick={signupHandler}
+                  variant="body1"
+                  component="span"
+                  sx={{
+                    padding: "20px",
+                    color: "text.light",
+                  }}
+                >
+                  Don't have an account?
+                </Typography>
+
+                <Typography
+                  onClick={() => {
+                    setOpensign(true);
+                    setOpenlogin(false);
+                  }}
                   variant="body1"
                   component="span"
                   fontWeight="700"
                   color="text.main"
                   borderBottom="1px solid #D9D9D9"
                   textDecoration="none"
+                  sx={{ cursor: "pointer" }}
                 >
                   Sign up
                 </Typography>
-  
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </DialogContent>
-    </StyledModal>
-    { menuItem &&  <AccountMenu/>}
-    {/* {opensign && <Signup setOpensign={setOpensign} opensign={opensign} />} */}
+        </DialogContent>
+      </StyledModal>
+      {menuItem && <AccountMenu />}
+      {/* {opensign && <Signup setOpensign={setOpensign} opensign={opensign} />} */}
     </>
   );
 }

@@ -1,6 +1,6 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import AccountMenu from './MenuItem';
+import AccountMenu from "./MenuItem";
 import jsonwebtoken from "jsonwebtoken";
 
 import {
@@ -42,14 +42,13 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header({ setOpensign }) {
+export default function Header({ setOpensign, setOpenlogin }) {
   // const { account, connect, disconnect, signer } = useContext(AppContext);
   // const tokenContract = useTokenContract(signer);
-  const [namestate,setnamestate]=useState('');
+  const [namestate, setnamestate] = useState("");
   const [searchstate, setsearchstate] = useState(true);
-  const [loginstate, setloginstate] = useState(false);
-  const [filterstate,setfilterstate]=useState('');
-  const [options,setOptionsstate]=useState([]);
+  const [filterstate, setfilterstate] = useState("");
+  const [options, setOptionsstate] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   // fetch all details from sever
@@ -59,22 +58,22 @@ export default function Header({ setOpensign }) {
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
-        setOptionsstate(data.allDiscussion)
+        setOptionsstate(data.allDiscussion);
       } catch (error) {
         console.log(error);
       }
     };
- 
+
     fetchdetails();
   }, []);
 
-  useEffect(()=>{
-    const token=localStorage?.getItem("token");
-    if(token){
+  useEffect(() => {
+    const token = localStorage?.getItem("token");
+    if (token) {
       const user = jsonwebtoken.decode(token);
       setnamestate(user?.name);
     }
-  },[])
+  }, []);
   // const [alertState, setAlertState] = useState({
   //   open: false,
   //   message: "",
@@ -241,39 +240,42 @@ export default function Header({ setOpensign }) {
                       }}
                     />
                   </Box>
-                  { namestate ? ( <AccountMenu/>):( <>
+                  {namestate ? (
+                    <AccountMenu />
+                  ) : (
+                    <>
                       <Typography
-                      ml={4}
-                      variant="body1"
-                      sx={{
-                        textDecoration: "none",
-                        cursor: "pointer",
-                        color: "text.main",
-                      }}
-                      onClick={() => {
-                        setloginstate(true);
-                      }}
-                    >
-                      Log in
-                    </Typography>
-  
-                    <Typography
-                      ml={4}
-                      variant="body1"
-                      sx={{
-                        textDecoration: "none",
-                        cursor: "pointer",
-                        color: "text.main",
-                      }}
-                      onClick={() => {
-                        setOpensign(true);
-                      }}
-                    >
-                      Sign up
-                    </Typography>
+                        ml={4}
+                        variant="body1"
+                        sx={{
+                          textDecoration: "none",
+                          cursor: "pointer",
+                          color: "text.main",
+                        }}
+                        onClick={() => {
+                          setOpenlogin(true);
+                        }}
+                      >
+                        Log in
+                      </Typography>
+
+                      <Typography
+                        ml={4}
+                        variant="body1"
+                        sx={{
+                          textDecoration: "none",
+                          cursor: "pointer",
+                          color: "text.main",
+                        }}
+                        onClick={() => {
+                          setOpensign(true);
+                        }}
+                      >
+                        Sign up
+                      </Typography>
                     </>
                   )}
-                
+
                   {/* {account ? (
                     <Box
                       width="130px"
@@ -349,7 +351,6 @@ export default function Header({ setOpensign }) {
           </Box>
         </Container>
       </Box>
-      {loginstate && <Login setloginstate={setloginstate} open={loginstate} />}
     </>
   );
 }

@@ -24,7 +24,7 @@ import Vote from "./Votes";
 import Like from "./Likes";
 import Mention from "./Mention";
 
-import moment from 'moment';
+import moment from "moment";
 import avtar from "../../images/avtar.png";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -95,8 +95,8 @@ export default function MainPage() {
           userProfileHandler();
         }
         setUserfile("");
-      }else{
-        toast.error("Choose the file !");
+      } else {
+        toast.error("Choose the file!");
       }
     } catch (error) {
       console.log("error upload", error);
@@ -105,7 +105,7 @@ export default function MainPage() {
   console.log(userProfilestate);
   return (
     <>
-      <Box bgcolor="primary.light">
+      <Box bgcolor="primary.light" height="260px">
         <Container maxWidth="lg">
           <Box display="flex" flexDirection="column">
             <Box
@@ -127,9 +127,10 @@ export default function MainPage() {
                     width: "150px",
                     height: "150px",
                     borderRadius: "50%",
-                    backgroundColor: "white",
+                    backgroundColor: "#fff",
                   }}
                 >
+                  {console.log(userProfilestate?.img, "jjj")}
                   {userProfilestate?.img ? (
                     <img
                       src={`${url}/${userProfilestate?.img}`}
@@ -142,11 +143,15 @@ export default function MainPage() {
                       loading="lazy"
                     />
                   ) : (
-                    <img src={avtar} alt="avtar" style={{ width: "100%" }} loading="lazy" />
-                  )}
-                </Box>
-                <form onSubmit={handlerSubmit}>
-                  <input
+                    // <img
+                    //   src={avtar}
+                    //   alt="avtar"
+                    //   style={{ width: "100%" }}
+                    //   loading="lazy"
+                    // />
+
+                    <form onSubmit={handlerSubmit}>
+                      {/* <input
                     type="file"
                     name="file"
                     sx={{
@@ -155,10 +160,42 @@ export default function MainPage() {
                     }}
                     accept="image/*"
                     onChange={handleFile}
-                  />
-                  <Button type="submit">Upload</Button>
-                </form>
+                  /> */}
+
+                      <div className="image-upload">
+                        <label for="file-input">
+                          <img src={avtar} style={{ width: "100%" }} />
+                        </label>
+
+                        <input
+                          id="file-input"
+                          type="file"
+                          name="file"
+                          accept="image/*"
+                          onChange={handleFile}
+                        />
+                      </div>
+                      <Box py={1} textAlign="center">
+                        <Button
+                          type="submit"
+                          sx={{
+                            color: "text.main",
+                            backgroundColor: "secondary.main",
+                            textTransform: "capitalize",
+                            width: "80px",
+                            "&:hover": {
+                              backgroundColor: "secondary.light",
+                            },
+                          }}
+                        >
+                          Save
+                        </Button>
+                      </Box>
+                    </form>
+                  )}
+                </Box>
               </Box>
+              {/* <Box component="input"></Box> */}
               <Box
                 ml={3}
                 display="flex"
@@ -197,8 +234,8 @@ export default function MainPage() {
                       fontWeight={400}
                       fontFamily="Open Sans"
                     >
-                      Joined Date {moment(userProfilestate ?.addedAt).format("LL")}
-                      
+                      Joined Date{" "}
+                      {moment(userProfilestate?.addedAt).format("LL")}
                     </Box>
                   </Box>
                   <Box display="flex" alignItems="center">
