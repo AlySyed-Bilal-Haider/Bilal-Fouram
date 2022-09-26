@@ -4,15 +4,16 @@ import { Box } from "@mui/material";
 import Web3 from "web3";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import Logout from './components/Logout';
+import Logout from "./components/Logout";
 import "./App.css";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import NetworkChange from "./networkSwitch";
 import AllDiscussions from "./components/AllDiscussions";
 import MainPage from "./components/UserPenal/MainPage";
-import Signup from "./components/Signup";
 import Detail from "./components/Detail";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
 
 const web3 = new Web3(
   Web3.givenProvider
@@ -21,7 +22,8 @@ const web3 = new Web3(
 );
 function App() {
   const [open, setOpen] = useState(false);
-  const [opensign, setOpensign] = useState(false);
+  const [openSign, setOpenSign] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
 
   // useEffect(() => {
   //   let chain = async () => {
@@ -47,17 +49,26 @@ function App() {
         pauseOnHover
       />
 
-      <Signup open={opensign} setOpensign={setOpensign} />
+      <Signup
+        open={openSign}
+        setOpensign={setOpenSign}
+        setOpenlogin={setOpenLogin}
+      />
+      <Login
+        open={openLogin}
+        setOpenlogin={setOpenLogin}
+        setOpensign={setOpenSign}
+      />
       <NetworkChange open={open} setOpen={setOpen} />
       <Box sx={{ backgroundColor: "body.main" }}>
-        <Header open={opensign} setOpensign={setOpensign} />
+        <Header setOpensign={setOpenSign} setOpenlogin={setOpenLogin} />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/profile" element={<MainPage />} />
           <Route path="/AllDiscussions" element={<AllDiscussions />} />
           <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />
           <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/logout" element={<Logout/>}/>
+          <Route path="/logout" element={<Logout />} />
         </Routes>
       </Box>
     </>

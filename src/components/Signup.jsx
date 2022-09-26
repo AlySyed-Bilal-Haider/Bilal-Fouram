@@ -66,7 +66,7 @@ const TextInput = styled(InputBase)({
   },
 });
 
-function Signup({ open, setOpensign }) {
+function Signup({ open, setOpensign, setOpenlogin }) {
   const url = "http://localhost:4000";
   const [userstate, setUserstate] = React.useState({
     name: "",
@@ -207,11 +207,16 @@ function Signup({ open, setOpensign }) {
               </Typography>
               <NavLink to="/" style={{ textDecoration: "none" }}>
                 <Typography
+                  onClick={() => {
+                    setOpenlogin(true);
+                    setOpensign(false);
+                  }}
                   variant="body1"
                   component="span"
                   fontWeight="700"
                   color="text.main"
                   borderBottom="1px solid #D9D9D9"
+                  sx={{ cursor: "pointer" }}
                 >
                   Log In
                 </Typography>

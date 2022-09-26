@@ -20,15 +20,15 @@ const renderComponent = (locationpath) => {
     case "/AllDiscussions/General":
       return <General title="General" tage="General" />;
     case "/AllDiscussions/Proposal":
-      return <Proposal title="Proposal" tage="Proposal"/>;
+      return <Proposal title="Proposal" tage="Proposal" />;
     case "/AllDiscussions/Support":
       return <Support title="Support" tage="Support" />;
     case "/AllDiscussions/KnowledgeBase":
       return <Knowledgebase title="Knowledgebase" tage="Knowledge Base" />;
     case "/AllDiscussions/CommunityDevelopment":
-      return <Community title="Community" tage="Community Development"/>;
+      return <Community title="Community" tage="Community Development" />;
     case "/AllDiscussions/Feedback":
-      return <Feed title="Feed" tage="Feedback"/>;
+      return <Feed title="Feed" tage="Feedback" />;
     case "/AllDiscussions/ProjectProposals":
       return <Projectprosal title="Project propsal" tage="Project Proposals" />;
     default:
@@ -59,7 +59,7 @@ const mainHeader = (locationpath) => {
 };
 function AllDiscussions() {
   const location = useLocation();
-  console.log("location",location.pathname);
+  console.log("location", location.pathname);
   return (
     <>
       {location?.pathname && mainHeader(location?.pathname)}
@@ -87,26 +87,16 @@ function AllDiscussions() {
                 Start a Discussion
               </Button>
               <Box sx={{ mt: 2, width: "100%" }}>
-                {sidebardata?.map(({ text, link }, index) => {
+                {sidebardata?.map(({ text, link, Icon }, index) => {
                   return (
                     <Box
                       key={index}
                       sx={{
                         width: "100%",
                         cursor: "pointer",
-                        display: "flex",
-                        justifyContent: "flex-start",
-                        alignItems: "center",
                         py: 1,
                       }}
                     >
-                      <AutorenewIcon
-                        sx={{
-                          width: "30%",
-                          mr: 1,
-                          color: index == 0 ? "primary.main" : "primary.light",
-                        }}
-                      />
                       <NavLink
                         to={link}
                         style={{ textDecoration: "none", fontSize: "16px" }}
@@ -114,7 +104,16 @@ function AllDiscussions() {
                           isActive ? "active" : "inactive"
                         }
                       >
-                        {text}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                          }}
+                        >
+                          {Icon}
+                          {text}
+                        </Box>
                       </NavLink>
                     </Box>
                   );
