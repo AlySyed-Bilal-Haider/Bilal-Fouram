@@ -88,13 +88,13 @@ function Login({ open, setOpenlogin, setOpensign }) {
   const loginHandler = async () => {
     try {
       const { data } = await axios.post(`${url}/login`, userstate);
-      console.log("data", data);
       if (data.status == "ok") {
         toast.success(data.message);
         localStorage.setItem("token", data.user);
         localStorage.setItem("name", data.name);
+        localStorage.setItem("email",data.email);
         setTimeout(() => {
-          window.location.reload();
+          window.location.href="/";
         }, 0);
         handleClose();
       } else {

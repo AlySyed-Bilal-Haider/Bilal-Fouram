@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import jsonwebtoken from "jsonwebtoken";
 import Comment from "./Comment";
 
 import {
@@ -105,12 +104,12 @@ const BpCheckbox = (props) => {
   );
 };
 
-export default function Detail() {
+export default function Detail({userId}) {
+  console.log("userId detailss",userId);
   const param = useParams();
   //close menu tag on click
   const userToken=localStorage.getItem("token");
-  const token = localStorage.getItem("token");
-  const userProfile = jsonwebtoken.decode(userToken);
+  const useremail=localStorage.getItem("email");
   const [name, setNamestate] = useState(localStorage.getItem("name"));
   const [openstate, setOpenlogin] = useState(false);
   const [descriptionstate,setPostDescription]=useState('');
@@ -133,37 +132,38 @@ export default function Detail() {
     }
   };
   // check this user is approveed or not
-  useEffect(() => {
-    userProfile?.email && approveORnotapproveCheck();
-  }, [userProfile?.email]);
-console.log("userProfile?.email",userProfile?.email );
-
+  console.log("useremail",useremail);
   const approveORnotapproveCheck = async () => {
-    const voteinfo = { id:param?.id, email: userProfile?.email };
+    console.log("useremail",useremail);
+    const voteinfo = { id:param?.id, email:useremail };
     try {
-      const { data } = await axios.post(`${url}/getvotesdetails`, voteinfo);
+      const { data } = await axios.post(`${url}/getvotesdetails`,voteinfo);
+      console.log("data votes",data);
         setCheckstate(data?.votedetails?.checkstatus);
-        console.log("checkstatus:",data?.votedetails?.checkstatus);
     } catch (error) {
       console.log("check approve and unapprove", error);
     }
   };
+  useEffect(() => {
+    useremail && approveORnotapproveCheck();
+  }, []);
   //Approve Handler
-  const handleApprove = async (id) => {
-    let approveinfo = { id, email: userProfile?.email };
+  const handleApprove = async () => {
+    let approveinfo = {id:param?.id, email:useremail};
     try {
       const { data } = await axios.post(`${url}/approve`, approveinfo);
-      console.log("approve data", data);
       data.status == "ok" && approveORnotapproveCheck();
     } catch (error) {
       console.log("error", error);
     }
   };
   //unapprove handler
-  const unapproveHandler = async (id) => {
-    let unapprove = { id, email: userProfile?.email };
+  const unapproveHandler = async () => {
+    let unapprove = { id:param?.id, email:useremail};
+    console.log("unapprove",unapprove);
     try {
       const { data } = await axios.post(`${url}/unapprove`, unapprove);
+      console.log("data",data);
       data.status == "ok" && approveORnotapproveCheck();
     } catch (error) {
       console.log("error", error);
@@ -171,17 +171,16 @@ console.log("userProfile?.email",userProfile?.email );
   };
   const CheckloginHandler = () => {
  
-    if (token) {
+    if (userToken) {
       setEditPopOpen(true);
     } else {
       setOpenlogin(true);
     }
   };
-  // console.log("postdetails",postdetails);
   return (
     <>
       <Comment open={editPopOpen} setOpen={setEditPopOpen} postId={param?.id} 
-      title={descriptionstate} email={userProfile?.email }/>
+      title={descriptionstate}  userid={userId}/>
       <Box bgcolor="primary.light">
         <Box py={5} textAlign="center" display="flex" flexDirection="column">
           <Box
@@ -352,7 +351,7 @@ console.log("userProfile?.email",userProfile?.email );
                     {checkstate == true ? null : (
                       <BpCheckbox
                         onClick={() => {
-                          unapproveHandler(postdetails?._id);
+                          unapproveHandler();
                         }}
                       />
                     )}
@@ -371,7 +370,7 @@ console.log("userProfile?.email",userProfile?.email );
                     {checkstate == true ? null : (
                       <BpCheckbox
                         onClick={() => {
-                          handleApprove(postdetails?._id);
+                          handleApprove();
                         }}
                       />
                     )}

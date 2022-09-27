@@ -51,11 +51,8 @@ export default function Header({ setOpensign, setOpenlogin }) {
   const [filterstate, setfilterstate] = useState("Search here");
   const [options, setOptionsstate] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
-
   // fetch all details from sever
-
   useEffect(() => {
-    console.log("Header functions");
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);

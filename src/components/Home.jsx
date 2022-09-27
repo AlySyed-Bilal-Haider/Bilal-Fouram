@@ -104,11 +104,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Home({username}) {
+export default function Home({username,email}) {
   const navigate = useNavigate();
-  // const matches = useMediaQuery("(max-width:750px)");
   const theme = useTheme();
-
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [loginstate, setloginstate] = useState(false);
@@ -130,7 +128,7 @@ export default function Home({username}) {
     const polldata = localStorage.getItem("poll");
     let checkstatus = false;
     let updatedata;
-    const addnameAndemail = { ...addpoststate, username: username };
+    const addnameAndemail = { ...addpoststate, username: username,email:email };
     if (!!tagsvalue) {
       if (polldata) {
         const pollrecord = JSON.parse(polldata);
@@ -140,6 +138,7 @@ export default function Home({username}) {
       try {
         if (checkstatus) {
           const { data } = await axios.post(`${url}/posts`, updatedata);
+          console.log("data",data);
           if (data.status == "ok") {
             toast.success(data.message);
             setTagsvalue('');

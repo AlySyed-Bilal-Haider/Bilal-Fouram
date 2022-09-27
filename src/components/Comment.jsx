@@ -39,34 +39,35 @@ const TextInput = styled(InputBase)({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function Comment({ open, setOpen, postId,title ,email}) {
+function Comment({ open, setOpen, postId, title, userid }) {
+  console.log("userid comment",userid);
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
-    setCommentstate('');
+    setCommentstate("");
     setOpen(false);
   };
   const addComment = async () => {
-    const commentValue = { comment: commentstate, postId,email };
+    const commentValue = { comment:commentstate, postId,userid };
     try {
       const { data } = await axios.post(`${url}/comment`, commentValue);
-      console.log("data", data);
+
       data.status == "ok" && handleClose();
     } catch (error) {
-      console.log("Comment routes not work !");
+      console.log("Comment routes not work !",error);
     }
   };
-  const fetchcomment=async()=>{
-    try{
-       const {data}=await axios.get(`${url}/fetchcomment/${postId}`);
-      console.log("comment data",data);
-    }catch(error){
-      console.log("comment page error",error);
-    }
-    }
-  
-  useEffect(()=>{
-    postId && fetchcomment();
-  },[postId])
+  // const fetchcomment = async () => {
+  //   try {
+  //     const { data } = await axios.get(`${url}/fetchcomment/${postId}`);
+  //     console.log("comment data", data);
+  //   } catch (error) {
+  //     console.log("comment page error", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   postId && fetchcomment();
+  // }, [postId]);
   return (
     <Dialog
       fullScreen
@@ -96,7 +97,7 @@ function Comment({ open, setOpen, postId,title ,email}) {
         </Toolbar>
       </AppBar>
       <Box mt={-3} mb={3} mx={4.5}>
-      <Typography sx={{m:1}}>{title}</Typography>
+        <Typography sx={{ m: 1 }}>{title}</Typography>
         <TextInput
           type="text"
           name="description"

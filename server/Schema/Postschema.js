@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-const Addpost = new mongoose.Schema({
+import {model, mongoose, Schema} from "mongoose";
+const Addpost = new Schema({
   tag:String,
   title : {
     type: String,
@@ -15,6 +15,10 @@ const Addpost = new mongoose.Schema({
     trim: true,
     required:true,
   },
+  comments:[{
+    type:Schema.Types.ObjectId,
+    ref:"commentAdd"
+  }],
   status:false,
   question:String,
   ans1:String,
@@ -23,5 +27,5 @@ const Addpost = new mongoose.Schema({
   username:String,
   email:String,
 });
-const postmodal=mongoose.model("Addpost", Addpost);
+const postmodal=model("Addpost", Addpost);
 export default postmodal;

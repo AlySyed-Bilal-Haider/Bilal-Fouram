@@ -1,4 +1,4 @@
-import mongoose, { trusted } from "mongoose";
+import mongoose from "mongoose";
 const commentAdd = new mongoose.Schema({
   comment  : {
     type: String,
@@ -10,19 +10,13 @@ const commentAdd = new mongoose.Schema({
     default:0
     
   },
-  email:{
+  userid:{
     type: String,
-    trim: true,
     required:true,
-    unique:true
   },
   dislike : {
     type: Number,
     default:0
-  },
-  postId:{
-    type:String,
-    required:true
   },
   addedAt: {
     type: Date,

@@ -58,9 +58,7 @@ const mainHeader = (locationpath) => {
   }
 };
 function AllDiscussions({modal}) {
-  console.log("setOpen",modal);
   const location = useLocation();
-  console.log("location", location.pathname);
   return (
     <>
       {location?.pathname && mainHeader(location?.pathname)}

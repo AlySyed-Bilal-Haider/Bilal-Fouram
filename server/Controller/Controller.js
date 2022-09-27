@@ -6,9 +6,10 @@ import { config } from "./config.js";
 
 import voiting from "../Schema/Voting.js";
 import commentModal from "../Schema/comment.js";
+import mongoose from "mongoose";
 // ......Signup here routes start..............
 
-export const post = async (req, res) => {
+export const signupHandler = async (req, res) => {
   try {
     let user1 = await mongomodal.findOne({
       email: req.body.email,
@@ -34,7 +35,6 @@ export const post = async (req, res) => {
         message: "User register Successfully!",
       });
     }
-
   } catch (error) {
     console.log(error);
     res.status(404).json({
@@ -48,49 +48,50 @@ export const post = async (req, res) => {
 // ........Login routes start...jsonwebtoken.....
 
 export const login = async (req, res) => {
-
   try {
-    console.log(req.body);
-    let user = mongomodal.findOne({ email: req.body.email, }, function (err, docs) {
-      if (docs) {
-        // console.log(docs._doc.name);
-        var decoded = jwt_decode(docs._doc.password);
-        // console.log(decoded);
-        if (decoded.password == req.body.password) {
-          // console.log("Password");
+    let user = mongomodal.findOne(
+      { email: req.body.email },
+      function (err, docs) {
+        if (docs) {
+          // console.log(docs._doc.name);
+          var decoded = jwt_decode(docs._doc.password);
+          // console.log(decoded);
+          if (decoded.password == req.body.password) {
+            // console.log("Password");
 
-          let userToken = { id: docs._doc._id };
-          jwt.sign(
-            userToken,
-            config.secret,
-            {
-              expiresIn: "6d",
-            },
-            (err, token) => {
-              res.json({
-                status: "ok",
-                message: "User login Successfully!",
-                user: token,
-                name: docs._doc.name,
-                email: docs._doc.email
-              });
-            }
-          );
+            let userToken = { id: docs._doc._id };
+            jwt.sign(
+              userToken,
+              config.secret,
+              {
+                expiresIn: "6d",
+              },
+              (err, token) => {
+                res.json({
+                  status: "ok",
+                  message: "User login Successfully!",
+                  user: token,
+                  name: docs._doc.name,
+                  email: docs._doc.email,
+                });
+              }
+            );
+          } else {
+            res.json({
+              status: "error",
+              message: "Please try gain! Password  not match",
+              user: false,
+            });
+          }
         } else {
-          res.json({
+          res.status(404).json({
             status: "error",
-            message: "Please try gain! Password  not match",
+            message: "SignUp First..!",
             user: false,
           });
         }
-      } else {
-        res.status(404).json({
-          status: "error",
-          message: "SignUp First..!",
-          user: false,
-        });
       }
-    });
+    );
   } catch (error) {
     console.log(error);
     res.status(404).json({
@@ -104,10 +105,8 @@ export const login = async (req, res) => {
 // .........verify token here start here...........
 
 export const tokenVerifyHandler = async (req, res) => {
-
   const token = req.headers["x-access-token"];
   try {
-
     var decoded = jwt_decode(token);
     if (decoded.id) {
       mongomodal.findOne({ _id: decoded.id }, function (err, docs) {
@@ -115,10 +114,11 @@ export const tokenVerifyHandler = async (req, res) => {
         res.json({
           status: "ok",
           name: docs.name,
-          email: docs.email
+          email: docs.email,
+          id: docs._id,
         });
       });
-    }else{
+    } else {
       res.json({
         status: "error",
         message: " invaild token",
@@ -134,7 +134,8 @@ export const tokenVerifyHandler = async (req, res) => {
 };
 
 // ....Add discussion and Questions ,answer..........
-export const discussion = async (req, res) => {
+export const discussion = async (req, res, next) => {
+  console.log(req.body);
   try {
     const addpost = await new postmodal({
       tag: req.body.tag,
@@ -148,33 +149,23 @@ export const discussion = async (req, res) => {
       username: req.body.name,
       email: req.body.email,
     });
-    await addpost.save();
+     addpost.save();
     if (addpost) {
       res.json({
         status: "ok",
         success: true,
         message: "post add Successfully!",
       });
-    } else {
-      res.json({
-        status: "error",
-        success: false,
-        message: "Please add agian and carefully!",
-      });
     }
   } catch (error) {
-    res.status(404).json({
-      status: "error",
-      message: "Please try again!",
-      user: false,
-    });
+    next(error);
   }
 };
 
 // fetch all discusions from server , then send on front end
 export const fetchAlldiscussion = async (req, res) => {
   try {
-    const data = await postmodal.find({});
+    const data = await postmodal.find().populate("comments");
     if (data) {
       res.json({
         status: "ok",
@@ -197,7 +188,7 @@ export const fetchAlldiscussion = async (req, res) => {
 export const fetchcategory = async (req, res) => {
   const tag = req.params.tag;
   try {
-    const data = await postmodal.find({ tag: tag });
+    const data = await postmodal.find({ tag: tag }).populate("comments");
     res.send(data);
   } catch (error) {
     console.log(error);
@@ -236,7 +227,7 @@ export const getSpecificdescussion = async (req, res) => {
 export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await postmodal.findOne({ _id: id });
+    const data = await postmodal.findById({ _id: id });
     res.send(data);
   } catch (error) {
     res.status(404).json({
@@ -345,11 +336,13 @@ export const approveHandler = async (req, res) => {
 };
 
 export const unapproveHandler = async (req, res) => {
-  // console.log(req.body,"Body data");
+  console.log(req.body, "Body data");
   let unapprove;
   try {
     const getpost = await voiting.findOne({ postId: req.body.id });
+    console.log("getpost", getpost);
     if (getpost) {
+      console.log("first unApprove !");
       const unapprovevalue = getpost.unapprove + 1;
       unapprove = await new voiting({
         useremail: req.body.email,
@@ -358,6 +351,7 @@ export const unapproveHandler = async (req, res) => {
         checkstatus: true,
       });
     } else {
+      console.log("Unapprove second");
       unapprove = await new voiting({
         useremail: req.body.email,
         postId: req.body.id,
@@ -383,14 +377,14 @@ export const unapproveHandler = async (req, res) => {
 
 // check user is exist or not for this post
 
-export const handlerApproveORunApprove = async (req, res) => {
+export const handlerApproveORunApprove = async (req, res, next) => {
   console.log(req.body);
   try {
     const data = await voiting.findOne({
       postId: req.body.id,
       email: req.body.email,
     });
-
+    console.log("Handler approve or not aaprove", data);
     if (data) {
       res.json({
         status: "ok",
@@ -398,14 +392,9 @@ export const handlerApproveORunApprove = async (req, res) => {
         message: "check approve and unapprove status!",
         votedetails: data,
       });
-    } else {
-      res.json({
-        status: "error",
-        success: false,
-        message: " approve and unapprove not exist  !",
-      });
     }
   } catch (error) {
+    next(error);
     console.log("check user exist or not,server issues !");
   }
 };
@@ -413,16 +402,27 @@ export const handlerApproveORunApprove = async (req, res) => {
 export const commentHandler = async (req, res, next) => {
   const comment = req.body.comment;
   const postId = req.body.postId;
-  let commentRecord;
 
+  console.log(req.body);
   try {
-    if (postId && comment) {
-      commentRecord = await new commentModal({
-        comment,
-        postId
-      });
-    }
-    await commentRecord.save();
+    let commentRecord = await new commentModal({
+      _id: new mongoose.Types.ObjectId(),
+      comment,
+      userid: req.body.userid,
+    });
+
+    commentRecord.save();
+    await postmodal.findByIdAndUpdate(
+      {
+        _id: postId,
+      },
+      {
+        $push: {
+          comments: commentRecord._id,
+        },
+      }
+    );
+
     res.json({
       status: "ok",
       success: true,
@@ -433,11 +433,10 @@ export const commentHandler = async (req, res, next) => {
   }
 };
 
-
-export const fetchComment=async(req,res,next)=>{
-  const id=req.params.id;
+export const fetchComment = async (req, res, next) => {
+  const id = req.params.id;
   try {
-    const data = await commentModal.find({_id:id});
+    const data = await commentModal.find({ _id: id });
     if (data) {
       res.json({
         status: "ok",
@@ -445,6 +444,6 @@ export const fetchComment=async(req,res,next)=>{
       });
     }
   } catch (error) {
-   next(error)
+    next(error);
   }
-}
+};
