@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Box } from "@mui/material";
 import Web3 from "web3";
@@ -15,6 +15,8 @@ import Detail from "./components/Detail";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 
+import { url } from "./utils";
+
 const web3 = new Web3(
   Web3.givenProvider
     ? Web3.givenProvider
@@ -24,6 +26,47 @@ function App() {
   const [open, setOpen] = useState(false);
   const [openSign, setOpenSign] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
+  const [username, setusernameState] = React.useState('');
+
+  const tokenVerfiy = async () => {
+    try {
+      await fetch(`${url}/verifytoken`, {
+        method: "POST",
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      }).then(response => response.json())
+        .then(data => {
+          console.log("all data", data);
+          localStorage.setItem('name', data.name);
+          setusernameState(data.name);
+        })
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+   
+  useEffect(() => {
+    const token = localStorage?.getItem("token");
+    if (token) {
+      tokenVerfiy();
+      
+
+
+      // const user = jsonwebtoken.decode(token);
+      // setusernameState(user?.name);
+      // setEmailstate(user?.email);
+      // if (!user) {
+      //   localStorage.removeItem("token");
+      //   navigate("/login");
+      // } else {
+      //   tokenVerfiy();
+      // }
+    } else {
+      // navigate("/login");
+    }
+  }, []);
 
   // useEffect(() => {
   //   let chain = async () => {
@@ -63,7 +106,7 @@ function App() {
       <Box sx={{ backgroundColor: "body.main" }}>
         <Header setOpensign={setOpenSign} setOpenlogin={setOpenLogin} />
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route exact path="/" element={<Home username={username} />}/>
           <Route path="/profile" element={<MainPage />} />
           <Route path="/AllDiscussions" element={<AllDiscussions />} />
           <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />

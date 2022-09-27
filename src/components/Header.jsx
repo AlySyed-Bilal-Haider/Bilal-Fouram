@@ -71,8 +71,8 @@ export default function Header({ setOpensign, setOpenlogin }) {
   useEffect(() => {
     const token = localStorage?.getItem("token");
     if (token) {
-      const user = jsonwebtoken.decode(token);
-      setnamestate(user?.name);
+      
+      setnamestate(localStorage?.getItem("name"));
     }
   }, []);
   const classes = useStyles();
@@ -267,7 +267,7 @@ export default function Header({ setOpensign, setOpenlogin }) {
                     />
                   </Box>
                   {namestate ? (
-                    <AccountMenu />
+                    <AccountMenu  />
                   ) : (
                     <>
                       <Typography

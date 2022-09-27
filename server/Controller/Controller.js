@@ -53,11 +53,11 @@ export const login = async (req, res) => {
     console.log(req.body);
     let user = mongomodal.findOne({ email: req.body.email, }, function (err, docs) {
       if (docs) {
-        console.log(docs._doc.name);
+        // console.log(docs._doc.name);
         var decoded = jwt_decode(docs._doc.password);
-        console.log(decoded);
+        // console.log(decoded);
         if (decoded.password == req.body.password) {
-          console.log("Password");
+          // console.log("Password");
 
           let userToken = { id: docs._doc._id };
           jwt.sign(
@@ -71,7 +71,8 @@ export const login = async (req, res) => {
                 status: "ok",
                 message: "User login Successfully!",
                 user: token,
-                name: docs._doc.password,
+                name: docs._doc.name,
+                email: docs._doc.email
               });
             }
           );
@@ -114,6 +115,7 @@ export const tokenVerifyHandler = async (req, res) => {
         res.json({
           status: "ok",
           name: docs.name,
+          email: docs.email
         });
       });
     }else{
