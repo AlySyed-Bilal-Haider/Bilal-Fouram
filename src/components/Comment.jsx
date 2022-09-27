@@ -39,22 +39,34 @@ const TextInput = styled(InputBase)({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function Comment({ open, setOpen, postId }) {
+function Comment({ open, setOpen, postId,title ,email}) {
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
     setCommentstate('');
     setOpen(false);
   };
-  const handlerSubmit = async () => {
-    const commentValue = { comment: commentstate, postId };
+  const addComment = async () => {
+    const commentValue = { comment: commentstate, postId,email };
     try {
       const { data } = await axios.post(`${url}/comment`, commentValue);
       console.log("data", data);
-      data.statue == "ok" && handleClose();
+      data.status == "ok" && handleClose();
     } catch (error) {
       console.log("Comment routes not work !");
     }
   };
+  const fetchcomment=async()=>{
+    try{
+       const {data}=await axios.get(`${url}/fetchcomment/${postId}`);
+      console.log("comment data",data);
+    }catch(error){
+      console.log("comment page error",error);
+    }
+    }
+  
+  useEffect(()=>{
+    postId && fetchcomment();
+  },[postId])
   return (
     <Dialog
       fullScreen
@@ -83,8 +95,8 @@ function Comment({ open, setOpen, postId }) {
           </IconButton>
         </Toolbar>
       </AppBar>
-
       <Box mt={-3} mb={3} mx={4.5}>
+      <Typography sx={{m:1}}>{title}</Typography>
         <TextInput
           type="text"
           name="description"
@@ -102,7 +114,7 @@ function Comment({ open, setOpen, postId }) {
       <Button
         type="submit"
         onClick={() => {
-          handlerSubmit();
+          addComment();
         }}
         disableRipple={true}
         sx={{

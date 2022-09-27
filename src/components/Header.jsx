@@ -48,7 +48,7 @@ export default function Header({ setOpensign, setOpenlogin }) {
   // const tokenContract = useTokenContract(signer);
   const [namestate, setnamestate] = useState("");
   const [searchstate, setsearchstate] = useState(true);
-  const [filterstate, setfilterstate] = useState("");
+  const [filterstate, setfilterstate] = useState("Search here");
   const [options, setOptionsstate] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -75,11 +75,6 @@ export default function Header({ setOpensign, setOpenlogin }) {
       setnamestate(user?.name);
     }
   }, []);
-  // const [alertState, setAlertState] = useState({
-  //   open: false,
-  //   message: "",
-  //   severity: undefined,
-  // });
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
@@ -238,6 +233,11 @@ export default function Header({ setOpensign, setOpenlogin }) {
                   >
                     <SearchIcon fontSize="small" sx={{ ml: 1 }} />
                     <InputBase
+                    autoComplete="off"
+                    label="Search here"
+                    value={filterstate || ''}
+                      type="text"
+                      name="search"
                       sx={{
                         backgroundColor: "secondary.main",
                         color: "text.light",
@@ -252,10 +252,12 @@ export default function Header({ setOpensign, setOpenlogin }) {
                         transitionDuration: "0.5s",
                         transitionTimingFunction: "linear",
                         transitionDelay: "0s",
+                        '&:label':{
+                          backgroundColor: "secondary.main",
+                        }
                       }}
-                      type="text"
-                      name="search"
-                      placeholder="Search Forum"
+                      
+                     
                       onClick={() => {
                         setsearchstate(false);
                       }}

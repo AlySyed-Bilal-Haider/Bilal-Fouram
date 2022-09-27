@@ -345,7 +345,7 @@ export const unapproveHandler = async (req, res) => {
 
 // check user is exist or not for this post
 
-export const handlercheckuser = async (req, res) => {
+export const handlerApproveORunApprove = async (req, res) => {
   console.log(req.body);
   try {
     const data = await voiting.findOne({
@@ -376,9 +376,9 @@ export const commentHandler = async (req, res, next) => {
   const comment = req.body.comment;
   const postId = req.body.postId;
   let commentRecord;
-  console.log("Client request",req.body);
+
   try {
-    if (postID && message) {
+    if (postId && comment) {
       commentRecord = await new commentModal({
         comment,
         postId
@@ -391,9 +391,22 @@ export const commentHandler = async (req, res, next) => {
       message: "Comment add Successfully!",
     });
   } catch (error) {
-    res.json({
-      status: "error",
-      message: error,
-    });
+    next(error);
   }
 };
+
+
+export const fetchComment=async(req,res,next)=>{
+  const id=req.params.id;
+  try {
+    const data = await commentModal.find({_id:id});
+    if (data) {
+      res.json({
+        status: "ok",
+        commentDetails: data,
+      });
+    }
+  } catch (error) {
+   next(error)
+  }
+}

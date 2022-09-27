@@ -13,8 +13,9 @@ import {
   editepostHandler,
   approveHandler,
   unapproveHandler,
-  handlercheckuser,
+  handlerApproveORunApprove,
   commentHandler,
+  fetchComment
 } from "../Controller/Controller.js";
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.post("/usersignup", post);
 router.post("/login", login);
 router.post("/verifytoken", tokenVerifyHandler);
 router.post("/posts", discussion);
-router.post("/getvotesdetails", handlercheckuser);
+router.post("/getvotesdetails", handlerApproveORunApprove);
 router.post("/approve", approveHandler);
 router.post("/unapprove", unapproveHandler);
 router.post("/comment", commentHandler);
@@ -32,7 +33,7 @@ router.get("/category/:tag", fetchcategory);
 router.get("/fetchuser/:email", fetchuser);
 router.get("/fetchspecificpost/:email", getSpecificdescussion);
 router.get("/fetchPostDetails/:id", fetchPostDetails);
-
+router.get("/fetchcomment/:id",fetchComment);
 router.delete("/removePost/:id", removepost);
 // edite post routes
 

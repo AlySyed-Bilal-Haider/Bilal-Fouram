@@ -10,9 +10,7 @@ function Logout() {
     } else {
       localStorage.removeItem("name");
     }
-    setTimeout(() => {
       window.location.href = "/";
-    },0);
   }, []);
 }
 

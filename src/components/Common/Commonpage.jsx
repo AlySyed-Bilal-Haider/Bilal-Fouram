@@ -133,7 +133,7 @@ function Commonpage(props) {
                     fontSize: { md: "14px", xs: "12px" },
                   }}
                 >
-                  OP
+                  {namestate ? namestate?.slice(0,1).toUpperCase():null}
                 </Avatar>
                 <Box
                   sx={{

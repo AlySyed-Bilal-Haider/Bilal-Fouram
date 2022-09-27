@@ -6,12 +6,18 @@ const commentAdd = new mongoose.Schema({
     required:true,
   },
   like : {
-    type: String,
+    type: Number,
     default:0
     
   },
-  dislike : {
+  email:{
     type: String,
+    trim: true,
+    required:true,
+    unique:true
+  },
+  dislike : {
+    type: Number,
     default:0
   },
   postId:{
