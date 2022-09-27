@@ -5,11 +5,11 @@ import {
   Grid,
   Menu,
   MenuItem,
-  Paper,
+  // Paper,
   useMediaQuery,
-  InputBase,
+  // InputBase,
 } from "@mui/material";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import jsonwebtoken from "jsonwebtoken";
 import { makeStyles } from "@mui/styles";
 import { BsCheckLg } from "react-icons/bs";
@@ -175,6 +175,7 @@ export default function MainPage() {
                         <label for="file-input">
                           <img
                             src={avtar}
+                            alt=""
                             style={{ width: "100%", cursor: "pointer" }}
                           />
                         </label>

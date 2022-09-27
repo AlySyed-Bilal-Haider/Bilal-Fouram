@@ -149,7 +149,7 @@ export const discussion = async (req, res, next) => {
       username: req.body.name,
       email: req.body.email,
     });
-     addpost.save();
+    addpost.save();
     if (addpost) {
       res.json({
         status: "ok",
@@ -166,14 +166,13 @@ export const discussion = async (req, res, next) => {
 export const fetchAlldiscussion = async (req, res) => {
   try {
     const data = await postmodal.find().populate("comments");
-    if (data) {
-      res.json({
-        status: "ok",
-        success: true,
-        message: "post add Successfully!",
-        allDiscussion: data,
-      });
-    }
+    console.log("data", data);
+    res.json({
+      status: "ok",
+      success: true,
+      message: "post add Successfully!",
+      allDiscussion: data,
+    });
   } catch (error) {
     res.status(404).json({
       status: "error",

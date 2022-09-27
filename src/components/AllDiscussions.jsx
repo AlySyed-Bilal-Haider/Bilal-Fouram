@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Box, Container, Typography, Grid } from "@mui/material";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { Box, Container, Grid } from "@mui/material";
 import { useLocation, NavLink } from "react-router-dom";
-// import Signup from './Signup';
+// import AutorenewIcon from "@mui/icons-material/Autorenew";
+
 import MainHeader from "./Common/MainHeader";
 import Knowledgebase from "./Knowledgebase";
 import General from "./General";
@@ -13,6 +13,8 @@ import Feed from "./Feed";
 import Support from "./Support";
 import Commonpage from "./Common/Commonpage";
 import { sidebardata } from "./Common/Links";
+import StartDiscussionButton from "./StartDiscussionButton";
+
 const renderComponent = (locationpath) => {
   switch (locationpath) {
     case "/AllDiscussions":
@@ -57,7 +59,8 @@ const mainHeader = (locationpath) => {
       return null;
   }
 };
-function AllDiscussions({modal}) {
+function AllDiscussions({ modal, setOpenlogin, username }) {
+  console.log("setOpen", modal);
   const location = useLocation();
   return (
     <>
@@ -69,8 +72,7 @@ function AllDiscussions({modal}) {
         <Container maxWidth="lg" sx={{ mt: 4 }}>
           <Grid container spacing={2}>
             <Grid item md={2} sx={{ display: { md: "block", xs: "none" } }}>
-              <Button
-             
+              {/* <Button
                 sx={{
                   width: "100%",
                   height: "36px",
@@ -85,7 +87,12 @@ function AllDiscussions({modal}) {
                 }}
               >
                 Start a Discussion
-              </Button>
+              </Button> */}
+
+              <StartDiscussionButton
+                setOpenlogin={setOpenlogin}
+                username={username}
+              />
               <Box sx={{ mt: 2, width: "100%" }}>
                 {sidebardata?.map(({ text, link, Icon }, index) => {
                   return (

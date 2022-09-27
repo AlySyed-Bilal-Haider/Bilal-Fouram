@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AccountMenu from "./MenuItem";
-import jsonwebtoken from "jsonwebtoken";
+// import jsonwebtoken from "jsonwebtoken";
 
 import {
   Paper,
@@ -20,11 +20,10 @@ import { makeStyles } from "@mui/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import clsx from "clsx";
-
 import axios from "axios";
+
 // import { AppContext } from "../utils";
 // import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
-import Login from "./Login";
 
 import logo from "../images/logo.png";
 import { url } from "../utils";
@@ -48,9 +47,10 @@ export default function Header({ setOpensign, setOpenlogin }) {
   // const tokenContract = useTokenContract(signer);
   const [namestate, setnamestate] = useState("");
   const [searchstate, setsearchstate] = useState(true);
-  const [filterstate, setfilterstate] = useState("Search here");
   const [options, setOptionsstate] = useState([]);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [filterstate, setfilterstate] = useState("Search here");
+  // const [anchorEl, setAnchorEl] = React.useState(null);
+
   // fetch all details from sever
   useEffect(() => {
     const fetchdetails = async () => {
@@ -68,7 +68,6 @@ export default function Header({ setOpensign, setOpenlogin }) {
   useEffect(() => {
     const token = localStorage?.getItem("token");
     if (token) {
-      
       setnamestate(localStorage?.getItem("name"));
     }
   }, []);
@@ -264,7 +263,7 @@ export default function Header({ setOpensign, setOpenlogin }) {
                     />
                   </Box>
                   {namestate ? (
-                    <AccountMenu  />
+                    <AccountMenu />
                   ) : (
                     <>
                       <Typography

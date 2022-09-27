@@ -15,10 +15,6 @@ const Addpost = new Schema({
     trim: true,
     required:true,
   },
-  comments:[{
-    type:Schema.Types.ObjectId,
-    ref:"commentAdd"
-  }],
   status:false,
   question:String,
   ans1:String,
@@ -26,6 +22,10 @@ const Addpost = new Schema({
   enddate:{type: Date},
   username:String,
   email:String,
+  comments:[{
+    type:Schema.Types.ObjectId,
+    ref:"commentAdd"
+  }],
 });
 const postmodal=model("Addpost", Addpost);
 export default postmodal;
