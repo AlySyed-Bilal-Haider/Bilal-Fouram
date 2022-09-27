@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+////Commit
 const vote = new mongoose.Schema({
   useremail: { type: String, trim: true, required: true, unique: true },
   postId: String,

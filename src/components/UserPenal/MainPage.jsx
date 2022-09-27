@@ -28,6 +28,7 @@ import moment from "moment";
 import avtar from "../../images/avtar.png";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { url } from "../../utils";
 
 const useStyles = makeStyles({
   paperMenu: {
@@ -38,7 +39,6 @@ const useStyles = makeStyles({
 });
 export default function MainPage() {
   const formData = new FormData();
-  const url = "http://localhost:4000";
   const classes = useStyles();
   const matches = useMediaQuery("(max-width:700px)");
   const [tabText, settabText] = useState("Post");

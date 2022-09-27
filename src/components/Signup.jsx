@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { url } from "../utils";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
@@ -67,7 +68,6 @@ const TextInput = styled(InputBase)({
 });
 
 function Signup({ open, setOpensign, setOpenlogin }) {
-  const url = "http://localhost:4000";
   const [userstate, setUserstate] = React.useState({
     name: "",
     email: "",

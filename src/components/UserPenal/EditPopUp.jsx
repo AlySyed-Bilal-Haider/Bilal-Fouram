@@ -17,6 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { url } from "../../utils";
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
@@ -40,7 +41,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function EditPopUp({ open, setOpen, postId }) {
-  const url = "http://localhost:4000";
 
   const [editPoll, setEditPoll] = React.useState(false);
   const [editePoststate, setEditePostState] = useState({
@@ -86,7 +86,6 @@ export default function EditPopUp({ open, setOpen, postId }) {
       if (data.status == "ok") {
         toast.success(data.message);
         handleClose();
-      
       } else {
         toast.error(data.message);
       }

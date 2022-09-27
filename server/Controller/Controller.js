@@ -6,8 +6,8 @@ import jwt_decode from "jwt-decode";
 import { config } from "./config.js";
 
 import voiting from "../Schema/Voting.js";
+import commentModal from "../Schema/comment.js";
 // ......Signup here routes start..............
-
 
 export const post = async (req, res) => {
   try {
@@ -91,12 +91,11 @@ export const login = async (req, res) => {
         });
       }
     });
-
   } catch (error) {
     console.log(error);
     res.status(404).json({
       status: "error",
-      message: "Please try again, server error!",
+      message: "Please wait server error!",
       user: false,
     });
   }
@@ -231,7 +230,7 @@ export const getSpecificdescussion = async (req, res) => {
   }
 };
 
-//fetch fetchPostDetails from MongoDB
+//fetch fetchPostDetails from MongoDB and server
 
 export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
@@ -258,7 +257,7 @@ export const removepost = async (req, res) => {
         message: "Post remove successfully !",
       });
     } else {
-      res.status(404).json({
+      res.status(200).json({
         status: "error",
         success: false,
         message: "please try again ,post not delete !",
@@ -273,12 +272,10 @@ export const removepost = async (req, res) => {
   }
 };
 
-
 // start update post code start here
 export const editepostHandler = async (req, res) => {
   const _id = req.params.id;
   try {
-
     const data = await postmodal.findByIdAndUpdate(_id, {
       description: req.body.description,
       question: req.body.Question,
@@ -299,7 +296,6 @@ export const editepostHandler = async (req, res) => {
         message: "Not successfully update",
       });
     }
-
   } catch (error) {
     res.status(505).json({
       status: "error",
@@ -307,7 +303,7 @@ export const editepostHandler = async (req, res) => {
       message: error,
     });
   }
-}
+};
 
 // ........Approve and UpApprove approveHandler.apply............
 export const approveHandler = async (req, res) => {
@@ -342,11 +338,10 @@ export const approveHandler = async (req, res) => {
     res.status(505).json({
       status: "error",
       success: false,
-      message: "Approve not successfully  !",
+      message: "Not approve,please try again  !",
     });
   }
-}
-
+};
 
 export const unapproveHandler = async (req, res) => {
   // console.log(req.body,"Body data");
@@ -383,42 +378,59 @@ export const unapproveHandler = async (req, res) => {
       message: "unprove not successfully  !",
     });
   }
-}
+};
 
 // check user is exist or not for this post
 
 export const handlercheckuser = async (req, res) => {
   console.log(req.body);
   try {
-    const data = await voiting.findOne({ postId: req.body.id, email: req.body.email });
+    const data = await voiting.findOne({
+      postId: req.body.id,
+      email: req.body.email,
+    });
 
     if (data) {
       res.json({
         status: "ok",
         success: true,
         message: "check approve and unapprove status!",
-        votedetails: data
-      })
+        votedetails: data,
+      });
     } else {
       res.json({
         status: "error",
         success: false,
-        message: "check approve and unapprove unsuccessfully !",
-      })
+        message: " approve and unapprove not exist  !",
+      });
     }
   } catch (error) {
     console.log("check user exist or not,server issues !");
   }
-}
+};
 
-
-export const commentHandler = async (req, res) => {
-  console.log("comment data", req.body);
-}
-
-
-
-
-
-
-
+export const commentHandler = async (req, res, next) => {
+  const comment = req.body.comment;
+  const postId = req.body.postId;
+  let commentRecord;
+  console.log("Client request",req.body);
+  try {
+    if (postId && comment) {
+      commentRecord = await new commentModal({
+        comment,
+        postId
+      });
+    }
+    await commentRecord.save();
+    res.json({
+      status: "ok",
+      success: true,
+      message: "Comment add Successfully!",
+    });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error,
+    });
+  }
+};

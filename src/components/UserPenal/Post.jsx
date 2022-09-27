@@ -10,6 +10,7 @@ import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import EditPopUp from "./EditPopUp";
+import { url } from "../../utils";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -54,7 +55,6 @@ function Post({ email }) {
   ///////////////////////////
   // fetch post of specific users
 
-  const url = "http://localhost:4000";
   useEffect(() => {
     if (email) {
       fetchPost();
