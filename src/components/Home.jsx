@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import jsonwebtoken from "jsonwebtoken";
 import AllDiscussions from './AllDiscussions';
@@ -56,47 +56,47 @@ const discussion = [
     maintext: "General",
     subtext:
       " For topics that do not belong to any other particular topics,please post them here",
-      value:"General"
+    value: "General"
   },
   {
     icons: <ContactEmergencyIcon />,
     maintext: "Proposal",
     subtext: "OIP-94B Inverse Bond Framework Approval",
-    value:"Proposal"
+    value: "Proposal"
   },
   {
     icons: <CloudOffIcon />,
     maintext: "Support",
     subtext: "How do I get any help on here?",
     color: "white",
-    value:"Support"
+    value: "Support"
   },
   {
     icons: <CloudOffIcon />,
     maintext: "Knowledge Base",
     subtext:
       "https://www.facebook.com/Juan-Rivera-Keto-Gummies-106696188817590",
-      value:"KnowledgeBase"
+    value: "KnowledgeBase"
   },
   {
     icons: <CloudOffIcon />,
     maintext: "Community Development",
     subtext:
       "All non-educational community proposals and community engagement ideas can be posted here",
-      value:"CommunityDevelopment"
+    value: "CommunityDevelopment"
   },
   {
     icons: <CloudOffIcon />,
     maintext: "Feedback",
     subtext:
       "Provide feedback about the protocol, the community and the team here",
-      value:'Feedback'
+    value: 'Feedback'
   },
   {
     icons: <CloudOffIcon />,
     maintext: "ProjectProposal",
     subtext: "Project Proposals within the DAO",
-    value:"ProjectProposals"
+    value: "ProjectProposals"
   },
 ];
 
@@ -104,18 +104,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Home() {
+export default function Home({username}) {
   const navigate = useNavigate();
   // const matches = useMediaQuery("(max-width:750px)");
   const theme = useTheme();
-  
+
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [loginstate, setloginstate] = useState(false);
   const [open2, setOpen2] = React.useState(false);
-  const [username,setusernameState]=React.useState('');
-  const [emailState,setEmailstate]=React.useState('');
-  const [tagsvalue,setTagsvalue]=useState('');
+  const [tagsvalue, setTagsvalue] = useState('');
   const [addpoststate, setPoststate] = React.useState({
     tags: "wow",
     title: "",
@@ -132,33 +130,34 @@ export default function Home() {
     const polldata = localStorage.getItem("poll");
     let checkstatus = false;
     let updatedata;
-    const addnameAndemail={...addpoststate,username:username,email:emailState};
-    if(!!tagsvalue){
-    if (polldata) {
-      const pollrecord = JSON.parse(polldata);
-      updatedata = { ...addnameAndemail, ...pollrecord,tag:tagsvalue,};
-      checkstatus = true;
-    }
-    try {
-      if (checkstatus) {
-        const { data } = await axios.post(`${url}/posts`, updatedata);
-        if (data.status == "ok") {
-          toast.success(data.message);
-          setTagsvalue('');
-        } else {
-          toast.error(data.message);
-        }
-      } else {
-        const { data } = await axios.post(`${url}/posts`, addnameAndemail);
-        if (data.status == "ok") {
-          toast.success(data.message);
-        } else {
-          toast.error(data.message);
-        }
+    const addnameAndemail = { ...addpoststate, username: username };
+    if (!!tagsvalue) {
+      if (polldata) {
+        const pollrecord = JSON.parse(polldata);
+        updatedata = { ...addnameAndemail, ...pollrecord, tag: tagsvalue, };
+        checkstatus = true;
       }
-    } catch (error) {
-      console.log(error, "error");
-    }}else{
+      try {
+        if (checkstatus) {
+          const { data } = await axios.post(`${url}/posts`, updatedata);
+          if (data.status == "ok") {
+            toast.success(data.message);
+            setTagsvalue('');
+          } else {
+            toast.error(data.message);
+          }
+        } else {
+          const { data } = await axios.post(`${url}/posts`, addnameAndemail);
+          if (data.status == "ok") {
+            toast.success(data.message);
+          } else {
+            toast.error(data.message);
+          }
+        }
+      } catch (error) {
+        console.log(error, "error");
+      }
+    } else {
       setOpen2(true);
     }
   };
@@ -178,58 +177,48 @@ export default function Home() {
   const handleClose = () => {
     setOpen(false);
   };
-  const CheckloginHandler=()=>{
+  const CheckloginHandler = () => {
     const token = localStorage.getItem("token");
-    console.log("token",token);
-    if(token){
+    console.log("token", token);
+    if (token) {
       handleClickOpen();
-    }else{
+    } else {
       setloginstate(true);
     }
-    
+
   }
   // ..........Token verfications ...........
-  const tokenVerfiy = async () => {
-    try {
-      await fetch(`${url}/verifytoken`, {
-        method: "POST",
-        headers: {
-          "x-access-token": localStorage.getItem("token"),
-        },
-      }).then(response => response.json())
-      .then(data => {
-        console.log("all data",data);
-        localStorage.setItem('name',data.name);
-      })
-    } catch (error) {
-      alert(error);
-    }
-  };
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      tokenVerfiy();
-      // const user = jsonwebtoken.decode(token);
-      // setusernameState(user?.name);
-      // setEmailstate(user?.email);
-      // if (!user) {
-      //   localStorage.removeItem("token");
-      //   navigate("/login");
-      // } else {
-      //   tokenVerfiy();
-      // }
-    }
-  }, []);
+  
+  // useEffect(() => {
+  //   const token = localStorage?.getItem("token");
+  //   if (token) {
+  //     tokenVerfiy();
+      
+
+
+  //     // const user = jsonwebtoken.decode(token);
+  //     // setusernameState(user?.name);
+  //     // setEmailstate(user?.email);
+  //     // if (!user) {
+  //     //   localStorage.removeItem("token");
+  //     //   navigate("/login");
+  //     // } else {
+  //     //   tokenVerfiy();
+  //     // }
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // }, []);
   // ..........end token verfication........
-  const navigationHandler=(value)=>{
- console.log("value",value);
- navigate(`/AllDiscussions/${value}`);
+  const navigationHandler = (value) => {
+    console.log("value", value);
+    navigate(`/AllDiscussions/${value}`);
   }
 
   return (
     <Box sx={{ width: "100%" }}>
       <PopUp open={open1} setOpen={setOpen1} />
-      <ChooseTag open={open2} setOpen={setOpen2}  setTagsvalue={setTagsvalue}/>
+      <ChooseTag open={open2} setOpen={setOpen2} setTagsvalue={setTagsvalue} />
 
       <Container maxWidth="lg" sx={{ mt: { md: 4, xs: 0 } }}>
         <Box
@@ -387,15 +376,15 @@ export default function Home() {
           {discussion?.map((items, index) => {
             return (
               <Grid
-               onClick={()=>{
-                navigationHandler(items.value)
-               }}
+                onClick={() => {
+                  navigationHandler(items.value)
+                }}
                 key={index}
                 item
                 md={4}
                 xs={12}
                 sx={{
-                  cursor:'pointer',
+                  cursor: 'pointer',
                   mt: { md: 0, xs: 1 },
                   height: "200px",
                   backgroundColor:
