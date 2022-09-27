@@ -100,12 +100,8 @@ function Login({ open, setOpenlogin, setOpensign }) {
         toast.error(data.message);
       }
     } catch (error) {
-<<<<<<< HEAD
       
       toast.error(error.response?.data?.message);
-=======
-      console.log("Route is not match !");
->>>>>>> 00f73fb815c09fdc0c8b9181ea2d7fa8648f6a8b
     }
     setUserstate({
       name: "",
