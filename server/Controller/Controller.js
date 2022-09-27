@@ -1,6 +1,5 @@
 import mongomodal from "../Schema/Signupschema.js";
 import postmodal from "../Schema/Postschema.js";
-import jsonwebtoken from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
 import { config } from "./config.js";
