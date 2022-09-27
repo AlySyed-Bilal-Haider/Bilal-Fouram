@@ -111,7 +111,12 @@ function App() {
             element={<Home setOpenlogin={setOpenLogin} username={username} />}
           />
           <Route path="/profile" element={<MainPage />} />
-          <Route path="/AllDiscussions" element={<AllDiscussions />} />
+          <Route
+            path="/AllDiscussions"
+            element={
+              <AllDiscussions setOpenlogin={setOpenLogin} username={username} />
+            }
+          />
           <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/logout" element={<Logout />} />
