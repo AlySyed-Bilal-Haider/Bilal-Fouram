@@ -71,21 +71,16 @@ app.post("/uploadimg", upload.single("file"), async (req, res) => {
     res.status(500).json({
       status: "error",
       success: false,
-      message: "Server error or routes not match !",
+      message: "Server error or routesis not match !",
     });
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("server file");
+});
 app.use(router);
 app.use("/upload", express.static("./upload"));
-app.use(express.static("./build"));
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "./build/index.html"), function (err) {
-    if (err) {
-      res.status(500).send(err);
-    }
-  });
-});
 app.listen(port, (req, res) => {
   console.log("server start");
 });

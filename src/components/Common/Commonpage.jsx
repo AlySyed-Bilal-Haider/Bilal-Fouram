@@ -30,26 +30,27 @@ function Commonpage(props) {
   }, [props.title]);
 
   // fetch all details from sever
+  let allPost=true;
   useEffect(() => {
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
         setAlldescussionsstate(data.allDiscussion);
-        console.log("data details", data.allDiscussion);
       } catch (error) {
         console.log(error);
       }
     };
     fetchdetails();
-  }, []);
+  }, [allPost]);
 
+  // check this category data and All descussion data
   useEffect(() => {
     if (categorystate.length !== 0) {
       setDetailsState(categorystate);
     } else {
       setDetailsState(allDescussionsstate);
     }
-  }, [categorystate]);
+  });
 
   const detailsHandler = (id) => {
     naviagte(`/detail/${id}`);
@@ -110,7 +111,7 @@ function Commonpage(props) {
                 pb: { md: 1, xs: 0 },
                 pr: 4,
                 "&:hover": {
-                  backgroundColor: "text.main",
+                  backgroundColor: "hover.primary",
                   borderRadius: "4px",
                   cursor: "pointer",
                 },
@@ -133,7 +134,7 @@ function Commonpage(props) {
                     fontSize: { md: "14px", xs: "12px" },
                   }}
                 >
-                  OP
+                  {namestate ? namestate?.slice(0,1).toUpperCase():null}
                 </Avatar>
                 <Box
                   sx={{

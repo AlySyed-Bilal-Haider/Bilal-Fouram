@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import jsonwebtoken from "jsonwebtoken";
+
 
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -24,40 +24,41 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  useEffect(()=>{
-    const token=localStorage?.getItem("token");
-    if(token){
-      const user = jsonwebtoken.decode(token);
-      setnamestate(user?.name);
+
+  useEffect(() => {
+    const name = localStorage?.getItem("name");
+    if (name) {
+      setnamestate(name);
     }
-  },[]);
+    console.log(namestate);
+  }, []);
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
+        <IconButton
+          onClick={handleClick}
+          size="small"
+          sx={{ ml: 2 }}
+          aria-controls={open ? "account-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+        >
 
-           {namestate && <Avatar sx={{ width: 32, height: 32 }}>
-              { namestate.toUpperCase().slice(0, 1)}
-            </Avatar> }
-            <Typography
-                ml={2}
-                variant="body1"
-                sx={{
-                  textDecoration: "none",
-                  cursor: "pointer",
-                  color: "text.main",
-                }}
-              >
-                {namestate ? namestate :null}
-              </Typography>
-          </IconButton>
+          {namestate && <Avatar sx={{ width: 32, height: 32 }}>
+            {namestate.toUpperCase().slice(0, 1)}
+          </Avatar>}
+          <Typography
+            ml={2}
+            variant="body1"
+            sx={{
+              textDecoration: "none",
+              cursor: "pointer",
+              color: "text.main",
+            }}
+          >
+            {namestate ? namestate : null}
+          </Typography>
+        </IconButton>
       </Box>
       <Menu
         anchorEl={anchorEl}
@@ -97,12 +98,12 @@ export default function AccountMenu() {
         <Divider />
 
         <MenuItem>
-  <Link to="/profile" style={{textDecoration:'none',color:"black"}}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-        Profile 
-        </Link>
+          <Link to="/profile" style={{ textDecoration: 'none', color: "black" }}>
+            <ListItemIcon>
+              <PersonAdd fontSize="small" />
+            </ListItemIcon>
+            Profile
+          </Link>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
@@ -111,12 +112,12 @@ export default function AccountMenu() {
           Settings
         </MenuItem>
         <MenuItem>
-        <Link to="/logout"  style={{textDecoration:'none',color:"black"}} >
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-       Logout
-       </Link>
+          <Link to="/logout" style={{ textDecoration: 'none', color: "black" }} >
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Logout
+          </Link>
         </MenuItem>
       </Menu>
     </React.Fragment>

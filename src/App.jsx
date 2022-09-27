@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Box } from "@mui/material";
-import Web3 from "web3";
+// import Web3 from "web3";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import Logout from "./components/Logout";
+
 import "./App.css";
+import Logout from "./components/Logout";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import NetworkChange from "./networkSwitch";
@@ -15,17 +16,47 @@ import Detail from "./components/Detail";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 
-const web3 = new Web3(
-  Web3.givenProvider
-    ? Web3.givenProvider
-    : "https://data-seed-prebsc-1-s1.binance.org:8545/"
-);
+import { url } from "./utils";
+
+// const web3 = new Web3(
+//   Web3.givenProvider
+//     ? Web3.givenProvider
+//     : "https://data-seed-prebsc-1-s1.binance.org:8545/"
+// );
 function App() {
   const [open, setOpen] = useState(false);
   const [openSign, setOpenSign] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
+  // const [username, setusernameState] = React.useState('');
+  // const [email,setemailState]=React.useState('');
+  const [userId,setUserId]=useState('');
+  const [username, setusernameState] = React.useState("");
+  const tokenVerfiy = async () => {
+    try {
+      await fetch(`${url}/verifytoken`, {
+        method: "POST",
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("all data", data);
+          localStorage.setItem("name", data.name);
+          setusernameState(data.name);
+        });
+    } catch (error) {
+      alert(error);
+    }
+  };
 
-  // useEffect(() => {
+  useEffect(() => {
+    const token = localStorage?.getItem("token");
+    if (token) {
+      tokenVerfiy();
+   }}, []);
+
+    // useEffect(() => {
   //   let chain = async () => {
   //     const chainid = await web3.eth.getChainId();
   //     if (chainid !== 97) {
@@ -33,8 +64,6 @@ function App() {
   //     }
   //   };
   //   chain();
-  // }, []);
-
   return (
     <>
       <ToastContainer
@@ -63,11 +92,20 @@ function App() {
       <Box sx={{ backgroundColor: "body.main" }}>
         <Header setOpensign={setOpenSign} setOpenlogin={setOpenLogin} />
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route
+            exact
+            path="/"
+            element={<Home setOpenlogin={setOpenLogin} username={username} />}
+          />
           <Route path="/profile" element={<MainPage />} />
-          <Route path="/AllDiscussions" element={<AllDiscussions />} />
+          <Route
+            path="/AllDiscussions"
+            element={
+              <AllDiscussions setOpenlogin={setOpenLogin} username={username} />
+            }
+          />
           <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />
-          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/detail/:id" element={<Detail userId={userId} />} />
           <Route path="/logout" element={<Logout />} />
         </Routes>
       </Box>

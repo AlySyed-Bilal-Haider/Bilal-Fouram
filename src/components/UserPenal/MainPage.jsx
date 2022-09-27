@@ -5,11 +5,11 @@ import {
   Grid,
   Menu,
   MenuItem,
-  Paper,
+  // Paper,
   useMediaQuery,
-  InputBase,
+  // InputBase,
 } from "@mui/material";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import jsonwebtoken from "jsonwebtoken";
 import { makeStyles } from "@mui/styles";
 import { BsCheckLg } from "react-icons/bs";
@@ -45,9 +45,8 @@ export default function MainPage() {
   const [userProfilestate, setProfilestate] = useState("");
   const [userid, setIDstate] = useState("");
   const [userfile, setUserfile] = useState("");
-  const [userToken, setuserTokenstate] = useState(
-    localStorage.getItem("token")
-  );
+ 
+  const userMail=localStorage.getItem("email") || '';
   const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -57,14 +56,12 @@ export default function MainPage() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const userProfile = jsonwebtoken.decode(userToken);
-
   const userProfileHandler = async () => {
-    console.log("user profile handler");
     try {
       const { data } = await axios.get(
-        `${url}/fetchuser/${userProfile?.email}`
+        `${url}/fetchuser/${userMail}`
       );
+      console.log("data",data);
       setProfilestate(data);
       setIDstate(data._id);
     } catch (error) {
@@ -73,10 +70,10 @@ export default function MainPage() {
   };
 
   useEffect(() => {
-    if (userProfile?.email) {
+    if (!!userMail) {
       userProfileHandler();
     }
-  }, [userProfile?.email]);
+  }, [userMail]);
 
   // image upload from server
   const handleFile = async (event) => {
@@ -91,7 +88,7 @@ export default function MainPage() {
         formData.append("id", userid);
         const response = await axios.post(`${url}/uploadimg`, formData);
         console.log("response", response);
-        if (userProfile?.email && response) {
+        if (userMail && response) {
           userProfileHandler();
         }
         setUserfile("");
@@ -102,9 +99,9 @@ export default function MainPage() {
       console.log("error upload", error);
     }
   };
-  console.log(userProfilestate);
   return (
     <>
+     
       <Box bgcolor="primary.light" height="260px">
         <Container maxWidth="lg">
           <Box display="flex" flexDirection="column">
@@ -178,6 +175,7 @@ export default function MainPage() {
                         <label for="file-input">
                           <img
                             src={avtar}
+                            alt=""
                             style={{ width: "100%", cursor: "pointer" }}
                           />
                         </label>
@@ -519,9 +517,9 @@ export default function MainPage() {
 
             <Grid item xs={12} sm={12} md={9}>
               {show === 0 ? (
-                <Post email={userProfile?.email} />
+                <Post email={userMail} userid={userid} />
               ) : show === 1 ? (
-                <Discussion email={userProfile?.email} />
+                <Discussion email={userMail} />
               ) : show === 2 ? (
                 <Like />
               ) : show === 3 ? (
@@ -536,3 +534,4 @@ export default function MainPage() {
     </>
   );
 }
+

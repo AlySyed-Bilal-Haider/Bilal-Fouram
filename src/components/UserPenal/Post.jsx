@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-
+import Comment from "../Comment";
 import { Box, Typography, Menu, styled, MenuItem } from "@mui/material";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import EditPopUp from "./EditPopUp";
 import { url } from "../../utils";
+
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -38,13 +39,16 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-function Post({ email }) {
+function Post({ email,userid }) {
   const [editPopOpen, setEditPopOpen] = useState(false);
   //close menu tag on click
   const name = localStorage.getItem("name");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userposts, setPoststate] = useState();
   const [postIDstate, setPostIdstate] = useState();
+  const [PostID,setPostID]=useState('');
+  const [descriptionstate,setDescriptionstate]=useState('');
+  const useremail=localStorage.getItem('email');
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -94,6 +98,12 @@ function Post({ email }) {
     setPostIdstate(id);
     handleClose();
   };
+
+  const CommentHandler=(id,descripton)=>{
+    setPostID(id);
+    setDescriptionstate(descripton)
+    setEditPopOpen(true); 
+  }
   return (
     <>
       <EditPopUp
@@ -101,6 +111,9 @@ function Post({ email }) {
         setOpen={setEditPopOpen}
         postId={postIDstate}
       />
+      
+         <Comment open={editPopOpen} setOpen={setEditPopOpen} postId={PostID} 
+      title={descriptionstate} userid={userid}/>
       <Box pb={10}>
         {userposts?.length > 0 ?
         (userposts?.map((item, i) => {
@@ -155,6 +168,11 @@ function Post({ email }) {
                   <AiFillLike size="22px" />
                   <AiFillDislike size="22px" style={{ marginLeft: "30px" }} />
                   <Typography
+                  onClick={()=>{
+                   
+                    CommentHandler(item?._id,item?.description);
+                  }}
+                  sx={{cursor:'pointer'}}
                     ml="30px"
                     variant="body1"
                     fontSize="14px"

@@ -1,4 +1,4 @@
-import mongoose, { trusted } from "mongoose";
+import mongoose from "mongoose";
 const commentAdd = new mongoose.Schema({
   comment  : {
     type: String,
@@ -6,17 +6,17 @@ const commentAdd = new mongoose.Schema({
     required:true,
   },
   like : {
-    type: String,
+    type: Number,
     default:0
     
   },
-  dislike : {
+  userid:{
     type: String,
-    default:0
+    required:true,
   },
-  postId:{
-    type:String,
-    required:true
+  dislike : {
+    type: Number,
+    default:0
   },
   addedAt: {
     type: Date,
