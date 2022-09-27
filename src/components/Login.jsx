@@ -92,8 +92,9 @@ function Login({ open, setOpenlogin, setOpensign }) {
       if (data.status == "ok") {
         toast.success(data.message);
         localStorage.setItem("token", data.user);
+        localStorage.setItem("name", data.name);
         setTimeout(() => {
-          navigate("/profile");
+          window.location.reload();
         }, 0);
         handleClose();
       } else {

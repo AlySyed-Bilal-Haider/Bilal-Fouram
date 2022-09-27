@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import jsonwebtoken from "jsonwebtoken";
 // import AllDiscussions from "./AllDiscussions";
@@ -103,7 +103,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function Home({ setOpenlogin }) {
+export default function Home({ setOpenlogin, username }) {
   const navigate = useNavigate();
   // const matches = useMediaQuery("(max-width:750px)");
   const theme = useTheme();
@@ -112,8 +112,6 @@ export default function Home({ setOpenlogin }) {
   const [open1, setOpen1] = React.useState(false);
   // const [loginstate, setloginstate] = useState(false);
   const [open2, setOpen2] = React.useState(false);
-  const [username, setusernameState] = React.useState("");
-  const [emailState, setEmailstate] = React.useState("");
   const [tagsvalue, setTagsvalue] = useState("");
   const [addpoststate, setPoststate] = React.useState({
     tags: "wow",
@@ -131,11 +129,7 @@ export default function Home({ setOpenlogin }) {
     const polldata = localStorage.getItem("poll");
     let checkstatus = false;
     let updatedata;
-    const addnameAndemail = {
-      ...addpoststate,
-      username: username,
-      email: emailState,
-    };
+    const addnameAndemail = { ...addpoststate, username: username };
     if (!!tagsvalue) {
       if (polldata) {
         const pollrecord = JSON.parse(polldata);
@@ -145,7 +139,7 @@ export default function Home({ setOpenlogin }) {
       try {
         if (checkstatus) {
           const { data } = await axios.post(`${url}/posts`, updatedata);
-          if (data.status == "ok") {
+          if (data.status === "ok") {
             toast.success(data.message);
             setTagsvalue("");
           } else {
@@ -153,7 +147,7 @@ export default function Home({ setOpenlogin }) {
           }
         } else {
           const { data } = await axios.post(`${url}/posts`, addnameAndemail);
-          if (data.status == "ok") {
+          if (data.status === "ok") {
             toast.success(data.message);
           } else {
             toast.error(data.message);
@@ -192,38 +186,25 @@ export default function Home({ setOpenlogin }) {
     }
   };
   // ..........Token verfications ...........
-  const tokenVerfiy = async () => {
-    try {
-      await fetch(`${url}/verifytoken`, {
-        method: "POST",
-        headers: {
-          "x-access-token": localStorage.getItem("token"),
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("all data", data);
-          localStorage.setItem("name", data.name);
-        });
-    } catch (error) {
-      alert(error);
-    }
-  };
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      tokenVerfiy();
-      // const user = jsonwebtoken.decode(token);
-      // setusernameState(user?.name);
-      // setEmailstate(user?.email);
-      // if (!user) {
-      //   localStorage.removeItem("token");
-      //   navigate("/login");
-      // } else {
-      //   tokenVerfiy();
-      // }
-    }
-  }, []);
+
+  // useEffect(() => {
+  //   const token = localStorage?.getItem("token");
+  //   if (token) {
+  //     tokenVerfiy();
+
+  //     // const user = jsonwebtoken.decode(token);
+  //     // setusernameState(user?.name);
+  //     // setEmailstate(user?.email);
+  //     // if (!user) {
+  //     //   localStorage.removeItem("token");
+  //     //   navigate("/login");
+  //     // } else {
+  //     //   tokenVerfiy();
+  //     // }
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // }, []);
   // ..........end token verfication........
   const navigationHandler = (value) => {
     console.log("value", value);
@@ -403,7 +384,7 @@ export default function Home({ setOpenlogin }) {
                   mt: { md: 0, xs: 1 },
                   height: "200px",
                   backgroundColor:
-                    index == 0 ? "primary.main" : "primary.light",
+                    index === 0 ? "primary.main" : "primary.light",
                 }}
               >
                 <Box
