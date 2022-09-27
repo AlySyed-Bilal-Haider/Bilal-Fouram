@@ -20,6 +20,7 @@ let theme = createTheme({
     },
     hover: {
       main: "#3a285a",
+      primary: "#dfdef6",
     },
   },
 });

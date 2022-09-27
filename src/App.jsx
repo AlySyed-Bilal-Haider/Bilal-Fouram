@@ -63,7 +63,11 @@ function App() {
       <Box sx={{ backgroundColor: "body.main" }}>
         <Header setOpensign={setOpenSign} setOpenlogin={setOpenLogin} />
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route
+            exact
+            path="/"
+            element={<Home setOpenlogin={setOpenLogin} />}
+          />
           <Route path="/profile" element={<MainPage />} />
           <Route path="/AllDiscussions" element={<AllDiscussions />} />
           <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />

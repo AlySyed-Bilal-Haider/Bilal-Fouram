@@ -110,7 +110,7 @@ function Commonpage(props) {
                 pb: { md: 1, xs: 0 },
                 pr: 4,
                 "&:hover": {
-                  backgroundColor: "text.main",
+                  backgroundColor: "hover.primary",
                   borderRadius: "4px",
                   cursor: "pointer",
                 },

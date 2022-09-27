@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Box, Container, Typography, Grid } from "@mui/material";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { Button, Box, Container, Grid } from "@mui/material";
+// import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { useLocation, NavLink } from "react-router-dom";
 // import Signup from './Signup';
 import MainHeader from "./Common/MainHeader";
@@ -57,8 +57,8 @@ const mainHeader = (locationpath) => {
       return null;
   }
 };
-function AllDiscussions({modal}) {
-  console.log("setOpen",modal);
+function AllDiscussions({ modal }) {
+  console.log("setOpen", modal);
   const location = useLocation();
   console.log("location", location.pathname);
   return (
@@ -72,7 +72,6 @@ function AllDiscussions({modal}) {
           <Grid container spacing={2}>
             <Grid item md={2} sx={{ display: { md: "block", xs: "none" } }}>
               <Button
-             
                 sx={{
                   width: "100%",
                   height: "36px",
