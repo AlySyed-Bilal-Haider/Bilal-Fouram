@@ -6,11 +6,11 @@ import connectDB from "./Database/ConnectDB.js";
 import mongomodal from "./Schema/Signupschema.js";
 
 import fs from "fs";
-// import path from "path";
+
 const url =
   "mongodb+srv://bilal:minerdao12345@cluster0.flytvry.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.port || 4000;
 app.use(cors("*"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -41,13 +41,14 @@ app.post("/uploadimg", upload.single("file"), async (req, res) => {
     if (previous.img !== "" && req.file && req.file.path) {
       if (data.img !== req.file.path) {
         console.log("not equal");
-        try {
-          fs.unlink("upload/" + data.img, (err) => {
+        try{
+          fs.unlink(('upload/' + data.img), (err) => {
             console.log(err);
-          });
-        } catch (error) {
+          })
+        } catch(error){
           console.log(error);
         }
+        
       }
     }
     if (data) {
@@ -67,21 +68,16 @@ app.post("/uploadimg", upload.single("file"), async (req, res) => {
     res.status(500).json({
       status: "error",
       success: false,
-      message: "Server error or routes not match !",
+      message: "Server error or routesis not match !",
     });
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("server file");
+});
 app.use(router);
 app.use("/upload", express.static("./upload"));
-app.use(express.static("./build"));
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "./build/index.html"), function (err) {
-    if (err) {
-      res.status(500).send(err);
-    }
-  });
-});
 app.listen(port, (req, res) => {
   console.log("server start");
 });
