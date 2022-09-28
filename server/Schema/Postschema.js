@@ -15,17 +15,32 @@ const Addpost = new Schema({
     trim: true,
     required:true,
   },
+  user:{
+    type:Schema.Types.ObjectId,
+    ref:"user"
+  },
+  comments:[{
+    type:Schema.Types.ObjectId,
+    ref:"comment"
+  }],
+  like:[{
+    type:Schema.Types.ObjectId,
+    ref:"user"
+  }],
+  dislike:[{
+    type:Schema.Types.ObjectId,
+    ref:"user"
+  }],
+
+
+
+
   status:false,
   question:String,
   ans1:String,
   ans2:String,
   enddate:{type: Date},
-  username:String,
-  email:String,
-  comments:[{
-    type:Schema.Types.ObjectId,
-    ref:"commentAdd"
-  }],
+  
 });
 const postmodal=model("Addpost", Addpost);
 export default postmodal;

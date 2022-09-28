@@ -3,20 +3,23 @@ import {
   signupHandler,
   login,
   tokenVerifyHandler,
+  fetchuser,
+} from "../Controller/Usercontroller.js";
+import {
   discussion,
   fetchAlldiscussion,
   fetchcategory,
-  fetchuser,
   getSpecificdescussion,
   fetchPostDetails,
   removepost,
   editepostHandler,
+} from "../Controller/Postcontroller.js";
+import { commentHandler, fetchComment } from "../Controller/Comment.js";
+import {
   approveHandler,
   unapproveHandler,
   handlerApproveORunApprove,
-  commentHandler,
-  fetchComment
-} from "../Controller/Controller.js";
+} from "../Controller/Votingcontroller.js";
 const router = express.Router();
 
 router.post("/usersignup", signupHandler);
@@ -33,7 +36,7 @@ router.get("/category/:tag", fetchcategory);
 router.get("/fetchuser/:email", fetchuser);
 router.get("/fetchspecificpost/:email", getSpecificdescussion);
 router.get("/fetchPostDetails/:id", fetchPostDetails);
-router.get("/fetchcomment/:id",fetchComment);
+router.get("/fetchcomment/:id", fetchComment);
 router.delete("/removePost/:id", removepost);
 // edite post routes
 

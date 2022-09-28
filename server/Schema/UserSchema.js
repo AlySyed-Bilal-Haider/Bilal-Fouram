@@ -26,5 +26,5 @@ const Adduser = new mongoose.Schema({
         default:""
     }
 });
-const mongomodal=mongoose.model("mindao", Adduser);
+const mongomodal=mongoose.model("user", Adduser);
 export default mongomodal;
