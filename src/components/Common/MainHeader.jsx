@@ -1,10 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import UndoIcon from "@mui/icons-material/Undo";
-import { sidebardata } from "../Common/Links";
-import { FaReply } from "react-icons/fa";
 
-function MainHeader({ title, icon }) {
+function MainHeader({ title, icon, description }) {
   return (
     <Box
       sx={{
@@ -39,8 +36,7 @@ function MainHeader({ title, icon }) {
           px: 2,
         }}
       >
-        For topics that do not belong to any other particular topics, please
-        post them here.
+        {description}
       </Typography>
     </Box>
   );

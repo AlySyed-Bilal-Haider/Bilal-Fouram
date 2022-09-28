@@ -81,6 +81,7 @@ const mainHeader = (locationpath) => {
               <FaPhone size="22px" style={{ marginRight: "8px" }} />
             </>
           }
+          description="Please head to our Discord for support."
         />
       );
     case "/AllDiscussions/KnowledgeBase":
@@ -92,6 +93,7 @@ const mainHeader = (locationpath) => {
               <FaBook size="22px" style={{ marginRight: "8px" }} />
             </>
           }
+          description="Community initiatives driving education to help new ohmies."
         />
       );
     case "/AllDiscussions/CommunityDevelopment":
@@ -103,6 +105,7 @@ const mainHeader = (locationpath) => {
               <RiGroupFill size="26px" style={{ marginRight: "8px" }} />
             </>
           }
+          description="All non-educational community proposals and community engagement ideas can be posted here"
         />
       );
     case "/AllDiscussions/Feedback":
@@ -114,6 +117,7 @@ const mainHeader = (locationpath) => {
               <CgNotes size="25px" style={{ marginRight: "8px" }} />
             </>
           }
+          description="Provide feedback about the protocol, the community and the team here"
         />
       );
     case "/AllDiscussions/ProjectProposals":
@@ -125,6 +129,7 @@ const mainHeader = (locationpath) => {
               <RiCheckboxBlankFill size="25px" style={{ marginRight: "8px" }} />
             </>
           }
+          description="Project Proposals within the DAO"
         />
       );
 

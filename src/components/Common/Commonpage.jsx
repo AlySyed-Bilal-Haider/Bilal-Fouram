@@ -6,7 +6,7 @@ import { Button, Box, Typography, Grid } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { deepPurple } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
-import UndoIcon from "@mui/icons-material/Undo";
+import { FaReply } from "react-icons/fa";
 import { url } from "../../utils";
 // /detail
 function Commonpage(props) {
@@ -161,7 +161,7 @@ function Commonpage(props) {
                         flexWrap: "wrap",
                       }}
                     >
-                      <UndoIcon sx={{ color: "text.paragraph" }} />
+                      <FaReply size="14px" style={{ marginRight: "3px" }} />
                       <Typography
                         sx={{ color: "text.paragraph", fontSize: "11px" }}
                       >
