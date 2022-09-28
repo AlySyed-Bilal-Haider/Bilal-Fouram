@@ -27,8 +27,6 @@ function App() {
   const [open, setOpen] = useState(false);
   const [openSign, setOpenSign] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
-  // const [username, setusernameState] = React.useState('');
-  // const [email,setemailState]=React.useState('');
   const [userId,setUserId]=useState('');
   const [username, setusernameState] = React.useState("");
   const tokenVerfiy = async () => {
@@ -44,6 +42,7 @@ function App() {
           console.log("all data", data);
           localStorage.setItem("name", data.name);
           setusernameState(data.name);
+          setUserId(data.id);
         });
     } catch (error) {
       alert(error);

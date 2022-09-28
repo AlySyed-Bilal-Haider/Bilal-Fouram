@@ -24,7 +24,15 @@ const Addpost = new Schema({
   email:String,
   comments:[{
     type:Schema.Types.ObjectId,
-    ref:"commentAdd"
+    ref:"comment"
+  }],
+  like:[{
+    type:Schema.Types.ObjectId,
+    ref:"user"
+  }],
+  dislike:[{
+    type:Schema.Types.ObjectId,
+    ref:"user"
   }],
 });
 const postmodal=model("Addpost", Addpost);

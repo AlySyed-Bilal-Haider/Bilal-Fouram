@@ -3,7 +3,7 @@ import cors from "cors";
 import multer from "multer";
 import router from "./Routes/routes.js";
 import connectDB from "./Database/ConnectDB.js";
-import mongomodal from "./Schema/Signupschema.js";
+import mongomodal from "./Schema/UserSchema.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";

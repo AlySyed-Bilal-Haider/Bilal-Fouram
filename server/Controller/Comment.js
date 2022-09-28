@@ -1,7 +1,7 @@
 
-import commentModal from "../Schema/comment.js";
-import mongoose from "mongoose";
+import commentModal from "../Schema/CommentSchema.js";
 import postmodal from "../Schema/Postschema.js";
+import mongoose from "mongoose";
 export const commentHandler = async (req, res, next) => {
   const comment = req.body.comment;
   const postId = req.body.postId;
