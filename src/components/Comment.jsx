@@ -39,18 +39,18 @@ const TextInput = styled(InputBase)({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function Comment({ open, setOpen, postId, title, userid }) {
-  console.log("userid comment",userid);
+function Comment({ open, setOpen, postId, title, userid,username }) {
+  console.log("userid comment",userid,"username comment",username);
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
     setCommentstate("");
     setOpen(false);
   };
   const addComment = async () => {
-    const commentValue = { comment:commentstate, postId,userid };
+    const commentValue = { comment:commentstate,userName:username,postId};
     try {
       const { data } = await axios.post(`${url}/comment`, commentValue);
-
+   console.log("dcomment data",data);
       data.status == "ok" && handleClose();
     } catch (error) {
       console.log("Comment routes not work !",error);

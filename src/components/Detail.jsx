@@ -104,8 +104,7 @@ const BpCheckbox = (props) => {
   );
 };
 
-export default function Detail({ userId }) {
-  console.log("userId details !", userId);
+export default function Detail({ userId,username }) {
   const param = useParams();
   //close menu tag on click
   const userToken = localStorage.getItem("token");
@@ -133,26 +132,25 @@ export default function Detail({ userId }) {
     }
   };
   // check this user is approveed or not
-  const approveORnotapproveCheck = async () => {
-    console.log("useremail", useremail);
-    const voteinfo = { id: param?.id, email: useremail };
-    try {
-      const { data } = await axios.post(`${url}/getvotesdetails`, voteinfo);
-      console.log("data votes", data);
-      setCheckstate(data?.votedetails?.checkstatus);
-    } catch (error) {
-      console.log("check approve and unapprove", error);
-    }
-  };
-  useEffect(() => {
-    useremail && approveORnotapproveCheck();
-  }, []);
+  // const approveORnotapproveCheck = async () => {
+  //   const voteinfo = { id: param?.id, email: useremail };
+  //   try {
+  //     const { data } = await axios.post(`${url}/getvotesdetails`, voteinfo);
+  //     console.log("data votes", data);
+  //     setCheckstate(data?.votedetails?.checkstatus);
+  //   } catch (error) {
+  //     console.log("check approve and unapprove", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   useremail && approveORnotapproveCheck();
+  // }, []);
   //Approve Handler
   const handleApprove = async () => {
     let approveinfo = { id: param?.id, email: useremail };
     try {
       const { data } = await axios.post(`${url}/approve`, approveinfo);
-      data.status == "ok" && approveORnotapproveCheck();
+      // data.status == "ok" && approveORnotapproveCheck();
     } catch (error) {
       console.log("error", error);
     }
@@ -164,7 +162,7 @@ export default function Detail({ userId }) {
     try {
       const { data } = await axios.post(`${url}/unapprove`, unapprove);
       console.log("data", data);
-      data.status == "ok" && approveORnotapproveCheck();
+      // data.status == "ok" && approveORnotapproveCheck();
     } catch (error) {
       console.log("error", error);
     }
@@ -238,6 +236,7 @@ export default function Detail({ userId }) {
         postId={param?.id}
         title={descriptionstate}
         userid={userId}
+        username={username}
       />
       <Box bgcolor="primary.light">
         <Box py={5} textAlign="center" display="flex" flexDirection="column">
@@ -461,6 +460,7 @@ export default function Detail({ userId }) {
                   variant="body1"
                   fontSize="14px"
                   color="primary.light"
+                  cursor="pointer"
                 >
                   Unlike
                 </Typography>
@@ -471,32 +471,87 @@ export default function Detail({ userId }) {
                   variant="body1"
                   fontSize="14px"
                   color="primary.light"
+                  cursor="pointer"
                 >
                   like
                 </Typography>
               )}
-             
-
-              {/* <BsThreeDots
-            onClick={handleClick}
-            size="22px"
-            style={{ marginLeft: "30px", cursor: "pointer" }}
-          /> */}
-
-              {/* <StyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
-            <MenuItem
-              onClick={handleClose}
-              disableRipple
-              sx={{ fontSize: "16px" }}
-            >
-              <BsFlagFill style={{ marginRight: "15px" }} />
-              Flag
-            </MenuItem>
-          </StyledMenu> */}
             </Box>
             {checklikeUnlike == true && (
-                <Typography>This ise liked !</Typography>
+                <Typography>This is liked !</Typography>
               )}
+          </Box>
+
+        {/* ........  show comment here ............ */}
+          <Box py={2.5} pl={6} borderBottom="1px solid #fff">
+            <Box py={2} display="flex" alignItems="center">
+              <Typography variant="body1" color="primary.main" fontWeight="700">
+                {name ? name : null}
+              </Typography>
+              <Typography
+                ml={2}
+                variant="body1"
+                color="primary.light"
+                fontSize="13px"
+              >
+                {moment(postdetails?.enddate).format("LL")}
+              </Typography>
+            </Box>
+
+            <Box pr={4} fontSize="14px" color="text.paragraph">
+              {postdetails?.description}
+            </Box>
+            
+            {/* like unlike, reply here */}
+            <Box
+              mt={2}
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-end"
+            >
+              <AiFillLike size="22px" />
+              <AiFillDislike
+                size="22px"
+                style={{ marginLeft: "30px", cursor: "unavailable" }}
+              />
+              <BsFillHeartFill
+                size="22px"
+                style={{ marginLeft: "30px", color: "#DD2E44" }}
+              />
+
+              <Typography
+                sx={{ cursor: "pointer" }}
+                ml="30px"
+                variant="body1"
+                fontSize="14px"
+                color="primary.light"
+              >
+                Reply
+              </Typography>
+              {checklikeUnlike == true ? (
+                <Typography
+                
+                  ml="30px"
+                  variant="body1"
+                  fontSize="14px"
+                  color="primary.light"
+                  cursor="pointer"
+                >
+                  Unlike
+                </Typography>
+              ) : (
+                <Typography
+                 
+                  ml="30px"
+                  variant="body1"
+                  fontSize="14px"
+                  color="primary.light"
+                  cursor="pointer"
+                >
+                  like
+                </Typography>
+              )}
+            </Box>
           </Box>
         </Box>
       </Container>

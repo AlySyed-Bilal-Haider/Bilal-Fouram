@@ -1,9 +1,9 @@
 
 import commentModal from "../Schema/CommentSchema.js";
 import postmodal from "../Schema/Postschema.js";
-export const commentHandler = async (req, res, next) => {
 
-  console.log(req.body);
+export const commentHandler = async (req, res, next) => {
+  console.log("comment",req.body);
   try {
     const newComment = new commentModal(req.body);
 
@@ -21,6 +21,48 @@ export const commentHandler = async (req, res, next) => {
     next(error);
   }
 };
+export const replyHandler = async (req, res, next) => {
+  console.log(req.body);
+  try {
+    const newComment = new commentModal(req.body);
+
+    await newComment.save();
+
+    const reply = await commentModal.findByIdAndUpdate(req.body.comment_id,{ $push: { reply : newComment._id} });
+  
+
+    res.json({
+      status: "ok",
+      success: true,
+      message: "Comment add Successfully!",
+      id: newComment._id
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const CheckCommentLike = async (req, res) => {
+  console.log(req.body);
+  try {
+    const commentLike = await commentModal.findById(req.body.comment_id,{like: [req.body.user_id]});
+    console.log(commentLike);
+    if(commentLike.like){
+      res.json({
+        status: "true"
+      })
+    } else{
+      res.json({
+        status: "false"
+      })
+    }
+  } catch (error) {
+    res.json({
+      message: error
+    })
+  }
+
+}
 
 export const likeComment = async(req,res)=>{
    console.log(req.body);
@@ -60,7 +102,7 @@ export const unlikeComment = async(req,res)=>{
 export const fetchComment = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const data = await commentModal.find({ _id: id });
+    const data = await postmodal.find({ _id: id });
     if (data) {
       res.json({
         status: "ok",

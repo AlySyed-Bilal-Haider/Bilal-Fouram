@@ -19,9 +19,11 @@ import {
 } from "../Controller/Postcontroller.js";
 import {
   commentHandler,
+  replyHandler,
+  CheckCommentLike,
   likeComment,
   unlikeComment,
-  fetchComment
+  fetchComment,
 } from "../Controller/CommentController.js";
 import {
   approveHandler,
@@ -38,8 +40,10 @@ router.post("/getvotesdetails", handlerApproveORunApprove);
 router.post("/approve", approveHandler);
 router.post("/unapprove", unapproveHandler);
 router.post("/comment", commentHandler);
+router.post("/reply",replyHandler);
 router.post("/like", likeHandler);
 router.post("/unlike", unlikeHandler);
+router.post("/checkcommentlike",CheckCommentLike);
 router.post("/likecomment", likeComment);
 router.post("/unlikecomment", unlikeComment);
 
@@ -51,7 +55,6 @@ router.get("/fetchspecificpost/:email", getSpecificdescussion);
 router.get("/fetchPostDetails/:id", fetchPostDetails);
 router.get("/fetchcomment/:id", fetchComment);
 router.get('/checklike/:postid/:userid',CheckPostLike);
-
 router.delete("/removePost/:id", removepost);
 
 // edite post routes

@@ -26,6 +26,7 @@ function App() {
   const [openLogin, setOpenLogin] = useState(false);
   const [userId,setUserId]=useState('');
   const [username, setusernameState] = React.useState("");
+  
   const tokenVerfiy = async () => {
     try {
       await fetch(`${url}/verifytoken`, {
@@ -101,7 +102,7 @@ function App() {
             }
           />
           <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />
-          <Route path="/detail/:id" element={<Detail userId={userId} />} />
+          <Route path="/detail/:id" element={<Detail userId={userId} username={username} />} />
           <Route path="/logout" element={<Logout />} />
         </Routes>
       </Box>

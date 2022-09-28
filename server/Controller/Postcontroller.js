@@ -187,7 +187,6 @@ export const likeHandler = async (req, res) => {
       message: error
     })
   }
-
 }
 
 export const unlikeHandler = async (req, res) => {
