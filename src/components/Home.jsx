@@ -3,55 +3,61 @@ import { Link, useNavigate } from "react-router-dom";
 // import jsonwebtoken from "jsonwebtoken";
 // import AllDiscussions from "./AllDiscussions";
 import { Button, Box, Container, Typography, Grid } from "@mui/material";
-import CloudOffIcon from "@mui/icons-material/CloudOff";
-import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
+import {
+  FaRegComments,
+  FaChalkboardTeacher,
+  FaPhone,
+  FaBook,
+} from "react-icons/fa";
+import { RiCheckboxBlankFill, RiGroupFill } from "react-icons/ri";
+import { CgNotes } from "react-icons/cg";
 
 import StartDiscussionButton from "./StartDiscussionButton";
 
 const discussion = [
   {
-    icons: <CloudOffIcon />,
+    icons: <FaRegComments size="30px" />,
     maintext: "General",
     subtext:
-      " For topics that do not belong to any other particular topics,please post them here",
+      " For topics that do not belong to any other particular topics, please post them here",
     value: "General",
   },
   {
-    icons: <ContactEmergencyIcon />,
+    icons: <FaChalkboardTeacher size="30px" />,
     maintext: "Proposal",
-    subtext: "OIP-94B Inverse Bond Framework Approval",
+    subtext:
+      "This section reserved for the final versions of MINER DAO Proposals. Use the template provided in the pinned post.",
     value: "Proposal",
   },
   {
-    icons: <CloudOffIcon />,
+    icons: <FaPhone size="26px" />,
     maintext: "Support",
-    subtext: "How do I get any help on here?",
+    subtext: "Please head to our Discord for support.",
     color: "white",
     value: "Support",
   },
   {
-    icons: <CloudOffIcon />,
+    icons: <FaBook size="26px" />,
     maintext: "Knowledge Base",
-    subtext:
-      "https://www.facebook.com/Juan-Rivera-Keto-Gummies-106696188817590",
+    subtext: "Community initiatives driving education to help new ohmies.",
     value: "KnowledgeBase",
   },
   {
-    icons: <CloudOffIcon />,
+    icons: <RiGroupFill size="28px" />,
     maintext: "Community Development",
     subtext:
       "All non-educational community proposals and community engagement ideas can be posted here",
     value: "CommunityDevelopment",
   },
   {
-    icons: <CloudOffIcon />,
+    icons: <CgNotes size="28px" />,
     maintext: "Feedback",
     subtext:
       "Provide feedback about the protocol, the community and the team here",
     value: "Feedback",
   },
   {
-    icons: <CloudOffIcon />,
+    icons: <RiCheckboxBlankFill size="30px" />,
     maintext: "ProjectProposal",
     subtext: "Project Proposals within the DAO",
     value: "ProjectProposals",
@@ -104,7 +110,7 @@ export default function Home({ setOpenlogin, username }) {
           />
           <Link to="/AllDiscussions" style={{ textDecoration: "none" }}>
             <Button
-              startIcon={<CloudOffIcon />}
+              startIcon={<FaRegComments />}
               sx={{
                 ml: 2,
                 color: "text.paragraph",
@@ -167,7 +173,7 @@ export default function Home({ setOpenlogin, username }) {
                     </Box>
                     <Typography
                       sx={{
-                        ml: 1,
+                        ml: 1.2,
                         fontSize: "18px",
                         fontWeight: 700,
                         color: "text.main",
