@@ -19,6 +19,8 @@ import {
 } from "../Controller/Postcontroller.js";
 import {
   commentHandler,
+  replyHandler,
+  CheckCommentLike,
   likeComment,
   unlikeComment,
   fetchComment
@@ -38,9 +40,11 @@ router.post("/getvotesdetails", handlerApproveORunApprove);
 router.post("/approve", approveHandler);
 router.post("/unapprove", unapproveHandler);
 router.post("/comment", commentHandler);
+router.post("/reply",replyHandler);
 router.post("/checkpostlike",CheckPostLike);
 router.post("/like", likeHandler);
 router.post("/unlike", unlikeHandler);
+router.post("/checkcommentlike",CheckCommentLike);
 router.post("/likecomment", likeComment);
 router.post("/unlikecomment", unlikeComment);
 
