@@ -4,19 +4,23 @@ import multer from "multer";
 import router from "./Routes/routes.js";
 import connectDB from "./Database/ConnectDB.js";
 import mongomodal from "./Schema/Signupschema.js";
-
+import dotenv from "dotenv";
 import fs from "fs";
+import path from "path";
 
-const url =
+const __dirname = path.resolve();
+
+dotenv.config();
+const urlDB =
   "mongodb+srv://bilal:minerdao12345@cluster0.flytvry.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
-const port = process.env.port || 4000;
-app.use(cors("*"));
+const port = process.env.PORT || 4000;
+app.use(cors(""));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-connectDB(url);
 
-// upload image and update
+connectDB(urlDB);
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "upload");
@@ -41,14 +45,13 @@ app.post("/uploadimg", upload.single("file"), async (req, res) => {
     if (previous.img !== "" && req.file && req.file.path) {
       if (data.img !== req.file.path) {
         console.log("not equal");
-        try{
-          fs.unlink(('upload/' + data.img), (err) => {
+        try {
+          fs.unlink("upload/" + data.img, (err) => {
             console.log(err);
-          })
-        } catch(error){
+          });
+        } catch (error) {
           console.log(error);
         }
-        
       }
     }
     if (data) {
