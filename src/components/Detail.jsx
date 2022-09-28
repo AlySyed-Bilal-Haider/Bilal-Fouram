@@ -105,8 +105,7 @@ const BpCheckbox = (props) => {
 };
 
 export default function Detail({ userId }) {
-
-  console.log("userId details !",userId);
+  console.log("userId details !", userId);
   const param = useParams();
   //close menu tag on click
   const userToken = localStorage.getItem("token");
@@ -118,6 +117,7 @@ export default function Detail({ userId }) {
   const [postdetails, setPostdetails] = useState();
   const [postidstate, setPostIdstate] = useState("");
   const [checkstate, setCheckstate] = useState(false);
+  const [checklikeUnlike, setChecklikeUnlikestate] = useState("");
   useEffect(() => {
     fetchdetails();
   }, [param?.id]);
@@ -177,34 +177,59 @@ export default function Detail({ userId }) {
     }
   };
 
-
-  // like and dislike  functionality here !
-  const checkedLike=async()=>{
-  try{
-    const {data}= await axios.get(`${url}/checklike/${param?.id}/${userId}`);
-    console.log("data liked checked",data);
-  }catch(error){
- console.log("checked like error !",error);
-  }
-}
-  useEffect(()=>{
+  // checkedlike and dislike  functionality here !
+  const checkedLike = async () => {
+    try {
+      const { data } = await axios.get(
+        `${url}/checklike/${param?.id}/${userId}`
+      );
+      console.log("data liked checked", data);
+      setChecklikeUnlikestate(data?.status);
+    } catch (error) {
+      console.log("checked like error !", error);
+    }
+  };
+  useEffect(() => {
     userId && checkedLike();
-  },[userId]);
-
+  }, [userId]);
 
   // ..........like handler ..........
-  const likeHandler=async()=>{
-    const likevalue={post_id:param?.id,user_id:userId};
-    console.log("likevalue:",likevalue);
-  try{
+  const likeHandler = async () => {
+    const likevalue = { post_id: param?.id, user_id: userId };
+    console.log("likevalue:", likevalue);
+    try {
+      if (userToken) {
+        const { data } = await axios.post(`${url}/like`, likevalue);
+        console.log("like response:", data);
+        if (data.message == "ok") {
+          checkedLike();
+        }
+      } else {
+        setOpenlogin(true);
+      }
+    } catch (error) {
+      console.log("like error", error);
+    }
+  };
 
-   const {data}=await axios.post(`${url}/like`,likevalue);
-   console.log("like response:",data);
+  // .........unliked handler section ..........
+  const unLikedHandler = async () => {
+    const unliked = { post_id: param?.id, user_id: userId };
+    try {
+      if (userToken) {
+        const { data } = await axios.post(`${url}/unlike`, unliked);
+        console.log("unliked response:", data);
+        if (data.message == "ok") {
+          checkedLike();
+        }
+      } else {
+        setOpenlogin(true);
+      }
+    } catch (error) {
+      console.log("unliked code error", error);
+    }
+  };
 
-  }catch(error){
-   console.log("like error",error);
-  }
-  }
   return (
     <>
       <Comment
@@ -281,44 +306,6 @@ export default function Detail({ userId }) {
             <Box pr={4} fontSize="14px" color="text.paragraph">
               {postdetails?.description}
             </Box>
-
-            <Box
-              mt={3}
-              display="flex"
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              <AiFillLike size="22px" cursor="unavailable" />
-              <AiFillDislike
-                size="22px"
-                cursor=""
-                style={{ marginLeft: "30px" }}
-              />
-              <Typography
-                onClick={() => {
-                  CheckloginHandler();
-                }}
-                ml="30px"
-                variant="body1"
-                fontSize="14px"
-                color="primary.light"
-                sx={{ cursor: "pointer" }}
-              >
-                Reply
-              </Typography>
-              <Typography
-              onClick={()=>{
-                likeHandler();
-              }}
-                ml="30px"
-                variant="body1"
-                fontSize="14px"
-                color="primary.light"
-                sx={{ cursor: "pointer" }}
-              >
-                like
-              </Typography>
-            </Box>
           </Box>
 
           <Box
@@ -351,137 +338,152 @@ export default function Detail({ userId }) {
             </Typography>
           </Box>
 
-{/* 
+          {/* 
      Poll start here, poll mean Questions and Ans */}
-          {postdetails?.status == true ? (
-            <Box mt={5} py={2} pl={6} borderBottom="1px solid #fff">
-              <Typography
-                variant="body1"
-                fontSize="25px"
-                fontWeight="700"
-                color="primary.main"
-              >
-                Poll
-              </Typography>
+
+          <Box mt={5} py={2} pl={6} borderBottom="1px solid #fff">
+            <Typography
+              variant="body1"
+              fontSize="25px"
+              fontWeight="700"
+              color="primary.main"
+            >
+              Poll
+            </Typography>
+
+            <Typography
+              mt={2}
+              variant="body1"
+              fontSize="14px"
+              color="primary.light"
+            >
+              {postdetails?.question}
+            </Typography>
+
+            <Typography
+              mt={3}
+              variant="body1"
+              fontSize="16px"
+              fontWeight="700"
+              color="primary.main"
+            >
+              Approve Launch Plan and Base Rate?
+            </Typography>
+
+            <Box
+              mt={1}
+              px={2}
+              display="flex"
+              alignItems="center"
+              justifyContent={{ xs: "center", md: "space-between" }}
+              flexWrap="wrap"
+            >
+              <Box>
+                <LinearProgressBox variant="determinate" value={5} />
+                <Typography
+                  mt={-4.6}
+                  variant="subtitle1"
+                  display="flex"
+                  alignItems="center"
+                >
+                  {checkstate == true ? null : (
+                    <BpCheckbox
+                      onClick={() => {
+                        unapproveHandler();
+                      }}
+                    />
+                  )}
+                  Do not approve
+                </Typography>
+              </Box>
+
+              <Box>
+                <LinearProgressBox variant="determinate" value={70} />
+                <Typography
+                  mt={-4.6}
+                  variant="subtitle1"
+                  display="flex"
+                  alignItems="center"
+                >
+                  {checkstate == true ? null : (
+                    <BpCheckbox
+                      onClick={() => {
+                        handleApprove();
+                      }}
+                    />
+                  )}
+                  Approve
+                </Typography>
+              </Box>
+            </Box>
+
+            <Typography
+              px={2}
+              mt={2}
+              fontSize="12px"
+              variant="subtitle1"
+              color="primary.light"
+            >
+              Poll ends in 11 hours.
+            </Typography>
+            <Box
+              mt={2}
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-end"
+            >
+              <AiFillLike size="22px" />
+              <AiFillDislike
+                size="22px"
+                style={{ marginLeft: "30px", cursor: "unavailable" }}
+              />
+              <BsFillHeartFill
+                size="22px"
+                style={{ marginLeft: "30px", color: "#DD2E44" }}
+              />
 
               <Typography
-                mt={2}
+                sx={{ cursor: "pointer" }}
+                onClick={() => {
+                  CheckloginHandler();
+                }}
+                ml="30px"
                 variant="body1"
                 fontSize="14px"
                 color="primary.light"
               >
-                {postdetails?.question}
+                Comment
               </Typography>
-
-              <Typography
-                mt={3}
-                variant="body1"
-                fontSize="16px"
-                fontWeight="700"
-                color="primary.main"
-              >
-                Approve Launch Plan and Base Rate?
-              </Typography>
-
-              <Box
-                mt={1}
-                px={2}
-                display="flex"
-                alignItems="center"
-                justifyContent={{ xs: "center", md: "space-between" }}
-                flexWrap="wrap"
-              >
-                <Box>
-                  <LinearProgressBox variant="determinate" value={5} />
-                  <Typography
-                    mt={-4.6}
-                    variant="subtitle1"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    {checkstate == true ? null : (
-                      <BpCheckbox
-                        onClick={() => {
-                          unapproveHandler();
-                        }}
-                      />
-                    )}
-                    Do not approve
-                  </Typography>
-                </Box>
-
-                <Box>
-                  <LinearProgressBox variant="determinate" value={70} />
-                  <Typography
-                    mt={-4.6}
-                    variant="subtitle1"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    {checkstate == true ? null : (
-                      <BpCheckbox
-                        onClick={() => {
-                          handleApprove();
-                        }}
-                      />
-                    )}
-                    Approve
-                  </Typography>
-                </Box>
-              </Box>
-
-              <Typography
-                px={2}
-                mt={2}
-                fontSize="12px"
-                variant="subtitle1"
-                color="primary.light"
-              >
-                Poll ends in 11 hours.
-              </Typography>
-              <Box
-                mt={2}
-                display="flex"
-                alignItems="center"
-                justifyContent="flex-end"
-              >
-                <AiFillLike size="22px" />
-                <AiFillDislike
-                  size="22px"
-                  style={{ marginLeft: "30px", cursor: "unavailable" }}
-                />
-                <BsFillHeartFill
-                  size="22px"
-                  style={{ marginLeft: "30px", color: "#DD2E44" }}
-                />
-
+              {checklikeUnlike == true ? (
                 <Typography
-                  sx={{ cursor: "pointer" }}
-                  onClick={() => {
-                    CheckloginHandler();
-                  }}
+                  onClick={unLikedHandler}
                   ml="30px"
                   variant="body1"
                   fontSize="14px"
                   color="primary.light"
                 >
-                  Reply
+                  Unlike
                 </Typography>
+              ) : (
                 <Typography
+                  onClick={likeHandler}
                   ml="30px"
                   variant="body1"
                   fontSize="14px"
                   color="primary.light"
                 >
-                  Like
+                  like
                 </Typography>
-                {/* <BsThreeDots
+              )}
+             
+
+              {/* <BsThreeDots
             onClick={handleClick}
             size="22px"
             style={{ marginLeft: "30px", cursor: "pointer" }}
           /> */}
 
-                {/* <StyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
+              {/* <StyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
             <MenuItem
               onClick={handleClose}
               disableRipple
@@ -491,9 +493,11 @@ export default function Detail({ userId }) {
               Flag
             </MenuItem>
           </StyledMenu> */}
-              </Box>
             </Box>
-          ) : null}
+            {checklikeUnlike == true && (
+                <Typography>This ise liked !</Typography>
+              )}
+          </Box>
         </Box>
       </Container>
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}

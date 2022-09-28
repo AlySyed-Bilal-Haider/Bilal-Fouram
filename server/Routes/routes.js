@@ -15,9 +15,14 @@ import {
   editepostHandler,
   likeHandler,
   unlikeHandler,
-  checkedlike
+  CheckPostLike
 } from "../Controller/Postcontroller.js";
-import { commentHandler, fetchComment } from "../Controller/Comment.js";
+import {
+  commentHandler,
+  likeComment,
+  unlikeComment,
+  fetchComment
+} from "../Controller/CommentController.js";
 import {
   approveHandler,
   unapproveHandler,
@@ -33,8 +38,10 @@ router.post("/getvotesdetails", handlerApproveORunApprove);
 router.post("/approve", approveHandler);
 router.post("/unapprove", unapproveHandler);
 router.post("/comment", commentHandler);
-router.post("/like",likeHandler);
-router.post("/unlike",unlikeHandler);
+router.post("/like", likeHandler);
+router.post("/unlike", unlikeHandler);
+router.post("/likecomment", likeComment);
+router.post("/unlikecomment", unlikeComment);
 
 
 router.get("/alldiscussion", fetchAlldiscussion);
@@ -43,7 +50,7 @@ router.get("/fetchuser/:email", fetchuser);
 router.get("/fetchspecificpost/:email", getSpecificdescussion);
 router.get("/fetchPostDetails/:id", fetchPostDetails);
 router.get("/fetchcomment/:id", fetchComment);
-router.get('/checklike/:postid/:userid',checkedlike);
+router.get('/checklike/:postid/:userid',CheckPostLike);
 
 router.delete("/removePost/:id", removepost);
 
