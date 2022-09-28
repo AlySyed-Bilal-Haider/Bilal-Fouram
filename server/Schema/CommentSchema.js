@@ -14,10 +14,6 @@ const commentAdd = new Schema({
     type: Schema.Types.ObjectId,
     ref: "user"
   }],
-  dislike: [{
-    type: Schema.Types.ObjectId,
-    ref: "user"
-  }],
   reply: [{
     type: Schema.Types.ObjectId,
     ref: "comment"

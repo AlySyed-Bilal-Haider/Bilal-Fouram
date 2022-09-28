@@ -27,12 +27,7 @@ const Addpost = new Schema({
     type:Schema.Types.ObjectId,
     ref:"user"
   }],
-  dislike:[{
-    type:Schema.Types.ObjectId,
-    ref:"user"
-  }],
-
-
+  
 
 
   status:false,
