@@ -105,6 +105,8 @@ const BpCheckbox = (props) => {
 };
 
 export default function Detail({ userId }) {
+
+  console.log("userId details !",userId);
   const param = useParams();
   //close menu tag on click
   const userToken = localStorage.getItem("token");
@@ -174,6 +176,35 @@ export default function Detail({ userId }) {
       setOpenlogin(true);
     }
   };
+
+
+  // like and dislike  functionality here !
+  const checkedLike=async()=>{
+  try{
+    const {data}= await axios.get(`${url}/checklike/${param?.id}/${userId}`);
+    console.log("data liked checked",data);
+  }catch(error){
+ console.log("checked like error !",error);
+  }
+}
+  useEffect(()=>{
+    userId && checkedLike();
+  },[userId]);
+
+
+  // ..........like handler ..........
+  const likeHandler=async()=>{
+    const likevalue={post_id:param?.id,user_id:userId};
+    console.log("likevalue:",likevalue);
+  try{
+
+   const {data}=await axios.post(`${url}/like`,likevalue);
+   console.log("like response:",data);
+
+  }catch(error){
+   console.log("like error",error);
+  }
+  }
   return (
     <>
       <Comment
@@ -276,6 +307,9 @@ export default function Detail({ userId }) {
                 Reply
               </Typography>
               <Typography
+              onClick={()=>{
+                likeHandler();
+              }}
                 ml="30px"
                 variant="body1"
                 fontSize="14px"
@@ -317,6 +351,8 @@ export default function Detail({ userId }) {
             </Typography>
           </Box>
 
+{/* 
+     Poll start here, poll mean Questions and Ans */}
           {postdetails?.status == true ? (
             <Box mt={5} py={2} pl={6} borderBottom="1px solid #fff">
               <Typography
