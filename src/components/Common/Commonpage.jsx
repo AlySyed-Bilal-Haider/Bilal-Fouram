@@ -30,7 +30,7 @@ function Commonpage(props) {
   }, [props.title]);
 
   // fetch all details from sever
-  let allPost=true;
+  let allPost = true;
   useEffect(() => {
     const fetchdetails = async () => {
       try {
@@ -134,7 +134,7 @@ function Commonpage(props) {
                     fontSize: { md: "14px", xs: "12px" },
                   }}
                 >
-                  {namestate ? namestate?.slice(0,1).toUpperCase():null}
+                  {namestate ? namestate?.slice(0, 1).toUpperCase() : null}
                 </Avatar>
                 <Box
                   sx={{

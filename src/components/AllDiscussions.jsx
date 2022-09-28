@@ -2,7 +2,14 @@ import React from "react";
 import { Box, Container, Grid } from "@mui/material";
 import { useLocation, NavLink } from "react-router-dom";
 // import AutorenewIcon from "@mui/icons-material/Autorenew";
-
+import {
+  FaRegComments,
+  FaChalkboardTeacher,
+  FaPhone,
+  FaBook,
+} from "react-icons/fa";
+import { RiCheckboxBlankFill, RiGroupFill } from "react-icons/ri";
+import { CgNotes } from "react-icons/cg";
 import MainHeader from "./Common/MainHeader";
 import Knowledgebase from "./Knowledgebase";
 import General from "./General";
@@ -41,19 +48,85 @@ const renderComponent = (locationpath) => {
 const mainHeader = (locationpath) => {
   switch (locationpath) {
     case "/AllDiscussions/General":
-      return <MainHeader title="General" />;
+      return (
+        <MainHeader
+          title="General"
+          icon={
+            <>
+              <FaRegComments size="25px" style={{ marginRight: "8px" }} />
+            </>
+          }
+          description="For topics that do not belong to any other particular topics, please
+          post them here."
+        />
+      );
     case "/AllDiscussions/Proposal":
-      return <MainHeader title="Proposal" />;
+      return (
+        <MainHeader
+          title="Proposal"
+          icon={
+            <>
+              <FaChalkboardTeacher size="25px" style={{ marginRight: "8px" }} />
+            </>
+          }
+          description="This section reserved for the final versions of MINER DAO Proposals. Use the template provided in the pinned post."
+        />
+      );
     case "/AllDiscussions/Support":
-      return <MainHeader title="Support" />;
+      return (
+        <MainHeader
+          title="Support"
+          icon={
+            <>
+              <FaPhone size="22px" style={{ marginRight: "8px" }} />
+            </>
+          }
+        />
+      );
     case "/AllDiscussions/KnowledgeBase":
-      return <MainHeader title="Knowledgebase" />;
+      return (
+        <MainHeader
+          title="Knowledgebase"
+          icon={
+            <>
+              <FaBook size="22px" style={{ marginRight: "8px" }} />
+            </>
+          }
+        />
+      );
     case "/AllDiscussions/CommunityDevelopment":
-      return <MainHeader title="Community" />;
+      return (
+        <MainHeader
+          title="Community"
+          icon={
+            <>
+              <RiGroupFill size="26px" style={{ marginRight: "8px" }} />
+            </>
+          }
+        />
+      );
     case "/AllDiscussions/Feedback":
-      return <MainHeader title="Feed" />;
+      return (
+        <MainHeader
+          title="Feed"
+          icon={
+            <>
+              <CgNotes size="25px" style={{ marginRight: "8px" }} />
+            </>
+          }
+        />
+      );
     case "/AllDiscussions/ProjectProposals":
-      return <MainHeader title="Project propsal" />;
+      return (
+        <MainHeader
+          title="Project propsal"
+          icon={
+            <>
+              <RiCheckboxBlankFill size="25px" style={{ marginRight: "8px" }} />
+            </>
+          }
+        />
+      );
 
     default:
       return null;
