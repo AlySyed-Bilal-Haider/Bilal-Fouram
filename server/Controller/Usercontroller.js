@@ -1,4 +1,4 @@
-import mongomodal from "../Schema/Signupschema.js";
+import mongomodal from "../Schema/UserSchema.js";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
 import { config } from "./config.js";
@@ -8,10 +8,19 @@ import mongoose from "mongoose";
 
 export const signupHandler = async (req, res) => {
   try {
+    let user = await mongomodal.findOne({
+      name: req.body.name,
+    });
     let user1 = await mongomodal.findOne({
       email: req.body.email,
     });
-    if (user1) {
+    if (user) {
+      res.status(200).json({
+        status: "warning",
+        message: "Username Already Exist!",
+        user: false,
+      });
+    } else if (user1) {
       res.status(200).json({
         status: "warning",
         message: "Email Already Exist!",
