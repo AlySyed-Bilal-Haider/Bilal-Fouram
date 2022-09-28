@@ -1,13 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import jsonwebtoken from "jsonwebtoken";
-// import AllDiscussions from "./AllDiscussions";
 import { Button, Box, Container, Typography, Grid } from "@mui/material";
 import CloudOffIcon from "@mui/icons-material/CloudOff";
 import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
-
 import StartDiscussionButton from "./StartDiscussionButton";
-
 const discussion = [
   {
     icons: <CloudOffIcon />,
@@ -58,30 +54,8 @@ const discussion = [
   },
 ];
 
-export default function Home({ setOpenlogin, username }) {
+export default function Home({ setOpenlogin,userid }) {
   const navigate = useNavigate();
-  // const matches = useMediaQuery("(max-width:750px)");
-
-  // ..........Token verfications ...........
-
-  // useEffect(() => {
-  //   const token = localStorage?.getItem("token");
-  //   if (token) {
-  //     tokenVerfiy();
-
-  //     // const user = jsonwebtoken.decode(token);
-  //     // setusernameState(user?.name);
-  //     // setEmailstate(user?.email);
-  //     // if (!user) {
-  //     //   localStorage.removeItem("token");
-  //     //   navigate("/login");
-  //     // } else {
-  //     //   tokenVerfiy();
-  //     // }
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // }, []);
   // ..........end token verfication........
   const navigationHandler = (value) => {
     console.log("value", value);
@@ -100,7 +74,7 @@ export default function Home({ setOpenlogin, username }) {
         >
           <StartDiscussionButton
             setOpenlogin={setOpenlogin}
-            username={username}
+            userid={userid}
           />
           <Link to="/AllDiscussions" style={{ textDecoration: "none" }}>
             <Button

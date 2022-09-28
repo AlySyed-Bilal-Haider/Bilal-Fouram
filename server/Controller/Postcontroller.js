@@ -1,19 +1,18 @@
 import postmodal from "../Schema/Postschema.js";
 // ....Add discussion and Questions ,answer..........
 export const discussion = async (req, res, next) => {
-  console.log(req.body);
+  console.log("user id",req.body);
   try {
     const addpost = await new postmodal({
       tag: req.body.tag,
       title: req.body.title,
-      description: req.body.despone,
+      description: req.body.description,
       status: req.body.status,
       question: req.body.question,
       ans1: req.body.ans1,
       ans2: req.body.ans2,
       enddate: req.body.enddate,
-      username: req.body.name,
-      email: req.body.email,
+      user:req.body.userid
     });
     addpost.save();
     if (addpost) {

@@ -104,21 +104,20 @@ const BpCheckbox = (props) => {
   );
 };
 
-export default function Detail({userId}) {
-  console.log("userId detailss",userId);
+export default function Detail({ userId }) {
   const param = useParams();
   //close menu tag on click
-  const userToken=localStorage.getItem("token");
-  const useremail=localStorage.getItem("email");
+  const userToken = localStorage.getItem("token");
+  const useremail = localStorage.getItem("email");
   const [name, setNamestate] = useState(localStorage.getItem("name"));
   const [openstate, setOpenlogin] = useState(false);
-  const [descriptionstate,setPostDescription]=useState('');
+  const [descriptionstate, setPostDescription] = useState("");
   const [editPopOpen, setEditPopOpen] = useState(false);
   const [postdetails, setPostdetails] = useState();
   const [postidstate, setPostIdstate] = useState("");
   const [checkstate, setCheckstate] = useState(false);
   useEffect(() => {
-      fetchdetails();
+    fetchdetails();
   }, [param?.id]);
 
   const fetchdetails = async () => {
@@ -132,14 +131,13 @@ export default function Detail({userId}) {
     }
   };
   // check this user is approveed or not
-  console.log("useremail",useremail);
   const approveORnotapproveCheck = async () => {
-    console.log("useremail",useremail);
-    const voteinfo = { id:param?.id, email:useremail };
+    console.log("useremail", useremail);
+    const voteinfo = { id: param?.id, email: useremail };
     try {
-      const { data } = await axios.post(`${url}/getvotesdetails`,voteinfo);
-      console.log("data votes",data);
-        setCheckstate(data?.votedetails?.checkstatus);
+      const { data } = await axios.post(`${url}/getvotesdetails`, voteinfo);
+      console.log("data votes", data);
+      setCheckstate(data?.votedetails?.checkstatus);
     } catch (error) {
       console.log("check approve and unapprove", error);
     }
@@ -149,7 +147,7 @@ export default function Detail({userId}) {
   }, []);
   //Approve Handler
   const handleApprove = async () => {
-    let approveinfo = {id:param?.id, email:useremail};
+    let approveinfo = { id: param?.id, email: useremail };
     try {
       const { data } = await axios.post(`${url}/approve`, approveinfo);
       data.status == "ok" && approveORnotapproveCheck();
@@ -159,18 +157,17 @@ export default function Detail({userId}) {
   };
   //unapprove handler
   const unapproveHandler = async () => {
-    let unapprove = { id:param?.id, email:useremail};
-    console.log("unapprove",unapprove);
+    let unapprove = { id: param?.id, email: useremail };
+    console.log("unapprove", unapprove);
     try {
       const { data } = await axios.post(`${url}/unapprove`, unapprove);
-      console.log("data",data);
+      console.log("data", data);
       data.status == "ok" && approveORnotapproveCheck();
     } catch (error) {
       console.log("error", error);
     }
   };
   const CheckloginHandler = () => {
- 
     if (userToken) {
       setEditPopOpen(true);
     } else {
@@ -179,8 +176,13 @@ export default function Detail({userId}) {
   };
   return (
     <>
-      <Comment open={editPopOpen} setOpen={setEditPopOpen} postId={param?.id} 
-      title={descriptionstate}  userid={userId}/>
+      <Comment
+        open={editPopOpen}
+        setOpen={setEditPopOpen}
+        postId={param?.id}
+        title={descriptionstate}
+        userid={userId}
+      />
       <Box bgcolor="primary.light">
         <Box py={5} textAlign="center" display="flex" flexDirection="column">
           <Box
@@ -256,7 +258,11 @@ export default function Detail({userId}) {
               justifyContent="flex-end"
             >
               <AiFillLike size="22px" cursor="unavailable" />
-              <AiFillDislike size="22px"  cursor="" style={{ marginLeft: "30px" }} />
+              <AiFillDislike
+                size="22px"
+                cursor=""
+                style={{ marginLeft: "30px" }}
+              />
               <Typography
                 onClick={() => {
                   CheckloginHandler();
@@ -268,6 +274,15 @@ export default function Detail({userId}) {
                 sx={{ cursor: "pointer" }}
               >
                 Reply
+              </Typography>
+              <Typography
+                ml="30px"
+                variant="body1"
+                fontSize="14px"
+                color="primary.light"
+                sx={{ cursor: "pointer" }}
+              >
+                like
               </Typography>
             </Box>
           </Box>
@@ -395,17 +410,20 @@ export default function Detail({userId}) {
                 justifyContent="flex-end"
               >
                 <AiFillLike size="22px" />
-                <AiFillDislike size="22px"  style={{ marginLeft: "30px",cursor:'unavailable' }}  />
+                <AiFillDislike
+                  size="22px"
+                  style={{ marginLeft: "30px", cursor: "unavailable" }}
+                />
                 <BsFillHeartFill
                   size="22px"
                   style={{ marginLeft: "30px", color: "#DD2E44" }}
                 />
 
                 <Typography
-               sx={{ cursor:"pointer"}}
-                onClick={() => {
-                  CheckloginHandler();
-                }}
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                    CheckloginHandler();
+                  }}
                   ml="30px"
                   variant="body1"
                   fontSize="14px"

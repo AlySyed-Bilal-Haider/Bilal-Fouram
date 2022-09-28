@@ -2,8 +2,6 @@ import mongomodal from "../Schema/UserSchema.js";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
 import { config } from "./config.js";
-
-import mongoose from "mongoose";
 // ......Signup here routes start..............
 
 export const signupHandler = async (req, res) => {

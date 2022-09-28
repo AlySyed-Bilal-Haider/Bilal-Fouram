@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 // import Web3 from "web3";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-
 import "./App.css";
 import Logout from "./components/Logout";
 import Header from "./components/Header";
@@ -15,9 +14,7 @@ import MainPage from "./components/UserPenal/MainPage";
 import Detail from "./components/Detail";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
-
 import { url } from "./utils";
-
 // const web3 = new Web3(
 //   Web3.givenProvider
 //     ? Web3.givenProvider
@@ -94,7 +91,7 @@ function App() {
           <Route
             exact
             path="/"
-            element={<Home setOpenlogin={setOpenLogin} username={username} />}
+            element={<Home setOpenlogin={setOpenLogin} userid={userId} />}
           />
           <Route path="/profile" element={<MainPage />} />
           <Route
