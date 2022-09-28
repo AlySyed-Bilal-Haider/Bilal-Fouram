@@ -148,16 +148,35 @@ export const editepostHandler = async (req, res) => {
   }
 };
 
+export const CheckPostLike = async (req, res) => {
+  console.log(req.body);
+  try {
+    const postLike = await postmodal.findById(req.body.post_id,{like: [req.body.user_id]});
+    console.log(postLike);
+    if(postLike.like){
+      res.json({
+        status: "true"
+      })
+    } else{
+      res.json({
+        status: "false"
+      })
+    }
+  } catch (error) {
+    res.json({
+      message: error
+    })
+  }
+
+}
+
 export const likeHandler = async (req, res) => {
   // console.log(req.body);
   try {
-    const post = await postmodal.findByIdAndUpdate(req.body.post_id,{ $push: { like : req.body.user_id } });
-    // post.like.push(req.body.user_id);
-    // post.save();
+    const post = await postmodal.findByIdAndUpdate(req.body.post_id, { $push: { like: req.body.user_id } });
     const postLike = await postmodal.findById(req.body.post_id);
 
     console.log("likehandler");
-    // console.log(post.like);
     console.log(postLike.like);
     res.json({
       message: "ok"
@@ -171,18 +190,12 @@ export const likeHandler = async (req, res) => {
 }
 
 export const unlikeHandler = async (req, res) => {
- 
-  try {
-    const post = await postmodal.findByIdAndUpdate(req.body.post_id,{ $pull: { like : req.body.user_id } });
 
-    // const post = await postmodal.findById(req.body.post_id);
-   
-    // post.like.pull(req.body.user_id);
-    // post.save();
-    const postLike = await postmodal.findById(req.body.post_id);
+  try {
+    const post = await postmodal.findByIdAndUpdate(req.body.post_id, { $pull: { like: req.body.user_id } });
+    // const postLike = await postmodal.findById(req.body.post_id);
     console.log("unlikehandler");
-    // console.log(post.like);
-    console.log(postLike.like);
+    // console.log(postLike.like);
 
     res.json({
       message: "ok"
