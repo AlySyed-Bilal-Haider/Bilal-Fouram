@@ -13,6 +13,8 @@ import {
   fetchPostDetails,
   removepost,
   editepostHandler,
+  likeHandler,
+  unlikeHandler
 } from "../Controller/Postcontroller.js";
 import { commentHandler, fetchComment } from "../Controller/Comment.js";
 import {
@@ -30,6 +32,9 @@ router.post("/getvotesdetails", handlerApproveORunApprove);
 router.post("/approve", approveHandler);
 router.post("/unapprove", unapproveHandler);
 router.post("/comment", commentHandler);
+router.post("/like",likeHandler);
+router.post("/unlike",unlikeHandler);
+
 
 router.get("/alldiscussion", fetchAlldiscussion);
 router.get("/category/:tag", fetchcategory);
