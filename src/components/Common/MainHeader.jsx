@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import UndoIcon from "@mui/icons-material/Undo";
-function MainHeader({ title }) {
+
+function MainHeader({ title, icon, description }) {
   return (
     <Box
       sx={{
@@ -10,7 +10,8 @@ function MainHeader({ title }) {
         alignItems: "center",
         flexDirection: "column",
         height: "133px",
-        backgroundColor: "transparent",
+        backgroundColor: "primary.light",
+        color: "text.main",
       }}
     >
       <Box
@@ -21,21 +22,21 @@ function MainHeader({ title }) {
           py: 1,
         }}
       >
-        <UndoIcon sx={{ color: "text.paragraph", fontSize: "22px", mr: 1 }} />
-        <Typography sx={{ color: "text.paragraph", fontSize: "22px" }}>
+        {icon}
+        {/* <FaReply sx={{ color: "text.paragraph", fontSize: "22px", mr: 1 }} /> */}
+        <Typography sx={{ fontSize: "24px", fontWeight: "500" }}>
           {title}
         </Typography>
       </Box>
       <Typography
         sx={{
-          color: "text.paragraph",
           fontSize: "15.5px",
           textAlign: "center",
+          fontWeight: "300",
           px: 2,
         }}
       >
-        For topics that do not belong to any other particular topics, please
-        post them here.
+        {description}
       </Typography>
     </Box>
   );
