@@ -2,6 +2,25 @@ import postmodal from "../Schema/Postschema.js";
 import pollmodal from "../Schema/PollSchema.js";
 
 
+export const FetchAllPoll = async (req, res) => {
+    try {
+        const data = await pollmodal.find({ visibility: true });
+        // console.log("data", data);
+        res.json({
+            status: "ok",
+            success: true,
+            message: "all poll",
+            allPoll: data,
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: "error",
+            success: false,
+            message: error,
+        });
+    }
+}
+
 export const CreatePoll = async (req, res) => {
     try {
         console.log(req.body);
@@ -10,11 +29,6 @@ export const CreatePoll = async (req, res) => {
 
         console.log(newPoll);
         await newPoll.save();
-
-        // const pollLink = await postmodal.findByIdAndUpdate(post_id, { poll: newPoll._id });
-
-        // console.log(pollLink);
-
         res.json({
             message: "ok",
             poll: newPoll._id
@@ -52,6 +66,25 @@ export const DeletePoll = async (req, res) => {
         });
     }
 };
+
+export const VotePoll = async (req, res) => {
+    try {
+        console.log(req.body);
+
+        res.status(200).json({
+            status: "ok",
+            success: true,
+            message: "Answer has been voted..!",
+        });
+
+    } catch (error) {
+        res.status(505).json({
+            status: "error",
+            success: false,
+            message: error,
+        });
+    }
+}
 
 export const CheckPollLike = async (req, res) => {
 
