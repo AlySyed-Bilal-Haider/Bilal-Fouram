@@ -3,7 +3,7 @@ import commentModal from "../Schema/CommentSchema.js";
 import postmodal from "../Schema/Postschema.js";
 
 export const commentHandler = async (req, res, next) => {
-  
+   console.log("body req",req.body);
   try {
     const {post_id} = req.body;
     const newComment = new commentModal(req.body);
@@ -23,7 +23,7 @@ export const commentHandler = async (req, res, next) => {
   }
 };
 export const replyHandler = async (req, res, next) => {
- 
+  console.log("req.body",req.body);
   try {
     const {comment_id} = req.body;
     const newComment = new commentModal(req.body);
@@ -36,7 +36,7 @@ export const replyHandler = async (req, res, next) => {
     res.json({
       status: "ok",
       success: true,
-      message: "Comment add Successfully!",
+      message: "Reply add Successfully!",
       id: newComment._id
     });
   } catch (error) {
@@ -104,17 +104,3 @@ export const unlikeComment = async(req,res)=>{
  }
 }
 
-export const fetchComment = async (req, res, next) => {
-  const id = req.params.id;
-  try {
-    const data = await postmodal.find({ _id: id });
-    if (data) {
-      res.json({
-        status: "ok",
-        commentDetails: data,
-      });
-    }
-  } catch (error) {
-    next(error);
-  }
-};

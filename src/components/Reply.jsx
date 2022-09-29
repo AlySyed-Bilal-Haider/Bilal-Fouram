@@ -39,16 +39,16 @@ const TextInput = styled(InputBase)({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function Reply({ open, setOpen, postId, title, userid,username }) {
+function Reply({ open, setOpen, title,comment_id,username}) {
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
     setCommentstate("");
     setOpen(false);
   };
-  const addComment = async () => {
-    const Reply = { comment:commentstate,userName:username,postId};
+  const addReply = async () => {
+    const Reply = { comment:commentstate,userName:username,comment_id};
     try {
-      const { data } = await axios.post(`${url}/comment`, Reply);
+      const { data } = await axios.post(`${url}/reply`, Reply);
    console.log("dcomment data",data);
       data.status == "ok" && handleClose();
     } catch (error) {
@@ -103,7 +103,7 @@ function Reply({ open, setOpen, postId, title, userid,username }) {
       <Button
         type="submit"
         onClick={() => {
-          addComment();
+            addReply();
         }}
         disableRipple={true}
         sx={{

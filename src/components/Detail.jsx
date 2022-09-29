@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Comment from "./Comment";
-import Reply from './Reply';
+import Reply from "./Reply";
 import {
   Box,
   Container,
@@ -101,7 +101,7 @@ export default function Detail({ userId, username }) {
   const userToken = localStorage.getItem("token");
   const useremail = localStorage.getItem("email");
   const [name, setNamestate] = useState(localStorage.getItem("name"));
-  const user_id=localStorage.getItem("user_id");
+  const user_id = localStorage.getItem("user_id");
   const [openstate, setOpenlogin] = useState(false);
   const [descriptionstate, setPostDescription] = useState("");
   const [editPopOpen, setEditPopOpen] = useState(false);
@@ -110,14 +110,21 @@ export default function Detail({ userId, username }) {
   const [postidstate, setPostIdstate] = useState("");
   const [checkstate, setCheckstate] = useState(false);
   const [checklikeUnlike, setChecklikeUnlikestate] = useState("");
+  const [renderPost, setRenderstate] = useState(false);
+  const [commentData, setCommentData] = useState([]);
+  const [commentID,setCommentIDstate]=useState();
+  const [commentValue,setcommentValue]=useState('');
+  // .........fetch post details and set states.........
   useEffect(() => {
     fetchdetails();
-  }, [param?.id]);
+  }, [param?.id, renderPost]);
 
   const fetchdetails = async () => {
     try {
       const { data } = await axios.get(`${url}/fetchPostDetails/${param?.id}`);
+      console.log("data farum",data);
       setPostdetails(data);
+      setCommentData(data?.comments);
       setPostDescription(data?.description);
       setPostIdstate(data._id);
     } catch (error) {
@@ -169,13 +176,15 @@ export default function Detail({ userId, username }) {
   };
 
   // .....reply Hanlder , open the reply modal Box......
-const replyHandle=()=>{
-  if (userToken) {
-    setReplyPopOpen(true);
-  } else {
-    setOpenlogin(true);
-  }
-}
+  const replyHandle = (commentID,commentvalue) => {
+    setCommentIDstate(commentID);
+    setcommentValue(commentvalue)
+    if (userToken) {
+      setReplyPopOpen(true);
+    } else {
+      setOpenlogin(true);
+    }
+  };
   // checkedlike and dislike  functionality here !
   const checkedLike = async () => {
     try {
@@ -185,10 +194,8 @@ const replyHandle=()=>{
       console.log("status:", data);
       if (data.status) {
         setChecklikeUnlikestate(true);
-      }
-      else{
+      } else {
         setChecklikeUnlikestate(false);
-
       }
     } catch (error) {
       console.log("checked like error !", error);
@@ -239,17 +246,21 @@ const replyHandle=()=>{
       <Comment
         open={editPopOpen}
         setOpen={setEditPopOpen}
-        postId={param?.id}
+        post_id={param?.id}
         title={descriptionstate}
         userid={userId}
         username={username}
+        renderFetchpost={setRenderstate}
       />
-      <Reply open={ReplyPopOpen}
+      <Reply
+        open={ReplyPopOpen}
         setOpen={setReplyPopOpen}
-        postId={param?.id}
-        title={descriptionstate}
+        title={commentValue}
+        comment_id={commentID}
+        username={username}
         userid={userId}
-        username={username}/>
+        
+      />
       <Box bgcolor="primary.light">
         <Box py={5} textAlign="center" display="flex" flexDirection="column">
           <Box
@@ -437,67 +448,88 @@ const replyHandle=()=>{
             >
               Poll ends in 11 hours.
             </Typography>
-            <Box
-              mt={2}
-              display="flex"
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              <AiFillLike size="22px" />
-              <AiFillDislike
-                size="22px"
-                style={{ marginLeft: "30px", cursor: "unavailable" }}
-              />
-              <BsFillHeartFill
-                size="22px"
-                style={{ marginLeft: "30px", color: "#DD2E44" }}
-              />
 
-              <Typography
-                sx={{ cursor: "pointer" }}
-                onClick={() => {
-                  CheckloginHandler();
-                }}
-                ml="30px"
-                variant="body1"
-                fontSize="14px"
-                color="primary.light"
-              >
-                Comment
-              </Typography>
-              {checklikeUnlike == true ? (
-                <Typography
-                  onClick={unLikedHandler}
-                  ml="30px"
-                  variant="body1"
-                  fontSize="14px"
-                  color="primary.light"
-                  sx={{ cursor: "pointer" }}
-                >
-                  Unlike
-                </Typography>
-              ) : (
-                <Typography
-                  onClick={likeHandler}
-                  ml="30px"
-                  variant="body1"
-                  sx={{
-                    cursor: "pointer",
-                    fontSize: "14px",
-                    color: "primary.light",
-                  }}
-                >
-                  like
-                </Typography>
-              )}
-            </Box>
-            {checklikeUnlike == true && (
-              <Typography>This is liked !</Typography>
-            )}
-          </Box>
+            {/* start comment sections start here */}
+            {commentData?.map(({_id, addedAt, comment }, index) => {
+              return (
+                <>
+                <div key={index}>
+                 <Box py={2} display="flex" alignItems="center">
+                  <Typography
+                    ml={2}
+                    variant="body1"
+                    color="primary.light"
+                    fontSize="13px"
+                  >
+                    {moment(addedAt).format("LL")}
+                  </Typography>
+                  </Box>
+                  <Box pr={4} fontSize="14px" color="text.paragraph">
+                    {comment}
+                  </Box>
+                  <Box
+                    key={index}
+                    mt={2}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                  >
+                    <AiFillLike size="22px" />
+                    <AiFillDislike
+                      size="22px"
+                      style={{ marginLeft: "30px", cursor: "unavailable" }}
+                    />
+                    <BsFillHeartFill
+                      size="22px"
+                      style={{ marginLeft: "30px", color: "#DD2E44" }}
+                    />
 
-          {/* ........  show comment here ............ */}
-          <Box py={2.5} pl={6} borderBottom="1px solid #fff">
+                    <Typography
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => {
+                        CheckloginHandler();
+                      }}
+                      ml="30px"
+                      variant="body1"
+                      fontSize="14px"
+                      color="primary.light"
+                    >
+                      Comment
+                    </Typography>
+                    {checklikeUnlike == true ? (
+                      <Typography
+                        onClick={unLikedHandler}
+                        ml="30px"
+                        variant="body1"
+                        fontSize="14px"
+                        color="primary.light"
+                        sx={{ cursor: "pointer" }}
+                      >
+                        Unlike
+                      </Typography>
+                    ) : (
+                      <Typography
+                        onClick={likeHandler}
+                        ml="30px"
+                        variant="body1"
+                        sx={{
+                          cursor: "pointer",
+                          fontSize: "14px",
+                          color: "primary.light",
+                        }}
+                      >
+                        like
+                      </Typography>
+                    )}
+                  </Box>
+                  {checklikeUnlike == true && (
+                    <Typography>This is liked !</Typography>
+                    
+                  )}
+                  </div>
+                  {/* Replay start here display */}
+                
+          <Box py={2.5} pl={6}>
             <Box py={2} display="flex" alignItems="center">
               <Typography variant="body1" color="primary.main" fontWeight="700">
                 {name ? name : null}
@@ -534,7 +566,9 @@ const replyHandle=()=>{
               />
 
               <Typography
-              onClick={replyHandle}
+                onClick={()=>{
+                  replyHandle(_id,comment);
+                }}
                 sx={{ cursor: "pointer" }}
                 ml="30px"
                 variant="body1"
@@ -543,8 +577,8 @@ const replyHandle=()=>{
               >
                 Reply
               </Typography>
-             
-                {/* <Typography
+
+              {/* <Typography
                   ml="30px"
                   variant="body1"
                   fontSize="14px"
@@ -553,20 +587,25 @@ const replyHandle=()=>{
                 >
                   Unlike
                 </Typography> */}
-              
-                <Typography
-              
-                  ml="30px"
-                  variant="body1"
-                  fontSize="14px"
-                  color="primary.light"
-                  sx={{ cursor: "pointer" }}
-                >
-                  like
-                </Typography>
-            
+
+              <Typography
+                ml="30px"
+                variant="body1"
+                fontSize="14px"
+                color="primary.light"
+                sx={{ cursor: "pointer" }}
+              >
+                like
+              </Typography>
             </Box>
           </Box>
+                </>
+              );
+             
+           })}
+          </Box>
+
+         
         </Box>
       </Container>
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}

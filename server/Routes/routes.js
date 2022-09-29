@@ -29,8 +29,6 @@ router.delete("/removePost/:id", Post.removepost);
 router.get("/fetchspecificpost/:email", Post.getSpecificdescussion);
 router.get("/fetchPostDetails/:id", Post.fetchPostDetails);
 router.get("/fetchuser/:email", Users.fetchuser);
-router.get("/fetchcomment/:id", comments.fetchComment);
-
 
 // edite post routes
 

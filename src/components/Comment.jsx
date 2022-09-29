@@ -39,14 +39,15 @@ const TextInput = styled(InputBase)({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function Comment({ open, setOpen, postId, title, userid,username }) {
+function Comment({ open, setOpen, post_id, title,username,renderFetchpost}) {
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
     setCommentstate("");
+    renderFetchpost(true);
     setOpen(false);
   };
   const addComment = async () => {
-    const commentValue = { comment:commentstate,userName:username,postId};
+    const commentValue = { comment:commentstate,userName:username,post_id};
     try {
       const { data } = await axios.post(`${url}/comment`, commentValue);
    console.log("dcomment data",data);
