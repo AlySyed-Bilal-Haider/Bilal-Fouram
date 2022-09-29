@@ -21,10 +21,14 @@ router.post("/reply", comments.replyHandler);
 router.post("/checkcommentlike", comments.CheckCommentLike);
 router.post("/likecomment", comments.likeComment);
 router.post("/unlikecomment", comments.unlikeComment);
-router.post("/createpoll", Poll.CreatePoll)
+router.post("/createpoll", Poll.CreatePoll);
+router.post('/votepoll', Poll.VotePoll);
+
 
 
 router.get("/alldiscussion", Post.fetchAlldiscussion);
+router.get("/allpoll", Poll.FetchAllPoll);
+
 router.get("/category/:tag", Post.fetchcategory);
 router.get('/checklike/:post_id/:user_id', Post.CheckPostLike);
 router.get("/fetchspecificpost/:email", Post.getSpecificdescussion);

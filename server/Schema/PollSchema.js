@@ -1,3 +1,4 @@
+
 import { model, mongoose, Schema } from "mongoose";
 const Poll = new Schema({
     question: {
@@ -7,7 +8,7 @@ const Poll = new Schema({
     },
     answers: [{
         title: String,
-        vote: [String]
+        vote: [{type: Schema.Types.ObjectId,}]
     }],
     addedAt: {
         type: Date,

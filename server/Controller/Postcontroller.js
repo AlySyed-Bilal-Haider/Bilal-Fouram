@@ -37,7 +37,7 @@ export const fetchAlldiscussion = async (req, res) => {
     res.json({
       status: "ok",
       success: true,
-      message: "post add Successfully!",
+      message: "all posts",
       allDiscussion: data,
     });
   } catch (error) {
