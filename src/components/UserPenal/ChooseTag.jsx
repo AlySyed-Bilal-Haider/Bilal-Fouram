@@ -30,7 +30,7 @@ const StyledModal = withStyles((theme) => ({
     },
   },
 }))(Dialog);
-function ChooseTag({ open, setOpen,setTagsvalue }) {
+function ChooseTag({ open, setOpen,getTags }) {
 
 const [tagestate,settageState]=useState('');
 
@@ -82,8 +82,9 @@ const [tagestate,settageState]=useState('');
 
   const addTagsHandler=()=>{
     if(tagestate){
+      getTags(tagestate);
       handleClose();
-      setTagsvalue(tagestate);
+      
     }
 
     settageState('');

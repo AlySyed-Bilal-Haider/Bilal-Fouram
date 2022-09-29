@@ -7,6 +7,7 @@ import { withStyles, styled } from "@mui/styles";
 import { useState } from "react";
 import axios from "axios";
 import { url } from "../../utils";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 const StyleTextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -49,38 +50,37 @@ const StyledModal = withStyles((theme) => ({
 }))(Dialog);
 
 function PopUp({ open, setOpen }) {
-  const [addpoll,setAddpollstate]=useState({
-    question:"",
-    ans1:"",
-    ans2:"",
-    enddate:"",
-    status:true
-  })
+  const [addpoll, setAddpollstate] = useState({
+    question: "",
+    ans1:'',
+  ans2:'',
+    enddate: "",
+    status: true,
+  });
 
-  const pollHandler=(e)=>{
-    setAddpollstate({...addpoll,[e.target.name]:e.target.value});
-  }
+  const pollHandler = (e) => {
+    setAddpollstate({ ...addpoll, [e.target.name]: e.target.value });
+  };
 
-  const addPollHandler=()=>{
 
-  try{
-      axios.post(`${url}/`,);
-  }catch(error){
-  console.log("poll error !",error);
-  }
+  const addPollHandler = () => {
 
-setAddpollstate({
-  question:"",
-  ans1:"",
-  ans2:"",
-  enddate:"",
-  status:true
-})
-  }
+    // try {
+    //   axios.post(`${url}/`);
+    // } catch (error) {
+    //   console.log("poll error !", error);
+    // }
+
+    setAddpollstate({
+      question: "",
+
+      enddate: "",
+    });
+  };
   const handleClose = () => {
     setOpen(false);
   };
-
+  console.log("addpoll", addpoll);
   return (
     <>
       <StyledModal
@@ -121,7 +121,13 @@ setAddpollstate({
           >
             Question
           </Typography>
-          <StyleTextInput fullWidth type="text" name="question"  value={addpoll.question || ''} onChange={pollHandler} />
+          <StyleTextInput
+            fullWidth
+            type="text"
+            name="question"
+            value={addpoll.question || ""}
+            onChange={pollHandler}
+          />
 
           <Typography
             mt={3}
@@ -133,11 +139,38 @@ setAddpollstate({
           >
             Answers
           </Typography>
-          <StyleTextInput fullWidth type="text" placeholder="Answer #1"  value={addpoll.ans1 || ''}  name="ans1"   onChange={pollHandler} />
+          <StyleTextInput
+            fullWidth
+            type="text"
+            placeholder="Answer #1"
+            value={addpoll.ans1|| ""}
+            name="ans1"
+            onChange={pollHandler}
+          />
           <Box mt={2}>
-            <StyleTextInput fullWidth type="text" placeholder="Answer #2" value={addpoll.ans2 || ''}  name="ans2"  onChange={pollHandler}/>
+            <StyleTextInput
+              fullWidth
+              type="text"
+              placeholder="Answer #2"
+              value={addpoll.ans2 || ""}
+              name="ans2"
+              onChange={pollHandler}
+            />
           </Box>
-
+          <Button
+            sx={{
+              color: "text.main",
+              mt: 1,
+              width: "120px",
+              height: "40px",
+              backgroundColor: "secondary.main",
+              "&:hover": {
+                backgroundColor: "secondary.main",
+              },
+            }}
+          >
+            Add ans
+          </Button>
           <Typography
             mt={3}
             mb={1}
@@ -148,11 +181,17 @@ setAddpollstate({
           >
             Poll end date (Optional)
           </Typography>
-          <StyleTextInput fullWidth type="date" value={addpoll.enddate} name="enddate" onChange={pollHandler} />
+          <StyleTextInput
+            fullWidth
+            type="date"
+            value={addpoll.enddate}
+            name="enddate"
+            onChange={pollHandler}
+          />
 
           <Button
-          onClick={addPollHandler}
-          type="submit"
+            onClick={addPollHandler}
+            type="submit"
             disableRipple={true}
             sx={{
               backgroundColor: "secondary.main",

@@ -54,7 +54,7 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
   const [open2, setOpen2] = useState(false);
   const [tagsvalue, setTagsvalue] = useState("");
   const [addpoststate, setPoststate] = useState({
-    tags: "wow",
+    tag: "wow",
     title: "",
     description:
       "Before you post this: 1. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines 2. If this proposal is going to the Proposal section, make sure you have read the Proposal  guidelines:  https://discord.com/invite/olympusdao ",
@@ -65,7 +65,7 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
   };
   // post discussion record here
   const postSubmitHandler = async () => {
-    const addnameAndemail = { ...addpoststate, user: userid, tag: tagsvalue };
+    const addnameAndemail = {...addpoststate, user: userid,tag: tagsvalue  };
     if (!!tagsvalue) {
       try {
         const { data } = await axios.post(`${url}/posts`, addnameAndemail);
@@ -81,7 +81,6 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
       setOpen2(true);
     }
   };
-
   // end post discussion here
   const handleClickOpen1 = () => {
     setOpen1(true);
@@ -106,10 +105,14 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
       setOpenlogin(true);
     }
   };
+
+  const getTag=(value)=>{
+    setTagsvalue(value)
+  }
   return (
     <>
       <PopUp open={open1} setOpen={setOpen1} />
-      <ChooseTag open={open2} setOpen={setOpen2} setTagsvalue={setTagsvalue} />
+      <ChooseTag open={open2} setOpen={setOpen2} getTags={getTag} />
 
       <Button
         onClick={CheckloginHandler}
@@ -208,7 +211,7 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
         <Box mt={-2} mb={5} mx={4.5}>
           <TextInput
             type="text"
-            name="despone"
+            name="description"
             value={addpoststate.description}
             onChange={discussionHandler}
             fullWidth
