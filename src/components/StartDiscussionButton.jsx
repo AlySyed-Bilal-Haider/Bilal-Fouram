@@ -63,35 +63,16 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
   const discussionHandler = (e) => {
     setPoststate({ ...addpoststate, [e.target.name]: e.target.value });
   };
-
   // post discussion record here
   const postSubmitHandler = async () => {
-    const polldata = localStorage.getItem("poll");
-    let checkstatus = false;
-    let updatedata;
-    const addnameAndemail = { ...addpoststate, user:userid};
+    const addnameAndemail = { ...addpoststate, user: userid, tag: tagsvalue };
     if (!!tagsvalue) {
-      if (polldata) {
-        const pollrecord = JSON.parse(polldata);
-        updatedata = { ...addnameAndemail, ...pollrecord, tag: tagsvalue };
-        checkstatus = true;
-      }
       try {
-        if (checkstatus) {
-          const { data } = await axios.post(`${url}/posts`, updatedata);
-          if (data.status === "ok") {
-            toast.success(data.message);
-            setTagsvalue("");
-          } else {
-            toast.error(data.message);
-          }
+        const { data } = await axios.post(`${url}/posts`, addnameAndemail);
+        if (data.status === "ok") {
+          toast.success(data.message);
         } else {
-          const { data } = await axios.post(`${url}/posts`, addnameAndemail);
-          if (data.status === "ok") {
-            toast.success(data.message);
-          } else {
-            toast.error(data.message);
-          }
+          toast.error(data.message);
         }
       } catch (error) {
         console.log(error, "error");

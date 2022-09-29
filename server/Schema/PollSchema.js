@@ -7,7 +7,7 @@ const Poll = new Schema({
     },
     answers: [{
         title: String,
-        vote: []
+        vote: [String]
     }],
     addedAt: {
         type: Date,
@@ -17,18 +17,11 @@ const Poll = new Schema({
         type: Date,
     },
     visible: Boolean,
-    // user: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "user"
-    // },
-    // comments: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: "comment"
-    // }],
-    // like: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: "user"
-    // }],
+    
+    like: [{
+        type: Schema.Types.ObjectId,
+        ref: "user"
+    }],
 });
 const pollmodal = model("poll", Poll);
 export default pollmodal;

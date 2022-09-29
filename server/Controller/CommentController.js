@@ -31,8 +31,6 @@ export const replyHandler = async (req, res, next) => {
     await newComment.save();
 
     const reply = await commentModal.findByIdAndUpdate(comment_id,{ $push: { reply : newComment._id} });
-  
-
     res.json({
       status: "ok",
       success: true,
@@ -47,28 +45,31 @@ export const replyHandler = async (req, res, next) => {
 export const CheckCommentLike = async (req, res) => {
 
   try {
-    const {comment_id,user_id} = req.body;
-    const commentLike = await commentModal.find({_id: comment_id, $match: {like:[user_id]}});
-    console.log(commentLike);
-    if(commentLike.like){
+    const comment_id = req.params.comment_id;
+    const user_id = req.params.user_id;
+    const commentLike = await commentModal.findById({ _id: comment_id });
+    const check = commentLike.like.includes(user_id);
+    console.log("check:", check);
+    if (check) {
       res.json({
-        status: "true"
-      })
-    } else{
+        status: true,
+        message: 'ok'
+      });
+    } else {
       res.json({
-        status: "false"
-      })
+        status: false,
+      });
     }
   } catch (error) {
     res.json({
-      message: error
-    })
+      message: error,
+    });
   }
 
 }
 
 export const likeComment = async(req,res)=>{
- 
+  console.log("req.body",req.body);
    try {
     const {comment_id,user_id} = req.body;
     const comment = await commentModal.findByIdAndUpdate(comment_id,{ $push: { like : user_id } });

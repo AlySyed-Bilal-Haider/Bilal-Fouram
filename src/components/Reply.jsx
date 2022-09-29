@@ -39,10 +39,11 @@ const TextInput = styled(InputBase)({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function Reply({ open, setOpen, title,comment_id,username}) {
+function Reply({ open, setOpen, title,comment_id,username,renderFetchpost}) {
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
     setCommentstate("");
+    renderFetchpost()
     setOpen(false);
   };
   const addReply = async () => {

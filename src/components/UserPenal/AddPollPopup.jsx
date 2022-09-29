@@ -5,6 +5,8 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { withStyles, styled } from "@mui/styles";
 import { useState } from "react";
+import axios from "axios";
+import { url } from "../../utils";
 
 const StyleTextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -60,13 +62,11 @@ function PopUp({ open, setOpen }) {
   }
 
   const addPollHandler=()=>{
-  const polldata=localStorage.getItem('poll');
-  if(polldata){
-    localStorage.removeItem('poll');
-    localStorage.setItem('poll',JSON.stringify(addpoll));
-  }else{
 
-    localStorage.setItem('poll',JSON.stringify(addpoll));
+  try{
+      axios.post(`${url}/`,);
+  }catch(error){
+  console.log("poll error !",error);
   }
 
 setAddpollstate({

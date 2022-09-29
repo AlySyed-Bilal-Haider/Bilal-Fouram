@@ -112,8 +112,8 @@ export default function Detail({ userId, username }) {
   const [checklikeUnlike, setChecklikeUnlikestate] = useState("");
   const [renderPost, setRenderstate] = useState(false);
   const [commentData, setCommentData] = useState([]);
-  const [commentID,setCommentIDstate]=useState();
-  const [commentValue,setcommentValue]=useState('');
+  const [commentID, setCommentIDstate] = useState();
+  const [commentValue, setcommentValue] = useState("");
   // .........fetch post details and set states.........
   useEffect(() => {
     fetchdetails();
@@ -122,7 +122,6 @@ export default function Detail({ userId, username }) {
   const fetchdetails = async () => {
     try {
       const { data } = await axios.get(`${url}/fetchPostDetails/${param?.id}`);
-      console.log("data farum",data);
       setPostdetails(data);
       setCommentData(data?.comments);
       setPostDescription(data?.description);
@@ -175,16 +174,6 @@ export default function Detail({ userId, username }) {
     }
   };
 
-  // .....reply Hanlder , open the reply modal Box......
-  const replyHandle = (commentID,commentvalue) => {
-    setCommentIDstate(commentID);
-    setcommentValue(commentvalue)
-    if (userToken) {
-      setReplyPopOpen(true);
-    } else {
-      setOpenlogin(true);
-    }
-  };
   // checkedlike and dislike  functionality here !
   const checkedLike = async () => {
     try {
@@ -241,6 +230,55 @@ export default function Detail({ userId, username }) {
     }
   };
 
+  // .....reply Hanlder , open the reply modal Box......
+  const replyHandle = (commentID, commentvalue) => {
+    setCommentIDstate(commentID);
+    setcommentValue(commentvalue);
+    if (userToken) {
+      setReplyPopOpen(true);
+    } else {
+      setOpenlogin(true);
+    }
+  };
+
+  //  ......... liked reply handle ...........
+  const likeReplyHandle = async (comment_id) => {
+    const likeReply = { comment_id, user_id: userId };
+    console.log("liked")
+    try {
+      if (userToken) {
+        const { data } = await axios.post(`${url}/likecomment`, likeReply);
+        console.log("like replyed data", data);
+        if (data.message == "ok") {
+          fetchdetails();
+        }
+      } else {
+        setOpenlogin(true);
+      }
+    } catch (error) {
+      console.log("reply like error !", error);
+    }
+  };
+  // unlike reply handler
+  const unLikeReply = async (comment_id) => {
+    const unlikeReply = { comment_id, user_id: userId };
+    try {
+      if (userToken) {
+        const { data } = await axios.post(`${url}/unlikecomment`, unlikeReply);
+        console.log("unlike replyed data", data);
+        if (data.message == "ok") {
+          fetchdetails();
+        }
+      } else {
+      }
+    } catch (error) {
+      console.log("reple unlike error !", error);
+    }
+  };
+
+  const renderDetails=()=>{
+    setRenderstate(!renderPost);
+  }
   return (
     <>
       <Comment
@@ -250,7 +288,7 @@ export default function Detail({ userId, username }) {
         title={descriptionstate}
         userid={userId}
         username={username}
-        renderFetchpost={setRenderstate}
+        renderFetchpost={renderDetails}
       />
       <Reply
         open={ReplyPopOpen}
@@ -259,7 +297,7 @@ export default function Detail({ userId, username }) {
         comment_id={commentID}
         username={username}
         userid={userId}
-        
+        renderFetchpost={renderDetails}
       />
       <Box bgcolor="primary.light">
         <Box py={5} textAlign="center" display="flex" flexDirection="column">
@@ -450,162 +488,180 @@ export default function Detail({ userId, username }) {
             </Typography>
 
             {/* start comment sections start here */}
-            {commentData?.map(({_id, addedAt, comment }, index) => {
+            {commentData?.map(({ _id, addedAt, comment }, index) => {
+              const commentId = _id;
               return (
                 <>
-                <div key={index}>
-                 <Box py={2} display="flex" alignItems="center">
-                  <Typography
-                    ml={2}
-                    variant="body1"
-                    color="primary.light"
-                    fontSize="13px"
-                  >
-                    {moment(addedAt).format("LL")}
-                  </Typography>
-                  </Box>
-                  <Box pr={4} fontSize="14px" color="text.paragraph">
-                    {comment}
-                  </Box>
-                  <Box
-                    key={index}
-                    mt={2}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-end"
-                  >
-                    <AiFillLike size="22px" />
-                    <AiFillDislike
-                      size="22px"
-                      style={{ marginLeft: "30px", cursor: "unavailable" }}
-                    />
-                    <BsFillHeartFill
-                      size="22px"
-                      style={{ marginLeft: "30px", color: "#DD2E44" }}
-                    />
-
-                    <Typography
-                      sx={{ cursor: "pointer" }}
-                      onClick={() => {
-                        CheckloginHandler();
-                      }}
-                      ml="30px"
-                      variant="body1"
-                      fontSize="14px"
-                      color="primary.light"
-                    >
-                      Comment
-                    </Typography>
-                    {checklikeUnlike == true ? (
+                  <div key={index}>
+                    <Box py={2} display="flex" alignItems="center">
                       <Typography
-                        onClick={unLikedHandler}
+                        ml={2}
+                        variant="body1"
+                        color="primary.light"
+                        fontSize="13px"
+                      >
+                        {moment(addedAt).format("LL")}
+                      </Typography>
+                    </Box>
+                    <Box pr={4} fontSize="14px" color="text.paragraph">
+                      {comment}
+                    </Box>
+                    <Box
+                      key={index}
+                      mt={2}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="flex-end"
+                    >
+                      <AiFillLike size="22px" />
+                      <AiFillDislike
+                        size="22px"
+                        style={{ marginLeft: "30px", cursor: "unavailable" }}
+                      />
+                      <BsFillHeartFill
+                        size="22px"
+                        style={{ marginLeft: "30px", color: "#DD2E44" }}
+                      />
+
+                      <Typography
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => {
+                          CheckloginHandler();
+                        }}
                         ml="30px"
                         variant="body1"
                         fontSize="14px"
                         color="primary.light"
-                        sx={{ cursor: "pointer" }}
                       >
-                        Unlike
+                        Comment
                       </Typography>
-                    ) : (
-                      <Typography
-                        onClick={likeHandler}
-                        ml="30px"
-                        variant="body1"
-                        sx={{
-                          cursor: "pointer",
-                          fontSize: "14px",
-                          color: "primary.light",
-                        }}
-                      >
-                        like
-                      </Typography>
+                      {checklikeUnlike == true ? (
+                        <Typography
+                          onClick={unLikedHandler}
+                          ml="30px"
+                          variant="body1"
+                          fontSize="14px"
+                          color="primary.light"
+                          sx={{ cursor: "pointer" }}
+                        >
+                          Unlike
+                        </Typography>
+                      ) : (
+                        <Typography
+                          onClick={likeHandler}
+                          ml="30px"
+                          variant="body1"
+                          sx={{
+                            cursor: "pointer",
+                            fontSize: "14px",
+                            color: "primary.light",
+                          }}
+                        >
+                          like
+                        </Typography>
+                      )}
+                    </Box>
+                    {checklikeUnlike == true && (
+                      <Typography>This is liked !</Typography>
                     )}
-                  </Box>
-                  {checklikeUnlike == true && (
-                    <Typography>This is liked !</Typography>
-                    
-                  )}
+
+                    {/* Replay start here display */}
+                    {commentData[index].reply?.map(
+                      ({ _id, addedAt, comment, userName }) => {
+                        return (
+                          <Box py={2.5} pl={6}>
+                            <Box py={2} display="flex" alignItems="center">
+                              <Typography
+                                variant="body1"
+                                color="primary.main"
+                                fontWeight="700"
+                              >
+                                {userName}
+                              </Typography>
+                              <Typography
+                                ml={2}
+                                variant="body1"
+                                color="primary.light"
+                                fontSize="13px"
+                              >
+                                {moment(addedAt).format("LL")}
+                              </Typography>
+                            </Box>
+
+                            <Box pr={4} fontSize="14px" color="text.paragraph">
+                              {comment}
+                            </Box>
+
+                            {/* like unlike, reply here */}
+                            <Box
+                              mt={2}
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="flex-end"
+                            >
+                              <AiFillLike size="22px" />
+                              <AiFillDislike
+                                size="22px"
+                                style={{
+                                  marginLeft: "30px",
+                                  cursor: "unavailable",
+                                }}
+                              />
+                              <BsFillHeartFill
+                                size="22px"
+                                style={{ marginLeft: "30px", color: "#DD2E44" }}
+                              />
+
+                              <Typography
+                                onClick={() => {
+                                  replyHandle(_id, comment);
+                                }}
+                                sx={{ cursor: "pointer" }}
+                                ml="30px"
+                                variant="body1"
+                                fontSize="14px"
+                                color="primary.light"
+                              >
+                                Reply
+                              </Typography>
+
+                              {commentData[index].like.includes(userId) ? (
+                                <Typography
+                                  onClick={() => {
+                                    unLikeReply(commentId);
+                                  }}
+                                  ml="30px"
+                                  variant="body1"
+                                  fontSize="14px"
+                                  color="primary.light"
+                                  sx={{ cursor: "pointer" }}
+                                >
+                                  Unlike
+                                </Typography>
+                              ) : (
+                                <Typography
+                                  onClick={() => {
+                                    likeReplyHandle(commentId);
+                                  }}
+                                  ml="30px"
+                                  variant="body1"
+                                  fontSize="14px"
+                                  color="primary.light"
+                                  sx={{ cursor: "pointer" }}
+                                >
+                                  like
+                                </Typography>
+                              )}
+                            </Box>
+                          </Box>
+                        );
+                      }
+                    )}
                   </div>
-                  {/* Replay start here display */}
-                
-          <Box py={2.5} pl={6}>
-            <Box py={2} display="flex" alignItems="center">
-              <Typography variant="body1" color="primary.main" fontWeight="700">
-                {name ? name : null}
-              </Typography>
-              <Typography
-                ml={2}
-                variant="body1"
-                color="primary.light"
-                fontSize="13px"
-              >
-                {moment(postdetails?.enddate).format("LL")}
-              </Typography>
-            </Box>
-
-            <Box pr={4} fontSize="14px" color="text.paragraph">
-              {postdetails?.description}
-            </Box>
-
-            {/* like unlike, reply here */}
-            <Box
-              mt={2}
-              display="flex"
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              <AiFillLike size="22px" />
-              <AiFillDislike
-                size="22px"
-                style={{ marginLeft: "30px", cursor: "unavailable" }}
-              />
-              <BsFillHeartFill
-                size="22px"
-                style={{ marginLeft: "30px", color: "#DD2E44" }}
-              />
-
-              <Typography
-                onClick={()=>{
-                  replyHandle(_id,comment);
-                }}
-                sx={{ cursor: "pointer" }}
-                ml="30px"
-                variant="body1"
-                fontSize="14px"
-                color="primary.light"
-              >
-                Reply
-              </Typography>
-
-              {/* <Typography
-                  ml="30px"
-                  variant="body1"
-                  fontSize="14px"
-                  color="primary.light"
-                  sx={{ cursor: "pointer" }}
-                >
-                  Unlike
-                </Typography> */}
-
-              <Typography
-                ml="30px"
-                variant="body1"
-                fontSize="14px"
-                color="primary.light"
-                sx={{ cursor: "pointer" }}
-              >
-                like
-              </Typography>
-            </Box>
-          </Box>
                 </>
               );
-             
-           })}
+            })}
           </Box>
-
-         
         </Box>
       </Container>
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}
