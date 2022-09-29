@@ -1,15 +1,18 @@
 import postmodal from "../Schema/Postschema.js";
 import commentModal from "../Schema/CommentSchema.js";
 // ....Add discussion and Questions ,answer..........
-export const discussion = async (req, res, next) => {
+export const createPost = async (req, res, next) => {
   // console.log("user id",req.body);
-  const { tag, title, description, status, question, ans1, ans2, enddate, user } = req.body;
+
   try {
-    const addpost = await new postmodal({
-      tag, title, description, status, question, ans1, ans2, enddate, user
-    });
-    addpost.save();
-    if (addpost) {
+    // const { tag, title, description, user, poll } = req.body;
+    const newPost = new postmodal(req.body);
+    // const addpost = await new postmodal({
+    //   tag, title, description,user,poll
+    // });
+    console.log(newPost);
+    await newPost.save();
+    if (newPost) {
       res.json({
         status: "ok",
         success: true,
@@ -24,7 +27,13 @@ export const discussion = async (req, res, next) => {
 // fetch all discusions from server , then send on front end
 export const fetchAlldiscussion = async (req, res) => {
   try {
-    const data = await postmodal.find().populate("comments");
+    const data = await postmodal.find({visibility: true}).populate("comments").populate({
+      path: "comments",
+      populate: [{
+        path: "reply",
+        modal: commentModal
+      }]
+    });
     // console.log("data", data);
     res.json({
       status: "ok",
@@ -46,7 +55,7 @@ export const fetchAlldiscussion = async (req, res) => {
 export const fetchcategory = async (req, res) => {
   const tag = req.params.tag;
   try {
-    const data = await postmodal.find({ tag: tag }).populate("comments");
+    const data = await postmodal.find({ tag: tag, visibility: true }).populate("comments");
     res.send(data);
   } catch (error) {
     console.log(error);
@@ -67,16 +76,24 @@ export const getSpecificdescussion = async (req, res, next) => {
 //fetch fetchPostDetails from MongoDB and server
 
 export const fetchPostDetails = async (req, res) => {
-  const _id = req.params.id;
+  const id = req.params.id;
   try {
-    const data = await postmodal.findById({ _id }).populate("comments").populate({
+    const data = await postmodal.find({ _id :id,visibility: true}).populate("comments").populate({
       path: "comments",
       populate: [{
         path: "reply",
         modal: commentModal
       }]
     });
-    res.send(data);
+    console.log(data);
+    if(data){
+      res.send(data);
+    }else{
+      res.json({
+        message: "no post exists"
+      })
+    }
+    
   } catch (error) {
     res.status(404).json({
       status: "error",
@@ -87,9 +104,10 @@ export const fetchPostDetails = async (req, res) => {
 };
 
 export const removepost = async (req, res) => {
-  const id = req.params.id.trim();
   try {
-    const data = await postmodal.findByIdAndDelete({ _id: id });
+    const id = req.params.id.trim();
+
+    const data = await postmodal.findByIdAndUpdate(id, { visibility: false });
     if (data) {
       res.status(200).json({
         status: "ok",

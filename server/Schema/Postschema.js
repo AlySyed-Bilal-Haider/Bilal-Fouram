@@ -27,10 +27,14 @@ const Addpost = new Schema({
     type:Schema.Types.ObjectId,
     ref:"user"
   }],
-  poll:[{
+  poll:{
     type:Schema.Types.ObjectId,
     ref:"poll"
-  }],
+  },
+  visibility:{
+    type: Boolean,
+    default: true
+  }
   
 });
 const postmodal=model("Addpost", Addpost);

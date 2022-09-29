@@ -16,8 +16,12 @@ const Poll = new Schema({
     endDate: {
         type: Date,
     },
-    visible: Boolean,
-    
+    voteVisibility: Boolean,
+    visibility: {
+        type: Boolean,
+        default: true
+    },
+
     like: [{
         type: Schema.Types.ObjectId,
         ref: "user"
