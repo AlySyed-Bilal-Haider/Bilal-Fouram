@@ -100,6 +100,7 @@ export default function Detail({ userId, username }) {
   const userToken = localStorage.getItem("token");
   const useremail = localStorage.getItem("email");
   const [name, setNamestate] = useState(localStorage.getItem("name"));
+  const user_id=localStorage.getItem("user_id");
   const [openstate, setOpenlogin] = useState(false);
   const [descriptionstate, setPostDescription] = useState("");
   const [editPopOpen, setEditPopOpen] = useState(false);
@@ -169,9 +170,9 @@ export default function Detail({ userId, username }) {
   const checkedLike = async () => {
     try {
       const { data } = await axios.get(
-        `${url}/checklike/${param?.id}/${userId}`
+        `${url}/checklike/${param?.id}/${user_id}`
       );
-      console.log("status:", data?.status);
+      console.log("status:", data);
       if (data.status) {
         setChecklikeUnlikestate(true);
       }
@@ -184,8 +185,8 @@ export default function Detail({ userId, username }) {
     }
   };
   useEffect(() => {
-    userId && checkedLike();
-  }, [userId]);
+    user_id && checkedLike();
+  }, [user_id]);
 
   // ..........like handler ..........
   const likeHandler = async () => {

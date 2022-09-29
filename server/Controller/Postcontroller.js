@@ -2,17 +2,10 @@ import postmodal from "../Schema/Postschema.js";
 // ....Add discussion and Questions ,answer..........
 export const discussion = async (req, res, next) => {
   // console.log("user id",req.body);
+  const {tag,title,description,status,question,ans1,ans2,enddate,user}=req.body;
   try {
     const addpost = await new postmodal({
-      tag: req.body.tag,
-      title: req.body.title,
-      description: req.body.description,
-      status: req.body.status,
-      question: req.body.question,
-      ans1: req.body.ans1,
-      ans2: req.body.ans2,
-      enddate: req.body.enddate,
-      user: req.body.userid,
+      tag,title,description,status,question,ans1,ans2,enddate,user
     });
     addpost.save();
     if (addpost) {
@@ -73,9 +66,9 @@ export const getSpecificdescussion = async (req, res, next) => {
 //fetch fetchPostDetails from MongoDB and server
 
 export const fetchPostDetails = async (req, res) => {
-  const id = req.params.id;
+  const _id = req.params.id;
   try {
-    const data = await postmodal.findById({ _id: id });
+    const data = await postmodal.findById({ _id });
     res.send(data);
   } catch (error) {
     res.status(404).json({
@@ -146,13 +139,14 @@ export const editepostHandler = async (req, res) => {
 };
 
 export const CheckPostLike = async (req, res) => {
-  const post_id = req.params.postid;
-  const user_id = req.params.userid;
+  const post_id = req.params.post_id;
+  const user_id = req.params.user_id;
 
   try {
     const postLike = await postmodal.findById({_id:post_id});
-   const a = postLike.like.includes(user_id);
-   if (a) {
+   const check = postLike.like.includes(user_id);
+   console.log("check:",check);
+   if (check) {
       res.json({
         status: true,
         message:'ok'

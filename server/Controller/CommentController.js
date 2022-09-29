@@ -3,13 +3,14 @@ import commentModal from "../Schema/CommentSchema.js";
 import postmodal from "../Schema/Postschema.js";
 
 export const commentHandler = async (req, res, next) => {
-  console.log("comment",req.body);
+  
   try {
+    const {post_id} = req.body;
     const newComment = new commentModal(req.body);
 
     await newComment.save();
   
-    const post = await postmodal.findByIdAndUpdate(req.body.post_id,{ $push: { comments : newComment._id } });
+    const post = await postmodal.findByIdAndUpdate(post_id,{ $push: { comments : newComment._id } });
 
     res.json({
       status: "ok",
@@ -22,13 +23,14 @@ export const commentHandler = async (req, res, next) => {
   }
 };
 export const replyHandler = async (req, res, next) => {
-  console.log(req.body);
+ 
   try {
+    const {comment_id} = req.body;
     const newComment = new commentModal(req.body);
 
     await newComment.save();
 
-    const reply = await commentModal.findByIdAndUpdate(req.body.comment_id,{ $push: { reply : newComment._id} });
+    const reply = await commentModal.findByIdAndUpdate(comment_id,{ $push: { reply : newComment._id} });
   
 
     res.json({
@@ -43,9 +45,10 @@ export const replyHandler = async (req, res, next) => {
 };
 
 export const CheckCommentLike = async (req, res) => {
-  console.log(req.body);
+
   try {
-    const commentLike = await commentModal.findById(req.body.comment_id,{like: [req.body.user_id]});
+    const {comment_id,user_id} = req.body;
+    const commentLike = await commentModal.find({_id: comment_id, $match: {like:[user_id]}});
     console.log(commentLike);
     if(commentLike.like){
       res.json({
@@ -65,10 +68,11 @@ export const CheckCommentLike = async (req, res) => {
 }
 
 export const likeComment = async(req,res)=>{
-   console.log(req.body);
+ 
    try {
-    const comment = await commentModal.findByIdAndUpdate(req.body.comment_id,{ $push: { like : req.body.user_id } });
-    const likecomment = await commentModal.findById(req.body.comment_id);
+    const {comment_id,user_id} = req.body;
+    const comment = await commentModal.findByIdAndUpdate(comment_id,{ $push: { like : user_id } });
+    const likecomment = await commentModal.findById(comment_id);
 
     console.log("likeComment");
     console.log(likecomment.like);
@@ -82,10 +86,11 @@ export const likeComment = async(req,res)=>{
   }
 }
 export const unlikeComment = async(req,res)=>{
-  console.log(req.body);
+ 
   try {
-   const comment = await commentModal.findByIdAndUpdate(req.body.comment_id,{ $pull: { like : req.body.user_id } });
-   const unlikecomment = await commentModal.findById(req.body.comment_id);
+    const {comment_id,user_id} = req.body;
+   const comment = await commentModal.findByIdAndUpdate(comment_id,{ $pull: { like : user_id } });
+   const unlikecomment = await commentModal.findById(comment_id);
 
    console.log("unlikeComment");
    console.log(unlikecomment.like);

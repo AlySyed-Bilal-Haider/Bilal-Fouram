@@ -69,7 +69,7 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
     const polldata = localStorage.getItem("poll");
     let checkstatus = false;
     let updatedata;
-    const addnameAndemail = { ...addpoststate, userid:userid};
+    const addnameAndemail = { ...addpoststate, user:userid};
     if (!!tagsvalue) {
       if (polldata) {
         const pollrecord = JSON.parse(polldata);

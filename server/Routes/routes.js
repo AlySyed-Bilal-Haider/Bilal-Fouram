@@ -24,7 +24,7 @@ router.post("/unlikecomment", comments.unlikeComment);
 
 router.get("/alldiscussion",Post.fetchAlldiscussion);
 router.get("/category/:tag", Post.fetchcategory);
-router.get('/checklike/:postid/:userid',Post.CheckPostLike);
+router.get('/checklike/:post_id/:user_id',Post.CheckPostLike);
 router.delete("/removePost/:id", Post.removepost);
 router.get("/fetchspecificpost/:email", Post.getSpecificdescussion);
 router.get("/fetchPostDetails/:id", Post.fetchPostDetails);
