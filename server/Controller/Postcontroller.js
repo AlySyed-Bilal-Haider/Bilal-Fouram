@@ -141,11 +141,9 @@ export const editepostHandler = async (req, res) => {
 export const CheckPostLike = async (req, res) => {
   const post_id = req.params.post_id;
   const user_id = req.params.user_id;
-
   try {
     const postLike = await postmodal.findById({_id:post_id});
    const check = postLike.like.includes(user_id);
-   console.log("check:",check);
    if (check) {
       res.json({
         status: true,

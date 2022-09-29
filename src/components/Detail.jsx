@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Comment from "./Comment";
+import Reply from './Reply';
 import {
   Box,
   Container,
@@ -104,6 +105,7 @@ export default function Detail({ userId, username }) {
   const [openstate, setOpenlogin] = useState(false);
   const [descriptionstate, setPostDescription] = useState("");
   const [editPopOpen, setEditPopOpen] = useState(false);
+  const [ReplyPopOpen, setReplyPopOpen] = useState(false);
   const [postdetails, setPostdetails] = useState();
   const [postidstate, setPostIdstate] = useState("");
   const [checkstate, setCheckstate] = useState(false);
@@ -166,6 +168,14 @@ export default function Detail({ userId, username }) {
     }
   };
 
+  // .....reply Hanlder , open the reply modal Box......
+const replyHandle=()=>{
+  if (userToken) {
+    setReplyPopOpen(true);
+  } else {
+    setOpenlogin(true);
+  }
+}
   // checkedlike and dislike  functionality here !
   const checkedLike = async () => {
     try {
@@ -234,6 +244,12 @@ export default function Detail({ userId, username }) {
         userid={userId}
         username={username}
       />
+      <Reply open={ReplyPopOpen}
+        setOpen={setReplyPopOpen}
+        postId={param?.id}
+        title={descriptionstate}
+        userid={userId}
+        username={username}/>
       <Box bgcolor="primary.light">
         <Box py={5} textAlign="center" display="flex" flexDirection="column">
           <Box
@@ -518,6 +534,7 @@ export default function Detail({ userId, username }) {
               />
 
               <Typography
+              onClick={replyHandle}
                 sx={{ cursor: "pointer" }}
                 ml="30px"
                 variant="body1"
@@ -526,8 +543,8 @@ export default function Detail({ userId, username }) {
               >
                 Reply
               </Typography>
-              {checklikeUnlike == true ? (
-                <Typography
+             
+                {/* <Typography
                   ml="30px"
                   variant="body1"
                   fontSize="14px"
@@ -535,9 +552,10 @@ export default function Detail({ userId, username }) {
                   sx={{ cursor: "pointer" }}
                 >
                   Unlike
-                </Typography>
-              ) : (
+                </Typography> */}
+              
                 <Typography
+              
                   ml="30px"
                   variant="body1"
                   fontSize="14px"
@@ -546,7 +564,7 @@ export default function Detail({ userId, username }) {
                 >
                   like
                 </Typography>
-              )}
+            
             </Box>
           </Box>
         </Box>

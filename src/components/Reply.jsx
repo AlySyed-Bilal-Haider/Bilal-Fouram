@@ -39,16 +39,16 @@ const TextInput = styled(InputBase)({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function Comment({ open, setOpen, postId, title, userid,username }) {
+function Reply({ open, setOpen, postId, title, userid,username }) {
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
     setCommentstate("");
     setOpen(false);
   };
   const addComment = async () => {
-    const commentValue = { comment:commentstate,userName:username,postId};
+    const Reply = { comment:commentstate,userName:username,postId};
     try {
-      const { data } = await axios.post(`${url}/comment`, commentValue);
+      const { data } = await axios.post(`${url}/comment`, Reply);
    console.log("dcomment data",data);
       data.status == "ok" && handleClose();
     } catch (error) {
@@ -120,10 +120,10 @@ function Comment({ open, setOpen, postId, title, userid,username }) {
           },
         }}
       >
-        Comment
+    post
       </Button>
     </Dialog>
   );
 }
 
-export default Comment;
+export default Reply;
