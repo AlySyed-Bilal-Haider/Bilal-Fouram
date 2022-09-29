@@ -3,6 +3,7 @@ import * as Users from '../Controller/Usercontroller.js';
 import * as Post from '../Controller/Postcontroller.js';
 import * as comments from '../Controller/CommentController.js';
 import * as Voting from '../Controller/Approvecontroller.js';
+import * as Poll from "../Controller/PollController.js";
 
 const router = express.Router();
 
@@ -20,6 +21,7 @@ router.post("/reply",comments.replyHandler);
 router.post("/checkcommentlike",comments.CheckCommentLike);
 router.post("/likecomment", comments.likeComment);
 router.post("/unlikecomment", comments.unlikeComment);
+router.post("/createpoll",Poll.CreatePoll)
 
 
 router.get("/alldiscussion",Post.fetchAlldiscussion);

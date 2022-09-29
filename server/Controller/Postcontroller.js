@@ -3,10 +3,10 @@ import commentModal from "../Schema/CommentSchema.js";
 // ....Add discussion and Questions ,answer..........
 export const discussion = async (req, res, next) => {
   // console.log("user id",req.body);
-  const {tag,title,description,status,question,ans1,ans2,enddate,user}=req.body;
+  const { tag, title, description, status, question, ans1, ans2, enddate, user } = req.body;
   try {
     const addpost = await new postmodal({
-      tag,title,description,status,question,ans1,ans2,enddate,user
+      tag, title, description, status, question, ans1, ans2, enddate, user
     });
     addpost.save();
     if (addpost) {
@@ -70,11 +70,11 @@ export const fetchPostDetails = async (req, res) => {
   const _id = req.params.id;
   try {
     const data = await postmodal.findById({ _id }).populate("comments").populate({
-      path:"comments",
-     populate:[{
-      path:"reply",
-      modal: commentModal
-     }]
+      path: "comments",
+      populate: [{
+        path: "reply",
+        modal: commentModal
+      }]
     });
     res.send(data);
   } catch (error) {
@@ -146,17 +146,18 @@ export const editepostHandler = async (req, res) => {
 };
 
 export const CheckPostLike = async (req, res) => {
-  const post_id = req.params.post_id;
-  const user_id = req.params.user_id;
+
 
   try {
-    const postLike = await postmodal.findById({_id:post_id});
-   const check = postLike.like.includes(user_id);
-   console.log("check:",check);
-   if (check) {
+    const post_id = req.params.post_id;
+    const user_id = req.params.user_id;
+    const postLike = await postmodal.findById({ _id: post_id });
+    const check = postLike.like.includes(user_id);
+    console.log("check:", check);
+    if (check) {
       res.json({
         status: true,
-        message:'ok'
+        message: 'ok'
       });
     } else {
       res.json({

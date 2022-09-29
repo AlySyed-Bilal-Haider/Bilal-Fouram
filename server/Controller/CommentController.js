@@ -47,22 +47,25 @@ export const replyHandler = async (req, res, next) => {
 export const CheckCommentLike = async (req, res) => {
 
   try {
-    const {comment_id,user_id} = req.body;
-    const commentLike = await commentModal.find({_id: comment_id, $match: {like:[user_id]}});
-    console.log(commentLike);
-    if(commentLike.like){
+    const comment_id = req.params.comment_id;
+    const user_id = req.params.user_id;
+    const commentLike = await commentModal.findById({ _id: comment_id });
+    const check = commentLike.like.includes(user_id);
+    console.log("check:", check);
+    if (check) {
       res.json({
-        status: "true"
-      })
-    } else{
+        status: true,
+        message: 'ok'
+      });
+    } else {
       res.json({
-        status: "false"
-      })
+        status: false,
+      });
     }
   } catch (error) {
     res.json({
-      message: error
-    })
+      message: error,
+    });
   }
 
 }
