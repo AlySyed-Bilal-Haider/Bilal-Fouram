@@ -14,9 +14,8 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 
-export default function AccountMenu() {
+export default function AccountMenu({name}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [namestate, setnamestate] = useState('');
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -25,13 +24,6 @@ export default function AccountMenu() {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    const name = localStorage?.getItem("name");
-    if (name) {
-      setnamestate(name);
-    }
-    console.log(namestate);
-  }, []);
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -44,8 +36,8 @@ export default function AccountMenu() {
           aria-expanded={open ? "true" : undefined}
         >
 
-          {namestate && <Avatar sx={{ width: 32, height: 32 }}>
-            {namestate.toUpperCase().slice(0, 1)}
+          {name && <Avatar sx={{ width: 32, height: 32 }}>
+            {name.toUpperCase().slice(0, 1)}
           </Avatar>}
           <Typography
             ml={2}
@@ -56,7 +48,7 @@ export default function AccountMenu() {
               color: "text.main",
             }}
           >
-            {namestate ? namestate : null}
+            {name ? name : null}
           </Typography>
         </IconButton>
       </Box>

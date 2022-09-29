@@ -171,9 +171,13 @@ export default function Detail({ userId, username }) {
       const { data } = await axios.get(
         `${url}/checklike/${param?.id}/${userId}`
       );
-    console.log("status:",data?.status);
-      if (data.message == "ok") {
-        setChecklikeUnlikestate(data?.status);
+      console.log("status:", data?.status);
+      if (data.status) {
+        setChecklikeUnlikestate(true);
+      }
+      else{
+        setChecklikeUnlikestate(false);
+
       }
     } catch (error) {
       console.log("checked like error !", error);
@@ -451,7 +455,7 @@ export default function Detail({ userId, username }) {
                   variant="body1"
                   fontSize="14px"
                   color="primary.light"
-                  cursor="pointer"
+                  sx={{ cursor: "pointer" }}
                 >
                   Unlike
                 </Typography>
@@ -527,7 +531,7 @@ export default function Detail({ userId, username }) {
                   variant="body1"
                   fontSize="14px"
                   color="primary.light"
-                  cursor="pointer"
+                  sx={{ cursor: "pointer" }}
                 >
                   Unlike
                 </Typography>
@@ -537,7 +541,7 @@ export default function Detail({ userId, username }) {
                   variant="body1"
                   fontSize="14px"
                   color="primary.light"
-                  cursor="pointer"
+                  sx={{ cursor: "pointer" }}
                 >
                   like
                 </Typography>

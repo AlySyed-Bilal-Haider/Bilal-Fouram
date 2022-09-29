@@ -150,9 +150,9 @@ export const CheckPostLike = async (req, res) => {
   const user_id = req.params.userid;
 
   try {
-    const postLike = await postmodal.findById({_id:post_id}, { like: [user_id] });
-    console.log(postLike);
-    if (postLike.like) {
+    const postLike = await postmodal.findById({_id:post_id});
+   const a = postLike.like.includes(user_id);
+   if (a) {
       res.json({
         status: true,
         message:'ok'

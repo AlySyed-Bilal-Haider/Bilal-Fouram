@@ -87,7 +87,7 @@ function App() {
       />
       <NetworkChange open={open} setOpen={setOpen} />
       <Box sx={{ backgroundColor: "body.main" }}>
-        <Header setOpensign={setOpenSign} setOpenlogin={setOpenLogin} />
+        <Header setOpensign={setOpenSign} setOpenlogin={setOpenLogin} name={username}/>
         <Routes>
           <Route
             exact

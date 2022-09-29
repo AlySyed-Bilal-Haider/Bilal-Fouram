@@ -42,7 +42,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header({ setOpensign, setOpenlogin }) {
+export default function Header({ setOpensign, setOpenlogin,name }) {
   // const { account, connect, disconnect, signer } = useContext(AppContext);
   // const tokenContract = useTokenContract(signer);
   const [namestate, setnamestate] = useState("");
@@ -65,12 +65,6 @@ export default function Header({ setOpensign, setOpenlogin }) {
     fetchdetails();
   }, []);
 
-  useEffect(() => {
-    const token = localStorage?.getItem("token");
-    if (token) {
-      setnamestate(localStorage?.getItem("name"));
-    }
-  }, []);
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
@@ -262,8 +256,8 @@ export default function Header({ setOpensign, setOpenlogin }) {
                       }}
                     />
                   </Box>
-                  {namestate ? (
-                    <AccountMenu />
+                  {name ? (
+                    <AccountMenu name={name} />
                   ) : (
                     <>
                       <Typography
