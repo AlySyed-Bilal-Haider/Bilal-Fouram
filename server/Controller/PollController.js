@@ -70,6 +70,9 @@ export const DeletePoll = async (req, res) => {
 export const VotePoll = async (req, res) => {
     try {
         console.log(req.body);
+        const { poll_id, answer_id, user_id } = req.body;
+        const voteAnswer = await pollmodal.findOneAndUpdate({ _id: poll_id, "answers._id": answer_id },{ $push: { "answers.$.vote": user_id } });
+        
 
         res.status(200).json({
             status: "ok",
@@ -115,9 +118,7 @@ export const CheckPollLike = async (req, res) => {
 export const likeHandler = async (req, res) => {
     try {
         const { poll_id, user_id } = req.body;
-        const poll = await pollmodal.findByIdAndUpdate(poll_id, {
-            $push: { like: user_id },
-        });
+        const poll = await pollmodal.findByIdAndUpdate(poll_id, { $push: { like: user_id } });
         const pollLike = await pollmodal.findById(poll_id);
 
 
