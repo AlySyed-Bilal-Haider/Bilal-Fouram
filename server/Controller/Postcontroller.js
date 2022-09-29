@@ -68,7 +68,7 @@ export const getSpecificdescussion = async (req, res, next) => {
 export const fetchPostDetails = async (req, res) => {
   const _id = req.params.id;
   try {
-    const data = await postmodal.findById({ _id });
+    const data = await postmodal.findById({ _id }).populate("comments");
     res.send(data);
   } catch (error) {
     res.status(404).json({
