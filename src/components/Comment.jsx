@@ -40,7 +40,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function Comment({ open, setOpen, postId, title, userid,username }) {
-  console.log("userid comment",userid,"username comment",username);
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
     setCommentstate("");

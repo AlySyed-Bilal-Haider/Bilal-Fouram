@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Comment from "./Comment";
-
 import {
   Box,
   Container,
@@ -9,22 +8,15 @@ import {
   styled,
   Checkbox,
   Menu,
-  MenuItem,
 } from "@mui/material";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { FaRegComments, FaLock } from "react-icons/fa";
-import {
-  BsFillPinFill,
-  BsFlagFill,
-  BsThreeDots,
-  BsFillHeartFill,
-} from "react-icons/bs";
+import { BsFillPinFill, BsFillHeartFill } from "react-icons/bs";
 import { GoCheck } from "react-icons/go";
 import axios from "axios";
-import { toast } from "react-toastify";
 import moment from "moment";
 import Login from "./Login";
 import { url } from "../utils";
@@ -68,7 +60,6 @@ const LinearProgressBox = styled(LinearProgress)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.light,
   },
 }));
-
 const BpIcon = styled("span")({
   borderRadius: 3,
   border: "1px solid #282439",
@@ -76,7 +67,6 @@ const BpIcon = styled("span")({
   height: 18,
   backgroundColor: "transparent",
 });
-
 const BpCheckbox = (props) => {
   return (
     <Checkbox
@@ -104,7 +94,7 @@ const BpCheckbox = (props) => {
   );
 };
 
-export default function Detail({ userId,username }) {
+export default function Detail({ userId, username }) {
   const param = useParams();
   //close menu tag on click
   const userToken = localStorage.getItem("token");
@@ -181,8 +171,10 @@ export default function Detail({ userId,username }) {
       const { data } = await axios.get(
         `${url}/checklike/${param?.id}/${userId}`
       );
-      console.log("data liked checked", data);
-      setChecklikeUnlikestate(data?.status);
+    console.log("status:",data?.status);
+      if (data.message == "ok") {
+        setChecklikeUnlikestate(data?.status);
+      }
     } catch (error) {
       console.log("checked like error !", error);
     }
@@ -209,7 +201,6 @@ export default function Detail({ userId,username }) {
       console.log("like error", error);
     }
   };
-
   // .........unliked handler section ..........
   const unLikedHandler = async () => {
     const unliked = { post_id: param?.id, user_id: userId };
@@ -469,20 +460,22 @@ export default function Detail({ userId,username }) {
                   onClick={likeHandler}
                   ml="30px"
                   variant="body1"
-                  fontSize="14px"
-                  color="primary.light"
-                  cursor="pointer"
+                  sx={{
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    color: "primary.light",
+                  }}
                 >
                   like
                 </Typography>
               )}
             </Box>
             {checklikeUnlike == true && (
-                <Typography>This is liked !</Typography>
-              )}
+              <Typography>This is liked !</Typography>
+            )}
           </Box>
 
-        {/* ........  show comment here ............ */}
+          {/* ........  show comment here ............ */}
           <Box py={2.5} pl={6} borderBottom="1px solid #fff">
             <Box py={2} display="flex" alignItems="center">
               <Typography variant="body1" color="primary.main" fontWeight="700">
@@ -501,7 +494,7 @@ export default function Detail({ userId,username }) {
             <Box pr={4} fontSize="14px" color="text.paragraph">
               {postdetails?.description}
             </Box>
-            
+
             {/* like unlike, reply here */}
             <Box
               mt={2}
@@ -530,7 +523,6 @@ export default function Detail({ userId,username }) {
               </Typography>
               {checklikeUnlike == true ? (
                 <Typography
-                
                   ml="30px"
                   variant="body1"
                   fontSize="14px"
@@ -541,7 +533,6 @@ export default function Detail({ userId,username }) {
                 </Typography>
               ) : (
                 <Typography
-                 
                   ml="30px"
                   variant="body1"
                   fontSize="14px"

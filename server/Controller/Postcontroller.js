@@ -12,7 +12,7 @@ export const discussion = async (req, res, next) => {
       ans1: req.body.ans1,
       ans2: req.body.ans2,
       enddate: req.body.enddate,
-      user:req.body.userid
+      user: req.body.userid,
     });
     addpost.save();
     if (addpost) {
@@ -58,8 +58,6 @@ export const fetchcategory = async (req, res) => {
     console.log(error);
   }
 };
-
-
 
 // fetch specific detials from discussion, according to user Email
 export const getSpecificdescussion = async (req, res, next) => {
@@ -148,63 +146,61 @@ export const editepostHandler = async (req, res) => {
 };
 
 export const CheckPostLike = async (req, res) => {
-  const post_id=req.params.postid;
-  const user_id=req.params.userid;
+  const post_id = req.params.postid;
+  const user_id = req.params.userid;
 
   try {
-    const postLike = await postmodal.findById(post_id,{like: [user_id]});
-    // console.log(postLike);
-    if(postLike.like){
+    const postLike = await postmodal.findById({_id:post_id}, { like: [user_id] });
+    console.log(postLike);
+    if (postLike.like) {
       res.json({
-        status: true
-      })
-    } else{
+        status: true,
+        message:'ok'
+      });
+    } else {
       res.json({
-        status: false
-      })
+        status: false,
+      });
     }
   } catch (error) {
     res.json({
-      message: error
-    })
+      message: error,
+    });
   }
-
-}
+};
 
 export const likeHandler = async (req, res) => {
   // console.log(req.body);
   try {
-    const post = await postmodal.findByIdAndUpdate(req.body.post_id, { $push: { like: req.body.user_id } });
+    const post = await postmodal.findByIdAndUpdate(req.body.post_id, {
+      $push: { like: req.body.user_id },
+    });
     const postLike = await postmodal.findById(req.body.post_id);
 
     // console.log("likehandler");
     // console.log(postLike.like);
     res.json({
-      message: "ok"
-    })
+      message: "ok",
+    });
   } catch (error) {
     res.json({
-      message: error
-    })
+      message: error,
+    });
   }
-}
+};
 
 export const unlikeHandler = async (req, res) => {
-
   try {
-    const post = await postmodal.findByIdAndUpdate(req.body.post_id, { $pull: { like: req.body.user_id } });
+    const post = await postmodal.findByIdAndUpdate(req.body.post_id, {
+      $pull: { like: req.body.user_id },
+    });
     res.json({
-      message: "ok"
-    })
+      message: "ok",
+    });
   } catch (error) {
     res.json({
       message: "error",
-      error:error
+      error: error,
     });
   }
-
-}
-
-
-
-
+};
