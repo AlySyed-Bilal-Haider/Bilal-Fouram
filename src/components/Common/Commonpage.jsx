@@ -35,6 +35,7 @@ function Commonpage(props) {
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
+        console.log("data.allDiscussion",data.allDiscussion);
         setAlldescussionsstate(data.allDiscussion);
       } catch (error) {
         console.log(error);

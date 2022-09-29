@@ -1,7 +1,6 @@
 
 import commentModal from "../Schema/CommentSchema.js";
 import postmodal from "../Schema/Postschema.js";
-import mongoose from "mongoose";
 
 export const commentHandler = async (req, res, next) => {
   
@@ -108,7 +107,7 @@ export const unlikeComment = async(req,res)=>{
 export const fetchComment = async (req, res, next) => {
   const id = req.params.id;
   try {
-    const data = await commentModal.find({ _id: id });
+    const data = await postmodal.find({ _id: id });
     if (data) {
       res.json({
         status: "ok",

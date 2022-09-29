@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 // import Web3 from "web3";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-
 import "./App.css";
 import Logout from "./components/Logout";
 import Header from "./components/Header";
@@ -15,9 +14,7 @@ import MainPage from "./components/UserPenal/MainPage";
 import Detail from "./components/Detail";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
-
 import { url } from "./utils";
-
 // const web3 = new Web3(
 //   Web3.givenProvider
 //     ? Web3.givenProvider
@@ -27,10 +24,9 @@ function App() {
   const [open, setOpen] = useState(false);
   const [openSign, setOpenSign] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
-  // const [username, setusernameState] = React.useState('');
-  // const [email,setemailState]=React.useState('');
   const [userId,setUserId]=useState('');
   const [username, setusernameState] = React.useState("");
+  
   const tokenVerfiy = async () => {
     try {
       await fetch(`${url}/verifytoken`, {
@@ -44,6 +40,7 @@ function App() {
           console.log("all data", data);
           localStorage.setItem("name", data.name);
           setusernameState(data.name);
+          setUserId(data.id);
         });
     } catch (error) {
       alert(error);
@@ -95,7 +92,7 @@ function App() {
           <Route
             exact
             path="/"
-            element={<Home setOpenlogin={setOpenLogin} username={username} />}
+            element={<Home setOpenlogin={setOpenLogin} userid={userId} />}
           />
           <Route path="/profile" element={<MainPage />} />
           <Route
@@ -105,7 +102,7 @@ function App() {
             }
           />
           <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />
-          <Route path="/detail/:id" element={<Detail userId={userId} />} />
+          <Route path="/detail/:id" element={<Detail userId={userId} username={username} />} />
           <Route path="/logout" element={<Logout />} />
         </Routes>
       </Box>

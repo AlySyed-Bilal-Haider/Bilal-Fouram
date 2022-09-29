@@ -1,30 +1,29 @@
 import mongoose from "mongoose";
 const Adduser = new mongoose.Schema({
-  name  : {
+  name: {
     type: String,
     trim: true,
-    required:true,
+    required: true,
   },
-  email : {
+  email: {
     type: String,
     trim: true,
-    required:true,
-    unique:true
+    required: true,
+    unique: true,
   },
-  password : {
+  password: {
     type: String,
     trim: true,
-    required:true,
+    required: true,
   },
   addedAt: {
     type: Date,
     default: new Date(),
   },
-  img:
-    {
-        type:String,
-        default:""
-    }
+  img: {
+    type: String,
+    default: "",
+  },
 });
 const mongomodal=mongoose.model("user", Adduser);
 export default mongomodal;

@@ -1,64 +1,39 @@
 import express from "express";
-import {
-  signupHandler,
-  login,
-  tokenVerifyHandler,
-  fetchuser,
-} from "../Controller/Usercontroller.js";
-import {
-  discussion,
-  fetchAlldiscussion,
-  fetchcategory,
-  getSpecificdescussion,
-  fetchPostDetails,
-  removepost,
-  editepostHandler,
-  likeHandler,
-  unlikeHandler,
-  CheckPostLike
-} from "../Controller/Postcontroller.js";
-import {
-  commentHandler,
-  replyHandler,
-  CheckCommentLike,
-  likeComment,
-  unlikeComment,
-  fetchComment
-} from "../Controller/CommentController.js";
-import {
-  approveHandler,
-  unapproveHandler,
-  handlerApproveORunApprove,
-} from "../Controller/Votingcontroller.js";
+import * as Users from '../Controller/Usercontroller.js';
+import * as Post from '../Controller/Postcontroller.js';
+import * as comments from '../Controller/CommentController.js';
+import * as Voting from '../Controller/Approvecontroller.js';
+
 const router = express.Router();
 
-router.post("/usersignup", signupHandler);
-router.post("/login", login);
-router.post("/verifytoken", tokenVerifyHandler);
-router.post("/posts", discussion);
-router.post("/getvotesdetails", handlerApproveORunApprove);
-router.post("/approve", approveHandler);
-router.post("/unapprove", unapproveHandler);
-router.post("/comment", commentHandler);
-router.post("/reply",replyHandler);
-router.post("/checkpostlike",CheckPostLike);
-router.post("/like", likeHandler);
-router.post("/unlike", unlikeHandler);
-router.post("/checkcommentlike",CheckCommentLike);
-router.post("/likecomment", likeComment);
-router.post("/unlikecomment", unlikeComment);
+router.post("/usersignup", Users.signupHandler);
+router.post("/login", Users.login);
+router.post("/verifytoken", Users.tokenVerifyHandler);
+router.post("/posts", Post.discussion);
+router.post("/like", Post.likeHandler);
+router.post("/unlike",Post.unlikeHandler);
+router.post("/getvotesdetails",Voting.handlerApproveORunApprove);
+router.post("/approve", Voting.approveHandler);
+router.post("/unapprove",Voting.unapproveHandler);
+router.post("/comment", comments.commentHandler);
+router.post("/reply",comments.replyHandler);
+router.post("/checkcommentlike",comments.CheckCommentLike);
+router.post("/likecomment", comments.likeComment);
+router.post("/unlikecomment", comments.unlikeComment);
 
 
+router.get("/alldiscussion",Post.fetchAlldiscussion);
+router.get("/category/:tag", Post.fetchcategory);
+router.get('/checklike/:postid/:userid',Post.CheckPostLike);
+router.delete("/removePost/:id", Post.removepost);
+router.get("/fetchspecificpost/:email", Post.getSpecificdescussion);
+router.get("/fetchPostDetails/:id", Post.fetchPostDetails);
+router.get("/fetchuser/:email", Users.fetchuser);
+router.get("/fetchcomment/:id", comments.fetchComment);
 
-router.get("/alldiscussion", fetchAlldiscussion);
-router.get("/category/:tag", fetchcategory);
-router.get("/fetchuser/:email", fetchuser);
-router.get("/fetchspecificpost/:email", getSpecificdescussion);
-router.get("/fetchPostDetails/:id", fetchPostDetails);
-router.get("/fetchcomment/:id", fetchComment);
-router.delete("/removePost/:id", removepost);
+
 // edite post routes
 
-router.put("/editepost/:id", editepostHandler);
+router.put("/editepost/:id", Post.editepostHandler);
 
 export default router;

@@ -1,19 +1,18 @@
 import postmodal from "../Schema/Postschema.js";
 // ....Add discussion and Questions ,answer..........
 export const discussion = async (req, res, next) => {
-  console.log(req.body);
+  // console.log("user id",req.body);
   try {
     const addpost = await new postmodal({
       tag: req.body.tag,
       title: req.body.title,
-      description: req.body.despone,
+      description: req.body.description,
       status: req.body.status,
       question: req.body.question,
       ans1: req.body.ans1,
       ans2: req.body.ans2,
       enddate: req.body.enddate,
-      username: req.body.name,
-      email: req.body.email,
+      user: req.body.userid,
     });
     addpost.save();
     if (addpost) {
@@ -32,7 +31,7 @@ export const discussion = async (req, res, next) => {
 export const fetchAlldiscussion = async (req, res) => {
   try {
     const data = await postmodal.find().populate("comments");
-    console.log("data", data);
+    // console.log("data", data);
     res.json({
       status: "ok",
       success: true,
@@ -59,8 +58,6 @@ export const fetchcategory = async (req, res) => {
     console.log(error);
   }
 };
-
-
 
 // fetch specific detials from discussion, according to user Email
 export const getSpecificdescussion = async (req, res, next) => {
@@ -125,7 +122,7 @@ export const editepostHandler = async (req, res) => {
       ans1: req.body.ans1,
       ans2: req.body.ans2,
     });
-    console.log("result value", data);
+    // console.log("result value", data);
     if (data) {
       res.status(202).json({
         status: "ok",
@@ -154,22 +151,22 @@ export const CheckPostLike = async (req, res) => {
     const {post_id,user_id} = req.body;
     const postLike = await postmodal.find({_id: post_id, $match: {like:[user_id]}});
     console.log(postLike);
-    if(postLike.like){
+    if (postLike.like) {
       res.json({
-        status: "true"
-      })
-    } else{
+        status: true,
+        message:'ok'
+      });
+    } else {
       res.json({
-        status: "false"
-      })
+        status: false,
+      });
     }
   } catch (error) {
     res.json({
-      message: error
-    })
+      message: error,
+    });
   }
-
-}
+};
 
 export const likeHandler = async (req, res) => {
   try {
@@ -177,20 +174,19 @@ export const likeHandler = async (req, res) => {
     const post = await postmodal.findByIdAndUpdate(post_id, { $push: { like: user_id } });
     const postLike = await postmodal.findById(req.body.post_id);
 
-    console.log("likehandler");
-    console.log(postLike.like);
+    // console.log("likehandler");
+    // console.log(postLike.like);
     res.json({
-      message: "ok"
-    })
+      message: "ok",
+    });
   } catch (error) {
     res.json({
-      message: error
-    })
+      message: error,
+    });
   }
-}
+};
 
 export const unlikeHandler = async (req, res) => {
-
   try {
     const {post_id,user_id} = req.body;
     const post = await postmodal.findByIdAndUpdate(post_id, { $pull: { like: user_id } });
@@ -199,17 +195,12 @@ export const unlikeHandler = async (req, res) => {
     // console.log(postLike.like);
 
     res.json({
-      message: "ok"
-    })
+      message: "ok",
+    });
   } catch (error) {
-    // console.log(error);
     res.json({
-      message: "error"
-    })
+      message: "error",
+      error: error,
+    });
   }
-
-}
-
-
-
-
+};

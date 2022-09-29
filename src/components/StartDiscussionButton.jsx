@@ -46,7 +46,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function StartDiscussionButton({ setOpenlogin, username }) {
+function StartDiscussionButton({ setOpenlogin, userid }) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -56,7 +56,7 @@ function StartDiscussionButton({ setOpenlogin, username }) {
   const [addpoststate, setPoststate] = useState({
     tags: "wow",
     title: "",
-    despone:
+    description:
       "Before you post this: 1. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines 2. If this proposal is going to the Proposal section, make sure you have read the Proposal  guidelines:  https://discord.com/invite/olympusdao ",
   });
 
@@ -69,7 +69,7 @@ function StartDiscussionButton({ setOpenlogin, username }) {
     const polldata = localStorage.getItem("poll");
     let checkstatus = false;
     let updatedata;
-    const addnameAndemail = { ...addpoststate, username: username };
+    const addnameAndemail = { ...addpoststate, userid:userid};
     if (!!tagsvalue) {
       if (polldata) {
         const pollrecord = JSON.parse(polldata);
@@ -228,7 +228,7 @@ function StartDiscussionButton({ setOpenlogin, username }) {
           <TextInput
             type="text"
             name="despone"
-            value={addpoststate.despone}
+            value={addpoststate.description}
             onChange={discussionHandler}
             fullWidth
             multiline

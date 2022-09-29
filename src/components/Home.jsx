@@ -1,7 +1,5 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import jsonwebtoken from "jsonwebtoken";
-// import AllDiscussions from "./AllDiscussions";
 import { Button, Box, Container, Typography, Grid } from "@mui/material";
 import {
   FaRegComments,
@@ -13,7 +11,6 @@ import { RiCheckboxBlankFill, RiGroupFill } from "react-icons/ri";
 import { CgNotes } from "react-icons/cg";
 
 import StartDiscussionButton from "./StartDiscussionButton";
-
 const discussion = [
   {
     icons: <FaRegComments size="30px" />,
@@ -64,30 +61,8 @@ const discussion = [
   },
 ];
 
-export default function Home({ setOpenlogin, username }) {
+export default function Home({ setOpenlogin,userid }) {
   const navigate = useNavigate();
-  // const matches = useMediaQuery("(max-width:750px)");
-
-  // ..........Token verfications ...........
-
-  // useEffect(() => {
-  //   const token = localStorage?.getItem("token");
-  //   if (token) {
-  //     tokenVerfiy();
-
-  //     // const user = jsonwebtoken.decode(token);
-  //     // setusernameState(user?.name);
-  //     // setEmailstate(user?.email);
-  //     // if (!user) {
-  //     //   localStorage.removeItem("token");
-  //     //   navigate("/login");
-  //     // } else {
-  //     //   tokenVerfiy();
-  //     // }
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // }, []);
   // ..........end token verfication........
   const navigationHandler = (value) => {
     console.log("value", value);
@@ -106,7 +81,7 @@ export default function Home({ setOpenlogin, username }) {
         >
           <StartDiscussionButton
             setOpenlogin={setOpenlogin}
-            username={username}
+            userid={userid}
           />
           <Link to="/AllDiscussions" style={{ textDecoration: "none" }}>
             <Button
