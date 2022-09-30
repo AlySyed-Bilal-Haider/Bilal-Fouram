@@ -107,7 +107,10 @@ export const unlikeComment = async (req, res) => {
 
 export const EditComment = async (req, res) => {
   try {
-    
+    console.log(req.body);
+    const {comment_id,comment} = req.body;
+    const update = await commentModal.findByIdAndUpdate(comment_id,{comment:comment}); 
+
     res.json({
       status: "ok",
       success: true,
@@ -123,3 +126,59 @@ export const EditComment = async (req, res) => {
   }
 }
 
+export const removeComment = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const data = await commentModal.findByIdAndUpdate(id, { visibility: false });
+
+    if (data) {
+      res.status(200).json({
+        status: "ok",
+        success: true,
+        message: "Comment remove successfully !",
+      });
+    } else {
+      res.status(200).json({
+        status: "error",
+        success: false,
+        message: "please try again ,Comment not delete !",
+      });
+    }
+  } catch (error) {
+    res.status(505).json({
+      status: "error",
+      success: false,
+      message: error,
+    });
+  }
+};
+
+export const restoreComment = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const data = await commentModal.findByIdAndUpdate(id, { visibility: true });
+    
+
+    if (data) {
+      res.status(200).json({
+        status: "ok",
+        success: true,
+        message: "Comment Restored successfully !",
+      });
+    } else {
+      res.status(200).json({
+        status: "error",
+        success: false,
+        message: "please try again ,Comment not Restored !",
+      });
+    }
+  } catch (error) {
+    res.status(505).json({
+      status: "error",
+      success: false,
+      message: error,
+    });
+  }
+};
