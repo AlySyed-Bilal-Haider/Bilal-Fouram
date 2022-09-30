@@ -62,7 +62,7 @@ export const fetchcategory = async (req, res) => {
 };
 
 // fetch specific detials from discussion, according to user id
-export const getSpecificdescussion = async (req, res, next) => {
+export const getSpecificDiscussion = async (req, res, next) => {
   
   try {
     const id = req.params.id;
