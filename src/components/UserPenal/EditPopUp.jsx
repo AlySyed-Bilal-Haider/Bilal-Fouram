@@ -40,51 +40,27 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditPopUp({ open, setOpen, postId }) {
-
-  const [editPoll, setEditPoll] = React.useState(false);
-  const [editePoststate, setEditePostState] = useState({
-    description: "",
-    Question: "",
-    ans1: "",
-    ans2: "",
-  });
+export default function EditPopUp({ open, setOpen, postId,title }) {
+  // const [editPoll, setEditPoll] = React.useState(false);
+  const [editePoststate, setEditePostState] = useState('');
   const handleClose = () => {
     setOpen(false);
   };
-
-  useEffect(() => {
-    postId && fetchuser();
-  }, [postId]);
-
-  const fetchuser = async () => {
-    try {
-      const { data } = await axios.get(`${url}/fetchPostDetails/${postId}`);
-      console.log("fetch post details:", data);
-      setEditePostState({
-        description: data?.description,
-        Question: data?.question,
-        ans1: data?.ans1,
-        ans2: data?.ans2,
-      });
-    } catch (error) {
-      console.log("Edite post error", error);
-    }
-  };
-
   const handlerInput = (e) => {
-    setEditePostState({ ...editePoststate, [e.target.name]: e.target.value });
+    setEditePostState(e.target.value);
   };
 
   const handlerSubmit = async () => {
     try {
+      const editepost={id:postId,description:editePoststate};
       const { data } = await axios.put(
-        `${url}/editepost/${postId}`,
-        editePoststate
+        `${url}/editepost/`,
+        editepost
       );
-      // console.log("data upadte", data);
+      console.log("data update", data);
       if (data.status == "ok") {
         toast.success(data.message);
+        setEditePostState('');
         handleClose();
       } else {
         toast.error(data.message);
@@ -92,6 +68,7 @@ export default function EditPopUp({ open, setOpen, postId }) {
     } catch (error) {
       console.log("Edite post server error:", error);
     }
+
   };
 
   return (
@@ -137,8 +114,9 @@ export default function EditPopUp({ open, setOpen, postId }) {
         <Box mt={-3} mb={3} mx={4.5}>
           <TextInput
             type="text"
-            name="description"
-            value={editePoststate?.description}
+            name="editePoststate"
+            value={editePoststate}
+            placeholder={title}
             fullWidth
             multiline
             rows={2}
@@ -146,7 +124,7 @@ export default function EditPopUp({ open, setOpen, postId }) {
             onChange={handlerInput}
           />
         </Box>
-
+{/* 
         <Button
           onClick={() => setEditPoll(true)}
           disableRipple={true}
@@ -166,39 +144,9 @@ export default function EditPopUp({ open, setOpen, postId }) {
           }}
         >
           Edit Poll
-        </Button>
+        </Button> */}
 
-        {editPoll === true ? (
-          <>
-            <Box mx={5}>
-              <TextInput
-                type="text"
-                name="Question"
-                value={editePoststate?.Question}
-                fullWidth
-                sx={{ fontWeight: "700" }}
-                onChange={handlerInput}
-              />
-              <Box my={2} display="flex" justifyContent="space-around">
-                <TextInput
-                  type="text"
-                  name="ans1"
-                  value={editePoststate?.ans1}
-                  sx={{ fontSize: "14px", width: "25%" }}
-                  onChange={handlerInput}
-                />
-
-                <TextInput
-                  type="text"
-                  name=" ans2"
-                  value={editePoststate?.ans2}
-                  sx={{ fontSize: "14px", width: "25%" }}
-                  onChange={handlerInput}
-                />
-              </Box>
-            </Box>
-          </>
-        ) : null}
+       
 
         <Divider />
         <Button

@@ -39,16 +39,17 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-function Post({ email,userid }) {
+function Post({ userid }) {
   const [editPopOpen, setEditPopOpen] = useState(false);
   //close menu tag on click
   const name = localStorage.getItem("name");
+  const user_id=localStorage.getItem("user_id");
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [userposts, setPoststate] = useState();
+  const [userposts, setPoststate] = useState([]);
   const [postIDstate, setPostIdstate] = useState();
   const [PostID,setPostID]=useState('');
   const [descriptionstate,setDescriptionstate]=useState('');
-  const useremail=localStorage.getItem('email');
+  const [updatepost,setUpdatestate]=useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -60,17 +61,17 @@ function Post({ email,userid }) {
   // fetch post of specific users
 
   useEffect(() => {
-    if (email) {
+    if (user_id) {
       fetchPost();
     }
-  }, [email,editPopOpen]);
+  }, [user_id,editPopOpen]);
 
   const fetchPost = async () => {
     try {
-      const { data } = await axios.get(`${url}/fetchspecificpost/${email}`);
-       console.log("data descussion",data);
+      const { data } = await axios.get(`${url}/fetchuserpost/${user_id}`);
+       console.log("data descussion allpost",data);
 
-      data && setPoststate(data);
+      data && setPoststate(data.data);
     } catch (error) {
       console.log("Discussions error:", error);
     }
@@ -80,7 +81,7 @@ function Post({ email,userid }) {
   const removeHandler = async (id) => {
     try {
       const { data } = await axios.delete(`${url}/removePost/${id}`);
-      console.log("data", data);
+      console.log("remove post !", data);
       if (data.status == "ok") {
         toast.success(data.message);
         fetchPost();
@@ -91,11 +92,12 @@ function Post({ email,userid }) {
       toast.error(error.message);
     }
   };
-  const editeHandler = (id) => {
+  const editeHandler = (id,descripton) => {
     setTimeout(() => {
-      setEditPopOpen(true);
+      setUpdatestate(true);
     }, 0);
     setPostIdstate(id);
+    setDescriptionstate(descripton);
     handleClose();
   };
 
@@ -104,18 +106,21 @@ function Post({ email,userid }) {
     setDescriptionstate(descripton)
     setEditPopOpen(true); 
   }
+
+  console.log("userposts",userposts);
   return (
     <>
       <EditPopUp
-        open={editPopOpen}
-        setOpen={setEditPopOpen}
+        open={updatepost}
+        setOpen={setUpdatestate}
         postId={postIDstate}
+        title={descriptionstate}
       />
       
          <Comment open={editPopOpen} setOpen={setEditPopOpen} postId={PostID} 
       title={descriptionstate} userid={userid}/>
       <Box pb={10}>
-        {userposts?.length > 0 ?
+        {userposts ?
         (userposts?.map((item, i) => {
           return (
             <Box mt={i === 0 ? 0 : 2} key={i}>
@@ -201,7 +206,7 @@ function Post({ email,userid }) {
                   >
                     <MenuItem
                       onClick={() => {
-                        editeHandler(item?._id);
+                        editeHandler(item?._id,item?.description);
                       }}
                       disableRipple
                       sx={{ fontSize: "16px" }}

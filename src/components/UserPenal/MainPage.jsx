@@ -46,7 +46,7 @@ export default function MainPage() {
   const [userid, setIDstate] = useState("");
   const [userfile, setUserfile] = useState("");
  
-  const userMail=localStorage.getItem("email") || '';
+  const user_id=localStorage.getItem("id") || '';
   const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -59,7 +59,7 @@ export default function MainPage() {
   const userProfileHandler = async () => {
     try {
       const { data } = await axios.get(
-        `${url}/fetchuser/${userMail}`
+        `${url}/fetchuser/${user_id}`
       );
       console.log("data",data);
       setProfilestate(data);
@@ -70,10 +70,10 @@ export default function MainPage() {
   };
 
   useEffect(() => {
-    if (!!userMail) {
+    if (!!user_id) {
       userProfileHandler();
     }
-  }, [userMail]);
+  }, [user_id]);
 
   // image upload from server
   const handleFile = async (event) => {
@@ -88,7 +88,7 @@ export default function MainPage() {
         formData.append("id", userid);
         const response = await axios.post(`${url}/uploadimg`, formData);
         console.log("response", response);
-        if (userMail && response) {
+        if (user_id && response) {
           userProfileHandler();
         }
         setUserfile("");
@@ -517,9 +517,9 @@ export default function MainPage() {
 
             <Grid item xs={12} sm={12} md={9}>
               {show === 0 ? (
-                <Post email={userMail} userid={userid} />
+                <Post  userid={userid} />
               ) : show === 1 ? (
-                <Discussion email={userMail} />
+                <Discussion />
               ) : show === 2 ? (
                 <Like />
               ) : show === 3 ? (
