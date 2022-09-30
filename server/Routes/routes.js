@@ -42,6 +42,6 @@ router.delete("/removePoll/:id", Poll.DeletePoll);
 
 // edite post routes
 
-router.put("/editepost/:id", Post.editepostHandler);
+router.put("/editepost", Post.EditepostHandler);
 
 export default router;

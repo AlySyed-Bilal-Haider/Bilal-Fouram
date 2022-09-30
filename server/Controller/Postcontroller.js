@@ -65,7 +65,7 @@ export const fetchcategory = async (req, res) => {
 export const getSpecificdescussion = async (req, res, next) => {
   const email = req.params.email;
   try {
-    const data = await postmodal.find({ email: email });
+    const data = await postmodal.find({ email });
     res.send(data);
   } catch (error) {
     next(error);
@@ -130,13 +130,14 @@ export const removepost = async (req, res) => {
 };
 
 // start update post code start here
-export const editepostHandler = async (req, res) => {
-  const _id = req.params.id;
+export const EditepostHandler = async (req, res) => {
+  
   try {
-    const data = await postmodal.findByIdAndUpdate(_id, {
-      description: req.body.description,
+    const {id,description} = req.body;
+    console.log("id:",id,"description: ",description);
+    const data = await postmodal.findByIdAndUpdate(id, {
+      description: description,
     });
-    // console.log("result value", data);
     if (data) {
       res.status(202).json({
         status: "ok",

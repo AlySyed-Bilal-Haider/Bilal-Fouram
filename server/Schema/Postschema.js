@@ -1,5 +1,5 @@
 import {model, mongoose, Schema} from "mongoose";
-const Addpost = new Schema({
+const Post = new Schema({
   tag:String,
   title : {
     type: String,
@@ -37,5 +37,5 @@ const Addpost = new Schema({
   }
   
 });
-const postmodal=model("Addpost", Addpost);
+const postmodal=model("post", Post);
 export default postmodal;

@@ -71,12 +71,15 @@ export const VotePoll = async (req, res) => {
         console.log(req.body);
         const { poll_id, answer_id, user_id } = req.body;
         const voteAnswer = await pollmodal.findOneAndUpdate({ _id: poll_id, "answers._id": answer_id },{ $push: { "answers.$.vote": user_id } });
-        
+
+        const data = await pollmodal.find({_id: poll_id,visibility: true});
+        console.log(data.answers);
 
         res.status(200).json({
             status: "ok",
             success: true,
             message: "Answer has been voted..!",
+            poll: data
         });
 
     } catch (error) {

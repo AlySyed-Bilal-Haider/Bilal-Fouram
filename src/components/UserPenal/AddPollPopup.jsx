@@ -175,7 +175,7 @@ function PopUp({ open, setOpen,pollHandle }) {
             sx={{
               color: "text.main",
               mt: 1,
-              width: "120px",
+              width: "130px",
               height: "40px",
               backgroundColor: "secondary.main",
               "&:hover": {
