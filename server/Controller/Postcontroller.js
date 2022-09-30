@@ -66,7 +66,7 @@ export const getSpecificdescussion = async (req, res, next) => {
   
   try {
     const id = req.params.id;
-    const data = await postmodal.find({ user: id });
+    const data = await postmodal.find({ user: id,visibility:true });
     res.json({
       status: true,
       data: data
