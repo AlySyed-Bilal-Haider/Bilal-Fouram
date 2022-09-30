@@ -24,11 +24,10 @@ export const FetchAllPoll = async (req, res) => {
 export const CreatePoll = async (req, res) => {
     try {
         console.log(req.body);
-        const { post_id } = req.body;
-        const newPoll = new pollmodal(req.body);
+        const newPoll = await new pollmodal(req.body);
 
         console.log(newPoll);
-        await newPoll.save();
+         newPoll.save();
         res.json({
             message: "ok",
             poll: newPoll._id

@@ -49,38 +49,54 @@ const StyledModal = withStyles((theme) => ({
   },
 }))(Dialog);
 
-function PopUp({ open, setOpen }) {
+function PopUp({ open, setOpen,pollHandle }) {
   const [addpoll, setAddpollstate] = useState({
     question: "",
-    ans1:'',
-  ans2:'',
+    answers:[],
     enddate: "",
-    status: true,
   });
+  const [addans, setAnsState] = useState({});
+  const [inputstate, setInputstate] = useState([{ id: 1 }, { id: 2 }]);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const addQuestions = () => {
+    if(inputstate.length < 10){
+    setInputstate([...inputstate, { id: inputstate.length }]);
+    }else{
+      alert("you are add maximum 10 ans and minimum 2 ans");
+    }
+  };
+  const addAnsHandler = (e) => {
+    const key=e.target.name;
+    setAnsState({...addans,[key]:e.target.value});
+  };
 
   const pollHandler = (e) => {
     setAddpollstate({ ...addpoll, [e.target.name]: e.target.value });
   };
 
-
-  const addPollHandler = () => {
-
-    // try {
-    //   axios.post(`${url}/`);
-    // } catch (error) {
-    //   console.log("poll error !", error);
-    // }
+  const addPollHandler = async() => {
+    addpoll.answers.push(addans);
+    try {
+      const {data}=await axios.post(`${url}/createpoll`,addpoll);
+      console.log("poll data",data);
+      data.message=='ok' && pollHandle(data.poll);
+      handleClose();
+    } catch (error) {
+      console.log("poll error !", error);
+    }
 
     setAddpollstate({
       question: "",
-
+      answers:[],
       enddate: "",
     });
+    setAnsState({});
   };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  console.log("addpoll", addpoll);
+
+
   return (
     <>
       <StyledModal
@@ -139,25 +155,23 @@ function PopUp({ open, setOpen }) {
           >
             Answers
           </Typography>
-          <StyleTextInput
-            fullWidth
-            type="text"
-            placeholder="Answer #1"
-            value={addpoll.ans1|| ""}
-            name="ans1"
-            onChange={pollHandler}
-          />
-          <Box mt={2}>
-            <StyleTextInput
-              fullWidth
-              type="text"
-              placeholder="Answer #2"
-              value={addpoll.ans2 || ""}
-              name="ans2"
-              onChange={pollHandler}
-            />
-          </Box>
+          {inputstate?.map(({id},index) => {
+            return (
+              <Box mt={2} key={id+index}>
+                <StyleTextInput
+                  fullWidth
+                  type="text"
+                  placeholder={`Answer #${index+1}`}
+                  name={"input"+index}
+        
+                  onChange={(e)=>addAnsHandler(e)}
+                />
+              </Box>
+            );
+          })}
+
           <Button
+            onClick={addQuestions}
             sx={{
               color: "text.main",
               mt: 1,
@@ -169,7 +183,7 @@ function PopUp({ open, setOpen }) {
               },
             }}
           >
-            Add ans
+            Add more ans
           </Button>
           <Typography
             mt={3}

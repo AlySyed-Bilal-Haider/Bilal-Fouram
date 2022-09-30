@@ -135,9 +135,6 @@ export const editepostHandler = async (req, res) => {
   try {
     const data = await postmodal.findByIdAndUpdate(_id, {
       description: req.body.description,
-      question: req.body.Question,
-      ans1: req.body.ans1,
-      ans2: req.body.ans2,
     });
     // console.log("result value", data);
     if (data) {

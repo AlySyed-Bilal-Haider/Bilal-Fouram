@@ -52,6 +52,7 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
   const [open1, setOpen1] = useState(false);
   // const [loginstate, setloginstate] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const [pollstate,setPollstate]=useState('');
   const [tagsvalue, setTagsvalue] = useState("");
   const [addpoststate, setPoststate] = useState({
     tag: "wow",
@@ -65,7 +66,8 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
   };
   // post discussion record here
   const postSubmitHandler = async () => {
-    const addnameAndemail = {...addpoststate, user: userid,tag: tagsvalue  };
+    const addnameAndemail = {...addpoststate, user: userid,tag: tagsvalue,poll:pollstate  };
+
     if (!!tagsvalue) {
       try {
         const { data } = await axios.post(`${url}/posts`, addnameAndemail);
@@ -109,9 +111,15 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
   const getTag=(value)=>{
     setTagsvalue(value)
   }
+
+  const pollHandle=(value)=>{
+    setPollstate(value);
+  }
+
+
   return (
     <>
-      <PopUp open={open1} setOpen={setOpen1} />
+      <PopUp open={open1} setOpen={setOpen1} pollHandle={pollHandle}/>
       <ChooseTag open={open2} setOpen={setOpen2} getTags={getTag} />
 
       <Button
