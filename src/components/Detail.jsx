@@ -114,6 +114,7 @@ export default function Detail({ userId, username }) {
   const [commentData, setCommentData] = useState([]);
   const [commentID, setCommentIDstate] = useState();
   const [commentValue, setcommentValue] = useState("");
+ 
   // .........fetch post details and set states.........
   useEffect(() => {
     fetchdetails();
@@ -122,6 +123,7 @@ export default function Detail({ userId, username }) {
   const fetchdetails = async () => {
     try {
       const { data } = await axios.get(`${url}/fetchPostDetails/${param?.id}`);
+      console.log("data fetch post",data);
       setPostdetails(data);
       setCommentData(data?.comments);
       setPostDescription(data?.description);
@@ -300,7 +302,9 @@ export default function Detail({ userId, username }) {
         renderFetchpost={renderDetails}
       />
       <Box bgcolor="primary.light">
-        <Box py={5} textAlign="center" display="flex" flexDirection="column">
+        {postdetails?.map((items,index)=>{
+            return <>
+             <Box py={5} textAlign="center" display="flex" flexDirection="column" key={index}>
           <Box
             display="flex"
             color="text.main"
@@ -336,18 +340,23 @@ export default function Detail({ userId, username }) {
             >
               <FaRegComments style={{ marginRight: "5px" }} />
               <Typography variant="body1" fontSize="14px" component="span">
-                {postdetails?.tag}
+                {items?.tag}
               </Typography>
             </Box>
           </Box>
 
           <Typography mt={2} variant="body1" fontSize="20px" color="text.main">
-            {postdetails?.title}
+            {items?.title}
           </Typography>
         </Box>
+            </>
+        })}
+       
       </Box>
       <Container>
-        <Box pb={10}>
+        {postdetails?.map((items,index)=>{
+          return <>
+           <Box pb={10} key={index}>
           <Box py={2.5} pl={6} borderBottom="1px solid #fff">
             <Box py={2} display="flex" alignItems="center">
               <Typography variant="body1" color="primary.main" fontWeight="700">
@@ -359,12 +368,12 @@ export default function Detail({ userId, username }) {
                 color="primary.light"
                 fontSize="13px"
               >
-                {moment(postdetails?.enddate).format("LL")}
+                {/* {moment(items?.enddate).format("LL")} */}
               </Typography>
             </Box>
 
             <Box pr={4} fontSize="14px" color="text.paragraph">
-              {postdetails?.description}
+              {items?.description}
             </Box>
           </Box>
 
@@ -397,10 +406,9 @@ export default function Detail({ userId, username }) {
               Locked the discussion.
             </Typography>
           </Box>
-
+          </Box>
           {/* 
      Poll start here, poll mean Questions and Ans */}
-
           <Box mt={5} py={2} pl={6} borderBottom="1px solid #fff">
             <Typography
               variant="body1"
@@ -417,7 +425,7 @@ export default function Detail({ userId, username }) {
               fontSize="14px"
               color="primary.light"
             >
-              {postdetails?.question}
+            Questions
             </Typography>
 
             <Typography
@@ -488,26 +496,7 @@ export default function Detail({ userId, username }) {
             </Typography>
 
             {/* start comment sections start here */}
-            {commentData?.map(({ _id, addedAt, comment }, index) => {
-              const commentId = _id;
-              return (
-                <>
-                  <div key={index}>
-                    <Box py={2} display="flex" alignItems="center">
-                      <Typography
-                        ml={2}
-                        variant="body1"
-                        color="primary.light"
-                        fontSize="13px"
-                      >
-                        {moment(addedAt).format("LL")}
-                      </Typography>
-                    </Box>
-                    <Box pr={4} fontSize="14px" color="text.paragraph">
-                      {comment}
-                    </Box>
-                    <Box
-                      key={index}
+            <Box
                       mt={2}
                       display="flex"
                       alignItems="center"
@@ -564,6 +553,25 @@ export default function Detail({ userId, username }) {
                     {checklikeUnlike == true && (
                       <Typography>This is liked !</Typography>
                     )}
+            {commentData?.map(({ _id, addedAt, comment }, index) => {
+              const commentId = _id;
+              return (
+                <>
+                  <div key={index}>
+                    <Box py={2} display="flex" alignItems="center">
+                      <Typography
+                        ml={2}
+                        variant="body1"
+                        color="primary.light"
+                        fontSize="13px"
+                      >
+                        {moment(addedAt).format("LL")}
+                      </Typography>
+                    </Box>
+                    <Box pr={4} fontSize="14px" color="text.paragraph">
+                      {comment} hello
+                    </Box>
+                  
 
                     {/* Replay start here display */}
                     {commentData[index].reply?.map(
@@ -662,8 +670,13 @@ export default function Detail({ userId, username }) {
               );
             })}
           </Box>
-        </Box>
-      </Container>
+          </>
+        })}
+       
+          </Container>
+    
+
+   
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}
     </>
   );

@@ -31,9 +31,9 @@ router.get("/allpoll", Poll.FetchAllPoll);
 
 router.get("/category/:tag", Post.fetchcategory);
 router.get('/checklike/:post_id/:user_id', Post.CheckPostLike);
-router.get("/fetchspecificpost/:email", Post.getSpecificdescussion);
+router.get("/fetchuserpost/:id", Post.getSpecificdescussion);
 router.get("/fetchPostDetails/:id", Post.fetchPostDetails);
-router.get("/fetchuser/:email", Users.fetchuser);
+router.get("/fetchuser/:id", Users.fetchuser);
 
 
 router.delete("/removePost/:id", Post.removepost);

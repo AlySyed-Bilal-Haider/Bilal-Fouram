@@ -141,16 +141,12 @@ export const tokenVerifyHandler = async (req, res) => {
 //fetch specific data from server of user
 
 export const fetchuser = async (req, res) => {
-  const email = req.params.email;
+  
   try {
-    const data = await mongomodal.findOne({ email: email });
+    const id = req.params.id;
+    const data = await mongomodal.findById(id);
     res.send(data);
   } catch (error) {
     console.log(error);
   }
 };
-
-
-
-
-

@@ -61,14 +61,21 @@ export const fetchcategory = async (req, res) => {
   }
 };
 
-// fetch specific detials from discussion, according to user Email
+// fetch specific detials from discussion, according to user id
 export const getSpecificdescussion = async (req, res, next) => {
-  const email = req.params.email;
+  
   try {
-    const data = await postmodal.find({ email });
-    res.send(data);
+    const id = req.params.id;
+    const data = await postmodal.find({ user: id });
+    res.json({
+      status: true,
+      data: data
+    })
   } catch (error) {
-    next(error);
+    res.json({
+      status: false,
+      message: error
+    })
   }
 };
 
@@ -105,6 +112,7 @@ export const fetchPostDetails = async (req, res) => {
 export const removepost = async (req, res) => {
   try {
     const id = req.params.id.trim();
+    console.log("id",id);
 
     const data = await postmodal.findByIdAndUpdate(id, { visibility: false });
     if (data) {
