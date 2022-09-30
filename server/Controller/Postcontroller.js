@@ -61,14 +61,21 @@ export const fetchcategory = async (req, res) => {
   }
 };
 
-// fetch specific detials from discussion, according to user Email
+// fetch specific detials from discussion, according to user id
 export const getSpecificdescussion = async (req, res, next) => {
-  const email = req.params.email;
+  
   try {
-    const data = await postmodal.find({ email: email });
-    res.send(data);
+    const id = req.params.id;
+    const data = await postmodal.find({ user: id });
+    res.json({
+      status: true,
+      data: data
+    })
   } catch (error) {
-    next(error);
+    res.json({
+      status: false,
+      message: error
+    })
   }
 };
 
