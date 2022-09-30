@@ -14,7 +14,7 @@ const Poll = new Schema({
         type: Date,
         default: new Date(),
     },
-    endDate: {
+    enddate: {
         type: Date,
     },
     voteVisibility: Boolean,

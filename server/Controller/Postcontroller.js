@@ -112,6 +112,7 @@ export const fetchPostDetails = async (req, res) => {
 export const removepost = async (req, res) => {
   try {
     const id = req.params.id.trim();
+    console.log("id",id);
 
     const data = await postmodal.findByIdAndUpdate(id, { visibility: false });
     if (data) {
