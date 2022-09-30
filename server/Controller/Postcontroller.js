@@ -130,16 +130,14 @@ export const removepost = async (req, res) => {
 };
 
 // start update post code start here
-export const editepostHandler = async (req, res) => {
-  const _id = req.params.id;
+export const EditepostHandler = async (req, res) => {
+  
   try {
-    const data = await postmodal.findByIdAndUpdate(_id, {
-      description: req.body.description,
-      question: req.body.Question,
-      ans1: req.body.ans1,
-      ans2: req.body.ans2,
+    const {id,description} = req.body;
+    console.log("id:",id,"description: ",description);
+    const data = await postmodal.findByIdAndUpdate(id, {
+      description: description,
     });
-    // console.log("result value", data);
     if (data) {
       res.status(202).json({
         status: "ok",
