@@ -2,8 +2,8 @@ import express from "express";
 import * as Users from '../Controller/Usercontroller.js';
 import * as Post from '../Controller/Postcontroller.js';
 import * as Comment from '../Controller/CommentController.js';
-import * as Voting from '../Controller/Approvecontroller.js';
 import * as Poll from "../Controller/PollController.js";
+import * as Admin from "../Controller/AdminController.js";
 
 const router = express.Router();
 
@@ -13,9 +13,6 @@ router.post("/verifytoken", Users.tokenVerifyHandler);
 router.post("/posts", Post.createPost);
 router.post("/like", Post.likeHandler);
 router.post("/unlike", Post.unlikeHandler);
-router.post("/getvotesdetails", Voting.handlerApproveORunApprove);
-router.post("/approve", Voting.approveHandler);
-router.post("/unapprove", Voting.unapproveHandler);
 router.post("/comment", Comment.commentHandler);
 router.post("/reply", Comment.replyHandler);
 router.post("/checkcommentlike", Comment.CheckCommentLike);
@@ -44,7 +41,17 @@ router.delete("/removeComment/:id", Comment.removeComment);
 
 router.put("/editpost", Post.EditepostHandler);
 router.put("/editcomment", Comment.EditComment);
-router.put("/restorecomment/:id",Comment.restoreComment);
+router.put("/restorecomment/:id", Comment.restoreComment);
+
+
+//admin related routes
+
+router.get("/fetchapprovedposts", Admin.FetchApprovedPosts);
+router.get("/fetchpendingposts", Admin.FetchPendingPosts);
+router.get("/fetchrejectedposts", Admin.FetchRejectedPosts);
+router.get("/approvepost/:id", Admin.ApprovePost);
+router.get("/rejectpost/:id", Admin.RejectPost);
+
 
 
 

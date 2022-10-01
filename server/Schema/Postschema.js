@@ -34,6 +34,10 @@ const Post = new Schema({
   visibility:{
     type: Boolean,
     default: true
+  },
+  status:{
+    type: String,
+    default: "Pending"
   }
   
 });
