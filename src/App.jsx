@@ -10,6 +10,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import NetworkChange from "./networkSwitch";
 import AllDiscussions from "./components/AllDiscussions";
+import AdminPanel from "./components/AdminPenal/AdminPage";
 import MainPage from "./components/UserPenal/MainPage";
 import Detail from "./components/Detail";
 import Signup from "./components/Signup";
@@ -24,9 +25,9 @@ function App() {
   const [open, setOpen] = useState(false);
   const [openSign, setOpenSign] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
-  const [userId,setUserId]=useState('');
+  const [userId, setUserId] = useState("");
   const [username, setusernameState] = React.useState("");
-  
+
   const tokenVerfiy = async () => {
     try {
       await fetch(`${url}/verifytoken`, {
@@ -39,10 +40,9 @@ function App() {
         .then((data) => {
           console.log("all data", data);
           localStorage.setItem("name", data.name);
-          localStorage.setItem("user_id",data.id)
+          localStorage.setItem("user_id", data.id);
           setusernameState(data.name);
           setUserId(data.id);
-
         });
     } catch (error) {
       alert(error);
@@ -53,9 +53,10 @@ function App() {
     const token = localStorage?.getItem("token");
     if (token) {
       tokenVerfiy();
-   }}, []);
+    }
+  }, []);
 
-    // useEffect(() => {
+  // useEffect(() => {
   //   let chain = async () => {
   //     const chainid = await web3.eth.getChainId();
   //     if (chainid !== 97) {
@@ -89,7 +90,11 @@ function App() {
       />
       <NetworkChange open={open} setOpen={setOpen} />
       <Box sx={{ backgroundColor: "body.main" }}>
-        <Header setOpensign={setOpenSign} setOpenlogin={setOpenLogin} name={username}/>
+        <Header
+          setOpensign={setOpenSign}
+          setOpenlogin={setOpenLogin}
+          name={username}
+        />
         <Routes>
           <Route
             exact
@@ -104,8 +109,12 @@ function App() {
             }
           />
           <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />
-          <Route path="/detail/:id" element={<Detail userId={userId} username={username} />} />
+          <Route
+            path="/detail/:id"
+            element={<Detail userId={userId} username={username} />}
+          />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </Box>
     </>

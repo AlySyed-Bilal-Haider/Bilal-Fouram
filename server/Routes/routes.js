@@ -30,7 +30,7 @@ router.get("/allpoll", Poll.FetchAllPoll);
 
 router.get("/category/:tag", Post.fetchcategory);
 router.get('/checklike/:post_id/:user_id', Post.CheckPostLike);
-router.get("/fetchuserpost/:id", Post.getSpecificdescussion);
+router.get("/fetchuserpost/:id", Post.getSpecificDiscussion);
 router.get("/fetchPostDetails/:id", Post.fetchPostDetails);
 router.get("/fetchuser/:id", Users.fetchuser);
 
