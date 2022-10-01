@@ -41,15 +41,14 @@ const StyledMenu = styled((props) => (
 
 function Post({ userid }) {
   const [editPopOpen, setEditPopOpen] = useState(false);
-  //close menu tag on click
   const name = localStorage.getItem("name");
-  const user_id=localStorage.getItem("user_id");
+  const user_id = localStorage.getItem("user_id");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userposts, setPoststate] = useState([]);
   const [postIDstate, setPostIdstate] = useState();
-  const [PostID,setPostID]=useState('');
-  const [descriptionstate,setDescriptionstate]=useState('');
-  const [updatepost,setUpdatestate]=useState(false);
+  const [PostID, setPostID] = useState("");
+  const [descriptionstate, setDescriptionstate] = useState("");
+  const [updatepost, setUpdatestate] = useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,19 +56,18 @@ function Post({ userid }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  ///////////////////////////
-  // fetch post of specific users
 
+  // fetch post details and display here
   useEffect(() => {
     if (user_id) {
       fetchPost();
     }
-  }, [user_id,editPopOpen]);
+  }, [user_id, editPopOpen,updatepost]);
 
   const fetchPost = async () => {
     try {
       const { data } = await axios.get(`${url}/fetchuserpost/${user_id}`);
-       console.log("data descussion allpost",data);
+      console.log("data descussion allpost", data);
 
       data && setPoststate(data.data);
     } catch (error) {
@@ -92,22 +90,22 @@ function Post({ userid }) {
       toast.error(error.message);
     }
   };
-  const editeHandler = (id,descripton) => {
+  const editeHandler = (id, descripton) => {
     setTimeout(() => {
-      setUpdatestate(true);
+      setUpdatestate(!updatepost);
     }, 0);
     setPostIdstate(id);
     setDescriptionstate(descripton);
     handleClose();
   };
 
-  const CommentHandler=(id,descripton)=>{
+  const CommentHandler = (id, descripton) => {
     setPostID(id);
-    setDescriptionstate(descripton)
-    setEditPopOpen(true); 
-  }
+    setDescriptionstate(descripton);
+    setEditPopOpen(true);
+  };
 
-  console.log("userposts",userposts);
+  console.log("userposts", userposts);
   return (
     <>
       <EditPopUp
@@ -116,125 +114,139 @@ function Post({ userid }) {
         postId={postIDstate}
         title={descriptionstate}
       />
-      
-         <Comment open={editPopOpen} setOpen={setEditPopOpen} postId={PostID} 
-      title={descriptionstate} userid={userid}/>
+
+      <Comment
+        open={editPopOpen}
+        setOpen={setEditPopOpen}
+        postId={PostID}
+        title={descriptionstate}
+        userid={userid}
+      />
       <Box pb={10}>
-        {userposts ?
-        (userposts?.map((item, i) => {
-          return (
-            <Box mt={i === 0 ? 0 : 2} key={i}>
-              <Typography variant="body1" color="primary.main" fontWeight="700">
-                {/* {item} */}
-              </Typography>
-
-              <Box pl={8} pb={3} borderBottom="1px solid #fff">
-                <Box py={2} display="flex" alignItems="center">
-                  <Typography
-                    variant="body1"
-                    color="primary.main"
-                    fontWeight="700"
-                  >
-                    {name}
-                  </Typography>
-                  <Typography
-                    ml={2}
-                    variant="body1"
-                    color="primary.light"
-                    fontSize="13px"
-                  >
-                    {item?.addedAt ? moment(item?.addedAt).format("LL") : null}
-                  </Typography>
-                  <Typography
-                    ml={2}
-                    variant="body1"
-                    color="primary.light"
-                    fontSize="13px"
-                  >
-                    Awaiting approval
-                  </Typography>
-                </Box>
-
-                <Box fontSize="14px" color="text.paragraph">
-                  {item?.title}
-                  <br />
-                  <br />
-                  {item?.description}
-                  <br />
-                </Box>
-
-                <Box
-                  mt={2}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="flex-end"
-                  
+        {userposts ? (
+          userposts?.map((item, i) => {
+            return (
+              <Box mt={i === 0 ? 0 : 2} key={i}>
+                <Typography
+                  variant="body1"
+                  color="primary.main"
+                  fontWeight="700"
                 >
-                  <AiFillLike size="22px" />
-                  <AiFillDislike size="22px" style={{ marginLeft: "30px" }} />
-                  <Typography
-                  onClick={()=>{
-                   
-                    CommentHandler(item?._id,item?.description);
-                  }}
-                  sx={{cursor:'pointer'}}
-                    ml="30px"
-                    variant="body1"
-                    fontSize="14px"
-                    color="primary.light"
-                  >
-                    Reply
-                  </Typography>
-                  <Typography
-                    ml="30px"
-                    variant="body1"
-                    fontSize="14px"
-                    color="primary.light"
-                  >
-                    Like
-                  </Typography>
-                  <BsThreeDots
-                    onClick={handleClick}
-                    size="22px"
-                    style={{ marginLeft: "30px", cursor: "pointer" }}
-                  />
+                  {/* {item} */}
+                </Typography>
 
-                  <StyledMenu
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
+                <Box pl={8} pb={3} borderBottom="1px solid #fff">
+                  <Box py={2} display="flex" alignItems="center">
+                    <Typography
+                      variant="body1"
+                      color="primary.main"
+                      fontWeight="700"
+                    >
+                      {name}
+                    </Typography>
+                    <Typography
+                      ml={2}
+                      variant="body1"
+                      color="primary.light"
+                      fontSize="13px"
+                    >
+                      {item?.addedAt
+                        ? moment(item?.addedAt).format("LL")
+                        : null}
+                    </Typography>
+                    <Typography
+                      ml={2}
+                      variant="body1"
+                      color="primary.light"
+                      fontSize="13px"
+                    >
+                      Awaiting approval
+                    </Typography>
+                  </Box>
+
+                  <Box fontSize="14px" color="text.paragraph">
+                    {item?.title}
+                    <br />
+                    <br />
+                    {item?.description}
+                    <br />
+                  </Box>
+
+                  <Box
+                    mt={2}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="flex-end"
                   >
-                    <MenuItem
+                    <AiFillLike size="22px" />
+                    <AiFillDislike size="22px" style={{ marginLeft: "30px" }} />
+                    <Typography
                       onClick={() => {
-                        editeHandler(item?._id,item?.description);
+                        CommentHandler(item?._id, item?.description);
                       }}
-                      disableRipple
-                      sx={{ fontSize: "16px" }}
+                      sx={{ cursor: "pointer" }}
+                      ml="30px"
+                      variant="body1"
+                      fontSize="14px"
+                      color="primary.light"
                     >
-                      <GrEdit style={{ marginRight: "15px" }} />
-                      Edit
-                    </MenuItem>
+                      Reply
+                    </Typography>
+                    <Typography
+                      ml="30px"
+                      variant="body1"
+                      fontSize="14px"
+                      color="primary.light"
+                    >
+                      Like
+                    </Typography>
+                    <BsThreeDots
+                      onClick={handleClick}
+                      size="22px"
+                      style={{ marginLeft: "30px", cursor: "pointer" }}
+                    />
 
-                    <MenuItem
-                      onClick={handleClose}
-                      disableRipple
-                      sx={{ fontSize: "16px" }}
+                    <StyledMenu
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
                     >
-                      <RiDeleteBin5Line style={{ marginRight: "15px" }} />
-                      <Typography
+                      <MenuItem
                         onClick={() => {
-                          removeHandler(item?._id);
+                          editeHandler(item?._id, item?.description);
                         }}
+                        disableRipple
+                        sx={{ fontSize: "16px" }}
                       >
-                        Delete
-                      </Typography>
-                    </MenuItem>
-                  </StyledMenu>
+                        <GrEdit style={{ marginRight: "15px" }} />
+                        Edit
+                      </MenuItem>
+
+                      <MenuItem
+                        onClick={handleClose}
+                        disableRipple
+                        sx={{ fontSize: "16px" }}
+                      >
+                        <RiDeleteBin5Line style={{ marginRight: "15px" }} />
+                        <Typography
+                          onClick={() => {
+                            removeHandler(item?._id);
+                          }}
+                        >
+                          Delete
+                        </Typography>
+                      </MenuItem>
+                    </StyledMenu>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          );
-        })):(<Typography variant="h3" textAlign="center" fontWeight={700}>Post Coming Soon</Typography>)}
+            );
+          })
+        ) : (
+          <Typography variant="h3" textAlign="center" fontWeight={700}>
+            Post Coming Soon
+          </Typography>
+        )}
       </Box>
     </>
   );

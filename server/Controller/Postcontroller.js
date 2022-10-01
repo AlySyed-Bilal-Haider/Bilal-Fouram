@@ -2,7 +2,7 @@ import postmodal from "../Schema/Postschema.js";
 import commentModal from "../Schema/CommentSchema.js";
 // ....Add discussion and Questions ,answer..........
 export const createPost = async (req, res, next) => {
- 
+ console.log("req.body:",req.body)
  const {tag,title,description,user,poll}=req.body;
   try {
 
@@ -139,7 +139,7 @@ export const removepost = async (req, res) => {
 
 // start update post code start here
 export const EditepostHandler = async (req, res) => {
-  
+console.log("req.body",req.body);
   try {
     const {id,description} = req.body;
     console.log("id:",id,"description: ",description);

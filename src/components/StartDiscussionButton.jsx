@@ -46,13 +46,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function StartDiscussionButton({ setOpenlogin, userid }) {
+function StartDiscussionButton({ setOpenlogin }) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   // const [loginstate, setloginstate] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const [pollstate,setPollstate]=useState('');
+  const [pollstate, setPollstate] = useState("");
   const [tagsvalue, setTagsvalue] = useState("");
   const [addpoststate, setPoststate] = useState({
     tag: "wow",
@@ -60,21 +60,40 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
     description:
       "Before you post this: 1. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines 2. If this proposal is going to the Proposal section, make sure you have read the Proposal  guidelines:  https://discord.com/invite/olympusdao ",
   });
-
+  const userid = localStorage.getItem("user_id");
   const discussionHandler = (e) => {
     setPoststate({ ...addpoststate, [e.target.name]: e.target.value });
   };
   // post discussion record here
   const postSubmitHandler = async () => {
-    const addnameAndemail = {...addpoststate, user: userid,tag: tagsvalue,poll:pollstate  };
+    let postdata;
+    console.log("pollstate", pollstate);
 
     if (!!tagsvalue) {
       try {
-        const { data } = await axios.post(`${url}/posts`, addnameAndemail);
-        if (data.status === "ok") {
-          toast.success(data.message);
+        if (pollstate) {
+          postdata = {
+            ...addpoststate,
+            user: userid,
+            tag: tagsvalue,
+            poll: pollstate,
+          };
+          console.log("postdata one", postdata);
+          const { data } = await axios.post(`${url}/posts`, postdata);
+          if (data.status === "ok") {
+            toast.success(data.message);
+          } else {
+            toast.error(data.message);
+          }
         } else {
-          toast.error(data.message);
+          postdata = { ...addpoststate, user: userid, tag: tagsvalue };
+          console.log("postdata two", postdata);
+          const { data } = await axios.post(`${url}/posts`, postdata);
+          if (data.status === "ok") {
+            toast.success(data.message);
+          } else {
+            toast.error(data.message);
+          }
         }
       } catch (error) {
         console.log(error, "error");
@@ -108,18 +127,18 @@ function StartDiscussionButton({ setOpenlogin, userid }) {
     }
   };
 
-  const getTag=(value)=>{
-    setTagsvalue(value)
-  }
+  const getTag = (value) => {
+    setTagsvalue(value);
+  };
 
-  const pollHandle=(value)=>{
+  const pollHandle = (value) => {
+    console.log("poll id", value);
     setPollstate(value);
-  }
-
+  };
 
   return (
     <>
-      <PopUp open={open1} setOpen={setOpen1} pollHandle={pollHandle}/>
+      <PopUp open={open1} setOpen={setOpen1} pollHandle={pollHandle} />
       <ChooseTag open={open2} setOpen={setOpen2} getTags={getTag} />
 
       <Button
