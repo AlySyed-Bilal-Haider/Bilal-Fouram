@@ -83,7 +83,7 @@ function PopUp({ open, setOpen,pollHandle }) {
       const {data}=await axios.post(`${url}/createpoll`,addpoll);
       console.log("poll data",data);
       data.message=='ok' && pollHandle(data.poll);
-      handleClose();
+      setOpen(false);
     } catch (error) {
       console.log("poll error !", error);
     }

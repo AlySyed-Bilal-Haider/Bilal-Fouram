@@ -51,12 +51,11 @@ export default function EditPopUp({ open, setOpen, postId,title }) {
   };
 
   const handlerSubmit = async () => {
+    const editepost={id:postId,description:editePoststate};
+    console.log("editepost",editepost);
     try {
-      const editepost={id:postId,description:editePoststate};
-      const { data } = await axios.put(
-        `${url}/editepost/`,
-        editepost
-      );
+      
+      const { data } = await axios.put(`${url}/editpost`,editepost);
       console.log("data update", data);
       if (data.status == "ok") {
         toast.success(data.message);
@@ -95,7 +94,7 @@ export default function EditPopUp({ open, setOpen, postId,title }) {
               fontSize="14px"
               fontWeight="600"
             >
-              Post # 1 in post new
+             Edite Post :{title}
             </Box>
 
             <IconButton
@@ -110,7 +109,7 @@ export default function EditPopUp({ open, setOpen, postId,title }) {
             </IconButton>
           </Toolbar>
         </AppBar>
-
+        
         <Box mt={-3} mb={3} mx={4.5}>
           <TextInput
             type="text"
