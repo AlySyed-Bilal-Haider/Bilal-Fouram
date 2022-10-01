@@ -1,10 +1,12 @@
 import React from "react";
-import { AppBar, Box, styled, Checkbox, Typography } from "@mui/material";
+import moment from "moment";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import { GoCheck } from "react-icons/go";
-
+import axios from "axios";
+import { url } from "../utils";
+import { AppBar, Box, styled, Checkbox, Typography } from "@mui/material";
 const LinearProgressBox = styled(LinearProgress)(({ theme }) => ({
   height: 40,
   width: 280,
@@ -52,91 +54,116 @@ const BpCheckbox = (props) => {
   );
 };
 
-
-function Poll({polldetails,user_id}) {
-  return ( <>
-    {polldetails?.visibility==true ? (
-      <Box>
-      <Typography
-        variant="body1"
-        fontSize="25px"
-        fontWeight="700"
-        color="primary.main"
-      >
-        Poll
-      </Typography>
-
-      <Typography mt={2} variant="body1" fontSize="14px" color="primary.light">
-        {polldetails?.question}
-      </Typography>
-      <Box sx={{display:"flex",alignItems:"center",justifyContent:"space-between",px:2}}>
-      {polldetails?.answers.map(({title,_id},i)=>{
-        return <>
-           <Typography 
-           key={i}
-        mt={3}
-        variant="body1"
-        fontSize="16px"
-        fontWeight="700"
-        color="primary.main"
-      >
-       {title}
-      </Typography>
-        </>
-      })}
-      </Box>
-    
-
-      <Box
-        mt={1}
-        px={2}
-        display="flex"
-        alignItems="center"
-        justifyContent={{ xs: "center", md: "space-between" }}
-        flexWrap="wrap"
-      >
+function Poll({ polldetails, user_id }) {
+  const pollApproveUnapprove = async (poll_id, answer_id) => {
+    try {
+      const pollvalue = { poll_id, answer_id, user_id };
+      console.log("pollvalue:", pollvalue);
+      const { data } = await axios(`${url}/votepoll`, pollvalue);
+      console.log("poll data", data.data);
+    } catch (error) {
+      console.log("Approve poll error !", error);
+    }
+  };
+  return (
+    <>
+      {polldetails?.visibility == true ? (
         <Box>
-          <LinearProgressBox variant="determinate" value={5} />
           <Typography
-            mt={-4.6}
-            variant="subtitle1"
-            display="flex"
-            alignItems="center"
+            variant="body1"
+            fontSize="25px"
+            fontWeight="700"
+            color="primary.main"
           >
-            <BpCheckbox />
-            Do not approve
+            Poll
+          </Typography>
+
+          <Typography
+            mt={2}
+            variant="body1"
+            fontSize="14px"
+            color="primary.light"
+          >
+            {polldetails?.question}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              px: 2,
+            }}
+          >
+            {polldetails?.answers.map(({ title, _id }, i) => {
+              return (
+                <>
+                  <div key={i + _id}>
+                    <Typography
+                      mt={3}
+                      variant="body1"
+                      fontSize="16px"
+                      fontWeight="700"
+                      color="primary.main"
+                    >
+                      {title}
+                    </Typography>
+                    <Box
+                      mt={1}
+                      px={2}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent={{ xs: "center", md: "space-between" }}
+                      flexWrap="wrap"
+                    >
+                      <Box>
+                        <LinearProgressBox variant="determinate" value={5} />
+                        <Typography
+                          onClick={() => {
+                            pollApproveUnapprove(polldetails?._id, _id);
+                          }}
+                          mt={-4.6}
+                          variant="subtitle1"
+                          display="flex"
+                          alignItems="center"
+                        >
+                          <BpCheckbox />
+                          Do not approve
+                        </Typography>
+                        <LinearProgressBox variant="determinate" value={5} />
+                        <Typography
+                          onClick={() => {
+                            pollApproveUnapprove(polldetails?._id, _id);
+                          }}
+                          mt={-4.6}
+                          variant="subtitle1"
+                          display="flex"
+                          alignItems="center"
+                        >
+                          <BpCheckbox />
+                          You approve
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* </Box> */}
+                  </div>
+                </>
+              );
+            })}
+          </Box>
+
+          <Typography
+            px={2}
+            mt={2}
+            fontSize="12px"
+            variant="subtitle1"
+            color="primary.light"
+          >
+            {moment(polldetails?.endDate).format("LL")}
           </Typography>
         </Box>
-
-        <Box>
-          <LinearProgressBox variant="determinate" value={70} />
-          <Typography
-            mt={-4.6}
-            variant="subtitle1"
-            display="flex"
-            alignItems="center"
-          >
-            <BpCheckbox />
-            Approve
-          </Typography>
-        </Box>
-      </Box>
-
-      <Typography
-        px={2}
-        mt={2}
-        fontSize="12px"
-        variant="subtitle1"
-        color="primary.light"
-      >
-        Poll ends in 11 hours.
-      </Typography>
-    </Box>
-    ):(
-    null
-    )}
+      ) : null}
     </>
-   
   );
 }
 

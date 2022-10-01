@@ -17,17 +17,17 @@ function Commonpage(props) {
   const [allDescussionsstate, setAlldescussionsstate] = useState([]);
   // fetch specific details from server
   useEffect(() => {
-    const fetchcategory = async () => {
+    async function fetchcategory() {
       try {
         const { data } = await axios.get(`${url}/category/${props.tage}`);
         console.log("data category", data);
-        setCategorystate(data);
+        setCategorystate(data.data);
       } catch (error) {
         console.log("commonpage category error:", error);
       }
-    };
-    fetchcategory();
-  }, [props.title]);
+    }
+    props?.title && fetchcategory();
+  }, [props?.title]);
 
   // fetch all details from sever
   let allPost = true;
@@ -35,8 +35,8 @@ function Commonpage(props) {
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
-        console.log("data.allDiscussion",data.allDiscussion);
-        setAlldescussionsstate(data.allDiscussion);
+        console.log("data.allDiscussion", data.allDiscussion);
+        setAlldescussionsstate(data?.allDiscussion);
       } catch (error) {
         console.log(error);
       }
@@ -135,7 +135,14 @@ function Commonpage(props) {
                     fontSize: { md: "14px", xs: "12px" },
                   }}
                 >
-                  {namestate ? namestate?.slice(0, 1).toUpperCase() : null}
+                  {alldetailsstate[i]?.user?.img ? (
+                    <img
+                      src={`${url}/upload/${alldetailsstate[i]?.user?.img}`}
+                      alt=""
+                    />
+                  ) : (
+                    alldetailsstate[i]?.user?.name?.slice(0, 1).toUpperCase()
+                  )}
                 </Avatar>
                 <Box
                   sx={{
@@ -167,7 +174,7 @@ function Commonpage(props) {
                         sx={{ color: "text.paragraph", fontSize: "11px" }}
                       >
                         <strong style={{ marginRight: "5px" }}>
-                          {namestate ? namestate : "Usman Shab"}
+                          { alldetailsstate[i]?.user?.name ? alldetailsstate[i]?.user?.name: "Admin" }
                         </strong>
 
                         {items?.addedAt

@@ -20,7 +20,7 @@ import { BsFillPinFill, BsFillHeartFill } from "react-icons/bs";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
-
+import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import moment from "moment";
 import Login from "./Login";
@@ -350,15 +350,19 @@ export default function Detail({ userId, username }) {
                   <Box py={2} display="flex" alignItems="center">
     
                    <Box sx={{width:"40px",height:'40px',borderRadius:'50%',mr:1}}>
-                      <img style={{width:"40px",height:'40px',borderRadius:'50%'}}
-                      src={`${url}/upload/${postdetails[index]?.user?.img}`} alt="Good"/>
+                     {postdetails[index]?.user?.img ?( <img style={{width:"40px",height:'40px',borderRadius:'50%'}}
+                      src={`${url}/upload/${postdetails[index]?.user?.img}`} alt="Good"/>):(
+                      <Avatar sx={{ width: 32, height: 32 }}>
+            {postdetails[0]?.user?.name?.toUpperCase().slice(0, 1)}
+          </Avatar>)
+        }
                     </Box>
                     <Typography
                       variant="body1"
                       color="primary.main"
                       fontWeight="700"
                     >
-                        {postdetails[0]?.user.name}
+                        {postdetails[0]?.user?.name}
                     </Typography>
               
            
@@ -388,7 +392,7 @@ export default function Detail({ userId, username }) {
                   <BsFillPinFill size="25px" style={{ marginRight: "20px" }} />
                   <Typography variant="body1">
                     <span style={{ fontWeight: "800" }}>
-                    {postdetails[0]?.user.name}
+                    {postdetails[0]?.user?.name}
                     </span>{" "}
                     stickied the discussion.
                   </Typography>
@@ -405,7 +409,7 @@ export default function Detail({ userId, username }) {
                   <FaLock size="23px" style={{ marginRight: "20px" }} />
                   <Typography variant="body1">
                     <span style={{ fontWeight: "800" }}>
-                      {postdetails[0]?.user.name}
+                      {postdetails[0]?.user?.name}
                     </span>{" "}
                     Locked the discussion.
                   </Typography>
@@ -528,7 +532,7 @@ export default function Detail({ userId, username }) {
                             Reply
                           </Typography>
 
-                          {commentData[index].like.includes(userId) ? (
+                          {commentData[index]?.like?.includes(userId) ? (
                             <Typography
                               onClick={() => {
                                 unLikeReply(commentId);
@@ -628,8 +632,8 @@ export default function Detail({ userId, username }) {
                           </Box>
                         ):null}
                         {/* Replay start here display */}
-                        {commentData[index].reply
-                          ? commentData[index].reply?.map(
+                        {commentData[index]?.reply
+                          ? commentData[index]?.reply?.map(
                               ({ _id, addedAt, comment, userName }, index) => {
                                 return (
                                   <Box py={2.5} pl={6} key={index}>
@@ -699,7 +703,7 @@ export default function Detail({ userId, username }) {
                                         Reply
                                       </Typography>
 
-                                      {commentData[index].like.includes(
+                                      {commentData[index]?.like?.includes(
                                         userId
                                       ) ? (
                                         <Typography

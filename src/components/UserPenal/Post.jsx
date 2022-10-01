@@ -6,6 +6,7 @@ import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
@@ -51,7 +52,7 @@ function Post({ userid }) {
   const [updatepost, setUpdatestate] = useState(false);
   const [openstate, setOpenlogin] = useState(false);
   const [checklikeUnlike, setChecklikeUnlikestate] = useState(false);
-  const userToken=localStorage.getItem('token');
+  const userToken = localStorage.getItem("token");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -65,7 +66,7 @@ function Post({ userid }) {
     if (user_id) {
       fetchPost();
     }
-  }, [user_id, editPopOpen,updatepost]);
+  }, [user_id, editPopOpen, updatepost]);
 
   const fetchPost = async () => {
     try {
@@ -132,7 +133,7 @@ function Post({ userid }) {
   };
   // .........unliked handler section ..........
   const unLikedHandler = async (postid) => {
-    const unliked = { post_id:postid, user_id };
+    const unliked = { post_id: postid, user_id };
     try {
       if (userToken) {
         const { data } = await axios.post(`${url}/unlike`, unliked);
@@ -178,13 +179,38 @@ function Post({ userid }) {
 
                 <Box pl={8} pb={3} borderBottom="1px solid #fff">
                   <Box py={2} display="flex" alignItems="center">
+                    <Box
+                      sx={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50%",
+                        mr: 1,
+                      }}
+                    >
+                      <Avatar sx={{ width: 32, height: 32 }}>
+                        {userposts[i]?.user?.img ? (
+                          <img
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              borderRadius: "50%",
+                            }}
+                            src={`${url}/upload/${userposts[i]?.user?.img}`}
+                            alt="Good"
+                          />
+                        ) : (
+                          userposts[i]?.user.name.toUpperCase().slice(0, 1)
+                        )}
+                      </Avatar>
+                    </Box>
                     <Typography
                       variant="body1"
                       color="primary.main"
                       fontWeight="700"
                     >
-                      {name}
+                      {userposts[i]?.user.name}
                     </Typography>
+
                     <Typography
                       ml={2}
                       variant="body1"
@@ -233,30 +259,32 @@ function Post({ userid }) {
                     >
                       Reply
                     </Typography>
-                    { userposts[i].like.includes(item?._id) ?( <Typography
-                   
-                    onClick={()=>{
-                      unLikedHandler(item?._id);
-                     }}
-                      ml="30px"
-                      variant="body1"
-                      fontSize="14px"
-                      color="primary.light"
-                    >
-                      
-                      Unlike
-                    </Typography>):(
-                         <Typography
-                         onClick={()=>{
+                    {userposts[i].like.includes(user_id) ? (
+                      <Typography
+                        onClick={() => {
+                          unLikedHandler(item?._id);
+                        }}
+                        ml="30px"
+                        variant="body1"
+                        fontSize="14px"
+                        color="primary.light"
+                        sx={{cursor:'pointer'}}
+                      >
+                        Unlike
+                      </Typography>
+                    ) : (
+                      <Typography
+                        onClick={() => {
                           likeHandler(item?._id);
                         }}
-                         ml="30px"
-                         variant="body1"
-                         fontSize="14px"
-                         color="primary.light"
-                       >
-                         Like
-                       </Typography>
+                        ml="30px"
+                        variant="body1"
+                        fontSize="14px"
+                        color="primary.light"
+                        sx={{cursor:'pointer'}}
+                      >
+                        Like
+                      </Typography>
                     )}
                     <BsThreeDots
                       onClick={handleClick}
@@ -306,7 +334,7 @@ function Post({ userid }) {
           </Typography>
         )}
       </Box>
-      
+
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}
     </>
   );

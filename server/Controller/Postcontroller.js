@@ -52,13 +52,18 @@ export const fetchAlldiscussion = async (req, res) => {
 
 // fetch specifc data from server
 
-export const fetchcategory = async (req, res) => {
-  const tag = req.params.tag;
+export const fetchcategory = async (req, res,next) => {
+
   try {
-    const data = await postmodal.find({ tag: tag, visibility: true }).populate("comments");
-    res.send(data);
+    const tag = req.params.tag;
+    console.log("tages:",tag);
+    const data = await postmodal.find({ tag: tag, visibility: true }).populate("user").populate("comments");
+    res.json({
+      message:"ok",
+      data: data
+    })
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
@@ -79,10 +84,7 @@ export const getSpecificDiscussion = async (req, res, next) => {
       data: data
     })
   } catch (error) {
-    res.json({
-      status: false,
-      message: error
-    })
+    next(error);
   }
 };
 
