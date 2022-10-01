@@ -293,7 +293,7 @@ export default function Detail({ userId, username }) {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <BsFillPinFill
+                  {/* <BsFillPinFill
                     size="24px"
                     style={{
                       background: "#CD3D31",
@@ -309,7 +309,7 @@ export default function Detail({ userId, username }) {
                       borderRadius: "50%",
                       padding: "5px",
                     }}
-                  />
+                  /> */}
                   <Box
                     display="flex"
                     alignItems="center"
@@ -320,6 +320,7 @@ export default function Detail({ userId, username }) {
                     py="1px"
                     px="5px"
                     width="fit-content"
+                    textTransform="capitalize"
                   >
                     {items?.tag === "general" ? (
                       <FaRegComments
@@ -366,8 +367,8 @@ export default function Detail({ userId, username }) {
       <Container>
         {postdetails?.map((items, index) => {
           return (
-            <>
-              <Box pb={10} key={index}>
+            <Box mb={10} sx={{ boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px" }}>
+              <Box pb={2} key={index}>
                 <Box py={2.5} pl={6} borderBottom="1px solid #fff">
                   <Box py={2} display="flex" alignItems="center">
                     <Box
@@ -411,7 +412,7 @@ export default function Detail({ userId, username }) {
                   </Box>
                 </Box>
 
-                <Box
+                {/* <Box
                   py={2}
                   pl={6}
                   borderBottom="1px solid #fff"
@@ -443,11 +444,11 @@ export default function Detail({ userId, username }) {
                     </span>{" "}
                     Locked the discussion.
                   </Typography>
-                </Box>
+                </Box> */}
               </Box>
               {/* 
      Poll start here, poll mean Questions and Ans */}
-              <Box mt={5} py={2} pl={6} borderBottom="1px solid #fff">
+              <Box py={2} pl={6}>
                 <Poll
                   polldetails={postdetails[index]?.poll}
                   user_id={user_id}
@@ -486,6 +487,7 @@ export default function Detail({ userId, username }) {
                     <Typography
                       onClick={unLikedHandler}
                       ml="30px"
+                      mr="20px"
                       variant="body1"
                       fontSize="14px"
                       color="primary.light"
@@ -497,6 +499,7 @@ export default function Detail({ userId, username }) {
                     <Typography
                       onClick={likeHandler}
                       ml="30px"
+                      mr="20px"
                       variant="body1"
                       sx={{
                         cursor: "pointer",
@@ -504,7 +507,7 @@ export default function Detail({ userId, username }) {
                         color: "primary.light",
                       }}
                     >
-                      like
+                      Like
                     </Typography>
                   )}
                 </Box>
@@ -789,7 +792,7 @@ export default function Detail({ userId, username }) {
                   }
                 )}
               </Box>
-            </>
+            </Box>
           );
         })}
       </Container>
