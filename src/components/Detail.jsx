@@ -13,20 +13,19 @@ import {
   InputBase,
   Button,
 } from "@mui/material";
-import LinearProgress, {
-  linearProgressClasses,
-} from "@mui/material/LinearProgress";
+
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { FaRegComments, FaLock } from "react-icons/fa";
 import { BsFillPinFill, BsFillHeartFill } from "react-icons/bs";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { GoCheck } from "react-icons/go";
+
 import axios from "axios";
 import moment from "moment";
 import Login from "./Login";
 import { url } from "../utils";
+import Poll from './Poll';
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -54,19 +53,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const LinearProgressBox = styled(LinearProgress)(({ theme }) => ({
-  height: 40,
-  width: 280,
-  marginTop: 15,
-  border: `2px solid ${theme.palette.secondary.light}`,
-  borderRadius: 5,
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: "transparent",
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    backgroundColor: theme.palette.secondary.light,
-  },
-}));
+
 const BpIcon = styled("span")({
   borderRadius: 3,
   border: "1px solid #282439",
@@ -74,32 +61,7 @@ const BpIcon = styled("span")({
   height: 18,
   backgroundColor: "transparent",
 });
-const BpCheckbox = (props) => {
-  return (
-    <Checkbox
-      disableRipple
-      color="default"
-      checkedIcon={
-        <>
-          <Box
-            width="18px"
-            height="18px"
-            border="1px solid #282439"
-            color="#282439"
-            borderRadius="3px"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <GoCheck size="14px" />
-          </Box>
-        </>
-      }
-      icon={<BpIcon />}
-      {...props}
-    />
-  );
-};
+
 
 export default function Detail({ userId, username }) {
   const param = useParams();
@@ -149,27 +111,6 @@ export default function Detail({ userId, username }) {
     }
   };
 
-  const handleApprove = async () => {
-    let approveinfo = { id: param?.id, email: useremail };
-    try {
-      const { data } = await axios.post(`${url}/approve`, approveinfo);
-      // data.status == "ok" && approveORnotapproveCheck();
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-  //unapprove handler
-  const unapproveHandler = async () => {
-    let unapprove = { id: param?.id, email: useremail };
-    console.log("unapprove", unapprove);
-    try {
-      const { data } = await axios.post(`${url}/unapprove`, unapprove);
-      console.log("data", data);
-      // data.status == "ok" && approveORnotapproveCheck();
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
   const CheckloginHandler = () => {
     if (userToken) {
       setEditPopOpen(true);
@@ -200,7 +141,7 @@ export default function Detail({ userId, username }) {
 
   // ..........like handler ..........
   const likeHandler = async () => {
-    const likevalue = { post_id: param?.id, user_id: userId };
+    const likevalue = { post_id: param?.id, user_id: user_id };
     console.log("likevalue:", likevalue);
     try {
       if (userToken) {
@@ -218,7 +159,7 @@ export default function Detail({ userId, username }) {
   };
   // .........unliked handler section ..........
   const unLikedHandler = async () => {
-    const unliked = { post_id: param?.id, user_id: userId };
+    const unliked = { post_id: param?.id, user_id: user_id };
     try {
       if (userToken) {
         const { data } = await axios.post(`${url}/unlike`, unliked);
@@ -469,90 +410,7 @@ export default function Detail({ userId, username }) {
               {/* 
      Poll start here, poll mean Questions and Ans */}
               <Box mt={5} py={2} pl={6} borderBottom="1px solid #fff">
-                <Typography
-                  variant="body1"
-                  fontSize="25px"
-                  fontWeight="700"
-                  color="primary.main"
-                >
-                  Poll
-                </Typography>
-
-                <Typography
-                  mt={2}
-                  variant="body1"
-                  fontSize="14px"
-                  color="primary.light"
-                >
-                  Questions
-                </Typography>
-
-                <Typography
-                  mt={3}
-                  variant="body1"
-                  fontSize="16px"
-                  fontWeight="700"
-                  color="primary.main"
-                >
-                  Approve Launch Plan and Base Rate?
-                </Typography>
-
-                <Box
-                  mt={1}
-                  px={2}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent={{ xs: "center", md: "space-between" }}
-                  flexWrap="wrap"
-                >
-                  <Box>
-                    <LinearProgressBox variant="determinate" value={5} />
-                    <Typography
-                      mt={-4.6}
-                      variant="subtitle1"
-                      display="flex"
-                      alignItems="center"
-                    >
-                      {checkstate == true ? null : (
-                        <BpCheckbox
-                          onClick={() => {
-                            unapproveHandler();
-                          }}
-                        />
-                      )}
-                      Do not approve
-                    </Typography>
-                  </Box>
-
-                  <Box>
-                    <LinearProgressBox variant="determinate" value={70} />
-                    <Typography
-                      mt={-4.6}
-                      variant="subtitle1"
-                      display="flex"
-                      alignItems="center"
-                    >
-                      {checkstate == true ? null : (
-                        <BpCheckbox
-                          onClick={() => {
-                            handleApprove();
-                          }}
-                        />
-                      )}
-                      Approve
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Typography
-                  px={2}
-                  mt={2}
-                  fontSize="12px"
-                  variant="subtitle1"
-                  color="primary.light"
-                >
-                  Poll ends in 11 hours.
-                </Typography>
+             <Poll polldetails={postdetails[index]?.poll} user_id={user_id}/>
 
                 {/* start comment sections start here */}
                 <Box
