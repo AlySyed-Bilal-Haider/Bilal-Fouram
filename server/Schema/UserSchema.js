@@ -24,6 +24,11 @@ const Adduser = new mongoose.Schema({
     type: String,
     default: "",
   },
+  role: {
+    type: String,
+    enum : ['user','admin'],
+    default: 'user'
+},
 });
 const mongomodal=mongoose.model("user", Adduser);
 export default mongomodal;
