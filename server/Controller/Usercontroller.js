@@ -6,11 +6,12 @@ import { config } from "./config.js";
 
 export const signupHandler = async (req, res) => {
   try {
+    const { name, email, password } = req.body;
     let user = await mongomodal.findOne({
-      name: req.body.name,
+      name: name,
     });
     let user1 = await mongomodal.findOne({
-      email: req.body.email,
+      email: email,
     });
     if (user) {
       res.status(200).json({
@@ -25,14 +26,26 @@ export const signupHandler = async (req, res) => {
         user: false,
       });
     } else {
-      let userToken = { password: req.body.password };
+      let userToken = { password: password };
       let token = jwt.sign(userToken, config.secret);
-      const usersignup = await new mongomodal({
-        name: req.body.name,
-        email: req.body.email,
-        password: token,
-      });
-      await usersignup.save();
+      if (email === "nabiha3802izhar@gmail.com") {
+        const usersignup = await new mongomodal({
+          name: name,
+          email: email,
+          password: token,
+          role: "admin"
+        });
+        await usersignup.save();
+      } else {
+        const usersignup = await new mongomodal({
+          name: name,
+          email: email,
+          password: token,
+        });
+        await usersignup.save();
+      }
+
+
       res.json({
         status: "ok",
         success: true,
@@ -71,6 +84,7 @@ export const login = async (req, res) => {
                 expiresIn: "6d",
               },
               (err, token) => {
+                console.log(docs._doc);
                 res.json({
                   status: "ok",
                   message: "User login Successfully!",
@@ -120,6 +134,7 @@ export const tokenVerifyHandler = async (req, res) => {
           name: docs.name,
           email: docs.email,
           id: docs._id,
+          role: docs.role
         });
       });
     } else {
@@ -141,7 +156,7 @@ export const tokenVerifyHandler = async (req, res) => {
 //fetch specific data from server of user
 
 export const fetchuser = async (req, res) => {
-  
+
   try {
     const id = req.params.id;
     const data = await mongomodal.findById(id);

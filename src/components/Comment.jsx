@@ -43,7 +43,7 @@ function Comment({ open, setOpen, post_id, title,username,renderFetchpost}) {
   const [commentstate, setCommentstate] = useState("");
   const handleClose = () => {
     setCommentstate("");
-    renderFetchpost(true);
+    renderFetchpost && renderFetchpost(true);
     setOpen(false);
   };
   const addComment = async () => {

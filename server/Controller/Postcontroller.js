@@ -1,8 +1,9 @@
 import postmodal from "../Schema/Postschema.js";
 import commentModal from "../Schema/CommentSchema.js";
+import pollmodal from "../Schema/PollSchema.js";
 // ....Add discussion and Questions ,answer..........
 export const createPost = async (req, res, next) => {
- 
+ console.log("req.body:",req.body)
  const {tag,title,description,user,poll}=req.body;
   try {
 
@@ -26,7 +27,7 @@ export const createPost = async (req, res, next) => {
 // fetch all discusions from server , then send on front end
 export const fetchAlldiscussion = async (req, res) => {
   try {
-    const data = await postmodal.find({visibility: true}).populate("comments").populate({
+    const data = await postmodal.find({visibility: true}).populate("user").populate("poll").populate("comments").populate({
       path: "comments",
       populate: [{
         path: "reply",
@@ -66,7 +67,13 @@ export const getSpecificDiscussion = async (req, res, next) => {
   
   try {
     const id = req.params.id;
-    const data = await postmodal.find({ user: id,visibility:true });
+    const data = await postmodal.find({user: id,visibility: true}).populate("user").populate("poll").populate("comments").populate({
+      path: "comments",
+      populate: [{
+        path: "reply",
+        modal: commentModal
+      }]
+    });
     res.json({
       status: true,
       data: data
@@ -84,7 +91,7 @@ export const getSpecificDiscussion = async (req, res, next) => {
 export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await postmodal.find({ _id :id,visibility: true}).populate("comments").populate({
+    const data = await postmodal.find({ _id :id,visibility: true}).populate("user").populate("poll").populate("comments").populate({
       path: "comments",
       populate: [{
         path: "reply",
@@ -139,7 +146,7 @@ export const removepost = async (req, res) => {
 
 // start update post code start here
 export const EditepostHandler = async (req, res) => {
-  
+console.log("req.body",req.body);
   try {
     const {id,description} = req.body;
     console.log("id:",id,"description: ",description);
