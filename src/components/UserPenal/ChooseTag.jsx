@@ -6,10 +6,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { withStyles } from "@mui/styles";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { BiMessageRounded } from "react-icons/bi";
-import { FaChalkboardTeacher, FaBook } from "react-icons/fa";
-import { MdGroup, MdFeed } from "react-icons/md";
-import { RiCheckboxBlankFill } from "react-icons/ri";
+import { FaRegComments, FaChalkboardTeacher, FaBook } from "react-icons/fa";
+import { RiGroupFill, RiCheckboxBlankFill } from "react-icons/ri";
+import { CgNotes } from "react-icons/cg";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -30,13 +29,12 @@ const StyledModal = withStyles((theme) => ({
     },
   },
 }))(Dialog);
-function ChooseTag({ open, setOpen,getTags }) {
-
-const [tagestate,settageState]=useState('');
+function ChooseTag({ open, setOpen, getTags }) {
+  const [tagestate, settageState] = useState("");
 
   const tagsData = [
     {
-      Icon: BiMessageRounded,
+      Icon: FaRegComments,
       label: "General",
       descrp:
         "For topics that do not belong to any other particular topics, please post them here.",
@@ -53,13 +51,13 @@ const [tagestate,settageState]=useState('');
       descrp: "Community initiatives driving education to help new ohmies.",
     },
     {
-      Icon: MdGroup,
+      Icon: RiGroupFill,
       label: "Community Development",
       descrp:
         "All non-educational community proposals and community engagement ideas can be posted here",
     },
     {
-      Icon: MdFeed,
+      Icon: CgNotes,
       label: "Feedback",
       descrp:
         "Provide feedback about the protocol, the community and the team here",
@@ -71,30 +69,27 @@ const [tagestate,settageState]=useState('');
     },
   ];
 
-  const getvalueHandler=(event, value)=>{
+  const getvalueHandler = (event, value) => {
+    settageState(value.label);
+  };
 
-      settageState(value.label);
-  }
-
-  const selectValueHandler=(e)=>{
+  const selectValueHandler = (e) => {
     settageState(e.target.value);
-  }
+  };
 
-  const addTagsHandler=()=>{
-    if(tagestate){
+  const addTagsHandler = () => {
+    if (tagestate) {
       getTags(tagestate);
       handleClose();
-      
     }
 
-    settageState('');
-  }
+    settageState("");
+  };
   const handleClose = () => {
     setOpen(false);
   };
   return (
     <>
-
       <StyledModal
         open={open}
         TransitionComponent={Transition}
@@ -154,8 +149,8 @@ const [tagestate,settageState]=useState('');
               )}
               renderInput={(params) => (
                 <TextField
-                value={tagestate || ''}
-                onChange={selectValueHandler}
+                  value={tagestate || ""}
+                  onChange={selectValueHandler}
                   {...params}
                   inputProps={{
                     ...params.inputProps,
@@ -193,7 +188,7 @@ const [tagestate,settageState]=useState('');
             />
 
             <Button
-            onClick={addTagsHandler}
+              onClick={addTagsHandler}
               disableRipple={true}
               sx={{
                 backgroundColor: "secondary.main",
