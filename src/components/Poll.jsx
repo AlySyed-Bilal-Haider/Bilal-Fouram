@@ -54,7 +54,6 @@ const BpCheckbox = (props) => {
 
 
 function Poll({polldetails,user_id}) {
-  console.log("polldetails",polldetails,"user_id",user_id)
   return ( <>
     {polldetails?.visibility==true ? (
       <Box>

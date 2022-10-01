@@ -67,8 +67,6 @@ export default function Detail({ userId, username }) {
   const param = useParams();
   //close menu tag on click
   const userToken = localStorage.getItem("token");
-  const useremail = localStorage.getItem("email");
-  const [name, setNamestate] = useState(localStorage.getItem("name"));
   const user_id = localStorage.getItem("user_id");
   const [openstate, setOpenlogin] = useState(false);
   const [descriptionstate, setPostDescription] = useState("");
@@ -76,7 +74,6 @@ export default function Detail({ userId, username }) {
   const [ReplyPopOpen, setReplyPopOpen] = useState(false);
   const [postdetails, setPostdetails] = useState();
   const [postidstate, setPostIdstate] = useState("");
-  const [checkstate, setCheckstate] = useState(false);
   const [checklikeUnlike, setChecklikeUnlikestate] = useState("");
   const [renderPost, setRenderstate] = useState(false);
   const [commentData, setCommentData] = useState([]);
@@ -351,20 +348,27 @@ export default function Detail({ userId, username }) {
               <Box pb={10} key={index}>
                 <Box py={2.5} pl={6} borderBottom="1px solid #fff">
                   <Box py={2} display="flex" alignItems="center">
+    
+                   <Box sx={{width:"40px",height:'40px',borderRadius:'50%',mr:1}}>
+                      <img style={{width:"40px",height:'40px',borderRadius:'50%'}}
+                      src={`${url}/upload/${postdetails[index]?.user?.img}`} alt="Good"/>
+                    </Box>
                     <Typography
                       variant="body1"
                       color="primary.main"
                       fontWeight="700"
                     >
-                      {name ? name : null}
+                        {postdetails[0]?.user.name}
                     </Typography>
+              
+           
                     <Typography
                       ml={2}
                       variant="body1"
                       color="primary.light"
                       fontSize="13px"
                     >
-                      {/* {moment(items?.enddate).format("LL")} */}
+                      {moment(items?.enddate).format("LL")}
                     </Typography>
                   </Box>
 
@@ -384,7 +388,7 @@ export default function Detail({ userId, username }) {
                   <BsFillPinFill size="25px" style={{ marginRight: "20px" }} />
                   <Typography variant="body1">
                     <span style={{ fontWeight: "800" }}>
-                      {name ? name : null}
+                    {postdetails[0]?.user.name}
                     </span>{" "}
                     stickied the discussion.
                   </Typography>
@@ -401,7 +405,7 @@ export default function Detail({ userId, username }) {
                   <FaLock size="23px" style={{ marginRight: "20px" }} />
                   <Typography variant="body1">
                     <span style={{ fontWeight: "800" }}>
-                      {name ? name : null}
+                      {postdetails[0]?.user.name}
                     </span>{" "}
                     Locked the discussion.
                   </Typography>
