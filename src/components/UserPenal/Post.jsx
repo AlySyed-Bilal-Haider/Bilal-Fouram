@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import EditPopUp from "./EditPopUp";
 import { url } from "../../utils";
-
+import Login from "../Login";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -49,6 +49,9 @@ function Post({ userid }) {
   const [PostID, setPostID] = useState("");
   const [descriptionstate, setDescriptionstate] = useState("");
   const [updatepost, setUpdatestate] = useState(false);
+  const [openstate, setOpenlogin] = useState(false);
+  const [checklikeUnlike, setChecklikeUnlikestate] = useState(false);
+  const userToken=localStorage.getItem('token');
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -106,6 +109,44 @@ function Post({ userid }) {
   };
 
   console.log("userposts", userposts);
+
+  // ...................like and unlike post code sections.........................
+
+  // ..........like handler ..........
+  const likeHandler = async (podtid) => {
+    const likevalue = { post_id: podtid, user_id };
+    console.log("likevalue:", likevalue);
+    try {
+      if (userToken) {
+        const { data } = await axios.post(`${url}/like`, likevalue);
+        console.log("like response:", data);
+        if (data.message == "ok") {
+          fetchPost();
+        }
+      } else {
+        setOpenlogin(true);
+      }
+    } catch (error) {
+      console.log("like error", error);
+    }
+  };
+  // .........unliked handler section ..........
+  const unLikedHandler = async (postid) => {
+    const unliked = { post_id:postid, user_id };
+    try {
+      if (userToken) {
+        const { data } = await axios.post(`${url}/unlike`, unliked);
+        console.log("unliked response:", data);
+        if (data.message == "ok") {
+          fetchPost();
+        }
+      } else {
+        setOpenlogin(true);
+      }
+    } catch (error) {
+      console.log("unliked code error", error);
+    }
+  };
   return (
     <>
       <EditPopUp
@@ -192,14 +233,31 @@ function Post({ userid }) {
                     >
                       Reply
                     </Typography>
-                    <Typography
+                    { userposts[i].like.includes(item?._id) ?( <Typography
+                   
+                    onClick={()=>{
+                      unLikedHandler(item?._id);
+                     }}
                       ml="30px"
                       variant="body1"
                       fontSize="14px"
                       color="primary.light"
                     >
-                      Like
-                    </Typography>
+                      
+                      Unlike
+                    </Typography>):(
+                         <Typography
+                         onClick={()=>{
+                          likeHandler(item?._id);
+                        }}
+                         ml="30px"
+                         variant="body1"
+                         fontSize="14px"
+                         color="primary.light"
+                       >
+                         Like
+                       </Typography>
+                    )}
                     <BsThreeDots
                       onClick={handleClick}
                       size="22px"
@@ -248,6 +306,8 @@ function Post({ userid }) {
           </Typography>
         )}
       </Box>
+      
+      {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}
     </>
   );
 }

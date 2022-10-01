@@ -148,21 +148,7 @@ export default function Detail({ userId, username }) {
       console.log("error details pages", error);
     }
   };
-  // check this user is approveed or not
-  // const approveORnotapproveCheck = async () => {
-  //   const voteinfo = { id: param?.id, email: useremail };
-  //   try {
-  //     const { data } = await axios.post(`${url}/getvotesdetails`, voteinfo);
-  //     console.log("data votes", data);
-  //     setCheckstate(data?.votedetails?.checkstatus);
-  //   } catch (error) {
-  //     console.log("check approve and unapprove", error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   useremail && approveORnotapproveCheck();
-  // }, []);
-  //Approve Handler
+
   const handleApprove = async () => {
     let approveinfo = { id: param?.id, email: useremail };
     try {
