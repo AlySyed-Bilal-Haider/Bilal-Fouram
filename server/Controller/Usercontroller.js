@@ -84,6 +84,7 @@ export const login = async (req, res) => {
                 expiresIn: "6d",
               },
               (err, token) => {
+                console.log(docs._doc);
                 res.json({
                   status: "ok",
                   message: "User login Successfully!",
@@ -133,6 +134,7 @@ export const tokenVerifyHandler = async (req, res) => {
           name: docs.name,
           email: docs.email,
           id: docs._id,
+          role: docs.role
         });
       });
     } else {
