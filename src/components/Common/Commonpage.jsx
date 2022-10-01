@@ -6,7 +6,16 @@ import { Button, Box, Typography, Grid } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { deepPurple } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
-import { FaReply } from "react-icons/fa";
+import {
+  FaRegComments,
+  FaChalkboardTeacher,
+  FaBook,
+  FaReply,
+  FaRegComment,
+} from "react-icons/fa";
+import { RiGroupFill } from "react-icons/ri";
+import { CgNotes } from "react-icons/cg";
+
 import { url } from "../../utils";
 // /detail
 function Commonpage(props) {
@@ -35,7 +44,7 @@ function Commonpage(props) {
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
-        console.log("data.allDiscussion",data.allDiscussion);
+        console.log("data.allDiscussion", data.allDiscussion);
         setAlldescussionsstate(data.allDiscussion);
       } catch (error) {
         console.log(error);
@@ -94,7 +103,7 @@ function Commonpage(props) {
       </Box>
       {/* 
       .........start main sections here ............. */}
-      {props.title && categorystate.length == 0 ? (
+      {props.title && categorystate.length === 0 ? (
         <Typography variant="h4" mt={2} fontWeight={700} align="center">
           Upcoming as soon {props.title} !
         </Typography>
@@ -108,12 +117,11 @@ function Commonpage(props) {
               key={i}
               sx={{
                 mt: 2,
-                pt: 0.5,
-                pb: { md: 1, xs: 0 },
-                pr: 4,
+                pb: { md: 2, xs: 1 },
+                boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
+                borderRadius: "4px",
                 "&:hover": {
                   backgroundColor: "hover.primary",
-                  borderRadius: "4px",
                   cursor: "pointer",
                 },
               }}
@@ -142,7 +150,6 @@ function Commonpage(props) {
                     width: "100%",
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "flex-start",
                     flexDirection: { md: "row", xs: "column" },
                   }}
                 >
@@ -176,42 +183,52 @@ function Commonpage(props) {
                       </Typography>
                     </Box>
                   </Box>
-                  <Box>
-                    <Button
-                      startIcon={
-                        <AutorenewIcon
-                          sx={{ fontSize: { md: "8px", xs: "4px" } }}
-                        />
-                      }
+                  <Box display="flex" alignItems="center">
+                    <Typography
+                      px="5px"
+                      py="2px"
+                      variant="body1"
                       sx={{
-                        height: "17px",
-                        fontSize: "8px",
-                        fontWeight: 700,
-                        backgroundColor: "primary.main",
-                        borderRadius: "4px",
                         color: "text.main",
-                        px: { md: 1, xs: 0.5 },
-                        py: { md: 1.5, xs: 1 },
-                        "&:hover": {
-                          backgroundColor: "primary.main",
-                        },
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        backgroundColor: "secondary.light",
+                        borderRadius: "4px",
+                        textTransform: "capitalize",
+                        width: "fit-content",
+                        display: "flex",
+                        alignItems: "center",
                       }}
                     >
-                      {items?.tag ? items?.tag : "All descussion"}
-                    </Button>
-                    <Button
-                      startIcon={
-                        <AutorenewIcon
-                          sx={{
-                            fontSize: "14px",
-                            display: { md: "block", xs: "none" },
-                          }}
+                      {items?.tag === "general" ? (
+                        <FaRegComments
+                          size="15px"
+                          style={{ marginRight: "5px" }}
                         />
-                      }
-                      sx={{ height: "21px", fontSize: "14px" }}
-                    >
-                      0
-                    </Button>
+                      ) : items?.tag === "Proposal" ? (
+                        <FaChalkboardTeacher
+                          size="15px"
+                          style={{ marginRight: "5px" }}
+                        />
+                      ) : items?.tag === "Knowledge Base" ? (
+                        <FaBook size="13px" style={{ marginRight: "5px" }} />
+                      ) : items?.tag === "Community Development" ? (
+                        <RiGroupFill
+                          size="15px"
+                          style={{ marginRight: "5px" }}
+                        />
+                      ) : items?.tag === "Feedback" ? (
+                        <CgNotes size="15px" style={{ marginRight: "5px" }} />
+                      ) : (
+                        ""
+                      )}
+
+                      {items?.tag ? items?.tag : "All descussion"}
+                    </Typography>
+
+                    <Typography variant="body1" fontSize="14px" ml={2}>
+                      <FaRegComment style={{ marginRight: "5px" }} /> 0
+                    </Typography>
                   </Box>
                 </Box>
               </Box>
