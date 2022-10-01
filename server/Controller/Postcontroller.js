@@ -27,7 +27,7 @@ export const createPost = async (req, res, next) => {
 // fetch all discusions from server , then send on front end
 export const fetchAlldiscussion = async (req, res) => {
   try {
-    const data = await postmodal.find({visibility: true}).populate("poll").populate("comments").populate({
+    const data = await postmodal.find({visibility: true}).populate("user").populate("poll").populate("comments").populate({
       path: "comments",
       populate: [{
         path: "reply",
@@ -67,7 +67,7 @@ export const getSpecificDiscussion = async (req, res, next) => {
   
   try {
     const id = req.params.id;
-    const data = await postmodal.find({user: id,visibility: true}).populate("poll").populate("comments").populate({
+    const data = await postmodal.find({user: id,visibility: true}).populate("user").populate("poll").populate("comments").populate({
       path: "comments",
       populate: [{
         path: "reply",
@@ -91,7 +91,7 @@ export const getSpecificDiscussion = async (req, res, next) => {
 export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await postmodal.find({ _id :id,visibility: true}).populate("poll").populate("comments").populate({
+    const data = await postmodal.find({ _id :id,visibility: true}).populate("user").populate("poll").populate("comments").populate({
       path: "comments",
       populate: [{
         path: "reply",
