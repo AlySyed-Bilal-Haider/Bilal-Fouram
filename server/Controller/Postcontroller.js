@@ -1,4 +1,4 @@
-import postmodal from "../Schema/Postschema.js";
+import postmodal from "../Schema/PostSchema.js";
 import commentModal from "../Schema/CommentSchema.js";
 import pollmodal from "../Schema/PollSchema.js";
 // ....Add discussion and Questions ,answer..........

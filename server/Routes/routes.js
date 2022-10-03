@@ -37,7 +37,7 @@ router.delete("/removePoll/:id", Poll.DeletePoll);
 router.delete("/removeComment/:id", Comment.removeComment);
 
 
-// edite post routes
+// edit post routes
 
 router.put("/editpost", Post.EditepostHandler);
 router.put("/editcomment", Comment.EditComment);
@@ -46,11 +46,11 @@ router.put("/restorecomment/:id", Comment.restoreComment);
 
 //admin related routes
 
-router.get("/fetchapprovedposts", Admin.FetchApprovedPosts);
-router.get("/fetchpendingposts", Admin.FetchPendingPosts);
-router.get("/fetchrejectedposts", Admin.FetchRejectedPosts);
-router.get("/approvepost/:id", Admin.ApprovePost);
-router.get("/rejectpost/:id", Admin.RejectPost);
+router.get("/fetchapprovedposts", Admin.VerifyAdmin, Admin.FetchApprovedPosts);
+router.get("/fetchpendingposts", Admin.VerifyAdmin, Admin.FetchPendingPosts);
+router.get("/fetchrejectedposts", Admin.VerifyAdmin, Admin.FetchRejectedPosts);
+router.get("/approvepost/:id", Admin.VerifyAdmin, Admin.ApprovePost);
+router.get("/rejectpost/:id", Admin.VerifyAdmin, Admin.RejectPost);
 
 
 

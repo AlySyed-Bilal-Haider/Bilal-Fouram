@@ -1,4 +1,4 @@
-import postmodal from "../Schema/Postschema.js";
+import postmodal from "../Schema/PostSchema.js";
 import pollmodal from "../Schema/PollSchema.js";
 
 export const FetchAllPoll = async (req, res) => {

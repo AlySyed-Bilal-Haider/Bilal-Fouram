@@ -1,25 +1,37 @@
-import postmodal from "../Schema/Postschema.js";
+import postmodal from "../Schema/PostSchema.js";
 import commentModal from "../Schema/CommentSchema.js";
 import pollmodal from "../Schema/PollSchema.js";
 import usermodal from "../Schema/UserSchema.js";
 
-export const FetchApprovedPosts = async (req, res) => {
+
+export async function VerifyAdmin(req, res, next) {
     try {
         const id = req.headers.id;
-        console.log(id);
+        // console.log(id);
         const admin = await usermodal.findOne({ _id: id, role: "admin" });
-        console.log(admin._id);
-        // if ( admin && admin._id && id === admin._id.toString()) {
+        // console.log(admin);
+        if (admin) {
+            next();
+        } else {
+            res.status(403).send("Access denied.");
+        }
+
+
+    } catch (error) {
+        res.json({
+            error: error
+        })
+    }
+}
+
+export const FetchApprovedPosts = async (req, res) => {
+    try {
         const data = await postmodal.find({ status: "Approved" })
         res.json({
             status: "ok",
             posts: data
         })
-        // } else {
-        //     res.status(403).send("Access denied.");
-        // }
     } catch (error) {
-        // res.status(403).send("Access denied.");
         res.json({
             status: "error",
             message: error
