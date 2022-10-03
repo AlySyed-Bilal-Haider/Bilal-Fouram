@@ -33,9 +33,11 @@ const upload = multer({ storage: storage });
 
 // .......start route update of profile pic.........
 app.post("/uploadimg", upload.single("file"), async (req, res) => {
-  const _id = req.body.id;
+ 
   try {
-    const previous = await mongomodal.findOne({ _id });
+    const _id = req.body.id;
+    console.log(req);
+    const previous = await mongomodal.findOne({ _id: _id });
     console.log("previous", previous);
 
     const data = await mongomodal.findByIdAndUpdate(_id, {

@@ -5,11 +5,11 @@ import usermodal from "../Schema/UserSchema.js";
 
 export const FetchApprovedPosts = async (req, res) => {
     try {
-        // const id = req.headers.id;
-        // console.log(id);
-        // const admin = await usermodal.find({ _id: id, role: "admin" });
-        // console.log(admin[0]._id.toString());
-        // if (id === admin[0]?._id.toString()) {
+        const id = req.headers.id;
+        console.log(id);
+        const admin = await usermodal.findOne({ _id: id, role: "admin" });
+        console.log(admin._id);
+        // if ( admin && admin._id && id === admin._id.toString()) {
         const data = await postmodal.find({ status: "Approved" })
         res.json({
             status: "ok",
