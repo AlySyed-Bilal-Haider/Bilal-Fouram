@@ -6,15 +6,14 @@ import LinearProgress, {
 import { GoCheck } from "react-icons/go";
 import axios from "axios";
 import { url } from "../utils";
-import { AppBar, Box, styled, Checkbox, Typography } from "@mui/material";
+import { Box, styled, Checkbox, Typography } from "@mui/material";
 const LinearProgressBox = styled(LinearProgress)(({ theme }) => ({
-  height: 40,
-  width: 280,
-  marginTop: 15,
-  border: `2px solid ${theme.palette.secondary.light}`,
-  borderRadius: 5,
+  height: "100%",
+  width: "100%",
+  // border: `2px solid ${theme.palette.secondary.light}`,
+  borderRadius: 4,
   [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: "transparent",
+    backgroundColor: theme.palette.hover.primary,
   },
   [`& .${linearProgressClasses.bar}`]: {
     backgroundColor: theme.palette.secondary.light,
@@ -81,12 +80,12 @@ function Poll({ polldetails, user_id }) {
           <Typography
             mt={2}
             variant="body1"
-            fontSize="14px"
+            fontSize="18px"
             color="primary.light"
           >
             {polldetails?.question}
           </Typography>
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               alignItems: "center",
@@ -97,59 +96,64 @@ function Poll({ polldetails, user_id }) {
             {polldetails?.answers.map(({ title, _id }, i) => {
               return (
                 <>
-                  <div key={i + _id}>
-                    <Typography
-                      mt={3}
-                      variant="body1"
-                      fontSize="16px"
-                      fontWeight="700"
-                      color="primary.main"
-                    >
-                      {title}
-                    </Typography>
-                    <Box
-                      mt={1}
-                      px={2}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent={{ xs: "center", md: "space-between" }}
-                      flexWrap="wrap"
-                    >
-                      <Box>
-                        <LinearProgressBox variant="determinate" value={5} />
-                        <Typography
-                          onClick={() => {
-                            pollApproveUnapprove(polldetails?._id, _id);
-                          }}
-                          mt={-4.6}
-                          variant="subtitle1"
-                          display="flex"
-                          alignItems="center"
-                        >
-                          <BpCheckbox />
-                          Do not approve
-                        </Typography>
-                        <LinearProgressBox variant="determinate" value={5} />
-                        <Typography
-                          onClick={() => {
-                            pollApproveUnapprove(polldetails?._id, _id);
-                          }}
-                          mt={-4.6}
-                          variant="subtitle1"
-                          display="flex"
-                          alignItems="center"
-                        >
-                          <BpCheckbox />
-                          You approve
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    {/* </Box> */}
-                  </div>
+                  <Typography
+                    key={i}
+                    mt={3}
+                    variant="body1"
+                    fontSize="16px"
+                    fontWeight="700"
+                    color="primary.main"
+                  >
+                    {title}
+                  </Typography>
                 </>
               );
             })}
+          </Box> */}
+
+          <Box
+            mt={2}
+            px={2}
+            display="flex"
+            alignItems="center"
+            justifyContent={{ xs: "center", md: "space-between" }}
+            flexWrap="wrap"
+          >
+            <Box
+              mt={{ md: 0, xs: 1.5 }}
+              height="39px"
+              width="270px"
+              position="relative"
+            >
+              <LinearProgressBox variant="determinate" value={5} />
+              <Typography
+                variant="subtitle1"
+                display="flex"
+                alignItems="center"
+                sx={{ position: "absolute", top: "2px" }}
+              >
+                <BpCheckbox />
+                Do not approve
+              </Typography>
+            </Box>
+
+            <Box
+              mt={{ md: 0, xs: 1.5 }}
+              height="39px"
+              width="270px"
+              position="relative"
+            >
+              <LinearProgressBox variant="determinate" value={70} />
+              <Typography
+                variant="subtitle1"
+                display="flex"
+                alignItems="center"
+                sx={{ position: "absolute", top: "2px" }}
+              >
+                <BpCheckbox />
+                Approve
+              </Typography>
+            </Box>
           </Box>
 
           <Typography

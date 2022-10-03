@@ -3,12 +3,15 @@ import commentModal from "../Schema/CommentSchema.js";
 import pollmodal from "../Schema/PollSchema.js";
 // ....Add discussion and Questions ,answer..........
 export const createPost = async (req, res, next) => {
- console.log("req.body:",req.body)
- const {tag,title,description,user,poll}=req.body;
+  console.log("req.body:", req.body);
+  const { tag, title, description, user, poll } = req.body;
   try {
-
     const newPost = new postmodal({
-      tag,title,description,user,poll
+      tag,
+      title,
+      description,
+      user,
+      poll,
     });
     console.log(newPost);
     await newPost.save();
@@ -27,13 +30,20 @@ export const createPost = async (req, res, next) => {
 // fetch all discusions from server , then send on front end
 export const fetchAlldiscussion = async (req, res) => {
   try {
-    const data = await postmodal.find({visibility: true}).populate("user").populate("poll").populate("comments").populate({
-      path: "comments",
-      populate: [{
-        path: "reply",
-        modal: commentModal
-      }]
-    });
+    const data = await postmodal
+      .find({ visibility: true, status: "Approved" })
+      .populate("user")
+      .populate("poll")
+      .populate("comments")
+      .populate({
+        path: "comments",
+        populate: [
+          {
+            path: "reply",
+            modal: commentModal,
+          },
+        ],
+      });
     // console.log("data", data);
     res.json({
       status: "ok",
@@ -52,16 +62,18 @@ export const fetchAlldiscussion = async (req, res) => {
 
 // fetch specifc data from server
 
-export const fetchcategory = async (req, res,next) => {
-
+export const fetchcategory = async (req, res, next) => {
   try {
     const tag = req.params.tag;
-    console.log("tages:",tag);
-    const data = await postmodal.find({ tag: tag, visibility: true }).populate("user").populate("comments");
+    console.log("tages:", tag);
+    const data = await postmodal
+      .find({ tag: tag, visibility: true })
+      .populate("user")
+      .populate("comments");
     res.json({
-      message:"ok",
-      data: data
-    })
+      message: "ok",
+      data: data,
+    });
   } catch (error) {
     next(error);
   }
@@ -69,20 +81,26 @@ export const fetchcategory = async (req, res,next) => {
 
 // fetch specific detials from discussion, according to user id
 export const getSpecificDiscussion = async (req, res, next) => {
-  
   try {
     const id = req.params.id;
-    const data = await postmodal.find({user: id,visibility: true}).populate("user").populate("poll").populate("comments").populate({
-      path: "comments",
-      populate: [{
-        path: "reply",
-        modal: commentModal
-      }]
-    });
+    const data = await postmodal
+      .find({ user: id, visibility: true })
+      .populate("user")
+      .populate("poll")
+      .populate("comments")
+      .populate({
+        path: "comments",
+        populate: [
+          {
+            path: "reply",
+            modal: commentModal,
+          },
+        ],
+      });
     res.json({
       status: true,
-      data: data
-    })
+      data: data,
+    });
   } catch (error) {
     next(error);
   }
@@ -93,22 +111,28 @@ export const getSpecificDiscussion = async (req, res, next) => {
 export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await postmodal.find({ _id :id,visibility: true}).populate("user").populate("poll").populate("comments").populate({
-      path: "comments",
-      populate: [{
-        path: "reply",
-        modal: commentModal
-      }]
-    });
+    const data = await postmodal
+      .find({ _id: id, visibility: true, status: "Approved" })
+      .populate("user")
+      .populate("poll")
+      .populate("comments")
+      .populate({
+        path: "comments",
+        populate: [
+          {
+            path: "reply",
+            modal: commentModal,
+          },
+        ],
+      });
     console.log(data);
-    if(data){
+    if (data) {
       res.send(data);
-    }else{
+    } else {
       res.json({
-        message: "no post exists"
-      })
+        message: "no post exists",
+      });
     }
-    
   } catch (error) {
     res.status(404).json({
       status: "error",
@@ -121,7 +145,7 @@ export const fetchPostDetails = async (req, res) => {
 export const removepost = async (req, res) => {
   try {
     const id = req.params.id.trim();
-    console.log("id",id);
+    console.log("id", id);
 
     const data = await postmodal.findByIdAndUpdate(id, { visibility: false });
     if (data) {
@@ -148,10 +172,10 @@ export const removepost = async (req, res) => {
 
 // start update post code start here
 export const EditepostHandler = async (req, res) => {
-console.log("req.body",req.body);
+  console.log("req.body", req.body);
   try {
-    const {id,description} = req.body;
-    console.log("id:",id,"description: ",description);
+    const { id, description } = req.body;
+    console.log("id:", id, "description: ", description);
     const data = await postmodal.findByIdAndUpdate(id, {
       description: description,
     });
@@ -178,15 +202,15 @@ console.log("req.body",req.body);
 };
 
 export const CheckPostLike = async (req, res) => {
-  const post_id = req.params.post_id;
-  const user_id = req.params.user_id;
   try {
-    const postLike = await postmodal.findById({_id:post_id});
-   const check = postLike.like.includes(user_id);
-   if (check) {
+    const post_id = req.params.post_id;
+    const user_id = req.params.user_id;
+    const postLike = await postmodal.findById({ _id: post_id });
+    const check = postLike.like.includes(user_id);
+    if (check) {
       res.json({
         status: true,
-        message: 'ok'
+        message: "ok",
       });
     } else {
       res.json({
@@ -201,7 +225,6 @@ export const CheckPostLike = async (req, res) => {
 };
 
 export const likeHandler = async (req, res) => {
-  // console.log(req.body);
   try {
     const post = await postmodal.findByIdAndUpdate(req.body.post_id, {
       $push: { like: req.body.user_id },
