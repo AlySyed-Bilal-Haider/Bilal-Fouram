@@ -7,16 +7,12 @@ import usermodal from "../Schema/UserSchema.js";
 export async function VerifyAdmin(req, res, next) {
     try {
         const id = req.headers.id;
-        // console.log(id);
         const admin = await usermodal.findOne({ _id: id, role: "admin" });
-        // console.log(admin);
         if (admin) {
             next();
         } else {
             res.status(403).send("Access denied.");
         }
-
-
     } catch (error) {
         res.json({
             error: error
@@ -26,7 +22,7 @@ export async function VerifyAdmin(req, res, next) {
 
 export const FetchApprovedPosts = async (req, res) => {
     try {
-        const data = await postmodal.find({ status: "Approved" })
+        const data = await postmodal.find({ status: "Approved" }).populate("poll").populate("user");
         res.json({
             status: "ok",
             posts: data
@@ -42,14 +38,13 @@ export const FetchApprovedPosts = async (req, res) => {
 export const FetchPendingPosts = async (req, res) => {
     try {
 
-        const data = await postmodal.find({ status: "Pending" })
+        const data = await postmodal.find({ status: "Pending" }).populate("poll").populate("user");
         res.json({
             status: "ok",
             posts: data
         })
 
     } catch (error) {
-
         res.json({
             status: "error",
             message: error
@@ -59,7 +54,7 @@ export const FetchPendingPosts = async (req, res) => {
 export const FetchRejectedPosts = async (req, res) => {
     try {
 
-        const data = await postmodal.find({ status: "Rejected" })
+        const data = await postmodal.find({ status: "Rejected" }).populate("poll").populate("user");
         res.json({
             status: "ok",
             posts: data
@@ -76,8 +71,13 @@ export const FetchRejectedPosts = async (req, res) => {
 
 export const ApprovePost = async (req, res) => {
     try {
+        // console.log(req);
         const id = req.params.id;
-        const data = await postmodal.findByIdAndUpdate(id, { status: "Approved" })
+        const data = await postmodal.findByIdAndUpdate(id, { status: "Approved" });
+        console.log(data);
+        const userdiscussion = await usermodal.findByIdAndUpdate(data.user, {
+            $push: { discussion: data._id },
+          });
         res.json({
             status: "ok",
             message: "Post has been Approved"

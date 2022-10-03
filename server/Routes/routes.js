@@ -4,6 +4,7 @@ import * as Post from '../Controller/Postcontroller.js';
 import * as Comment from '../Controller/CommentController.js';
 import * as Poll from "../Controller/PollController.js";
 import * as Admin from "../Controller/AdminController.js";
+import * as UserPanal from "../Controller/UserPanalController.js";
 
 const router = express.Router();
 
@@ -51,6 +52,14 @@ router.get("/fetchpendingposts", Admin.VerifyAdmin, Admin.FetchPendingPosts);
 router.get("/fetchrejectedposts", Admin.VerifyAdmin, Admin.FetchRejectedPosts);
 router.get("/approvepost/:id", Admin.VerifyAdmin, Admin.ApprovePost);
 router.get("/rejectpost/:id", Admin.VerifyAdmin, Admin.RejectPost);
+
+
+//user panal routes
+
+router.get("/fetchuserposts/:id",UserPanal.FetchPosts);
+router.get("/fetchuserdiscussion/:id",UserPanal.FetchDiscussion);
+router.get("/fetchlikedposts/:id",UserPanal.FetchLiked);
+
 
 
 
