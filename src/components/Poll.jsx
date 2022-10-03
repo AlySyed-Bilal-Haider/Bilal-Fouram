@@ -53,13 +53,14 @@ const BpCheckbox = (props) => {
   );
 };
 
-function Poll({ polldetails, user_id }) {
-  const pollApproveUnapprove = async (poll_id, answer_id) => {
+function Poll({ polldetails, user_id, checkedfunc }) {
+  const pollApproveUnapprove = async (poll_id, answer_id, user_id) => {
     try {
       const pollvalue = { poll_id, answer_id, user_id };
-      console.log("pollvalue:", pollvalue);
-      const { data } = await axios(`${url}/votepoll`, pollvalue);
-      console.log("poll data", data.data);
+      console.log("pollvalue", pollvalue);
+      const { data } = await axios.post(`${url}/votepoll`, pollvalue);
+      console.log("data", data);
+      (await data.status) === "ok" && checkedfunc(true);
     } catch (error) {
       console.log("Approve poll error !", error);
     }
@@ -85,31 +86,14 @@ function Poll({ polldetails, user_id }) {
           >
             {polldetails?.question}
           </Typography>
-          {/* <Box
+          <Box
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
               px: 2,
             }}
-          >
-            {polldetails?.answers.map(({ title, _id }, i) => {
-              return (
-                <>
-                  <Typography
-                    key={i}
-                    mt={3}
-                    variant="body1"
-                    fontSize="16px"
-                    fontWeight="700"
-                    color="primary.main"
-                  >
-                    {title}
-                  </Typography>
-                </>
-              );
-            })}
-          </Box> */}
+          ></Box>
 
           <Box
             mt={2}
@@ -119,41 +103,42 @@ function Poll({ polldetails, user_id }) {
             justifyContent={{ xs: "center", md: "space-between" }}
             flexWrap="wrap"
           >
-            <Box
-              mt={{ md: 0, xs: 1.5 }}
-              height="39px"
-              width="270px"
-              position="relative"
-            >
-              <LinearProgressBox variant="determinate" value={5} />
-              <Typography
-                variant="subtitle1"
-                display="flex"
-                alignItems="center"
-                sx={{ position: "absolute", top: "2px" }}
-              >
-                <BpCheckbox />
-                Do not approve
-              </Typography>
-            </Box>
-
-            <Box
-              mt={{ md: 0, xs: 1.5 }}
-              height="39px"
-              width="270px"
-              position="relative"
-            >
-              <LinearProgressBox variant="determinate" value={70} />
-              <Typography
-                variant="subtitle1"
-                display="flex"
-                alignItems="center"
-                sx={{ position: "absolute", top: "2px" }}
-              >
-                <BpCheckbox />
-                Approve
-              </Typography>
-            </Box>
+            {polldetails?.answers.map(({ title, _id }, i) => {
+              return (
+                <>
+                  <Box
+                    key={_id}
+                    mt={{ md: 0, xs: 1.5 }}
+                    height="39px"
+                    width="270px"
+                    position="relative"
+                  >
+                    <LinearProgressBox variant="determinate" value={5} />
+                    <Typography
+                      variant="subtitle1"
+                      display="flex"
+                      alignItems="center"
+                      sx={{ position: "absolute", top: "2px" }}
+                    >
+                      {polldetails?.answers[i]?.vote?.includes(
+                        user_id
+                      ) ? null : (
+                        <BpCheckbox
+                          onClick={() => {
+                            pollApproveUnapprove(
+                              polldetails?._id,
+                              _id,
+                              user_id
+                            );
+                          }}
+                        />
+                      )}
+                      {title}
+                    </Typography>
+                  </Box>
+                </>
+              );
+            })}
           </Box>
 
           <Typography

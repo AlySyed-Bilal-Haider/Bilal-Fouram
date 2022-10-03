@@ -65,9 +65,8 @@ export const fetchAlldiscussion = async (req, res) => {
 export const fetchcategory = async (req, res, next) => {
   try {
     const tag = req.params.tag;
-    console.log("tages:", tag);
     const data = await postmodal
-      .find({ tag: tag, visibility: true })
+      .find({ tag: tag, visibility: true, status: "Approved" })
       .populate("user")
       .populate("comments");
     res.json({

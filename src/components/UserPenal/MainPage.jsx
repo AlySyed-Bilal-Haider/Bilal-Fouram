@@ -43,7 +43,6 @@ export default function MainPage() {
   const [userProfilestate, setProfilestate] = useState("");
   const [userid, setIDstate] = useState("");
   const [userfile, setUserfile] = useState("");
-
   const user_id = localStorage.getItem("user_id") || "";
   const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -66,7 +65,7 @@ export default function MainPage() {
   };
 
   useEffect(() => {
-    if (!!user_id) {
+    if (user_id) {
       userProfileHandler();
     }
   }, [user_id]);
@@ -95,6 +94,7 @@ export default function MainPage() {
       console.log("error upload", error);
     }
   };
+
   return (
     <>
       <Box bgcolor="primary.light" height="260px">

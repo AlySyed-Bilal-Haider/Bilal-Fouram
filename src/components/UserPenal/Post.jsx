@@ -165,7 +165,7 @@ function Post({ userid }) {
         userid={userid}
       />
       <Box pb={10}>
-        {userposts ? (
+        {userposts.length > 0 ? (
           userposts?.map((item, i) => {
             return (
               <Box mt={i === 0 ? 0 : 2} key={i}>
@@ -268,7 +268,7 @@ function Post({ userid }) {
                         variant="body1"
                         fontSize="14px"
                         color="primary.light"
-                        sx={{cursor:'pointer'}}
+                        sx={{ cursor: "pointer" }}
                       >
                         Unlike
                       </Typography>
@@ -281,7 +281,7 @@ function Post({ userid }) {
                         variant="body1"
                         fontSize="14px"
                         color="primary.light"
-                        sx={{cursor:'pointer'}}
+                        sx={{ cursor: "pointer" }}
                       >
                         Like
                       </Typography>

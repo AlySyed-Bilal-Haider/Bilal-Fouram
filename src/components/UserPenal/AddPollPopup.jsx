@@ -77,30 +77,31 @@ function PopUp({ open, setOpen, pollHandle }) {
   };
 
   const addPollHandler = async () => {
-    console.log("addans:", addans);
-    // for (const item of addans) {
-    //   if (addans.hasOwnProperty(item)) {
-    //     addpoll.answers.push({ key: addans[item] });
-    //   }
-    // }
-    // addpoll.answers.push(addans);
-
-    console.log("addpoll", addpoll);
-    console.log("addans:", addans);
-    // try {
-    //   const { data } = await axios.post(`${url}/createpoll`, addpoll);
-    //   console.log("poll data", data);
-    //   (await data.message) == "ok" && pollHandle(data.poll);
-    //   await setOpen(false);
-    // } catch (error) {
-    //   console.log("poll error !", error);
-    // }
-    // setAnsState({});
-    // setAddpollstate({
-    //   question: "",
-    //   answers: [],
-    //   enddate: "",
-    // });
+    let items = [];
+    const title = "title";
+    items = [...items, { ...addans }];
+    let res = items.reduce((acc, obj) => {
+      Object.keys(obj).forEach((key) => {
+        acc.push({ [`${title}`]: obj[key] });
+      });
+      return acc;
+    }, []);
+    addpoll.answers = res;
+    console.log("addpoll:", addpoll);
+    try {
+      const { data } = await axios.post(`${url}/createpoll`, addpoll);
+      console.log("poll data", data);
+      (await data.message) == "ok" && pollHandle(data.poll);
+      await setOpen(false);
+    } catch (error) {
+      console.log("poll error !", error);
+    }
+    setAnsState({});
+    setAddpollstate({
+      question: "",
+      answers: [],
+      enddate: "",
+    });
   };
 
   return (

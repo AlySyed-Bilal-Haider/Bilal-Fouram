@@ -85,7 +85,13 @@ export default function Detail({ userId, username }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openCommentEdite, setCommentsection] = useState("");
   const [EditecommentValue, setEditevalue] = useState("");
+  const [checkedPoll, setCheckPollstate] = useState(false);
   const open = Boolean(anchorEl);
+  const HandleChecked = (value) => {
+    console.log("value:", value);
+    setCheckPollstate(value);
+  };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -96,7 +102,7 @@ export default function Detail({ userId, username }) {
   // .........fetch post details and set states.........
   useEffect(() => {
     fetchdetails();
-  }, [param?.id, renderPost]);
+  }, [param?.id, renderPost, checkedPoll]);
 
   const fetchdetails = async () => {
     try {
@@ -254,8 +260,9 @@ export default function Detail({ userId, username }) {
       console.log("comment edite error !", error);
     }
   };
-
-  console.log("openCommentEdite:", openCommentEdite);
+  const checkPollHandle = () => {
+    setCheckPollstate(true);
+  };
   return (
     <>
       <Comment
@@ -285,7 +292,7 @@ export default function Detail({ userId, username }) {
                 textAlign="center"
                 display="flex"
                 flexDirection="column"
-                key={index}
+                key={index + "det"}
               >
                 <Box
                   display="flex"
@@ -367,8 +374,12 @@ export default function Detail({ userId, username }) {
       <Container>
         {postdetails?.map((items, index) => {
           return (
-            <Box mb={10} sx={{ boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px" }}>
-              <Box pb={2} key={index}>
+            <Box
+              mb={10}
+              sx={{ boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px" }}
+              key={index}
+            >
+              <Box pb={2}>
                 <Box py={2.5} pl={6} borderBottom="1px solid #fff">
                   <Box py={2} display="flex" alignItems="center">
                     <Box
@@ -459,6 +470,7 @@ export default function Detail({ userId, username }) {
                 <Poll
                   polldetails={postdetails[index]?.poll}
                   user_id={user_id}
+                  checkedfunc={HandleChecked}
                 />
 
                 {/* start comment sections start here */}
@@ -530,7 +542,7 @@ export default function Detail({ userId, username }) {
                   return (
                     <>
                       {visibility === true && (
-                        <div key={index}>
+                        <div key={`index${_id}`}>
                           <Box borderBottom="1px solid white" py={1}>
                             <Box py={2} display="flex" alignItems="center">
                               <Typography
@@ -702,7 +714,7 @@ export default function Detail({ userId, username }) {
                                 ) => {
                                   return (
                                     <>
-                                      <Box py={2.5} pl={6} key={index}>
+                                      <Box py={2.5} pl={6} key={`${_id}index`}>
                                         <Box
                                           py={2}
                                           display="flex"

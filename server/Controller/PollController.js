@@ -1,6 +1,4 @@
-import postmodal from "../Schema/Postschema.js";
 import pollmodal from "../Schema/PollSchema.js";
-
 export const FetchAllPoll = async (req, res) => {
   try {
     const data = await pollmodal.find({ visibility: true });
@@ -22,7 +20,6 @@ export const FetchAllPoll = async (req, res) => {
 
 export const CreatePoll = async (req, res) => {
   try {
-    console.log("create poll:", req.body);
     const newPoll = await new pollmodal(req.body);
     newPoll.save();
     res.json({
@@ -63,6 +60,7 @@ export const DeletePoll = async (req, res) => {
 };
 
 export const VotePoll = async (req, res, next) => {
+  console.log("vote", req.body);
   try {
     console.log("vote", req.body);
     const { poll_id, answer_id, user_id } = req.body;
@@ -70,14 +68,10 @@ export const VotePoll = async (req, res, next) => {
       { _id: poll_id, "answers._id": answer_id },
       { $push: { "answers.$.vote": user_id } }
     );
-
-    const data = await pollmodal.find({ _id: poll_id, visibility: true });
-    console.log("Poll data:", data);
-    res.status(200).json({
+    res.json({
       status: "ok",
       success: true,
       message: "Answer has been voted..!",
-      poll: data,
     });
   } catch (error) {
     next(error);
