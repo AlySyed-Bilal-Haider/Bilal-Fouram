@@ -7,7 +7,6 @@ import { withStyles, styled } from "@mui/styles";
 import { useState } from "react";
 import axios from "axios";
 import { url } from "../../utils";
-import { ConstructionOutlined } from "@mui/icons-material";
 
 const StyleTextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -49,10 +48,10 @@ const StyledModal = withStyles((theme) => ({
   },
 }))(Dialog);
 
-function PopUp({ open, setOpen,pollHandle }) {
+function PopUp({ open, setOpen, pollHandle }) {
   const [addpoll, setAddpollstate] = useState({
     question: "",
-    answers:[],
+    answers: [],
     enddate: "",
   });
   const [addans, setAnsState] = useState({});
@@ -62,40 +61,47 @@ function PopUp({ open, setOpen,pollHandle }) {
     setOpen(false);
   };
   const addQuestions = () => {
-    if(inputstate.length < 10){
-    setInputstate([...inputstate, { id: inputstate.length }]);
-    }else{
+    if (inputstate.length < 10) {
+      setInputstate([...inputstate, { id: inputstate.length }]);
+    } else {
       alert("you are add maximum 10 ans and minimum 2 ans");
     }
   };
   const addAnsHandler = (e) => {
-    const key=e.target.name;
-    setAnsState({...addans,[key]:e.target.value});
+    const key = e.target.name;
+    setAnsState({ ...addans, [key]: e.target.value });
   };
 
   const pollHandler = (e) => {
     setAddpollstate({ ...addpoll, [e.target.name]: e.target.value });
   };
 
-  const addPollHandler = async() => {
-    addpoll.answers.push(addans);
-    try {
-      const {data}=await axios.post(`${url}/createpoll`,addpoll);
-      console.log("poll data",data);
-      data.message=='ok' && pollHandle(data.poll);
-      setOpen(false);
-    } catch (error) {
-      console.log("poll error !", error);
-    }
+  const addPollHandler = async () => {
+    console.log("addans:", addans);
+    // for (const item of addans) {
+    //   if (addans.hasOwnProperty(item)) {
+    //     addpoll.answers.push({ key: addans[item] });
+    //   }
+    // }
+    // addpoll.answers.push(addans);
 
-    setAddpollstate({
-      question: "",
-      answers:[],
-      enddate: "",
-    });
-    setAnsState({});
+    console.log("addpoll", addpoll);
+    console.log("addans:", addans);
+    // try {
+    //   const { data } = await axios.post(`${url}/createpoll`, addpoll);
+    //   console.log("poll data", data);
+    //   (await data.message) == "ok" && pollHandle(data.poll);
+    //   await setOpen(false);
+    // } catch (error) {
+    //   console.log("poll error !", error);
+    // }
+    // setAnsState({});
+    // setAddpollstate({
+    //   question: "",
+    //   answers: [],
+    //   enddate: "",
+    // });
   };
-
 
   return (
     <>
@@ -139,6 +145,7 @@ function PopUp({ open, setOpen,pollHandle }) {
           </Typography>
           <StyleTextInput
             fullWidth
+            placeholder="Questions"
             type="text"
             name="question"
             value={addpoll.question || ""}
@@ -155,16 +162,15 @@ function PopUp({ open, setOpen,pollHandle }) {
           >
             Answers
           </Typography>
-          {inputstate?.map(({id},index) => {
+          {inputstate?.map(({ id }, index) => {
             return (
-              <Box mt={2} key={id+index}>
+              <Box mt={2} key={id + index}>
                 <StyleTextInput
                   fullWidth
                   type="text"
-                  placeholder={`Answer #${index+1}`}
-                  name={"input"+index}
-        
-                  onChange={(e)=>addAnsHandler(e)}
+                  placeholder={`Answer #${index + 1}`}
+                  name={"input" + index}
+                  onChange={(e) => addAnsHandler(e)}
                 />
               </Box>
             );

@@ -3,11 +3,15 @@ import commentModal from "../Schema/CommentSchema.js";
 import pollmodal from "../Schema/PollSchema.js";
 // ....Add discussion and Questions ,answer..........
 export const createPost = async (req, res, next) => {
-  console.log("req.body:", req.body)
+  console.log("req.body:", req.body);
   const { tag, title, description, user, poll } = req.body;
   try {
     const newPost = new postmodal({
-      tag, title, description, user, poll
+      tag,
+      title,
+      description,
+      user,
+      poll,
     });
     console.log(newPost);
     await newPost.save();
@@ -26,13 +30,20 @@ export const createPost = async (req, res, next) => {
 // fetch all discusions from server , then send on front end
 export const fetchAlldiscussion = async (req, res) => {
   try {
-    const data = await postmodal.find({ visibility: true, status: "Approved" }).populate("user").populate("poll").populate("comments").populate({
-      path: "comments",
-      populate: [{
-        path: "reply",
-        modal: commentModal
-      }]
-    });
+    const data = await postmodal
+      .find({ visibility: true, status: "Approved" })
+      .populate("user")
+      .populate("poll")
+      .populate("comments")
+      .populate({
+        path: "comments",
+        populate: [
+          {
+            path: "reply",
+            modal: commentModal,
+          },
+        ],
+      });
     // console.log("data", data);
     res.json({
       status: "ok",
@@ -51,37 +62,47 @@ export const fetchAlldiscussion = async (req, res) => {
 
 // fetch specifc data from server
 
-export const fetchcategory = async (req, res) => {
-  const tag = req.params.tag;
+export const fetchcategory = async (req, res, next) => {
   try {
-    const data = await postmodal.find({ tag: tag, visibility: true, status: "Approved" }).populate("comments");
-    res.send(data);
+    const tag = req.params.tag;
+    console.log("tages:", tag);
+    const data = await postmodal
+      .find({ tag: tag, visibility: true })
+      .populate("user")
+      .populate("comments");
+    res.json({
+      message: "ok",
+      data: data,
+    });
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 
 // fetch specific detials from discussion, according to user id
 export const getSpecificDiscussion = async (req, res, next) => {
-
   try {
     const id = req.params.id;
-    const data = await postmodal.find({ user: id, visibility: true }).populate("user").populate("poll").populate("comments").populate({
-      path: "comments",
-      populate: [{
-        path: "reply",
-        modal: commentModal
-      }]
-    });
+    const data = await postmodal
+      .find({ user: id, visibility: true })
+      .populate("user")
+      .populate("poll")
+      .populate("comments")
+      .populate({
+        path: "comments",
+        populate: [
+          {
+            path: "reply",
+            modal: commentModal,
+          },
+        ],
+      });
     res.json({
       status: true,
-      data: data
-    })
+      data: data,
+    });
   } catch (error) {
-    res.json({
-      status: false,
-      message: error
-    })
+    next(error);
   }
 };
 
@@ -90,22 +111,28 @@ export const getSpecificDiscussion = async (req, res, next) => {
 export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await postmodal.find({ _id: id, visibility: true, status: "Approved" }).populate("user").populate("poll").populate("comments").populate({
-      path: "comments",
-      populate: [{
-        path: "reply",
-        modal: commentModal
-      }]
-    });
+    const data = await postmodal
+      .find({ _id: id, visibility: true, status: "Approved" })
+      .populate("user")
+      .populate("poll")
+      .populate("comments")
+      .populate({
+        path: "comments",
+        populate: [
+          {
+            path: "reply",
+            modal: commentModal,
+          },
+        ],
+      });
     console.log(data);
     if (data) {
       res.send(data);
     } else {
       res.json({
-        message: "no post exists"
-      })
+        message: "no post exists",
+      });
     }
-
   } catch (error) {
     res.status(404).json({
       status: "error",
@@ -175,7 +202,6 @@ export const EditepostHandler = async (req, res) => {
 };
 
 export const CheckPostLike = async (req, res) => {
-
   try {
     const post_id = req.params.post_id;
     const user_id = req.params.user_id;
@@ -184,7 +210,7 @@ export const CheckPostLike = async (req, res) => {
     if (check) {
       res.json({
         status: true,
-        message: 'ok'
+        message: "ok",
       });
     } else {
       res.json({

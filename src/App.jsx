@@ -38,7 +38,6 @@ function App() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("all data", data);
           localStorage.setItem("name", data.name);
           localStorage.setItem("user_id", data.id);
           setusernameState(data.name);

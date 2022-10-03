@@ -16,7 +16,6 @@ import { FaRibbon } from "react-icons/fa";
 import { BiMessageRounded, BiMenu, BiLike } from "react-icons/bi";
 import { AiTwotoneLike } from "react-icons/ai";
 import { MdAlternateEmail } from "react-icons/md";
-
 import Post from "./Post";
 import Discussion from "./Discussion";
 import Vote from "./Votes";
@@ -44,8 +43,8 @@ export default function MainPage() {
   const [userProfilestate, setProfilestate] = useState("");
   const [userid, setIDstate] = useState("");
   const [userfile, setUserfile] = useState("");
- 
-  const user_id=localStorage.getItem("id") || '';
+
+  const user_id = localStorage.getItem("user_id") || "";
   const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -57,10 +56,8 @@ export default function MainPage() {
   };
   const userProfileHandler = async () => {
     try {
-      const { data } = await axios.get(
-        `${url}/fetchuser/${user_id}`
-      );
-      console.log("data",data);
+      const { data } = await axios.get(`${url}/fetchuser/${user_id}`);
+      console.log("data", data);
       setProfilestate(data);
       setIDstate(data._id);
     } catch (error) {
@@ -100,7 +97,6 @@ export default function MainPage() {
   };
   return (
     <>
-     
       <Box bgcolor="primary.light" height="260px">
         <Container maxWidth="lg">
           <Box display="flex" flexDirection="column">
@@ -516,7 +512,7 @@ export default function MainPage() {
 
             <Grid item xs={12} sm={12} md={9}>
               {show === 0 ? (
-                <Post  userid={userid} />
+                <Post userid={userid} />
               ) : show === 1 ? (
                 <Discussion />
               ) : show === 2 ? (
@@ -533,4 +529,3 @@ export default function MainPage() {
     </>
   );
 }
-

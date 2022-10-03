@@ -7,10 +7,12 @@ function Logout() {
     if (token) {
       localStorage.removeItem("token");
       localStorage.removeItem("name");
+      localStorage.removeItem("id");
     } else {
       localStorage.removeItem("name");
+      localStorage.removeItem("id");
     }
-      window.location.href = "/";
+    window.location.href = "/";
   }, []);
 }
 

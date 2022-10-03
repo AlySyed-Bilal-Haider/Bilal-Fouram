@@ -1,10 +1,12 @@
 import React from "react";
-import { Box, styled, Checkbox, Typography } from "@mui/material";
+import moment from "moment";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import { GoCheck } from "react-icons/go";
-
+import axios from "axios";
+import { url } from "../utils";
+import { Box, styled, Checkbox, Typography } from "@mui/material";
 const LinearProgressBox = styled(LinearProgress)(({ theme }) => ({
   height: "100%",
   width: "100%",
@@ -52,10 +54,20 @@ const BpCheckbox = (props) => {
 };
 
 function Poll({ polldetails, user_id }) {
+  const pollApproveUnapprove = async (poll_id, answer_id) => {
+    try {
+      const pollvalue = { poll_id, answer_id, user_id };
+      console.log("pollvalue:", pollvalue);
+      const { data } = await axios(`${url}/votepoll`, pollvalue);
+      console.log("poll data", data.data);
+    } catch (error) {
+      console.log("Approve poll error !", error);
+    }
+  };
   return (
     <>
-      {polldetails?.visibility === true ? (
-        <Box pr={3}>
+      {polldetails?.visibility == true ? (
+        <Box>
           <Typography
             variant="body1"
             fontSize="25px"
@@ -151,7 +163,7 @@ function Poll({ polldetails, user_id }) {
             variant="subtitle1"
             color="primary.light"
           >
-            Poll ends in 11 hours.
+            {moment(polldetails?.endDate).format("LL")}
           </Typography>
         </Box>
       ) : null}
