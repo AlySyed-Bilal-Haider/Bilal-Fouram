@@ -46,7 +46,7 @@ export const FetchDiscussion = async (req, res) => {
         const id = req.params.id.trim();
         console.log(id);
         const data = await usermodal.find({_id:id}).populate("discussion").populate({
-            path: "post",
+            path: "discussion",
             populate: [
               {
                 path: "comments",
@@ -83,7 +83,7 @@ export const FetchLiked = async (req, res) => {
         const id = req.params.id.trim();
         console.log(id);
         const data = await usermodal.find({_id:id}).populate("like").populate({
-            path: "post",
+            path: "like",
             populate: [
               {
                 path: "comments",
