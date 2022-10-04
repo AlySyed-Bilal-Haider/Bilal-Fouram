@@ -1,6 +1,8 @@
 import pollmodal from "../Schema/PollSchema.js";
+import postmodal from "../Schema/PostSchema.js";
 import usermodal from "../Schema/UserSchema.js";
 import commentModal from "../Schema/CommentSchema.js";
+
 export const FetchPosts = async (req, res) => {
   try {
     const id = req.params.id.trim();

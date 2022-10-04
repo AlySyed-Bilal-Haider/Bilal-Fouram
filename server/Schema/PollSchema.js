@@ -8,7 +8,7 @@ const Poll = new Schema({
     },
     answers: [{
         title: String,
-        vote: [{type: Schema.Types.ObjectId,}]
+        vote: [{ type: Schema.Types.ObjectId, }]
     }],
     addedAt: {
         type: Date,
@@ -27,6 +27,10 @@ const Poll = new Schema({
         type: Schema.Types.ObjectId,
         ref: "user"
     }],
+    totalvotes: {
+        type: Number,
+        default: 0,
+    },
 });
 const pollmodal = model("poll", Poll);
 export default pollmodal;
