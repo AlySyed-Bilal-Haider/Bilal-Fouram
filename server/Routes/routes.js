@@ -8,6 +8,7 @@ import * as UserPanal from "../Controller/UserPanalController.js";
 
 const router = express.Router();
 
+
 router.post("/usersignup", Users.signupHandler);
 router.post("/login", Users.login);
 router.post("/verifytoken", Users.tokenVerifyHandler);
@@ -61,5 +62,9 @@ router.get("/fetchuserdiscussion/:id",UserPanal.FetchDiscussion);
 router.get("/fetchlikedposts/:id",UserPanal.FetchLiked);
 router.get("/fetchvotedpolls/:id",UserPanal.FetchPollPosts);
 
+
+//@mention related routes
+
+router.post("/fetchusername",Comment.FetchUsers);
 
 export default router;

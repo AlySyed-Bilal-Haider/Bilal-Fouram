@@ -1,22 +1,28 @@
 
 import commentModal from "../Schema/CommentSchema.js";
 import postmodal from "../Schema/PostSchema.js";
+import usermodal from "../Schema/UserSchema.js";
 
 export const commentHandler = async (req, res, next) => {
 
   try {
-    const { post_id } = req.body;
-    const newComment = new commentModal(req.body);
 
-    await newComment.save();
+    const { post_id, mention } = req.body;
+    console.log(mention);
 
-    const post = await postmodal.findByIdAndUpdate(post_id, { $push: { comments: newComment._id } });
+    // const newComment = new commentModal(req.body);
+    // await newComment.save();
 
+    // const post = await postmodal.findByIdAndUpdate(post_id, { $push: { comments: newComment._id } });
+    for (var i in mention) {
+      
+      console.log(mention[i]);
+    }
     res.json({
       status: "ok",
       success: true,
       message: "Comment add Successfully!",
-      id: newComment._id
+      // id: newComment._id
     });
   } catch (error) {
     next(error);
@@ -108,8 +114,8 @@ export const unlikeComment = async (req, res) => {
 export const EditComment = async (req, res) => {
   try {
     console.log(req.body);
-    const {comment_id,comment} = req.body;
-    const update = await commentModal.findByIdAndUpdate(comment_id,{comment:comment}); 
+    const { comment_id, comment } = req.body;
+    const update = await commentModal.findByIdAndUpdate(comment_id, { comment: comment });
 
     res.json({
       status: "ok",
@@ -157,10 +163,7 @@ export const removeComment = async (req, res) => {
 export const restoreComment = async (req, res) => {
   try {
     const id = req.params.id;
-
     const data = await commentModal.findByIdAndUpdate(id, { visibility: true });
-    
-
     if (data) {
       res.status(200).json({
         status: "ok",
@@ -182,3 +185,26 @@ export const restoreComment = async (req, res) => {
     });
   }
 };
+
+
+export const FetchUsers = async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (name == null) {
+      usermodal.find({}, function (err, data) {
+        res.send(data);
+      });
+    } else {
+      const regex = new RegExp(name, 'i')
+      usermodal.find({ name: regex }, function (err, data) {
+        res.send(data);
+      });
+    }
+  } catch (error) {
+    res.status(505).json({
+      status: "error",
+      success: false,
+      message: error,
+    });
+  }
+}
