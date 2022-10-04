@@ -1,5 +1,5 @@
 
-import {model, mongoose, Schema} from "mongoose";
+import { model, mongoose, Schema } from "mongoose";
 
 const Adduser = new mongoose.Schema({
   name: {
@@ -46,6 +46,10 @@ const Adduser = new mongoose.Schema({
   poll: [{
     type: Schema.Types.ObjectId,
     ref: "post"
+  }],
+  mention: [{
+    type: Schema.Types.ObjectId,
+    ref: "comment"
   }]
 });
 const usermodal = mongoose.model("user", Adduser);

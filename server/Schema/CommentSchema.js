@@ -18,6 +18,11 @@ const commentAdd = new Schema({
     type: Schema.Types.ObjectId,
     ref: "comment"
   }],
+
+  mention:[{
+    type: Schema.Types.ObjectId,
+    ref: "user"
+  }],
   visibility:{
     type: Boolean,
     default: true
