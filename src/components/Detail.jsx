@@ -12,12 +12,7 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
-import {
-  FaRegComments,
-  FaChalkboardTeacher,
-  FaBook,
-  FaLock,
-} from "react-icons/fa";
+import { FaRegComments, FaChalkboardTeacher, FaBook } from "react-icons/fa";
 import { RiGroupFill } from "react-icons/ri";
 import { CgNotes } from "react-icons/cg";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
@@ -57,14 +52,6 @@ const StyledMenu = styled((props) => (
     },
   },
 }));
-
-// const BpIcon = styled("span")({
-//   borderRadius: 3,
-//   border: "1px solid #282439",
-//   width: 18,
-//   height: 18,
-//   backgroundColor: "transparent",
-// });
 
 export default function Detail({ userId, username }) {
   const param = useParams();
@@ -300,23 +287,6 @@ export default function Detail({ userId, username }) {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  {/* <BsFillPinFill
-                size="24px"
-                style={{
-                  background: "#CD3D31",
-                  borderRadius: "50%",
-                  padding: "4px",
-                }}
-              />
-              <FaLock
-                size="26px"
-                style={{
-                  marginRight: "7px",
-                  background: "#282439",
-                  borderRadius: "50%",
-                  padding: "5px",
-                }}
-              /> */}
                   <Box
                     display="flex"
                     alignItems="center"

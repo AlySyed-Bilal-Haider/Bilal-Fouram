@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Stack, Pagination } from "@mui/material";
 import { url } from "../../utils";
 import moment from "moment";
 import { toast } from "react-toastify";
@@ -32,10 +32,10 @@ export default function Pending() {
     idstate && fetchPending();
   }, []);
 
-  const approveHandle = async (post_id) => {
+  const approveAndReactHandle = async (path, post_id) => {
     console.log("post_id", post_id);
     try {
-      await fetch(`${url}/approvepost/${post_id}`, {
+      await fetch(`${url}/${path}/${post_id}`, {
         method: "GET",
         headers: {
           "x-access-token": idstate,
@@ -52,10 +52,31 @@ export default function Pending() {
       toast.error(error.message);
     }
   };
+
+  const btn = {
+    width: "120px",
+    height: "36px",
+    fontSize: "10px",
+    fontWeight: 700,
+    padding: "8px 30px 8px 30px",
+  };
+
+  // paginations start here
+  // start paginations code
+  const [postsPerPage, setPostsPerPage] = useState(4);
+  const [currentPage, setCurrentPage] = useState(1);
+  const handleChangepage = (event, value) => {
+    setCurrentPage(value);
+  };
+  const pageCount = Math.ceil(pendingpost?.length / postsPerPage);
   return (
     <Box pb={10}>
-      {pendingpost?.map(
-        ({ _id, addedAt, description, status, user, tag, title }, i) => {
+      {pendingpost
+        ?.slice(
+          currentPage * postsPerPage - postsPerPage,
+          currentPage * postsPerPage
+        )
+        ?.map(({ _id, addedAt, description, status, user, tag, title }, i) => {
           return (
             <Box key={_id + i}>
               <Box pl={8} pb={3} borderBottom="1px solid #fff">
@@ -102,14 +123,10 @@ export default function Pending() {
                 >
                   <Button
                     onClick={() => {
-                      approveHandle(_id);
+                      approveAndReactHandle("approvepost", _id);
                     }}
+                    style={btn}
                     sx={{
-                      width: "120px",
-                      height: "36px",
-                      fontSize: "10px",
-                      fontWeight: 700,
-                      padding: "8px 30px 8px 30px",
                       backgroundColor: "secondary.main",
                       color: "text.main",
                       "&:hover": {
@@ -119,12 +136,36 @@ export default function Pending() {
                   >
                     Approved
                   </Button>
+                  <Button
+                    style={btn}
+                    sx={{
+                      m: 1,
+                      backgroundColor: "secondary.main",
+                      color: "text.main",
+                      "&:hover": {
+                        backgroundColor: "secondary.main",
+                      },
+                    }}
+                    onClick={() => {
+                      approveAndReactHandle("rejectpost", _id);
+                    }}
+                  >
+                    Reject
+                  </Button>
                 </Box>
               </Box>
             </Box>
           );
-        }
-      )}
+        })}
+      <Box my="15px" mx="10" px>
+        <Stack direction={"row"} alignItems="center" justifyContent="flex-end">
+          <Pagination
+            count={pageCount}
+            page={currentPage}
+            onChange={handleChangepage}
+          />
+        </Stack>
+      </Box>
     </Box>
   );
 }
