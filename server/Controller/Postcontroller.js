@@ -1,11 +1,14 @@
-import postmodal from "../Schema/Postschema.js";
+import postmodal from "../Schema/PostSchema.js";
 import commentModal from "../Schema/CommentSchema.js";
 import pollmodal from "../Schema/PollSchema.js";
+import usermodal from "../Schema/UserSchema.js";
+
 // ....Add discussion and Questions ,answer..........
+
 export const createPost = async (req, res, next) => {
-  console.log("req.body:", req.body);
-  const { tag, title, description, user, poll } = req.body;
   try {
+    console.log("req.body:", req.body);
+    const { tag, title, description, user, poll } = req.body;
     const newPost = new postmodal({
       tag,
       title,
@@ -14,7 +17,11 @@ export const createPost = async (req, res, next) => {
       poll,
     });
     console.log(newPost);
+
     await newPost.save();
+    const userpost = await usermodal.findByIdAndUpdate(user, {
+      $push: { post: newPost._id },
+    });
     if (newPost) {
       res.json({
         status: "ok",
@@ -65,6 +72,7 @@ export const fetchAlldiscussion = async (req, res) => {
 export const fetchcategory = async (req, res, next) => {
   try {
     const tag = req.params.tag;
+    console.log("tag:", tag);
     const data = await postmodal
       .find({ tag: tag, visibility: true, status: "Approved" })
       .populate("user")
@@ -171,8 +179,8 @@ export const removepost = async (req, res) => {
 
 // start update post code start here
 export const EditepostHandler = async (req, res) => {
-  console.log("req.body", req.body);
   try {
+    console.log("req.body", req.body);
     const { id, description } = req.body;
     console.log("id:", id, "description: ", description);
     const data = await postmodal.findByIdAndUpdate(id, {
@@ -225,10 +233,14 @@ export const CheckPostLike = async (req, res) => {
 
 export const likeHandler = async (req, res) => {
   try {
-    const post = await postmodal.findByIdAndUpdate(req.body.post_id, {
-      $push: { like: req.body.user_id },
+    const { user_id, post_id } = req.body;
+    const post = await postmodal.findByIdAndUpdate(post_id, {
+      $push: { like: user_id },
     });
-    const postLike = await postmodal.findById(req.body.post_id);
+    const likepost = await usermodal.findByIdAndUpdate(user_id, {
+      $push: { like: post._id },
+    });
+    const postLike = await postmodal.findById(post_id);
 
     // console.log("likehandler");
     // console.log(postLike.like);
@@ -244,8 +256,12 @@ export const likeHandler = async (req, res) => {
 
 export const unlikeHandler = async (req, res) => {
   try {
-    const post = await postmodal.findByIdAndUpdate(req.body.post_id, {
-      $pull: { like: req.body.user_id },
+    const { user_id, post_id } = req.body;
+    const post = await postmodal.findByIdAndUpdate(post_id, {
+      $pull: { like: user_id },
+    });
+    const likepost = await usermodal.findByIdAndUpdate(user_id, {
+      $pull: { like: post._id },
     });
     res.json({
       message: "ok",

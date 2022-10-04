@@ -3,7 +3,7 @@ import cors from "cors";
 import multer from "multer";
 import router from "./Routes/routes.js";
 import connectDB from "./Database/ConnectDB.js";
-import mongomodal from "./Schema/UserSchema.js";
+import usermodal from "./Schema/UserSchema.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
@@ -33,12 +33,14 @@ const upload = multer({ storage: storage });
 
 // .......start route update of profile pic.........
 app.post("/uploadimg", upload.single("file"), async (req, res) => {
-  const _id = req.body.id;
+ 
   try {
-    const previous = await mongomodal.findOne({ _id });
+    const _id = req.body.id;
+    console.log(req);
+    const previous = await usermodal.findOne({ _id: _id });
     console.log("previous", previous);
 
-    const data = await mongomodal.findByIdAndUpdate(_id, {
+    const data = await usermodal.findByIdAndUpdate(_id, {
       img: req.file.filename,
     });
 

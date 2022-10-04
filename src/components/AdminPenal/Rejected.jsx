@@ -1,74 +1,129 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Button } from "@mui/material";
-// import { toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+import { url } from "../../utils";
+import moment from "moment";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Rejected() {
+  const [rejected, setRejectedstate] = useState([]);
+  const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
+
+  // fetch rejectd post from server
+  const fetchRejected = async () => {
+    try {
+      await fetch(`${url}/fetchrejectedposts`, {
+        method: "GET",
+        headers: {
+          "x-access-token": idstate,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Rejected data !", data);
+          setRejectedstate(data?.posts);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    idstate && fetchRejected();
+  }, []);
+
+  const approveHandle = async (post_id) => {
+    console.log("post_id", post_id);
+    try {
+      await fetch(`${url}/approvepost/${post_id}`, {
+        method: "GET",
+        headers: {
+          "x-access-token": idstate,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Approve data !");
+          data?.status == "ok" && toast.success(data.message);
+          data?.status == "ok" && fetchRejected();
+        });
+    } catch (error) {
+      console.log("Approved post error", error);
+      toast.error(error.message);
+    }
+  };
   return (
     <Box pb={10}>
-      <Box>
-        <Typography variant="body1" color="primary.main" fontWeight="700">
-          Post 3
-        </Typography>
+      {rejected?.map(
+        ({ _id, addedAt, description, status, user, tag, title }, i) => {
+          return (
+            <Box key={_id + i}>
+              <Box pl={8} pb={3} borderBottom="1px solid #fff">
+                <Box py={2} display="flex" alignItems="center">
+                  <Typography
+                    variant="body1"
+                    color="primary.main"
+                    fontWeight="700"
+                  >
+                    {user?.name}
+                  </Typography>
 
-        <Box pl={8} pb={3} borderBottom="1px solid #fff">
-          <Box py={2} display="flex" alignItems="center">
-            <Typography variant="body1" color="primary.main" fontWeight="700">
-              User3
-            </Typography>
-            <Typography
-              ml={2}
-              variant="body1"
-              color="primary.light"
-              fontSize="13px"
-            >
-              22 dec 2021
-            </Typography>
-            <Typography
-              ml={2}
-              variant="body1"
-              color="primary.light"
-              fontSize="13px"
-            >
-              Awaiting approval
-            </Typography>
-          </Box>
+                  <Typography
+                    ml={2}
+                    variant="body1"
+                    color="primary.light"
+                    fontSize="13px"
+                  >
+                    {moment(addedAt).format("LL")}
+                  </Typography>
+                  <Typography
+                    ml={2}
+                    variant="body1"
+                    color="primary.light"
+                    fontSize="13px"
+                  >
+                    {status}
+                  </Typography>
+                </Box>
 
-          <Box fontSize="14px" color="text.paragraph">
-            Post title
-            <br />
-            <br />
-            Treasury team is glad to present the first Treasury report to the
-            community. This thread will be used to publish monthly reports. All
-            feedback is welcome and can be shared in ...
-            <br />
-          </Box>
+                <Box fontSize="14px" color="text.paragraph">
+                  {title}
+                  <br />
+                  <br />
+                  {description}
+                  <br />
+                </Box>
 
-          <Box
-            mt={2}
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-end"
-          >
-            <Button
-              sx={{
-                width: "120px",
-                height: "36px",
-                fontSize: "10px",
-                fontWeight: 700,
-                padding: "8px 30px 8px 30px",
-                backgroundColor: "secondary.main",
-                color: "text.main",
-                "&:hover": {
-                  backgroundColor: "secondary.main",
-                },
-              }}
-            >
-              approved
-            </Button>
-          </Box>
-        </Box>
-      </Box>
+                <Box
+                  mt={2}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-end"
+                >
+                  <Button
+                    onClick={() => {
+                      approveHandle(_id);
+                    }}
+                    sx={{
+                      width: "120px",
+                      height: "36px",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                      padding: "8px 30px 8px 30px",
+                      backgroundColor: "secondary.main",
+                      color: "text.main",
+                      "&:hover": {
+                        backgroundColor: "secondary.main",
+                      },
+                    }}
+                  >
+                    Approved
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+          );
+        }
+      )}
     </Box>
   );
 }

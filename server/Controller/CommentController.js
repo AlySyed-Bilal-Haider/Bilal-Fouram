@@ -1,6 +1,6 @@
 
 import commentModal from "../Schema/CommentSchema.js";
-import postmodal from "../Schema/Postschema.js";
+import postmodal from "../Schema/PostSchema.js";
 
 export const commentHandler = async (req, res, next) => {
 

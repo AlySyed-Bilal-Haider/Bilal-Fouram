@@ -1,4 +1,6 @@
-import mongoose from "mongoose";
+
+import {model, mongoose, Schema} from "mongoose";
+
 const Adduser = new mongoose.Schema({
   name: {
     type: String,
@@ -26,9 +28,21 @@ const Adduser = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum : ['user','admin'],
+    enum: ['user', 'admin'],
     default: 'user'
-},
+  },
+  post: [{
+    type: Schema.Types.ObjectId,
+    ref: "post"
+  }],
+  discussion: [{
+    type: Schema.Types.ObjectId,
+    ref: "post"
+  }],
+  like: [{
+    type: Schema.Types.ObjectId,
+    ref: "post"
+  }],
 });
-const mongomodal=mongoose.model("user", Adduser);
-export default mongomodal;
+const usermodal = mongoose.model("user", Adduser);
+export default usermodal;
