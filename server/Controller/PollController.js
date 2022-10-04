@@ -1,10 +1,10 @@
 import postmodal from "../Schema/PostSchema.js";
 import pollmodal from "../Schema/PollSchema.js";
+import usermodal from "../Schema/UserSchema.js";
 
 export const FetchAllPoll = async (req, res) => {
   try {
     const data = await pollmodal.find({ visibility: true });
-    // console.log("data", data);
     res.json({
       status: "ok",
       success: true,
@@ -64,15 +64,23 @@ export const DeletePoll = async (req, res) => {
 
 export const VotePoll = async (req, res, next) => {
   try {
-    console.log("vote", req.body);
+    // console.log("vote", req.body);
     const { poll_id, answer_id, user_id } = req.body;
     const voteAnswer = await pollmodal.findOneAndUpdate(
       { _id: poll_id, "answers._id": answer_id },
       { $push: { "answers.$.vote": user_id } }
     );
+    const increaseVote = await pollmodal.findByIdAndUpdate(voteAnswer._id,{totalvote: voteAnswer.totalvote+1});
+    
+    const post = await postmodal.find({poll: poll_id});
+    // console.log(post[0]._id);
 
-    const data = await pollmodal.find({ _id: poll_id, visibility: true });
-    console.log("Poll data:", data);
+    const votepoll = await usermodal.findByIdAndUpdate(user_id, {
+      $push: { poll: post[0]._id },
+    });
+
+    const data = await pollmodal.find({ _id: poll_id,visibility: true});
+    // console.log("Poll data:", data);
     res.status(200).json({
       status: "ok",
       success: true,

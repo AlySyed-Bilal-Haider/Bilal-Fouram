@@ -105,8 +105,45 @@ export const FetchLiked = async (req, res) => {
                 },
             ],
         });
-        console.log(data[0].like.length);
         const length = data[0].like.length;
+        res.json({
+            status: true,
+            length: length,
+            data: data
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            status: false,
+            error: error
+        })
+    }
+}
+export const FetchPollPosts = async (req, res) => {
+    try {
+        const id = req.params.id.trim();
+        const data = await usermodal.find({ _id: id }).populate("poll").populate({
+            path: "poll",
+            populate: [
+                {
+                    path: "comments",
+                    modal: commentModal,
+                    populate: [
+                        {
+                            path: "reply",
+                            modal: commentModal,
+                        }
+                    ]
+                },
+                {
+                    path: "poll",
+                    modal: pollmodal,
+                },
+            ],
+        });
+        const length = data[0].poll.length;
+
         res.json({
             status: true,
             length: length,

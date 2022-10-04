@@ -43,6 +43,10 @@ const Adduser = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: "post"
   }],
+  poll: [{
+    type: Schema.Types.ObjectId,
+    ref: "post"
+  }]
 });
 const usermodal = mongoose.model("user", Adduser);
 export default usermodal;
