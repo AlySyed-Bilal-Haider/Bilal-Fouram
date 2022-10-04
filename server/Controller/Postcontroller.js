@@ -48,6 +48,12 @@ export const fetchAlldiscussion = async (req, res) => {
           {
             path: "reply",
             modal: commentModal,
+            populate: [
+              {
+                  path: "reply",
+                  modal: commentModal,
+              }
+          ]
           },
         ],
       });
@@ -101,6 +107,12 @@ export const getSpecificDiscussion = async (req, res, next) => {
           {
             path: "reply",
             modal: commentModal,
+            populate: [
+              {
+                  path: "reply",
+                  modal: commentModal,
+              }
+          ]
           },
         ],
       });
@@ -129,6 +141,12 @@ export const fetchPostDetails = async (req, res) => {
           {
             path: "reply",
             modal: commentModal,
+            populate: [
+              {
+                  path: "reply",
+                  modal: commentModal,
+              }
+          ]
           },
         ],
       });

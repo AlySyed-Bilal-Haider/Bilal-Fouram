@@ -10,19 +10,21 @@ export const commentHandler = async (req, res, next) => {
     const { post_id, mention } = req.body;
     console.log(mention);
 
-    // const newComment = new commentModal(req.body);
-    // await newComment.save();
+    const newComment = new commentModal(req.body);
+    await newComment.save();
 
-    // const post = await postmodal.findByIdAndUpdate(post_id, { $push: { comments: newComment._id } });
     for (var i in mention) {
-      
+      const data = await usermodal.findByIdAndUpdate(mention[i], { $push: { mention: newComment._id }, })
       console.log(mention[i]);
     }
+
+    const post = await postmodal.findByIdAndUpdate(post_id, { $push: { comments: newComment._id } });
+
     res.json({
       status: "ok",
       success: true,
       message: "Comment add Successfully!",
-      // id: newComment._id
+      id: newComment._id
     });
   } catch (error) {
     next(error);
@@ -31,10 +33,15 @@ export const commentHandler = async (req, res, next) => {
 export const replyHandler = async (req, res, next) => {
 
   try {
-    const { comment_id } = req.body;
+    const { comment_id, mention } = req.body;
     const newComment = new commentModal(req.body);
 
     await newComment.save();
+    for (var i in mention) {
+      const data = await usermodal.findByIdAndUpdate(mention[i], { $push: { mention: newComment._id }, })
+      console.log(mention[i]);
+    }
+
 
     const reply = await commentModal.findByIdAndUpdate(comment_id, { $push: { reply: newComment._id } });
     res.json({

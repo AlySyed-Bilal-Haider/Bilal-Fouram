@@ -61,6 +61,8 @@ router.get("/fetchuserposts/:id",UserPanal.FetchPosts);
 router.get("/fetchuserdiscussion/:id",UserPanal.FetchDiscussion);
 router.get("/fetchlikedposts/:id",UserPanal.FetchLiked);
 router.get("/fetchvotedpolls/:id",UserPanal.FetchPollPosts);
+router.get("/fetchmentions/:id",UserPanal.FetchMentionComments);
+
 
 
 //@mention related routes
