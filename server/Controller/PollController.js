@@ -33,32 +33,32 @@ export const CreatePoll = async (req, res) => {
     });
   }
 };
-export const DeletePoll = async (req, res) => {
-  try {
-    const id = req.params.id.trim();
+// export const DeletePoll = async (req, res) => {
+//   try {
+//     const id = req.params.id.trim();
 
-    const data = await pollmodal.findByIdAndUpdate(id, { visibility: false });
-    if (data) {
-      res.status(200).json({
-        status: "ok",
-        success: true,
-        message: "Poll remove successfully !",
-      });
-    } else {
-      res.status(200).json({
-        status: "error",
-        success: false,
-        message: "please try again ,poll not delete !",
-      });
-    }
-  } catch (error) {
-    res.status(505).json({
-      status: "error",
-      success: false,
-      message: error,
-    });
-  }
-};
+//     const data = await pollmodal.findByIdAndUpdate(id, { visibility: false });
+//     if (data) {
+//       res.status(200).json({
+//         status: "ok",
+//         success: true,
+//         message: "Poll remove successfully !",
+//       });
+//     } else {
+//       res.status(200).json({
+//         status: "error",
+//         success: false,
+//         message: "please try again ,poll not delete !",
+//       });
+//     }
+//   } catch (error) {
+//     res.status(505).json({
+//       status: "error",
+//       success: false,
+//       message: error,
+//     });
+//   }
+// };
 
 export const VotePoll = async (req, res, next) => {
   console.log("vote", req.body);

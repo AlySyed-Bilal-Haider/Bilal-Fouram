@@ -152,9 +152,11 @@ export const fetchPostDetails = async (req, res) => {
 export const removepost = async (req, res) => {
   try {
     const id = req.params.id.trim();
-    console.log("id", id);
+    // console.log("id", id);
 
     const data = await postmodal.findByIdAndUpdate(id, { visibility: false });
+    const poll = await pollmodal.findByIdAndUpdate(data.poll, { visibility: false });
+
     if (data) {
       res.status(200).json({
         status: "ok",

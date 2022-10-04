@@ -34,7 +34,7 @@ router.get("/fetchuser/:id", Users.fetchuser);
 
 
 router.delete("/removePost/:id", Post.removepost);
-router.delete("/removePoll/:id", Poll.DeletePoll);
+// router.delete("/removePoll/:id", Poll.DeletePoll);
 router.delete("/removeComment/:id", Comment.removeComment);
 
 
@@ -60,10 +60,6 @@ router.get("/fetchuserposts/:id",UserPanal.FetchPosts);
 router.get("/fetchuserdiscussion/:id",UserPanal.FetchDiscussion);
 router.get("/fetchlikedposts/:id",UserPanal.FetchLiked);
 router.get("/fetchvotedpolls/:id",UserPanal.FetchPollPosts);
-
-
-
-
 
 
 export default router;
