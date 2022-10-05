@@ -1,13 +1,12 @@
-import pollmodal from "../Schema/PollSchema.js";
-import postmodal from "../Schema/PostSchema.js";
-import usermodal from "../Schema/UserSchema.js";
+import pollModal from "../Schema/PollSchema.js";
+import postModal from "../Schema/PostSchema.js";
+import userModal from "../Schema/UserSchema.js";
 import commentModal from "../Schema/CommentSchema.js";
 
 export const FetchPosts = async (req, res) => {
     try {
         const id = req.params.id.trim();
-        console.log(id);
-        const data = await usermodal
+        const data = await userModal
             .find({ _id: id })
             .populate("post")
             .populate({
@@ -31,15 +30,123 @@ export const FetchPosts = async (req, res) => {
                     },
                     {
                         path: "poll",
-                        modal: pollmodal,
+                        modal: pollModal,
+                    },
+                ],
+            })
+            .populate("discussion")
+            .populate({
+                path: "discussion",
+                populate: [
+                    {
+                        path: "comments",
+                        modal: commentModal,
+                        populate: [
+                            {
+                                path: "reply",
+                                modal: commentModal,
+                                populate: [
+                                    {
+                                        path: "reply",
+                                        modal: commentModal,
+                                    }
+                                ]
+                            },
+                        ],
+                    },
+                    {
+                        path: "poll",
+                        modal: pollModal,
+                    },
+                ],
+            })
+            .populate("like")
+            .populate({
+                path: "like",
+                populate: [
+                    {
+                        path: "comments",
+                        modal: commentModal,
+                        populate: [
+                            {
+                                path: "reply",
+                                modal: commentModal,
+                                populate: [
+                                    {
+                                        path: "reply",
+                                        modal: commentModal,
+                                    }
+                                ]
+                            },
+                        ],
+                    },
+                    {
+                        path: "poll",
+                        modal: pollModal,
+                    },
+                ],
+            })
+            .populate("poll")
+            .populate({
+                path: "poll",
+                populate: [
+                    {
+                        path: "comments",
+                        modal: commentModal,
+                        populate: [
+                            {
+                                path: "reply",
+                                modal: commentModal,
+                                populate: [
+                                    {
+                                        path: "reply",
+                                        modal: commentModal,
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        path: "poll",
+                        modal: pollModal,
+                    },
+                ],
+            })
+            .populate("mention")
+            .populate({
+                path: "mention",
+                populate: [
+                    {
+                        path: "reply",
+                        modal: commentModal,
+                        populate: [
+                            {
+                                path: "reply",
+                                modal: commentModal,
+                            }
+                        ]
                     },
                 ],
             });
-        const length = data[0].post.length;
+        const combined = data[0].post.concat(data[0].discussion).concat(data[0].poll).concat(data[0].like).concat(data[0].mention);
+        // console.log(combined);
+        // const arr= {
+        //     "DATA": combined
+        // }
+
+        // const sortByDate = arr => {
+        //     const sorter = (a, b) => {
+        //        return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
+        //     };
+        //     arr["DATA"].sort(sorter);
+        //     return arr;
+        //  };
+        //  console.log(sortByDate(arr));
+
         res.json({
             status: true,
-            length: length,
-            data: data,
+            // length: length,
+            data: combined,
         });
     } catch (error) {
         console.log(error);
@@ -54,7 +161,7 @@ export const FetchDiscussion = async (req, res) => {
     try {
         const id = req.params.id.trim();
         console.log(id);
-        const data = await usermodal
+        const data = await userModal
             .find({ _id: id })
             .populate("discussion")
             .populate({
@@ -78,7 +185,7 @@ export const FetchDiscussion = async (req, res) => {
                     },
                     {
                         path: "poll",
-                        modal: pollmodal,
+                        modal: pollModal,
                     },
                 ],
             });
@@ -101,7 +208,7 @@ export const FetchLiked = async (req, res) => {
     try {
         const id = req.params.id.trim();
         console.log(id);
-        const data = await usermodal
+        const data = await userModal
             .find({ _id: id })
             .populate("like")
             .populate({
@@ -125,7 +232,7 @@ export const FetchLiked = async (req, res) => {
                     },
                     {
                         path: "poll",
-                        modal: pollmodal,
+                        modal: pollModal,
                     },
                 ],
             });
@@ -144,35 +251,36 @@ export const FetchLiked = async (req, res) => {
         });
     }
 };
-
 export const FetchPollPosts = async (req, res) => {
     try {
         const id = req.params.id.trim();
-        const data = await usermodal.find({ _id: id }).populate("poll").populate({
-            path: "poll",
-            populate: [
-                {
-                    path: "comments",
-                    modal: commentModal,
-                    populate: [
-                        {
-                            path: "reply",
-                            modal: commentModal,
-                            populate: [
-                                {
-                                    path: "reply",
-                                    modal: commentModal,
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    path: "poll",
-                    modal: pollmodal,
-                },
-            ],
-        });
+        const data = await userModal.find({ _id: id })
+            .populate("poll")
+            .populate({
+                path: "poll",
+                populate: [
+                    {
+                        path: "comments",
+                        modal: commentModal,
+                        populate: [
+                            {
+                                path: "reply",
+                                modal: commentModal,
+                                populate: [
+                                    {
+                                        path: "reply",
+                                        modal: commentModal,
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        path: "poll",
+                        modal: pollModal,
+                    },
+                ],
+            });
         const length = data[0].poll.length;
 
         res.json({
@@ -188,12 +296,12 @@ export const FetchPollPosts = async (req, res) => {
             error: error
         })
     }
-}
-
+};
 export const FetchMentionComments = async (req, res) => {
     try {
         const id = req.params.id.trim();
-        const data = await usermodal.find({ _id: id }).populate("mention")
+        const data = await userModal.find({ _id: id })
+            .populate("mention")
             .populate({
                 path: "mention",
                 populate: [
@@ -224,4 +332,4 @@ export const FetchMentionComments = async (req, res) => {
             error: error
         })
     }
-}
+};

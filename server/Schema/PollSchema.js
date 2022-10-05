@@ -32,5 +32,5 @@ const Poll = new Schema({
         default: 0,
     },
 });
-const pollmodal = model("poll", Poll);
-export default pollmodal;
+const pollModal = model("poll", Poll);
+export default pollModal;

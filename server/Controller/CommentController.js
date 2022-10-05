@@ -1,7 +1,7 @@
 
 import commentModal from "../Schema/CommentSchema.js";
-import postmodal from "../Schema/PostSchema.js";
-import usermodal from "../Schema/UserSchema.js";
+import postModal from "../Schema/PostSchema.js";
+import userModal from "../Schema/UserSchema.js";
 
 export const commentHandler = async (req, res, next) => {
 
@@ -14,11 +14,11 @@ export const commentHandler = async (req, res, next) => {
     await newComment.save();
 
     for (var i in mention) {
-      const data = await usermodal.findByIdAndUpdate(mention[i], { $push: { mention: newComment._id }, })
+      const data = await userModal.findByIdAndUpdate(mention[i], { $push: { mention: newComment._id }, })
       console.log(mention[i]);
     }
 
-    const post = await postmodal.findByIdAndUpdate(post_id, { $push: { comments: newComment._id } });
+    const post = await postModal.findByIdAndUpdate(post_id, { $push: { comments: newComment._id } });
 
     res.json({
       status: "ok",
@@ -38,7 +38,7 @@ export const replyHandler = async (req, res, next) => {
 
     await newComment.save();
     for (var i in mention) {
-      const data = await usermodal.findByIdAndUpdate(mention[i], { $push: { mention: newComment._id }, })
+      const data = await userModal.findByIdAndUpdate(mention[i], { $push: { mention: newComment._id }, })
       console.log(mention[i]);
     }
 
@@ -198,12 +198,12 @@ export const FetchUsers = async (req, res) => {
   try {
     const { name } = req.body;
     if (name == null) {
-      usermodal.find({}, function (err, data) {
+      userModal.find({}, function (err, data) {
         res.send(data);
       });
     } else {
       const regex = new RegExp(name, 'i')
-      usermodal.find({ name: regex }, function (err, data) {
+      userModal.find({ name: regex }, function (err, data) {
         res.send(data);
       });
     }

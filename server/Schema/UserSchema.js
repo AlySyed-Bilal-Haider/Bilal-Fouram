@@ -1,5 +1,5 @@
 
-import { model, mongoose, Schema } from "mongoose";
+import mongoose,  {  Schema } from "mongoose";
 
 const Adduser = new mongoose.Schema({
   name: {
@@ -52,5 +52,5 @@ const Adduser = new mongoose.Schema({
     ref: "comment"
   }]
 });
-const usermodal = mongoose.model("user", Adduser);
-export default usermodal;
+const userModal = mongoose.model("user", Adduser);
+export default userModal;
