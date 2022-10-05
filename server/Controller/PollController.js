@@ -1,10 +1,10 @@
-import pollmodal from "../Schema/PollSchema.js";
-import usermodal from "../Schema/UserSchema.js";
-import postmodal from "../Schema/PostSchema.js";
+import pollModal from "../Schema/PollSchema.js";
+import userModal from "../Schema/UserSchema.js";
+import postModal from "../Schema/PostSchema.js";
 
 export const FetchAllPoll = async (req, res) => {
   try {
-    const data = await pollmodal.find({ visibility: true });
+    const data = await pollModal.find({ visibility: true });
     res.json({
       status: "ok",
       success: true,
@@ -22,7 +22,7 @@ export const FetchAllPoll = async (req, res) => {
 
 export const CreatePoll = async (req, res) => {
   try {
-    const newPoll = await new pollmodal(req.body);
+    const newPoll = await new pollModal(req.body);
     newPoll.save();
     res.json({
       message: "ok",
@@ -66,20 +66,20 @@ export const VotePoll = async (req, res, next) => {
   try {
     // console.log("vote", req.body);
     const { poll_id, answer_id, user_id } = req.body;
-    const voteAnswer = await pollmodal.findOneAndUpdate(
+    const voteAnswer = await pollModal.findOneAndUpdate(
       { _id: poll_id, "answers._id": answer_id },
       { $push: { "answers.$.vote": user_id } }
     );
-    const increaseVote = await pollmodal.findByIdAndUpdate(voteAnswer._id,{totalvote: voteAnswer.totalvote+1});
+    const increaseVote = await pollModal.findByIdAndUpdate(voteAnswer._id,{totalvote: voteAnswer.totalvote+1});
     
-    const post = await postmodal.find({poll: poll_id});
+    const post = await postModal.find({poll: poll_id});
     // console.log(post[0]._id);
 
-    const votepoll = await usermodal.findByIdAndUpdate(user_id, {
+    const votepoll = await userModal.findByIdAndUpdate(user_id, {
       $push: { poll: post[0]._id },
     });
 
-    const data = await pollmodal.find({ _id: poll_id,visibility: true});
+    const data = await pollModal.find({ _id: poll_id,visibility: true});
     // console.log("Poll data:", data);
     res.status(200).json({
       status: "ok",
@@ -95,7 +95,7 @@ export const CheckPollLike = async (req, res) => {
   try {
     const poll_id = req.params.poll_id;
     const user_id = req.params.user_id;
-    const pollLike = await pollmodal.findById(poll_id);
+    const pollLike = await pollModal.findById(poll_id);
     const check = pollLike.like.includes(user_id);
     console.log("check:", check);
     if (check) {
@@ -118,10 +118,10 @@ export const CheckPollLike = async (req, res) => {
 export const likeHandler = async (req, res) => {
   try {
     const { poll_id, user_id } = req.body;
-    const poll = await pollmodal.findByIdAndUpdate(poll_id, {
+    const poll = await pollModal.findByIdAndUpdate(poll_id, {
       $push: { like: user_id },
     });
-    const pollLike = await pollmodal.findById(poll_id);
+    const pollLike = await pollModal.findById(poll_id);
 
     // console.log(pollLike.like);
     res.json({
@@ -137,7 +137,7 @@ export const likeHandler = async (req, res) => {
 export const unlikeHandler = async (req, res) => {
   try {
     const { poll_id, user_id } = req.body;
-    const poll = await pollmodal.findByIdAndUpdate(poll_id, {
+    const poll = await pollModal.findByIdAndUpdate(poll_id, {
       $pull: { like: user_id },
     });
     res.json({

@@ -1,7 +1,7 @@
-import postmodal from "../Schema/PostSchema.js";
+import postModal from "../Schema/PostSchema.js";
 import commentModal from "../Schema/CommentSchema.js";
-import pollmodal from "../Schema/PollSchema.js";
-import usermodal from "../Schema/UserSchema.js";
+import pollModal from "../Schema/PollSchema.js";
+import userModal from "../Schema/UserSchema.js";
 
 // ....Add discussion and Questions ,answer..........
 
@@ -9,7 +9,7 @@ export const createPost = async (req, res, next) => {
   try {
     console.log("req.body:", req.body);
     const { tag, title, description, user, poll } = req.body;
-    const newPost = new postmodal({
+    const newPost = new postModal({
       tag,
       title,
       description,
@@ -19,7 +19,7 @@ export const createPost = async (req, res, next) => {
     console.log(newPost);
 
     await newPost.save();
-    const userpost = await usermodal.findByIdAndUpdate(user, {
+    const userpost = await userModal.findByIdAndUpdate(user, {
       $push: { post: newPost._id },
     });
     if (newPost) {
@@ -37,7 +37,7 @@ export const createPost = async (req, res, next) => {
 // fetch all discusions from server , then send on front end
 export const fetchAlldiscussion = async (req, res) => {
   try {
-    const data = await postmodal
+    const data = await postModal
       .find({ visibility: true, status: "Approved" })
       .populate("user")
       .populate("poll")
@@ -48,6 +48,12 @@ export const fetchAlldiscussion = async (req, res) => {
           {
             path: "reply",
             modal: commentModal,
+            populate: [
+              {
+                  path: "reply",
+                  modal: commentModal,
+              }
+          ]
           },
         ],
       });
@@ -73,7 +79,7 @@ export const fetchcategory = async (req, res, next) => {
   try {
     const tag = req.params.tag;
     console.log("tag:", tag);
-    const data = await postmodal
+    const data = await postModal
       .find({ tag: tag, visibility: true, status: "Approved" })
       .populate("user")
       .populate("comments");
@@ -90,7 +96,7 @@ export const fetchcategory = async (req, res, next) => {
 export const getSpecificDiscussion = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const data = await postmodal
+    const data = await postModal
       .find({ user: id, visibility: true })
       .populate("user")
       .populate("poll")
@@ -101,6 +107,12 @@ export const getSpecificDiscussion = async (req, res, next) => {
           {
             path: "reply",
             modal: commentModal,
+            populate: [
+              {
+                  path: "reply",
+                  modal: commentModal,
+              }
+          ]
           },
         ],
       });
@@ -118,7 +130,7 @@ export const getSpecificDiscussion = async (req, res, next) => {
 export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
   try {
-    const data = await postmodal
+    const data = await postModal
       .find({ _id: id, visibility: true, status: "Approved" })
       .populate("user")
       .populate("poll")
@@ -129,6 +141,12 @@ export const fetchPostDetails = async (req, res) => {
           {
             path: "reply",
             modal: commentModal,
+            populate: [
+              {
+                  path: "reply",
+                  modal: commentModal,
+              }
+          ]
           },
         ],
       });
@@ -154,8 +172,8 @@ export const removepost = async (req, res) => {
     const id = req.params.id.trim();
     // console.log("id", id);
 
-    const data = await postmodal.findByIdAndUpdate(id, { visibility: false });
-    const poll = await pollmodal.findByIdAndUpdate(data.poll, { visibility: false });
+    const data = await postModal.findByIdAndUpdate(id, { visibility: false });
+    const poll = await pollModal.findByIdAndUpdate(data.poll, { visibility: false });
 
     if (data) {
       res.status(200).json({
@@ -185,7 +203,7 @@ export const EditepostHandler = async (req, res) => {
     console.log("req.body", req.body);
     const { id, description } = req.body;
     console.log("id:", id, "description: ", description);
-    const data = await postmodal.findByIdAndUpdate(id, {
+    const data = await postModal.findByIdAndUpdate(id, {
       description: description,
     });
     if (data) {
@@ -214,7 +232,7 @@ export const CheckPostLike = async (req, res) => {
   try {
     const post_id = req.params.post_id;
     const user_id = req.params.user_id;
-    const postLike = await postmodal.findById({ _id: post_id });
+    const postLike = await postModal.findById({ _id: post_id });
     const check = postLike.like.includes(user_id);
     if (check) {
       res.json({
@@ -236,13 +254,13 @@ export const CheckPostLike = async (req, res) => {
 export const likeHandler = async (req, res) => {
   try {
     const { user_id, post_id } = req.body;
-    const post = await postmodal.findByIdAndUpdate(post_id, {
+    const post = await postModal.findByIdAndUpdate(post_id, {
       $push: { like: user_id },
     });
-    const likepost = await usermodal.findByIdAndUpdate(user_id, {
+    const likepost = await userModal.findByIdAndUpdate(user_id, {
       $push: { like: post._id },
     });
-    const postLike = await postmodal.findById(post_id);
+    const postLike = await postModal.findById(post_id);
 
     // console.log("likehandler");
     // console.log(postLike.like);
@@ -259,10 +277,10 @@ export const likeHandler = async (req, res) => {
 export const unlikeHandler = async (req, res) => {
   try {
     const { user_id, post_id } = req.body;
-    const post = await postmodal.findByIdAndUpdate(post_id, {
+    const post = await postModal.findByIdAndUpdate(post_id, {
       $pull: { like: user_id },
     });
-    const likepost = await usermodal.findByIdAndUpdate(user_id, {
+    const likepost = await userModal.findByIdAndUpdate(user_id, {
       $pull: { like: post._id },
     });
     res.json({

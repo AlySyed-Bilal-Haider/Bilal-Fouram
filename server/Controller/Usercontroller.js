@@ -1,4 +1,4 @@
-import usermodal from "../Schema/UserSchema.js";
+import userModal from "../Schema/UserSchema.js";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
 import { config } from "./config.js";
@@ -7,10 +7,10 @@ import { config } from "./config.js";
 export const signupHandler = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    let user = await usermodal.findOne({
+    let user = await userModal.findOne({
       name: name,
     });
-    let user1 = await usermodal.findOne({
+    let user1 = await userModal.findOne({
       email: email,
     });
     if (user) {
@@ -29,22 +29,21 @@ export const signupHandler = async (req, res) => {
       let userToken = { password: password };
       let token = jwt.sign(userToken, config.secret);
       if (email === "nabiha3802izhar@gmail.com") {
-        const usersignup = await new usermodal({
+        const usersignup = await new userModal({
           name: name,
           email: email,
           password: token,
-          role: "admin"
+          role: "admin",
         });
         await usersignup.save();
       } else {
-        const usersignup = await new usermodal({
+        const usersignup = await new userModal({
           name: name,
           email: email,
           password: token,
         });
         await usersignup.save();
       }
-
 
       res.json({
         status: "ok",
@@ -66,7 +65,7 @@ export const signupHandler = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    let user = usermodal.findOne(
+    let user = userModal.findOne(
       { email: req.body.email },
       function (err, docs) {
         if (docs) {
@@ -127,14 +126,13 @@ export const tokenVerifyHandler = async (req, res) => {
   try {
     var decoded = jwt_decode(token);
     if (decoded.id) {
-      usermodal.findOne({ _id: decoded.id }, function (err, docs) {
-        // console.log(docs);
+      userModal.findOne({ _id: decoded.id }, function (err, docs) {
         res.json({
           status: "ok",
           name: docs.name,
           email: docs.email,
           id: docs._id,
-          role: docs.role
+          role: docs.role,
         });
       });
     } else {
@@ -152,14 +150,12 @@ export const tokenVerifyHandler = async (req, res) => {
   }
 };
 
-
 //fetch specific data from server of user
 
 export const fetchuser = async (req, res) => {
-
   try {
     const id = req.params.id;
-    const data = await usermodal.findById(id);
+    const data = await userModal.findById(id);
     res.send(data);
   } catch (error) {
     console.log(error);

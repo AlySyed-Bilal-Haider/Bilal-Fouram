@@ -3,7 +3,7 @@ import cors from "cors";
 import multer from "multer";
 import router from "./Routes/routes.js";
 import connectDB from "./Database/ConnectDB.js";
-import usermodal from "./Schema/UserSchema.js";
+import userModal from "./Schema/UserSchema.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
@@ -37,10 +37,10 @@ app.post("/uploadimg", upload.single("file"), async (req, res) => {
   try {
     const _id = req.body.id;
     console.log(req);
-    const previous = await usermodal.findOne({ _id: _id });
+    const previous = await userModal.findOne({ _id: _id });
     console.log("previous", previous);
 
-    const data = await usermodal.findByIdAndUpdate(_id, {
+    const data = await userModal.findByIdAndUpdate(_id, {
       img: req.file.filename,
     });
 

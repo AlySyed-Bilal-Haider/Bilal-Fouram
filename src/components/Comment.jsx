@@ -41,12 +41,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
+  console.log("username:", username, post_id);
   const [commentstate, setCommentstate] = useState("");
-  const [mentionState, setMentionstate] = useState("");
+  const [mentionState, setMentionstate] = useState();
   const [userState, setUsername] = useState("");
-  const [name, nameState] = React.useState("");
   const [_usernamedropDown, setUsernameDropdown] = useState([]);
-  const [filterNamestate, setFilterNamestate] = useState("");
+  const [filterNameIDstate, setFilterNamestate] = useState([]);
   const handleClose = () => {
     setCommentstate("");
     renderFetchpost && renderFetchpost(true);
@@ -54,28 +54,28 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
   };
   const addComment = async () => {
     try {
-      if (name) {
-        const commentValue = {
-          comment: commentstate,
-          userName: username,
-          post_id,
-        };
-        const { data } = await axios.post(`${url}/comment`, commentValue);
-        console.log("comment data", data);
-        setUsername(data);
-        data.status == "ok" && handleClose();
-      }
+      let comment = commentstate.replace("", "@");
+      const commentValue = {
+        comment,
+        userName: username,
+        post_id,
+        mention: filterNameIDstate,
+      };
+      const { data } = await axios.post(`${url}/comment`, commentValue);
+      console.log("comment data", data);
+      setUsername(data);
+      data.status == "ok" && handleClose();
     } catch (error) {
       console.log("Comment routes not work !", error);
     }
-    nameState("");
   };
 
+  // fetch user name and show in drop down from API server side
   const fetchusername = async (e) => {
     try {
       const { data } = await axios.post(`${url}/fetchusername`, mentionState);
-      console.log("user name data", data?.data);
-      setUsernameDropdown(data?.data);
+      console.log("user name data", data);
+      setUsernameDropdown(data);
       setMentionstate("");
     } catch (error) {
       console.log("error here !", error);
@@ -99,10 +99,13 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
   };
 
   // select name in drop down
-  const handleChange = (event) => {
-    setFilterNamestate(event.target.value);
+  const handleChange = (event, value) => {
+    if (value.name) {
+      console.log("value.id:", value._id);
+      return setFilterNamestate([...filterNameIDstate, value._id]);
+    }
   };
-
+  console.log(filterNameIDstate, "mention");
   return (
     <Dialog
       fullScreen
@@ -133,14 +136,15 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
       </AppBar>
       <Box mt={-5} mb={3} mx={4.5}>
         <Typography sx={{ m: 1 }}>{title}</Typography>
-        {_usernamedropDown.length > 0 && (
+        {_usernamedropDown?.length > 0 && (
           <Autocomplete
             disablePortal
             id="combo-box-demo"
             options={_usernamedropDown}
             sx={{ width: 300 }}
+            onChange={handleChange}
             getOptionLabel={(option) => {
-              return option && option.name;
+              return option && option?.name;
             }}
             renderInput={(params) => (
               <TextField

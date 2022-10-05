@@ -41,5 +41,5 @@ const Post = new Schema({
   }
   
 });
-const postmodal=model("post", Post);
-export default postmodal;
+const postModal=model("post", Post);
+export default postModal;

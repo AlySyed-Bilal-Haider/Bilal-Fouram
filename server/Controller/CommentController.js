@@ -1,24 +1,32 @@
 import commentModal from "../Schema/CommentSchema.js";
-import postmodal from "../Schema/PostSchema.js";
-import usermodal from "../Schema/UserSchema.js";
+import postModal from "../Schema/PostSchema.js";
+import userModal from "../Schema/UserSchema.js";
 
 export const commentHandler = async (req, res, next) => {
+  console.log("comment handle:", req.body);
   try {
     const { post_id, mention } = req.body;
     console.log(mention);
 
-    // const newComment = new commentModal(req.body);
-    // await newComment.save();
+    const newComment = new commentModal(req.body);
+    await newComment.save();
 
-    // const post = await postmodal.findByIdAndUpdate(post_id, { $push: { comments: newComment._id } });
     for (var i in mention) {
+      const data = await userModal.findByIdAndUpdate(mention[i], {
+        $push: { mention: newComment._id },
+      });
       console.log(mention[i]);
     }
+
+    const post = await postModal.findByIdAndUpdate(post_id, {
+      $push: { comments: newComment._id },
+    });
+
     res.json({
       status: "ok",
       success: true,
       message: "Comment add Successfully!",
-      // id: newComment._id
+      id: newComment._id,
     });
   } catch (error) {
     next(error);
@@ -26,10 +34,16 @@ export const commentHandler = async (req, res, next) => {
 };
 export const replyHandler = async (req, res, next) => {
   try {
-    const { comment_id } = req.body;
+    const { comment_id, mention } = req.body;
     const newComment = new commentModal(req.body);
 
     await newComment.save();
+    for (var i in mention) {
+      const data = await userModal.findByIdAndUpdate(mention[i], {
+        $push: { mention: newComment._id },
+      });
+      console.log(mention[i]);
+    }
 
     const reply = await commentModal.findByIdAndUpdate(comment_id, {
       $push: { reply: newComment._id },
@@ -190,16 +204,12 @@ export const FetchUsers = async (req, res) => {
   try {
     const { name } = req.body;
     if (name == null) {
-      usermodal.find({}, function (err, data) {
-        res.json({
-          status: "ok",
-          success: true,
-          data: data,
-        });
+      userModal.find({}, function (err, data) {
+        res.send(data);
       });
     } else {
       const regex = new RegExp(name, "i");
-      usermodal.find({ name: regex }, function (err, data) {
+      userModal.find({ name: regex }, function (err, data) {
         res.send(data);
       });
     }

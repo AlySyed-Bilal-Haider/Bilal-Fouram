@@ -18,7 +18,6 @@ const commentAdd = new Schema({
     type: Schema.Types.ObjectId,
     ref: "comment"
   }],
-
   mention:[{
     type: Schema.Types.ObjectId,
     ref: "user"
@@ -27,8 +26,6 @@ const commentAdd = new Schema({
     type: Boolean,
     default: true
   }
-
-
 });
 const commentModal = mongoose.model("comment", commentAdd);
 export default commentModal;
