@@ -17,10 +17,12 @@ export const createPost = async (req, res, next) => {
       poll,
     });
     console.log(newPost);
+  
 
     await newPost.save();
+    const ref = {ref_id: newPost._id}
     const userpost = await userModal.findByIdAndUpdate(user, {
-      $push: { post: newPost._id },
+      $push: { discussion:  ref},
     });
     if (newPost) {
       res.json({
@@ -257,8 +259,9 @@ export const likeHandler = async (req, res) => {
     const post = await postModal.findByIdAndUpdate(post_id, {
       $push: { like: user_id },
     });
+    const ref = {ref_id: post._id}
     const likepost = await userModal.findByIdAndUpdate(user_id, {
-      $push: { like: post._id },
+      $push: { like: ref },
     });
     const postLike = await postModal.findById(post_id);
 
@@ -280,8 +283,9 @@ export const unlikeHandler = async (req, res) => {
     const post = await postModal.findByIdAndUpdate(post_id, {
       $pull: { like: user_id },
     });
+    const ref = {ref_id: post._id}
     const likepost = await userModal.findByIdAndUpdate(user_id, {
-      $pull: { like: post._id },
+      $pull: { like : ref },
     });
     res.json({
       message: "ok",

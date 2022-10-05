@@ -1,5 +1,5 @@
 
-import mongoose,  {  Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const Adduser = new mongoose.Schema({
   name: {
@@ -31,25 +31,45 @@ const Adduser = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user'
   },
-  post: [{
-    type: Schema.Types.ObjectId,
-    ref: "post"
-  }],
   discussion: [{
-    type: Schema.Types.ObjectId,
-    ref: "post"
+    ref_id: {
+      type: Schema.Types.ObjectId,
+      ref: "post"
+    },
+    date: {
+      type: Date,
+      default: new Date(),
+    },
   }],
   like: [{
-    type: Schema.Types.ObjectId,
-    ref: "post"
+    ref_id: {
+      type: Schema.Types.ObjectId,
+      ref: "post"
+    },
+    date: {
+      type: Date,
+      default: new Date(),
+    },
   }],
   poll: [{
-    type: Schema.Types.ObjectId,
-    ref: "post"
+    ref_id: {
+      type: Schema.Types.ObjectId,
+      ref: "post"
+    },
+    date: {
+      type: Date,
+      default: new Date(),
+    },
   }],
   mention: [{
-    type: Schema.Types.ObjectId,
-    ref: "comment"
+    ref_id: {
+      type: Schema.Types.ObjectId,
+      ref: "comment"
+    },
+    date: {
+      type: Date,
+      default: new Date(),
+    },
   }]
 });
 const userModal = mongoose.model("user", Adduser);

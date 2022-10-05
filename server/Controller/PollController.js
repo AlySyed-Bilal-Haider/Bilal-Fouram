@@ -75,8 +75,9 @@ export const VotePoll = async (req, res, next) => {
     const post = await postModal.find({poll: poll_id});
     // console.log(post[0]._id);
 
+    const ref = {ref_id: post[0]._id};
     const votepoll = await userModal.findByIdAndUpdate(user_id, {
-      $push: { poll: post[0]._id },
+      $push: { poll: ref },
     });
 
     const data = await pollModal.find({ _id: poll_id,visibility: true});
