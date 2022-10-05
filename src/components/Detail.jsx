@@ -347,7 +347,7 @@ export default function Detail({ userId, username }) {
             <Box
               mb={10}
               sx={{ boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px" }}
-              key={index}
+              key={index + Math.random() * 10}
             >
               <Box pb={2}>
                 <Box py={2.5} pl={6} borderBottom="1px solid #fff">

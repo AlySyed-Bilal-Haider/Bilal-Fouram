@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AccountMenu from "./MenuItem";
-// import jsonwebtoken from "jsonwebtoken";
-
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 import {
   Paper,
   Box,
@@ -42,7 +42,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header({ setOpensign, setOpenlogin,name }) {
+export default function Header({ setOpensign, setOpenlogin, name }) {
   // const { account, connect, disconnect, signer } = useContext(AppContext);
   // const tokenContract = useTokenContract(signer);
   const [namestate, setnamestate] = useState("");
@@ -222,10 +222,47 @@ export default function Header({ setOpensign, setOpenlogin,name }) {
                     }}
                   >
                     <SearchIcon fontSize="small" sx={{ ml: 1 }} />
-                    <InputBase
-                    autoComplete="off"
-                    label="Search here"
-                    value={filterstate || ''}
+                    {/* <Autocomplete
+                      sx={{
+                        backgroundColor: "secondary.main",
+                        color: "text.light",
+                        borderRadius: "4px",
+                        height: "36px",
+                        padding: searchstate
+                          ? "10px 20px 8px 10px"
+                          : "10px 100px 8px 10px",
+                        border: "none",
+                        outline: "none",
+                        transitionProperty: "padding",
+                        transitionDuration: "0.5s",
+                        transitionTimingFunction: "linear",
+                        transitionDelay: "0s",
+                        "&:label": {
+                          backgroundColor: "secondary.main",
+                        },
+                      }}
+                      id="name_id"
+                      getOptionLabel={(option) => option.name}
+                      autoHighlight
+                      renderOption={(props, option) => (
+                        <Box component="li" {...props}>
+                          {option.name}
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          inputProps={{
+                            ...params.inputProps,
+                          }}
+                          placeholder="Mention name..."
+                        />
+                      )}
+                    /> */}
+                    {/* <InputBase
+                      autoComplete="off"
+                      label="Search here"
+                      value={filterstate || ""}
                       type="text"
                       name="search"
                       sx={{
@@ -242,19 +279,17 @@ export default function Header({ setOpensign, setOpenlogin,name }) {
                         transitionDuration: "0.5s",
                         transitionTimingFunction: "linear",
                         transitionDelay: "0s",
-                        '&:label':{
+                        "&:label": {
                           backgroundColor: "secondary.main",
-                        }
+                        },
                       }}
-                      
-                     
                       onClick={() => {
                         setsearchstate(false);
                       }}
                       onMouseLeave={() => {
                         setsearchstate(true);
                       }}
-                    />
+                    /> */}
                   </Box>
                   {name ? (
                     <AccountMenu name={name} />

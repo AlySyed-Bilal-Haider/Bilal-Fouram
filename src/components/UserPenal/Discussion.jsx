@@ -24,7 +24,7 @@ function Discussion() {
     user_id && fetchdescussion();
   }, [user_id]);
 
-  // start descussion here
+  // start discussion here
   // start paginations code
   const [postsPerPage, setPostsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
