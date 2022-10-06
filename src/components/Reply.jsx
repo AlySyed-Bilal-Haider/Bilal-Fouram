@@ -11,10 +11,12 @@ import {
   styled,
   Toolbar,
   Typography,
+  TextField,
 } from "@mui/material";
+
 import CloseIcon from "@mui/icons-material/Close";
 import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
+import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
 import { url } from "../utils";
 
@@ -39,24 +41,76 @@ const TextInput = styled(InputBase)({
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function Reply({ open, setOpen, title,comment_id,username,renderFetchpost}) {
+function Reply({
+  open,
+  setOpen,
+  title,
+  comment_id,
+  username,
+  renderFetchpost,
+  post_id,
+}) {
   const [commentstate, setCommentstate] = useState("");
+  const [mentionState, setMentionstate] = useState();
+  const [_usernamedropDown, setUsernameDropdown] = useState([]);
+  const [filterNameIDstate, setFilterNamestate] = useState([]);
   const handleClose = () => {
     setCommentstate("");
-    renderFetchpost()
+    renderFetchpost();
     setOpen(false);
   };
   const addReply = async () => {
-    const Reply = { comment:commentstate,userName:username,comment_id};
+    const Reply = {
+      comment: commentstate,
+      username,
+      comment_id,
+      post_id,
+      mention: mentionState,
+    };
     try {
       const { data } = await axios.post(`${url}/reply`, Reply);
-   console.log("dcomment data",data);
+      console.log("dcomment data", data);
       data.status == "ok" && handleClose();
     } catch (error) {
-      console.log("Comment routes not work !",error);
+      console.log("Comment routes not work !", error);
     }
   };
 
+  // fetch user name and show in drop down from API server side
+  const fetchusername = async (e) => {
+    try {
+      const { data } = await axios.post(`${url}/fetchusername`, mentionState);
+      console.log("user name data", data);
+      setUsernameDropdown(data);
+      setMentionstate("");
+    } catch (error) {
+      console.log("error here !", error);
+    }
+  };
+
+  useEffect(() => {
+    mentionState === "@" && fetchusername();
+  }, [mentionState]);
+
+  // onChange handler get user values;
+  const Inputvalue = (e) => {
+    let value = e.target.value;
+    const atTherate = value.substring(value.length - 1);
+    let mention = atTherate.match(/@/gi);
+    if (mention) {
+      setMentionstate(mention[0]);
+      mention = "";
+    }
+    setCommentstate(value);
+  };
+
+  // select name in drop down
+  const handleChange = (event, value) => {
+    if (value.name) {
+      console.log("value.id:", value._id);
+      return setFilterNamestate([...filterNameIDstate, value._id]);
+    }
+  };
   return (
     <Dialog
       fullScreen
@@ -87,6 +141,32 @@ function Reply({ open, setOpen, title,comment_id,username,renderFetchpost}) {
       </AppBar>
       <Box mt={-3} mb={3} mx={4.5}>
         <Typography sx={{ m: 1 }}>{title}</Typography>
+        {/* mentions start here */}
+        {_usernamedropDown?.length > 0 && (
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={_usernamedropDown}
+            sx={{ width: 300 }}
+            onChange={handleChange}
+            getOptionLabel={(option) => {
+              return option && option?.name;
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                onChange={handleChange}
+                label="Mentions user"
+              />
+            )}
+            renderOption={(props, option) => (
+              <Box component="li" {...props}>
+                {option.name}
+              </Box>
+            )}
+          />
+        )}
+        {/* // end autocomplete here */}
         <TextInput
           type="text"
           name="description"
@@ -95,16 +175,14 @@ function Reply({ open, setOpen, title,comment_id,username,renderFetchpost}) {
           multiline
           rows={2}
           sx={{ fontSize: "15px" }}
-          onChange={(e) => {
-            setCommentstate(e.target.value);
-          }}
+          onChange={Inputvalue}
         />
       </Box>
       <Divider />
       <Button
         type="submit"
         onClick={() => {
-            addReply();
+          addReply();
         }}
         disableRipple={true}
         sx={{
@@ -121,7 +199,7 @@ function Reply({ open, setOpen, title,comment_id,username,renderFetchpost}) {
           },
         }}
       >
-    post
+        post
       </Button>
     </Dialog>
   );

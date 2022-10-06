@@ -41,7 +41,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
-  console.log("username:", username, post_id);
+  // console.log("username:", username, post_id, title);
   const [commentstate, setCommentstate] = useState("");
   const [mentionState, setMentionstate] = useState();
   const [userState, setUsername] = useState("");
@@ -54,10 +54,10 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
   };
   const addComment = async () => {
     try {
-      let comment = commentstate.replace("", "@");
+      let comment = commentstate.replace("@", "");
       const commentValue = {
         comment,
-        userName: username,
+        username,
         post_id,
         mention: filterNameIDstate,
       };
@@ -105,7 +105,6 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
       return setFilterNamestate([...filterNameIDstate, value._id]);
     }
   };
-  console.log(filterNameIDstate, "mention");
   return (
     <Dialog
       fullScreen

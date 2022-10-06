@@ -4,15 +4,12 @@ import userModal from "../Schema/UserSchema.js";
 
 export const commentHandler = async (req, res, next) => {
   try {
+    console.log("comment !", req.body);
     const { post_id, mention, username } = req.body;
-    console.log(username);
-
     const user = await userModal.findOne({ name: username });
-    console.log(user._id);
-
     const newComment = new commentModal(req.body);
     await newComment.save();
-    const commentref = { ref_id: post_id }
+    const commentref = { ref_id: post_id };
 
     await userModal.findByIdAndUpdate(user._id, {
       $push: { comment: commentref },
@@ -24,7 +21,6 @@ export const commentHandler = async (req, res, next) => {
       await userModal.findByIdAndUpdate(mention[i], {
         $push: { mention: ref },
       });
-      console.log(mention[i]);
     }
 
     await postModal.findByIdAndUpdate(post_id, {
@@ -43,13 +39,13 @@ export const commentHandler = async (req, res, next) => {
 };
 export const replyHandler = async (req, res, next) => {
   try {
+    console.log("reply body:", req.body);
     const { comment_id, mention, username, post_id } = req.body;
     const user = await userModal.findOne({ name: username });
-    console.log(user._id);
 
     const newComment = new commentModal(req.body);
     await newComment.save();
-    const commentref = { ref_id: post_id }
+    const commentref = { ref_id: post_id };
 
     await userModal.findByIdAndUpdate(user._id, {
       $push: { comment: commentref },
@@ -60,7 +56,6 @@ export const replyHandler = async (req, res, next) => {
       await userModal.findByIdAndUpdate(mention[i], {
         $push: { mention: ref },
       });
-      console.log(mention[i]);
     }
 
     await commentModal.findByIdAndUpdate(comment_id, {
@@ -83,7 +78,7 @@ export const CheckCommentLike = async (req, res) => {
     const user_id = req.params.user_id;
     const commentLike = await commentModal.findById({ _id: comment_id });
     const check = commentLike.like.includes(user_id);
-    console.log("check:", check);
+
     if (check) {
       res.json({
         status: true,
@@ -109,8 +104,6 @@ export const likeComment = async (req, res) => {
     });
     const likecomment = await commentModal.findById(comment_id);
 
-    console.log("likeComment");
-    console.log(likecomment.like);
     res.json({
       message: "ok",
     });
@@ -128,8 +121,6 @@ export const unlikeComment = async (req, res) => {
     });
     const unlikecomment = await commentModal.findById(comment_id);
 
-    console.log("unlikeComment");
-    console.log(unlikecomment.like);
     res.json({
       message: "ok",
     });
@@ -142,7 +133,6 @@ export const unlikeComment = async (req, res) => {
 
 export const EditComment = async (req, res) => {
   try {
-    console.log(req.body);
     const { comment_id, comment } = req.body;
     await commentModal.findByIdAndUpdate(comment_id, {
       comment: comment,

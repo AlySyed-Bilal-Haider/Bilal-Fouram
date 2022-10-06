@@ -73,6 +73,7 @@ export default function Detail({ userId, username }) {
   const [openCommentEdite, setCommentsection] = useState("");
   const [EditecommentValue, setEditevalue] = useState("");
   const [checkedPoll, setCheckPollstate] = useState(false);
+  const [postReplyId, setPostReplyID] = useState("");
   const open = Boolean(anchorEl);
   const HandleChecked = (value) => {
     console.log("value:", value);
@@ -104,7 +105,8 @@ export default function Detail({ userId, username }) {
     }
   };
 
-  const CheckloginHandler = () => {
+  const CheckloginHandler = (title) => {
+    setPostDescription(title);
     if (userToken) {
       setEditPopOpen(true);
     } else {
@@ -169,9 +171,10 @@ export default function Detail({ userId, username }) {
   };
 
   // .....reply Hanlder , open the reply modal Box......
-  const replyHandle = (commentID, commentvalue) => {
+  const replyHandle = (commentID, commentvalue, post_id) => {
     setCommentIDstate(commentID);
     setcommentValue(commentvalue);
+    setPostReplyID(post_id);
     if (userToken) {
       setReplyPopOpen(true);
     } else {
@@ -257,7 +260,6 @@ export default function Detail({ userId, username }) {
         setOpen={setEditPopOpen}
         post_id={param?.id}
         title={descriptionstate}
-        userid={userId}
         username={username}
         renderFetchpost={renderDetails}
       />
@@ -269,6 +271,7 @@ export default function Detail({ userId, username }) {
         username={username}
         userid={userId}
         renderFetchpost={renderDetails}
+        post_id={postReplyId}
       />
       <Box bgcolor="primary.light">
         {postdetails?.map((items, index) => {
@@ -463,7 +466,7 @@ export default function Detail({ userId, username }) {
                   <Typography
                     sx={{ cursor: "pointer" }}
                     onClick={() => {
-                      CheckloginHandler();
+                      CheckloginHandler(items?.description);
                     }}
                     ml="30px"
                     variant="body1"
@@ -528,20 +531,6 @@ export default function Detail({ userId, username }) {
                               {comment}
                             </Box>
                           </Box>
-                          {/* like and dislike of comment */}
-                          <Box
-                            mt={2}
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="flex-end"
-                          >
-                            <Typography>
-                              {moment(addedAt).format("LL")}
-                            </Typography>
-                          </Box>
-                          <Box pr={4} fontSize="14px" color="text.paragraph">
-                            {comment}
-                          </Box>
 
                           {/* like and dislike of comment */}
                           <Box
@@ -565,7 +554,7 @@ export default function Detail({ userId, username }) {
 
                             <Typography
                               onClick={() => {
-                                replyHandle(_id, comment);
+                                replyHandle(_id, comment, items?._id);
                               }}
                               sx={{ cursor: "pointer" }}
                               ml="30px"

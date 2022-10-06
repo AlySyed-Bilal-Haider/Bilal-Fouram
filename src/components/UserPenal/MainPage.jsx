@@ -41,11 +41,12 @@ export default function MainPage() {
   const matches = useMediaQuery("(max-width:700px)");
   const [tabText, settabText] = useState("Post");
   const [userProfilestate, setProfilestate] = useState("");
-  const [userid, setIDstate] = useState("");
   const [userfile, setUserfile] = useState("");
   const user_id = localStorage.getItem("user_id") || "";
   const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [alldata, setAlldatastate] = useState("");
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -58,7 +59,6 @@ export default function MainPage() {
       const { data } = await axios.get(`${url}/fetchuser/${user_id}`);
       console.log("data", data);
       setProfilestate(data);
-      setIDstate(data._id);
     } catch (error) {
       console.log("user profile issues", error);
     }
@@ -80,7 +80,7 @@ export default function MainPage() {
     try {
       if (userfile) {
         formData.append("file", userfile);
-        formData.append("id", userid);
+        formData.append("id", user_id);
         const response = await axios.post(`${url}/uploadimg`, formData);
         console.log("response", response);
         if (user_id && response) {
@@ -95,6 +95,17 @@ export default function MainPage() {
     }
   };
 
+  useEffect(() => {
+    const fetchallrecord = async () => {
+      try {
+        const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
+        console.log("main page all data", data);
+      } catch (error) {
+        console.log("Likes error", error);
+      }
+    };
+    user_id && fetchallrecord();
+  }, [user_id]);
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
@@ -512,7 +523,7 @@ export default function MainPage() {
 
             <Grid item xs={12} sm={12} md={9}>
               {show === 0 ? (
-                <Post userid={userid} />
+                <Post username={userProfilestate?.name} />
               ) : show === 1 ? (
                 <Discussion />
               ) : show === 2 ? (

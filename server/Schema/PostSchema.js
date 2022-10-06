@@ -1,45 +1,45 @@
-import {model, mongoose, Schema} from "mongoose";
+import { model, Schema } from "mongoose";
 const Post = new Schema({
-  tag:String,
-  title : {
+  tag: String,
+  title: {
     type: String,
     trim: true,
-    required:true,
+    required: true,
   },
   addedAt: {
     type: Date,
     default: new Date(),
   },
-  description : {
+  description: {
     type: String,
     trim: true,
-    required:true,
+    required: true,
   },
-  user:{
-    type:Schema.Types.ObjectId,
-    ref:"user"
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "user"
   },
-  comments:[{
-    type:Schema.Types.ObjectId,
-    ref:"comment"
+  comments: [{
+    type: Schema.Types.ObjectId,
+    ref: "comment"
   }],
-  like:[{
-    type:Schema.Types.ObjectId,
-    ref:"user"
+  like: [{
+    type: Schema.Types.ObjectId,
+    ref: "user"
   }],
-  poll:{
-    type:Schema.Types.ObjectId,
-    ref:"poll"
+  poll: {
+    type: Schema.Types.ObjectId,
+    ref: "poll"
   },
-  visibility:{
+  visibility: {
     type: Boolean,
     default: true
   },
-  status:{
+  status: {
     type: String,
     default: "Pending"
   }
-  
+
 });
-const postModal=model("post", Post);
+const postModal = model("post", Post);
 export default postModal;

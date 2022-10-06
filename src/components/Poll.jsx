@@ -201,4 +201,4 @@ function Poll({ polldetails, user_id, checkedfunc }) {
   );
 }
 
-export default Poll;
+export default React.memo(Poll);
