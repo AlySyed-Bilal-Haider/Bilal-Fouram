@@ -11,7 +11,7 @@ export const commentHandler = async (req, res, next) => {
     const newComment = new commentModal(req.body);
     await newComment.save();
 
-    const ref = { ref_id: newComment._id };
+    const ref = { ref_id: post_id };
 
     for (var i in mention) {
       const data = await userModal.findByIdAndUpdate(mention[i], {

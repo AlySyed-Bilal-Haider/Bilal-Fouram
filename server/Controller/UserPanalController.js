@@ -101,15 +101,15 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       });
-    // const combined = data[0].post
-    //   .concat(data[0].discussion)
-    //   .concat(data[0].poll)
-    //   .concat(data[0].like)
-    //   .concat(data[0].mention);
-    // console.log(combined);
-    // const arr= {
-    //     "DATA": combined
-    // }
+      // console.log(data[0].discussion);
+    const combined = data[0].discussion
+      .concat(data[0].poll)
+      .concat(data[0].like)
+      .concat(data[0].mention);
+    console.log(combined);
+    const arr= {
+        "DATA": combined
+    }
 
     // const sortByDate = arr => {
     //     const sorter = (a, b) => {
@@ -123,7 +123,7 @@ export const FetchPosts = async (req, res) => {
     res.json({
       status: true,
       // length: length,
-      data: data,
+      data: combined,
     });
   } catch (error) {
     console.log(error);
