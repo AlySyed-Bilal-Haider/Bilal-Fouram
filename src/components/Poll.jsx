@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import moment from "moment";
 import LinearProgress, {
   linearProgressClasses,
@@ -7,6 +7,7 @@ import { GoCheck } from "react-icons/go";
 import axios from "axios";
 import { url } from "../utils";
 import { Box, styled, Checkbox, Typography } from "@mui/material";
+import { Co2Sharp } from "@mui/icons-material";
 const LinearProgressBox = styled(LinearProgress)(({ theme }) => ({
   height: "100%",
   width: "100%",
@@ -54,6 +55,9 @@ const BpCheckbox = (props) => {
 };
 
 function Poll({ polldetails, user_id, checkedfunc }) {
+  console.log("polldetails:", polldetails);
+
+  const [checkstatus, setCheckstate] = React.useState(false);
   const pollApproveUnapprove = async (poll_id, answer_id, user_id) => {
     try {
       const pollvalue = { poll_id, answer_id, user_id };
@@ -65,6 +69,21 @@ function Poll({ polldetails, user_id, checkedfunc }) {
       console.log("Approve poll error !", error);
     }
   };
+  function vote() {
+    let len = polldetails?.answers?.length - 1;
+    for (let i = 0; i <= len; i++) {
+      let status = polldetails?.answers[i]?.vote?.includes(user_id);
+      if (status) {
+        setCheckstate(true);
+        break;
+      }
+    }
+  }
+
+  useEffect(() => {
+    vote();
+  }, [polldetails]);
+
   return (
     <>
       {polldetails?.visibility == true ? (
@@ -103,11 +122,11 @@ function Poll({ polldetails, user_id, checkedfunc }) {
             justifyContent={{ xs: "center", md: "space-between" }}
             flexWrap="wrap"
           >
-            {polldetails?.answers.map(({ title, _id }, i) => {
+            {polldetails?.answers?.map(({ title, _id }, i) => {
               return (
                 <>
                   <Box
-                    key={_id}
+                    key={_id + i}
                     mt={{ md: 0, xs: 1.5 }}
                     height="39px"
                     width="270px"
@@ -120,9 +139,34 @@ function Poll({ polldetails, user_id, checkedfunc }) {
                       alignItems="center"
                       sx={{ position: "absolute", top: "2px" }}
                     >
-                      {polldetails?.answers[i]?.vote?.includes(
-                        user_id
-                      ) ? null : (
+                      {checkstatus == true ? (
+                        <>
+                          {polldetails?.answers[i]?.vote?.includes(user_id) ? (
+                            <BpCheckbox
+                              disabled
+                              checked
+                              onClick={() => {
+                                pollApproveUnapprove(
+                                  polldetails?._id,
+                                  _id,
+                                  user_id
+                                );
+                              }}
+                            />
+                          ) : (
+                            <BpCheckbox
+                              disabled
+                              onClick={() => {
+                                pollApproveUnapprove(
+                                  polldetails?._id,
+                                  _id,
+                                  user_id
+                                );
+                              }}
+                            />
+                          )}
+                        </>
+                      ) : (
                         <BpCheckbox
                           onClick={() => {
                             pollApproveUnapprove(
@@ -133,6 +177,7 @@ function Poll({ polldetails, user_id, checkedfunc }) {
                           }}
                         />
                       )}
+
                       {title}
                     </Typography>
                   </Box>

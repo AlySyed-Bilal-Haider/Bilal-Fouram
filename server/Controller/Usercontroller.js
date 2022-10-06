@@ -33,7 +33,7 @@ export const signupHandler = async (req, res) => {
           name: name,
           email: email,
           password: token,
-          role: "admin"
+          role: "admin",
         });
         await usersignup.save();
       } else {
@@ -44,7 +44,6 @@ export const signupHandler = async (req, res) => {
         });
         await usersignup.save();
       }
-
 
       res.json({
         status: "ok",
@@ -128,13 +127,12 @@ export const tokenVerifyHandler = async (req, res) => {
     var decoded = jwt_decode(token);
     if (decoded.id) {
       userModal.findOne({ _id: decoded.id }, function (err, docs) {
-        // console.log(docs);
         res.json({
           status: "ok",
           name: docs.name,
           email: docs.email,
           id: docs._id,
-          role: docs.role
+          role: docs.role,
         });
       });
     } else {
@@ -156,7 +154,6 @@ export const tokenVerifyHandler = async (req, res) => {
 //fetch specific data from server 
 
 export const fetchuser = async (req, res) => {
-
   try {
     const id = req.params.id;
     const data = await userModal.findById(id);

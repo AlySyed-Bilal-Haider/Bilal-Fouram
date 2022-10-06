@@ -10,8 +10,6 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
-// import jsonwebtoken from "jsonwebtoken";
-// import { toast } from "react-toastify";
 import { MdPendingActions, MdDisabledByDefault } from "react-icons/md";
 import { FcApproval } from "react-icons/fc";
 // import moment from "moment";
@@ -19,9 +17,6 @@ import { FcApproval } from "react-icons/fc";
 import Approved from "./Approved";
 import Pending from "./Pending";
 import Rejected from "./Rejected";
-
-// import axios from "axios";
-// import { url } from "../../utils";
 
 const useStyles = makeStyles({
   paperMenu: {
@@ -47,47 +42,6 @@ export default function AdminPanel() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  //   const userProfileHandler = async () => {
-  //     try {
-  //       const { data } = await axios.get(`${url}/fetchuser/${userMail}`);
-  //       console.log("data", data);
-  //       setProfilestate(data);
-  //       setIDstate(data._id);
-  //     } catch (error) {
-  //       console.log("user profile issues", error);
-  //     }
-  //   };
-
-  //   useEffect(() => {
-  //     if (!!userMail) {
-  //       userProfileHandler();
-  //     }
-  //   }, [userMail]);
-
-  // image upload from server
-  //   const handleFile = async (event) => {
-  //     let file = event.target.files[0];
-  //     setUserfile(file);
-  //   };
-  //   const handlerSubmit = async (e) => {
-  //     e.preventDefault();
-  //     try {
-  //       if (userfile) {
-  //         formData.append("file", userfile);
-  //         formData.append("id", userid);
-  //         const response = await axios.post(`${url}/uploadimg`, formData);
-  //         console.log("response", response);
-  //         if (userMail && response) {
-  //           userProfileHandler();
-  //         }
-  //         setUserfile("");
-  //       } else {
-  //         toast.error("Choose the file!");
-  //       }
-  //     } catch (error) {
-  //       console.log("error upload", error);
-  //     }
-  //   };
 
   return (
     <>
@@ -102,174 +56,6 @@ export default function AdminPanel() {
               justifyContent="center"
               flexDirection={matches ? "column" : "row"}
             >
-              {/* <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "column",
-                }}
-              >
-                <Box
-                  sx={{
-                    width: "150px",
-                    height: "150px",
-                    borderRadius: "50%",
-                    backgroundColor: "#fff",
-                  }}
-                >
-                  {userProfilestate?.img ? (
-                    <form onSubmit={handlerSubmit}>
-                      <div className="image-show">
-                        <label for="file-input">
-                          <img
-                            src={`${url}/upload/${userProfilestate?.img}`}
-                            alt="avtar"
-                            style={{
-                              width: "150px",
-                              height: "150px",
-                              borderRadius: "50%",
-                              cursor: "pointer",
-                            }}
-                            loading="lazy"
-                          />
-                        </label>
-
-                        <input
-                          id="file-input"
-                          type="file"
-                          name="file"
-                          accept="image/*"
-                          onChange={handleFile}
-                        />
-                      </div>
-                      <Box py={1} textAlign="center">
-                        <Button
-                          type="submit"
-                          sx={{
-                            color: "text.main",
-                            backgroundColor: "secondary.main",
-                            textTransform: "capitalize",
-                            width: "80px",
-                            "&:hover": {
-                              backgroundColor: "secondary.light",
-                            },
-                          }}
-                        >
-                          Save
-                        </Button>
-                      </Box>
-                    </form>
-                  ) : (
-                    <form onSubmit={handlerSubmit}>
-                      <div className="image-upload">
-                        <label for="file-input">
-                          <img
-                            src={avtar}
-                            alt=""
-                            style={{ width: "100%", cursor: "pointer" }}
-                          />
-                        </label>
-
-                        <input
-                          id="file-input"
-                          type="file"
-                          name="file"
-                          accept="image/*"
-                          onChange={handleFile}
-                        />
-                      </div>
-                      <Box py={1} textAlign="center">
-                        <Button
-                          type="submit"
-                          sx={{
-                            color: "text.main",
-                            backgroundColor: "secondary.main",
-                            textTransform: "capitalize",
-                            width: "80px",
-                            "&:hover": {
-                              backgroundColor: "secondary.light",
-                            },
-                          }}
-                        >
-                          Save
-                        </Button>
-                      </Box>
-                    </form>
-                  )}
-                </Box>
-              </Box>
-
-              <Box
-                ml={3}
-                display="flex"
-                flexDirection="column"
-                alignItems={matches ? "center" : "flex-start"}
-              >
-                <Box
-                  color="text.main"
-                  fontSize="22px"
-                  fontWeight={600}
-                  fontFamily="Open Sans"
-                  mt={matches ? 2 : 0}
-                >
-                  {userProfilestate?.name}
-                </Box>
-                <Box
-                  mt={2}
-                  display="flex"
-                  alignItems="center"
-                  flexWrap="wrap"
-                  justifyContent={matches ? "center" : "flex-start"}
-                >
-                  <Box display="flex" alignItems="center">
-                    <Box
-                      color="text.light"
-                      fontSize="15px"
-                      fontWeight={400}
-                      fontFamily="Open Sans"
-                    >
-                      Online
-                    </Box>
-                    <Box
-                      color="text.light"
-                      ml={3}
-                      fontSize="15px"
-                      fontWeight={400}
-                      fontFamily="Open Sans"
-                    >
-                      Joined Date{" "}
-                      {moment(userProfilestate?.addedAt).format("LL")}
-                    </Box>
-                  </Box>
-                  <Box display="flex" alignItems="center">
-                    <Box
-                      color="text.light"
-                      ml={3}
-                      fontSize="15px"
-                      fontWeight={400}
-                      fontFamily="Open Sans"
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <BsCheckLg style={{ marginRight: "5px" }} /> 0 best
-                      answers
-                    </Box>
-                    <Box
-                      color="text.light"
-                      ml={3}
-                      fontSize="15px"
-                      fontWeight={400}
-                      fontFamily="Open Sans"
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <FaRibbon style={{ marginRight: "5px" }} /> 0 points
-                    </Box>
-                  </Box>
-                </Box>
-              </Box> */}
-
               <Typography
                 variant="body1"
                 textAlign="center"

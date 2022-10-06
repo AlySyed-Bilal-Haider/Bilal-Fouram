@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AccountMenu from "./MenuItem";
-// import jsonwebtoken from "jsonwebtoken";
-
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 import {
   Paper,
   Box,
@@ -15,6 +15,7 @@ import {
   ListItem,
   ListItemText,
   InputBase,
+  styled,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -42,7 +43,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header({ setOpensign, setOpenlogin,name }) {
+export default function Header({ setOpensign, setOpenlogin, name }) {
   // const { account, connect, disconnect, signer } = useContext(AppContext);
   // const tokenContract = useTokenContract(signer);
   const [namestate, setnamestate] = useState("");
@@ -134,49 +135,25 @@ export default function Header({ setOpensign, setOpenlogin,name }) {
           />
         </ListItem>
       </List>
-      {/* <Box mb={1} display="flex" justifyContent="center">
-        {account ? (
-          <Box
-            width="90%"
-            height="42px"
-            bgcolor="#098CDC"
-            borderRadius="8px"
-            sx={{ cursor: "pointer" }}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            color="primary.main"
-            fontWeight="500"
-            fontSize="16px"
-            onClick={() => disconnect()}
-            style={{ zIndex: 1 }}
-          >
-            {account.slice(0, 4) + "..." + account.slice(-4)}
-          </Box>
-        ) : (
-          <Box
-            zIndex={1}
-            sx={{
-              cursor: "pointer",
-              bgcolor:"primary.main"
-            }}
-            width="90%"
-            height="42px"
-            fontWeight="500"
-            borderRadius="8px"
-            fontSize="20px"
-            color="#ffffff"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            onClick={() => connect()}
-          >
-            Connect
-          </Box>
-        )}
-      </Box> */}
     </div>
   );
+  const Autocompletege = styled(Autocomplete)(({ theme }) => ({
+    "& .MuiAutocomplete-inputFocused": {
+      border: "none",
+      outline: "none",
+    },
+    "& .css-rwpby0-MuiListSubheader-root-MuiAutocomplete-groupLabel": {
+      backgroundColor: theme.palette.text.light,
+    },
+  }));
+  const _data = [
+    {
+      label: "First",
+    },
+    {
+      label: "second",
+    },
+  ];
   return (
     <>
       {/* <ToastNotify alertState={alertState} setAlertState={setAlertState} /> */}
@@ -222,10 +199,65 @@ export default function Header({ setOpensign, setOpenlogin,name }) {
                     }}
                   >
                     <SearchIcon fontSize="small" sx={{ ml: 1 }} />
+                    {/* <Autocompletege
+                      sx={{
+                        position: "relative",
+                        width: { md: "300px", xs: "150px" },
+                        height: "60px",
+                        top: "10px",
+                        padding: "0px",
+                        borderRadius: "10px",
+                        color: "text.main",
+                        padding: searchstate ? "0px" : "10px 100px 8px 10px",
+                        transitionProperty: "padding",
+                        transitionDuration: "0.5s",
+                        transitionTimingFunction: "linear",
+                        transitionDelay: "0s",
+                        "& .MuiAutocomplete-popupIndicator": {
+                          color: "text.main",
+                        },
+                        "& .MuiAutocomplete-clearIndicator": {
+                          color: "text.main",
+                        },
+                        "& .MuiAutocomplete-root": {
+                          backgroundColor: "secondary.main",
+                          border: "none !important",
+                          ouline: "none !important",
+                          "&:hover": {
+                            border: "none !important",
+                            ouline: "none !important",
+                          },
+                        },
+                        "&:label": {
+                          backgroundColor: "secondary.main",
+                        },
+                      }}
+                      onClick={() => {
+                        setsearchstate(false);
+                      }}
+                      onMouseLeave={() => {
+                        setsearchstate(true);
+                      }}
+                      autoComplete="off"
+                      disablePortal
+                      id="combo-box-demo"
+                      options={_data}
+                      getOptionLabel={(option) => {
+                        return option && option?.label;
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} placeholder="Mentions user" />
+                      )}
+                      renderOption={(props, option) => (
+                        <Box component="li" {...props}>
+                          {option.name}
+                        </Box>
+                      )}
+                    /> */}
                     <InputBase
-                    autoComplete="off"
-                    label="Search here"
-                    value={filterstate || ''}
+                      autoComplete="off"
+                      label="Search here"
+                      value={filterstate || ""}
                       type="text"
                       name="search"
                       sx={{
@@ -242,12 +274,10 @@ export default function Header({ setOpensign, setOpenlogin,name }) {
                         transitionDuration: "0.5s",
                         transitionTimingFunction: "linear",
                         transitionDelay: "0s",
-                        '&:label':{
+                        "&:label": {
                           backgroundColor: "secondary.main",
-                        }
+                        },
                       }}
-                      
-                     
                       onClick={() => {
                         setsearchstate(false);
                       }}

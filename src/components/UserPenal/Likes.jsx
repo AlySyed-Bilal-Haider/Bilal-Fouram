@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Stack, Pagination } from "@mui/material";
 import { FaRegComment } from "react-icons/fa";
 import axios from "axios";
 import { url } from "../../utils";
@@ -20,94 +20,125 @@ export default function Like() {
     user_id && fetchlikepost();
   }, [user_id]);
 
+  // start paginations code
+  const [postsPerPage, setPostsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const handleChangepage = (event, value) => {
+    setCurrentPage(value);
+  };
+  const pageCount = Math.ceil(likestate?.length / postsPerPage);
   return (
     <>
       <Box pb={10}>
-        {likestate?.map((item, i) => {
-          return (
-            <>
-              {likestate[i]?.like?.map(
-                ({ _id, addedAt, description, tag, title, name }, i) => {
-                  return (
-                    <Box
-                      key={_id + i}
-                      p={2}
-                      sx={{
-                        // opacity: "0.4",
-                        "&:hover": {
-                          background: "#fff",
-                          borderRadius: "10px",
-                        },
-                      }}
-                    >
-                      <Box
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Typography
-                          variant="body1"
-                          color="primary.main"
-                          fontWeight="700"
-                          fontSize="18px"
+        {likestate?.length > 0 ? (
+          likestate
+            ?.slice(
+              currentPage * postsPerPage - postsPerPage,
+              currentPage * postsPerPage
+            )
+            ?.map((item, i) => {
+              return (
+                <>
+                  {likestate[i]?.like?.map(
+                    ({ _id, addedAt, description, tag, title, name }, i) => {
+                      return (
+                        <Box
+                          key={_id + i}
+                          p={2}
+                          sx={{
+                            boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
+                            borderRadius: "4px",
+                            "&:hover": {
+                              backgroundColor: "hover.primary",
+                              cursor: "pointer",
+                            },
+                          }}
                         >
-                          General
-                        </Typography>
-
-                        <Box display="flex" alignItems="center">
-                          <Typography
-                            variant="body1"
-                            component="span"
-                            color="text.main"
-                            backgroundColor="primary.main"
-                            borderRadius="5px"
-                            px="7px"
-                            py="1px"
+                          <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            alignItems="center"
                           >
-                            {tag}
-                          </Typography>
-                          <FaRegComment
-                            style={{
-                              marginLeft: "15px",
-                              marginRight: "5px",
-                            }}
-                          />{" "}
-                          {item[i]?.like?.length}
+                            <Typography
+                              variant="body1"
+                              color="primary.main"
+                              fontWeight="700"
+                              fontSize="18px"
+                            >
+                              {title}
+                            </Typography>
+
+                            <Box display="flex" alignItems="center">
+                              <Typography
+                                variant="body1"
+                                component="span"
+                                color="text.main"
+                                backgroundColor="primary.main"
+                                borderRadius="5px"
+                                px="7px"
+                                py="1px"
+                              >
+                                {tag}
+                              </Typography>
+                              <FaRegComment
+                                style={{
+                                  marginLeft: "15px",
+                                  marginRight: "5px",
+                                }}
+                              />{" "}
+                              {item[i]?.like?.length}
+                            </Box>
+                          </Box>
+
+                          <Box>
+                            <Box display="flex" alignItems="center">
+                              <Typography
+                                variant="subtitle2"
+                                color="primary.main"
+                                fontWeight="700"
+                              >
+                                {name}
+                              </Typography>
+                              <Typography
+                                ml={1}
+                                variant="body1"
+                                color="primary.light"
+                                fontSize="13px"
+                              >
+                                {moment(addedAt).format("LL")}
+                              </Typography>
+                            </Box>
+                          </Box>
+
+                          <Box mt={1} fontSize="14px" color="text.paragraph">
+                            {description}
+                          </Box>
                         </Box>
-                      </Box>
+                      );
+                    }
+                  )}
+                </>
+              );
+            })
+        ) : (
+          <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
+            It looks vote there are no posts here.
+          </Box>
+        )}
 
-                      <Box>
-                        <Box display="flex" alignItems="center">
-                          <Typography
-                            variant="subtitle2"
-                            color="primary.main"
-                            fontWeight="700"
-                          >
-                            {name}
-                          </Typography>
-                          <Typography
-                            ml={1}
-                            variant="body1"
-                            color="primary.light"
-                            fontSize="13px"
-                          >
-                            {moment(addedAt).format("LL")}
-                          </Typography>
-                        </Box>
-                      </Box>
-
-                      <Box mt={1} fontSize="14px" color="text.paragraph">
-                        {title}
-                        <br />
-                        {description}
-                      </Box>
-                    </Box>
-                  );
-                }
-              )}
-            </>
-          );
-        })}
+        <Box my="15px" mx="10" px>
+          <Stack
+            direction={"row"}
+            alignItems="center"
+            justifyContent="flex-end"
+          >
+            <Pagination
+              count={pageCount}
+              page={currentPage}
+              onChange={handleChangepage}
+            />
+          </Stack>
+        </Box>
       </Box>
     </>
   );

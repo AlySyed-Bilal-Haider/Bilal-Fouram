@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import Comment from "../Comment";
-import { Box, Typography, Menu, styled, MenuItem } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Menu,
+  styled,
+  MenuItem,
+  Stack,
+  Pagination,
+} from "@mui/material";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
@@ -148,6 +156,14 @@ function Post({ userid }) {
       console.log("unliked code error", error);
     }
   };
+
+  // start paginations code
+  const [postsPerPage, setPostsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const handleChangepage = (event, value) => {
+    setCurrentPage(value);
+  };
+  const pageCount = Math.ceil(userposts?.length / postsPerPage);
   return (
     <>
       <EditPopUp
@@ -165,175 +181,209 @@ function Post({ userid }) {
         userid={userid}
       />
       <Box pb={10}>
-        {userposts.length > 0 ? (
-          userposts?.map((item, i) => {
-            return (
-              <Box mt={i === 0 ? 0 : 2} key={i}>
-                <Typography
-                  variant="body1"
-                  color="primary.main"
-                  fontWeight="700"
+        {userposts?.length > 0 ? (
+          userposts
+            ?.slice(
+              currentPage * postsPerPage - postsPerPage,
+              currentPage * postsPerPage
+            )
+            ?.map((item, i) => {
+              return (
+                <Box
+                  mt={i === 0 ? 0 : 2}
+                  key={i}
+                  sx={{
+                    boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
+                    borderRadius: "4px",
+                    "&:hover": {
+                      backgroundColor: "hover.primary",
+                      cursor: "pointer",
+                    },
+                  }}
                 >
-                  {/* {item} */}
-                </Typography>
-
-                <Box pl={8} pb={3} borderBottom="1px solid #fff">
-                  <Box py={2} display="flex" alignItems="center">
-                    <Box
-                      sx={{
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                        mr: 1,
-                      }}
-                    >
-                      <Avatar sx={{ width: 32, height: 32 }}>
-                        {userposts[i]?.user?.img ? (
-                          <img
-                            style={{
-                              width: "40px",
-                              height: "40px",
-                              borderRadius: "50%",
-                            }}
-                            src={`${url}/upload/${userposts[i]?.user?.img}`}
-                            alt="Good"
-                          />
-                        ) : (
-                          userposts[i]?.user.name.toUpperCase().slice(0, 1)
-                        )}
-                      </Avatar>
-                    </Box>
-                    <Typography
-                      variant="body1"
-                      color="primary.main"
-                      fontWeight="700"
-                    >
-                      {userposts[i]?.user.name}
-                    </Typography>
-
-                    <Typography
-                      ml={2}
-                      variant="body1"
-                      color="primary.light"
-                      fontSize="13px"
-                    >
-                      {item?.addedAt
-                        ? moment(item?.addedAt).format("LL")
-                        : null}
-                    </Typography>
-                    <Typography
-                      ml={2}
-                      variant="body1"
-                      color="primary.light"
-                      fontSize="13px"
-                    >
-                      Awaiting approval
-                    </Typography>
-                  </Box>
-
-                  <Box fontSize="14px" color="text.paragraph">
-                    {item?.title}
-                    <br />
-                    <br />
-                    {item?.description}
-                    <br />
-                  </Box>
-
-                  <Box
-                    mt={2}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-end"
+                  <Typography
+                    variant="body1"
+                    color="primary.main"
+                    fontWeight="700"
                   >
-                    <AiFillLike size="22px" />
-                    <AiFillDislike size="22px" style={{ marginLeft: "30px" }} />
-                    <Typography
-                      onClick={() => {
-                        CommentHandler(item?._id, item?.description);
-                      }}
-                      sx={{ cursor: "pointer" }}
-                      ml="30px"
-                      variant="body1"
-                      fontSize="14px"
-                      color="primary.light"
+                    {/* {item} */}
+                  </Typography>
+
+                  <Box pl={8} pb={3} borderBottom="1px solid #fff">
+                    <Box py={2} display="flex" alignItems="center">
+                      <Box
+                        sx={{
+                          width: "40px",
+                          height: "40px",
+                          borderRadius: "50%",
+                          mr: 1,
+                        }}
+                      >
+                        <Avatar sx={{ width: 32, height: 32 }}>
+                          {userposts[i]?.user?.img ? (
+                            <img
+                              style={{
+                                width: "40px",
+                                height: "40px",
+                                borderRadius: "50%",
+                              }}
+                              src={`${url}/upload/${userposts[i]?.user?.img}`}
+                              alt="Good"
+                            />
+                          ) : (
+                            userposts[i]?.user?.name?.toUpperCase().sli
+                          )}
+                        </Avatar>
+                      </Box>
+                      <Typography
+                        variant="body1"
+                        color="primary.main"
+                        fontWeight="700"
+                      >
+                        {userposts[i]?.user.name}
+                      </Typography>
+
+                      <Typography
+                        ml={2}
+                        variant="body1"
+                        color="primary.light"
+                        fontSize="13px"
+                      >
+                        {item?.addedAt
+                          ? moment(item?.addedAt).format("LL")
+                          : null}
+                      </Typography>
+                      <Typography
+                        ml={2}
+                        variant="body1"
+                        color="primary.light"
+                        fontSize="13px"
+                      >
+                        Awaiting approval
+                      </Typography>
+                    </Box>
+
+                    <Box fontSize="14px" color="text.paragraph">
+                      {item?.title}
+                      <br />
+                      <br />
+                      {item?.description}
+                      <br />
+                    </Box>
+
+                    <Box
+                      mt={2}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="flex-end"
                     >
-                      Reply
-                    </Typography>
-                    {userposts[i].like.includes(user_id) ? (
+                      <AiFillLike size="22px" />
+                      <AiFillDislike
+                        size="22px"
+                        style={{ marginLeft: "30px" }}
+                      />
                       <Typography
                         onClick={() => {
-                          unLikedHandler(item?._id);
+                          CommentHandler(item?._id, item?.description);
                         }}
+                        sx={{ cursor: "pointer" }}
                         ml="30px"
                         variant="body1"
                         fontSize="14px"
                         color="primary.light"
-                        sx={{ cursor: "pointer" }}
                       >
-                        Unlike
+                        Reply
                       </Typography>
-                    ) : (
-                      <Typography
-                        onClick={() => {
-                          likeHandler(item?._id);
-                        }}
-                        ml="30px"
-                        variant="body1"
-                        fontSize="14px"
-                        color="primary.light"
-                        sx={{ cursor: "pointer" }}
-                      >
-                        Like
-                      </Typography>
-                    )}
-                    <BsThreeDots
-                      onClick={handleClick}
-                      size="22px"
-                      style={{ marginLeft: "30px", cursor: "pointer" }}
-                    />
-
-                    <StyledMenu
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          editeHandler(item?._id, item?.description);
-                        }}
-                        disableRipple
-                        sx={{ fontSize: "16px" }}
-                      >
-                        <GrEdit style={{ marginRight: "15px" }} />
-                        Edit
-                      </MenuItem>
-
-                      <MenuItem
-                        onClick={handleClose}
-                        disableRipple
-                        sx={{ fontSize: "16px" }}
-                      >
-                        <RiDeleteBin5Line style={{ marginRight: "15px" }} />
+                      {userposts[i].like.includes(user_id) ? (
                         <Typography
                           onClick={() => {
-                            removeHandler(item?._id);
+                            unLikedHandler(item?._id);
                           }}
+                          ml="30px"
+                          variant="body1"
+                          fontSize="14px"
+                          color="primary.light"
+                          sx={{ cursor: "pointer" }}
                         >
-                          Delete
+                          Unlike
                         </Typography>
-                      </MenuItem>
-                    </StyledMenu>
+                      ) : (
+                        <Typography
+                          onClick={() => {
+                            likeHandler(item?._id);
+                          }}
+                          ml="30px"
+                          variant="body1"
+                          fontSize="14px"
+                          color="primary.light"
+                          sx={{ cursor: "pointer" }}
+                        >
+                          Like
+                        </Typography>
+                      )}
+                      <BsThreeDots
+                        onClick={handleClick}
+                        size="22px"
+                        style={{ marginLeft: "30px", cursor: "pointer" }}
+                      />
+
+                      <StyledMenu
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                      >
+                        <MenuItem
+                          onClick={() => {
+                            editeHandler(item?._id, item?.description);
+                          }}
+                          disableRipple
+                          sx={{ fontSize: "16px" }}
+                        >
+                          <GrEdit style={{ marginRight: "15px" }} />
+                          Edit
+                        </MenuItem>
+
+                        <MenuItem
+                          onClick={handleClose}
+                          disableRipple
+                          sx={{ fontSize: "16px" }}
+                        >
+                          <RiDeleteBin5Line style={{ marginRight: "15px" }} />
+                          <Typography
+                            onClick={() => {
+                              removeHandler(item?._id);
+                            }}
+                          >
+                            Delete
+                          </Typography>
+                        </MenuItem>
+                      </StyledMenu>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            );
-          })
+              );
+            })
         ) : (
-          <Typography variant="h3" textAlign="center" fontWeight={700}>
-            Post Coming Soon
-          </Typography>
+          <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
+            It looks vote there are no posts here.
+          </Box>
         )}
       </Box>
+      {userposts?.length > 0 && (
+        <Box my="15px" mx="10" px>
+          <Stack
+            direction={"row"}
+            alignItems="center"
+            justifyContent="flex-end"
+          >
+            <Pagination
+              count={pageCount}
+              page={currentPage}
+              onChange={handleChangepage}
+            />
+          </Stack>
+        </Box>
+      )}
 
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}
     </>
