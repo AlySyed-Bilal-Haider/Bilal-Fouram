@@ -50,7 +50,6 @@ const StyledMenu = styled((props) => (
 
 function Post({ userid }) {
   const [editPopOpen, setEditPopOpen] = useState(false);
-  const name = localStorage.getItem("name");
   const user_id = localStorage.getItem("user_id");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userposts, setPoststate] = useState([]);
@@ -226,11 +225,13 @@ function Post({ userid }) {
                                 height: "40px",
                                 borderRadius: "50%",
                               }}
-                              src={`${url}/upload/${userposts[i]?.user?.img}`}
+                              src={`${url}/upload/${userposts[i]?.ref_id?.user?.img}`}
                               alt="Good"
                             />
                           ) : (
-                            userposts[i]?.user?.name?.toUpperCase().sli
+                            userposts[i]?.ref_id?.user?.name
+                              ?.toUpperCase()
+                              .slice(0, 1)
                           )}
                         </Avatar>
                       </Box>
@@ -239,7 +240,7 @@ function Post({ userid }) {
                         color="primary.main"
                         fontWeight="700"
                       >
-                        {userposts[i]?.user?.name}
+                        {userposts[i]?.ref_id?.user?.name}
                       </Typography>
 
                       <Typography
@@ -258,12 +259,12 @@ function Post({ userid }) {
                         color="primary.light"
                         fontSize="13px"
                       >
-                        Awaiting approval
+                        {item?.ref_id?.status}
                       </Typography>
                     </Box>
 
                     <Box fontSize="14px" color="text.paragraph">
-                      {item?.title}
+                      {item?.ref_id?.title}
                       <br />
                       <br />
                       {item?.ref_id?.description}
@@ -293,7 +294,7 @@ function Post({ userid }) {
                       >
                         Reply
                       </Typography>
-                      {/* {userposts[i].like.includes(user_id) ? (
+                      {userposts[i]?.ref_id?.like?.includes(user_id) ? (
                         <Typography
                           onClick={() => {
                             unLikedHandler(item?._id);
@@ -319,44 +320,53 @@ function Post({ userid }) {
                         >
                           Like
                         </Typography>
-                      )} */}
-                      <BsThreeDots
-                        onClick={handleClick}
-                        size="22px"
-                        style={{ marginLeft: "30px", cursor: "pointer" }}
-                      />
+                      )}
+                      {userposts[i]?.ref_id?.user?._id === user_id ? (
+                        <Box>
+                          <BsThreeDots
+                            onClick={handleClick}
+                            size="22px"
+                            style={{ marginLeft: "30px", cursor: "pointer" }}
+                          />
 
-                      <StyledMenu
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                      >
-                        <MenuItem
-                          onClick={() => {
-                            editeHandler(item?.ref_id?._id, item?.description);
-                          }}
-                          disableRipple
-                          sx={{ fontSize: "16px" }}
-                        >
-                          <GrEdit style={{ marginRight: "15px" }} />
-                          Edit
-                        </MenuItem>
-
-                        <MenuItem
-                          onClick={handleClose}
-                          disableRipple
-                          sx={{ fontSize: "16px" }}
-                        >
-                          <RiDeleteBin5Line style={{ marginRight: "15px" }} />
-                          <Typography
-                            onClick={() => {
-                              removeHandler(item?.ref_id?._id);
-                            }}
+                          <StyledMenu
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
                           >
-                            Delete
-                          </Typography>
-                        </MenuItem>
-                      </StyledMenu>
+                            <MenuItem
+                              onClick={() => {
+                                editeHandler(
+                                  item?.ref_id?._id,
+                                  item?.description
+                                );
+                              }}
+                              disableRipple
+                              sx={{ fontSize: "16px" }}
+                            >
+                              <GrEdit style={{ marginRight: "15px" }} />
+                              Edit
+                            </MenuItem>
+
+                            <MenuItem
+                              onClick={handleClose}
+                              disableRipple
+                              sx={{ fontSize: "16px" }}
+                            >
+                              <RiDeleteBin5Line
+                                style={{ marginRight: "15px" }}
+                              />
+                              <Typography
+                                onClick={() => {
+                                  removeHandler(item?.ref_id?._id);
+                                }}
+                              >
+                                Delete
+                              </Typography>
+                            </MenuItem>
+                          </StyledMenu>
+                        </Box>
+                      ) : null}
                     </Box>
                   </Box>
                 </Box>

@@ -10,7 +10,7 @@ export default function Mention() {
   useEffect(() => {
     const fetchlikepost = async () => {
       try {
-        const { data } = await axios.get(`${url}/fetchmentions/${user_id}`);
+        const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
         console.log("mentions:", data);
         setMentionState(data?.data);
         console.log("like component:", data.data);

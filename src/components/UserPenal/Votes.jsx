@@ -10,9 +10,9 @@ export default function Vote() {
   useEffect(() => {
     const fetchvote = async () => {
       try {
-        const { data } = await axios.get(`${url}/fetchvotedpolls/${user_id}`);
-        setVotestate(data.data);
-        console.log("vote component:", data.data);
+        const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
+        setVotestate(data?.data);
+        console.log("vote component:", data?.data);
       } catch (error) {
         console.log("votes error", error);
       }
@@ -37,89 +37,85 @@ export default function Vote() {
               currentPage * postsPerPage - postsPerPage,
               currentPage * postsPerPage
             )
-            ?.map((item, i) => {
+            ?.map(({ ref_id }, i) => {
               return (
                 <>
-                  {votestate[i]?.poll?.map(
-                    ({ _id, addedAt, description, tag, title }, i) => {
-                      return (
-                        <Box
-                          key={_id + i}
-                          sx={{
-                            p: 2,
-                            boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
-                            borderRadius: "4px",
-                            "&:hover": {
-                              backgroundColor: "hover.primary",
-                              cursor: "pointer",
-                            },
-                          }}
+                  {ref_id?.poll?.answers?.vote?.includes(user_id) ? (
+                    <Box
+                      key={ref_id?._id + i}
+                      sx={{
+                        p: 2,
+                        boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
+                        borderRadius: "4px",
+                        "&:hover": {
+                          backgroundColor: "hover.primary",
+                          cursor: "pointer",
+                        },
+                      }}
+                    >
+                      <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <Typography
+                          variant="body1"
+                          color="primary.main"
+                          fontWeight="700"
+                          fontSize="18px"
                         >
-                          <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="center"
+                          {ref_id?.tag}
+                        </Typography>
+
+                        <Box display="flex" alignItems="center">
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            color="text.main"
+                            backgroundColor="primary.main"
+                            borderRadius="5px"
+                            px="7px"
+                            py="1px"
                           >
-                            <Typography
-                              variant="body1"
-                              color="primary.main"
-                              fontWeight="700"
-                              fontSize="18px"
-                            >
-                              General
-                            </Typography>
-
-                            <Box display="flex" alignItems="center">
-                              <Typography
-                                variant="body1"
-                                component="span"
-                                color="text.main"
-                                backgroundColor="primary.main"
-                                borderRadius="5px"
-                                px="7px"
-                                py="1px"
-                              >
-                                {tag}
-                              </Typography>
-                              <FaRegComment
-                                style={{
-                                  marginLeft: "15px",
-                                  marginRight: "5px",
-                                }}
-                              />{" "}
-                              {item[i]?.like?.length}
-                            </Box>
-                          </Box>
-
-                          <Box>
-                            <Box display="flex" alignItems="center">
-                              <Typography
-                                variant="subtitle2"
-                                color="primary.main"
-                                fontWeight="700"
-                              >
-                                {votestate[i]?.name}
-                              </Typography>
-                              <Typography
-                                ml={1}
-                                variant="body1"
-                                color="primary.light"
-                                fontSize="13px"
-                              >
-                                {moment(addedAt).format("LL")}
-                              </Typography>
-                            </Box>
-                          </Box>
-
-                          <Box mt={1} fontSize="14px" color="text.paragraph">
-                            {title}
-                            <br />
-                            {description}
-                          </Box>
+                            {ref_id?.tag}
+                          </Typography>
+                          <FaRegComment
+                            style={{
+                              marginLeft: "15px",
+                              marginRight: "5px",
+                            }}
+                          />{" "}
+                          {ref_id.poll?.vote?.length}
                         </Box>
-                      );
-                    }
-                  )}
+                      </Box>
+
+                      <Box>
+                        <Box display="flex" alignItems="center">
+                          <Typography
+                            variant="subtitle2"
+                            color="primary.main"
+                            fontWeight="700"
+                          >
+                            {ref_id?.user?.name}
+                          </Typography>
+                          <Typography
+                            ml={1}
+                            variant="body1"
+                            color="primary.light"
+                            fontSize="13px"
+                          >
+                            {moment(ref_id?.addedAt).format("LL")}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      <Box mt={1} fontSize="14px" color="text.paragraph">
+                        {ref_id?.title}
+                        <br />
+                        {ref_id?.description}
+                      </Box>
+                    </Box>
+                  ) : null}
                 </>
               );
             })
