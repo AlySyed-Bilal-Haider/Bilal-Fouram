@@ -61,16 +61,26 @@ const Adduser = new mongoose.Schema({
       default: new Date(),
     },
   }],
-  mention: [{
+  comment: [{
     ref_id: {
       type: Schema.Types.ObjectId,
-      ref: "comment"
+      ref: "post"
     },
     date: {
       type: Date,
       default: new Date(),
     },
-  }]
+  }],
+  mention: [{
+    ref_id: {
+      type: Schema.Types.ObjectId,
+      ref: "post"
+    },
+    date: {
+      type: Date,
+      default: new Date(),
+    },
+  }],
 });
 const userModal = mongoose.model("user", Adduser);
 export default userModal;

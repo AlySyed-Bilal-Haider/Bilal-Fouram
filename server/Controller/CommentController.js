@@ -3,13 +3,20 @@ import postModal from "../Schema/PostSchema.js";
 import userModal from "../Schema/UserSchema.js";
 
 export const commentHandler = async (req, res, next) => {
-  console.log("comment handle:", req.body);
   try {
-    const { post_id, mention } = req.body;
-    console.log(mention);
+    const { post_id, mention,username } = req.body;
+    console.log(username);
+
+    const user = await userModal.findOne({name: username});
+    console.log(user._id);
 
     const newComment = new commentModal(req.body);
     await newComment.save();
+    const commentref = {ref_id: post_id}
+
+    const commentdata = await userModal.findByIdAndUpdate(user._id, {
+      $push: { comment: commentref },
+    });
 
     const ref = { ref_id: post_id };
 
@@ -36,10 +43,17 @@ export const commentHandler = async (req, res, next) => {
 };
 export const replyHandler = async (req, res, next) => {
   try {
-    const { comment_id, mention } = req.body;
-    const newComment = new commentModal(req.body);
+    const { comment_id, mention,username,post_id } = req.body;
+    const user = await userModal.findOne({name: username});
+    console.log(user._id);
 
+    const newComment = new commentModal(req.body);
     await newComment.save();
+    const commentref = {ref_id: post_id}
+
+    const commentdata = await userModal.findByIdAndUpdate(user._id, {
+      $push: { comment: commentref },
+    });
 
     const ref = { ref_id: newComment._id };
     for (var i in mention) {
