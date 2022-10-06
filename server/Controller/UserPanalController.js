@@ -28,6 +28,7 @@ export const FetchPosts = async (req, res) => {
           },
           {
             path: "user",
+            select: "_id name email img",
             modal: userModal,
           },
           {
@@ -59,6 +60,7 @@ export const FetchPosts = async (req, res) => {
           },
           {
             path: "user",
+            select: "_id name email img",
             modal: userModal,
           },
           {
@@ -89,6 +91,7 @@ export const FetchPosts = async (req, res) => {
           },
           {
             path: "user",
+            select: "_id name email img",
             modal: userModal,
           },
           {
@@ -119,6 +122,7 @@ export const FetchPosts = async (req, res) => {
           },
           {
             path: "user",
+            select: "_id name email img",
             modal: userModal,
           },
           {
@@ -149,6 +153,7 @@ export const FetchPosts = async (req, res) => {
           },
           {
             path: "user",
+            select: "_id name email img",
             modal: userModal,
           },
           {
