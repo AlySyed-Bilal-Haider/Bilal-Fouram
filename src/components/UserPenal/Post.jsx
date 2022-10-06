@@ -81,7 +81,7 @@ function Post({ userid }) {
       const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
       console.log("data descussion allpost", data);
 
-      data && setPoststate(data.data);
+      data && setPoststate(data?.data);
     } catch (error) {
       console.log("Discussions error:", error);
     }
@@ -162,6 +162,7 @@ function Post({ userid }) {
     setCurrentPage(value);
   };
   const pageCount = Math.ceil(userposts?.length / postsPerPage);
+  console.log("userposts:", userposts);
   return (
     <>
       <EditPopUp
@@ -218,7 +219,7 @@ function Post({ userid }) {
                         }}
                       >
                         <Avatar sx={{ width: 32, height: 32 }}>
-                          {userposts[i]?.user?.img ? (
+                          {userposts[i]?.ref_id?.user?.img ? (
                             <img
                               style={{
                                 width: "40px",
@@ -248,7 +249,7 @@ function Post({ userid }) {
                         fontSize="13px"
                       >
                         {item?.addedAt
-                          ? moment(item?.addedAt).format("LL")
+                          ? moment(item?.ref_id?.addedAt).format("LL")
                           : null}
                       </Typography>
                       <Typography
@@ -265,7 +266,7 @@ function Post({ userid }) {
                       {item?.title}
                       <br />
                       <br />
-                      {item?.description}
+                      {item?.ref_id?.description}
                       <br />
                     </Box>
 
@@ -282,7 +283,7 @@ function Post({ userid }) {
                       />
                       <Typography
                         onClick={() => {
-                          CommentHandler(item?._id, item?.description);
+                          CommentHandler(item?.ref_id?._id, item?.description);
                         }}
                         sx={{ cursor: "pointer" }}
                         ml="30px"
@@ -292,7 +293,7 @@ function Post({ userid }) {
                       >
                         Reply
                       </Typography>
-                      {userposts[i].like.includes(user_id) ? (
+                      {/* {userposts[i].like.includes(user_id) ? (
                         <Typography
                           onClick={() => {
                             unLikedHandler(item?._id);
@@ -318,7 +319,7 @@ function Post({ userid }) {
                         >
                           Like
                         </Typography>
-                      )}
+                      )} */}
                       <BsThreeDots
                         onClick={handleClick}
                         size="22px"
@@ -332,7 +333,7 @@ function Post({ userid }) {
                       >
                         <MenuItem
                           onClick={() => {
-                            editeHandler(item?._id, item?.description);
+                            editeHandler(item?.ref_id?._id, item?.description);
                           }}
                           disableRipple
                           sx={{ fontSize: "16px" }}
@@ -349,7 +350,7 @@ function Post({ userid }) {
                           <RiDeleteBin5Line style={{ marginRight: "15px" }} />
                           <Typography
                             onClick={() => {
-                              removeHandler(item?._id);
+                              removeHandler(item?.ref_id?._id);
                             }}
                           >
                             Delete
