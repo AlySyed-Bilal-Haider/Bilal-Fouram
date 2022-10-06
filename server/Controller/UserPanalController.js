@@ -7,9 +7,9 @@ export const FetchPosts = async (req, res) => {
     const id = req.params.id.trim();
     const data = await userModal
       .find({ _id: id })
-      .populate("post")
+      .populate("discussion.ref_id")
       .populate({
-        path: "post",
+        path: "discussion.ref_id",
         populate: [
           {
             path: "comments",
@@ -33,9 +33,9 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       })
-      .populate("discussion")
+      .populate("like.ref_id")
       .populate({
-        path: "discussion",
+        path: "like.ref_id",
         populate: [
           {
             path: "comments",
@@ -59,9 +59,9 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       })
-      .populate("like")
+      .populate("poll.ref_id")
       .populate({
-        path: "like",
+        path: "poll.ref_id",
         populate: [
           {
             path: "comments",
@@ -85,35 +85,9 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       })
-      .populate("poll")
+      .populate("mention.ref_id")
       .populate({
-        path: "poll",
-        populate: [
-          {
-            path: "comments",
-            modal: commentModal,
-            populate: [
-              {
-                path: "reply",
-                modal: commentModal,
-                populate: [
-                  {
-                    path: "reply",
-                    modal: commentModal,
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            path: "poll",
-            modal: pollModal,
-          },
-        ],
-      })
-      .populate("mention")
-      .populate({
-        path: "mention",
+        path: "mention.ref_id",
         populate: [
           {
             path: "reply",
@@ -127,11 +101,11 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       });
-    const combined = data[0].post
-      .concat(data[0].discussion)
-      .concat(data[0].poll)
-      .concat(data[0].like)
-      .concat(data[0].mention);
+    // const combined = data[0].post
+    //   .concat(data[0].discussion)
+    //   .concat(data[0].poll)
+    //   .concat(data[0].like)
+    //   .concat(data[0].mention);
     // console.log(combined);
     // const arr= {
     //     "DATA": combined
@@ -149,7 +123,7 @@ export const FetchPosts = async (req, res) => {
     res.json({
       status: true,
       // length: length,
-      data: combined,
+      data: data,
     });
   } catch (error) {
     console.log(error);
@@ -166,9 +140,9 @@ export const FetchDiscussion = async (req, res) => {
     console.log(id);
     const data = await userModal
       .find({ _id: id })
-      .populate("discussion")
+      .populate("discussion.ref_id")
       .populate({
-        path: "discussion",
+        path: "discussion.ref_id",
         populate: [
           {
             path: "comments",
@@ -213,9 +187,9 @@ export const FetchLiked = async (req, res) => {
     console.log(id);
     const data = await userModal
       .find({ _id: id })
-      .populate("like")
+      .populate("like.ref_id")
       .populate({
-        path: "like",
+        path: "like.ref_id",
         populate: [
           {
             path: "comments",
@@ -259,9 +233,9 @@ export const FetchPollPosts = async (req, res) => {
     const id = req.params.id.trim();
     const data = await userModal
       .find({ _id: id })
-      .populate("poll")
+      .populate("poll.ref_id")
       .populate({
-        path: "poll",
+        path: "poll.ref_id",
         populate: [
           {
             path: "comments",
@@ -306,9 +280,9 @@ export const FetchMentionComments = async (req, res) => {
     console.log("id:", id);
     const data = await userModal
       .find({ _id: id })
-      .populate("mention")
+      .populate("mention.ref_id")
       .populate({
-        path: "mention",
+        path: "mention.ref_id",
         populate: [
           {
             path: "reply",
