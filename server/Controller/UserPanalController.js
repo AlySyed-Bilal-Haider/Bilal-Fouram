@@ -1,5 +1,5 @@
 import pollModal from "../Schema/PollSchema.js";
-import postModal from "../Schema/PostSchema.js";
+// import postModal from "../Schema/PostSchema.js";
 import userModal from "../Schema/UserSchema.js";
 import commentModal from "../Schema/CommentSchema.js";
 export const FetchPosts = async (req, res) => {
@@ -133,17 +133,31 @@ export const FetchPosts = async (req, res) => {
         path: "mention.ref_id",
         populate: [
           {
-            path: "reply",
+            path: "comments",
             modal: commentModal,
             populate: [
               {
                 path: "reply",
                 modal: commentModal,
+                populate: [
+                  {
+                    path: "reply",
+                    modal: commentModal,
+                  },
+                ],
               },
             ],
           },
+          {
+            path: "user",
+            modal: userModal,
+          },
+          {
+            path: "poll",
+            modal: pollModal,
+          },
         ],
-      });
+      })
     // console.log(data[0].discussion);
     const combined = data[0].discussion
       .concat(data[0].poll)

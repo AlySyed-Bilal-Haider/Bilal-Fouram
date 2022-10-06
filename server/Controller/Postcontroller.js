@@ -17,12 +17,12 @@ export const createPost = async (req, res, next) => {
       poll,
     });
     console.log(newPost);
-  
+
 
     await newPost.save();
-    const ref = {ref_id: newPost._id}
-    const userpost = await userModal.findByIdAndUpdate(user, {
-      $push: { discussion:  ref},
+    const ref = { ref_id: newPost._id }
+    await userModal.findByIdAndUpdate(user, {
+      $push: { discussion: ref },
     });
     if (newPost) {
       res.json({
@@ -52,14 +52,14 @@ export const fetchAlldiscussion = async (req, res) => {
             modal: commentModal,
             populate: [
               {
-                  path: "reply",
-                  modal: commentModal,
+                path: "reply",
+                modal: commentModal,
               }
-          ]
+            ]
           },
         ],
       });
-    // console.log("data", data);
+    
     res.json({
       status: "ok",
       success: true,
@@ -94,7 +94,7 @@ export const fetchcategory = async (req, res, next) => {
   }
 };
 
-// fetch specific detials from discussion, according to user id
+// fetch specific details from discussion, according to user id
 export const getSpecificDiscussion = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -111,10 +111,10 @@ export const getSpecificDiscussion = async (req, res, next) => {
             modal: commentModal,
             populate: [
               {
-                  path: "reply",
-                  modal: commentModal,
+                path: "reply",
+                modal: commentModal,
               }
-          ]
+            ]
           },
         ],
       });
@@ -145,10 +145,10 @@ export const fetchPostDetails = async (req, res) => {
             modal: commentModal,
             populate: [
               {
-                  path: "reply",
-                  modal: commentModal,
+                path: "reply",
+                modal: commentModal,
               }
-          ]
+            ]
           },
         ],
       });
@@ -175,7 +175,7 @@ export const removepost = async (req, res) => {
     // console.log("id", id);
 
     const data = await postModal.findByIdAndUpdate(id, { visibility: false });
-    const poll = await pollModal.findByIdAndUpdate(data.poll, { visibility: false });
+    await pollModal.findByIdAndUpdate(data.poll, { visibility: false });
 
     if (data) {
       res.status(200).json({
@@ -187,7 +187,7 @@ export const removepost = async (req, res) => {
       res.status(200).json({
         status: "error",
         success: false,
-        message: "please try again ,post not delete !",
+        message: "please try again ,post not deleted !",
       });
     }
   } catch (error) {
@@ -259,11 +259,11 @@ export const likeHandler = async (req, res) => {
     const post = await postModal.findByIdAndUpdate(post_id, {
       $push: { like: user_id },
     });
-    const ref = {ref_id: post._id}
-    const likepost = await userModal.findByIdAndUpdate(user_id, {
+    const ref = { ref_id: post._id }
+    await userModal.findByIdAndUpdate(user_id, {
       $push: { like: ref },
     });
-    const postLike = await postModal.findById(post_id);
+    await postModal.findById(post_id);
 
     // console.log("likehandler");
     // console.log(postLike.like);
@@ -283,9 +283,9 @@ export const unlikeHandler = async (req, res) => {
     const post = await postModal.findByIdAndUpdate(post_id, {
       $pull: { like: user_id },
     });
-    const ref = {ref_id: post._id}
-    const likepost = await userModal.findByIdAndUpdate(user_id, {
-      $pull: { like : ref },
+    const ref = { ref_id: post._id }
+    await userModal.findByIdAndUpdate(user_id, {
+      $pull: { like: ref },
     });
     res.json({
       message: "ok",
