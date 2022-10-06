@@ -17,12 +17,11 @@ export const createPost = async (req, res, next) => {
       poll,
     });
     console.log(newPost);
-  
 
     await newPost.save();
-    const ref = {ref_id: newPost._id}
+    const ref = { ref_id: newPost._id };
     const userpost = await userModal.findByIdAndUpdate(user, {
-      $push: { discussion:  ref},
+      $push: { discussion: ref },
     });
     if (newPost) {
       res.json({
@@ -52,10 +51,10 @@ export const fetchAlldiscussion = async (req, res) => {
             modal: commentModal,
             populate: [
               {
-                  path: "reply",
-                  modal: commentModal,
-              }
-          ]
+                path: "reply",
+                modal: commentModal,
+              },
+            ],
           },
         ],
       });
@@ -111,10 +110,10 @@ export const getSpecificDiscussion = async (req, res, next) => {
             modal: commentModal,
             populate: [
               {
-                  path: "reply",
-                  modal: commentModal,
-              }
-          ]
+                path: "reply",
+                modal: commentModal,
+              },
+            ],
           },
         ],
       });
@@ -145,10 +144,10 @@ export const fetchPostDetails = async (req, res) => {
             modal: commentModal,
             populate: [
               {
-                  path: "reply",
-                  modal: commentModal,
-              }
-          ]
+                path: "reply",
+                modal: commentModal,
+              },
+            ],
           },
         ],
       });
@@ -175,7 +174,9 @@ export const removepost = async (req, res) => {
     // console.log("id", id);
 
     const data = await postModal.findByIdAndUpdate(id, { visibility: false });
-    const poll = await pollModal.findByIdAndUpdate(data.poll, { visibility: false });
+    const poll = await pollModal.findByIdAndUpdate(data.poll, {
+      visibility: false,
+    });
 
     if (data) {
       res.status(200).json({
@@ -259,7 +260,7 @@ export const likeHandler = async (req, res) => {
     const post = await postModal.findByIdAndUpdate(post_id, {
       $push: { like: user_id },
     });
-    const ref = {ref_id: post._id}
+    const ref = { ref_id: post._id };
     const likepost = await userModal.findByIdAndUpdate(user_id, {
       $push: { like: ref },
     });
@@ -283,9 +284,9 @@ export const unlikeHandler = async (req, res) => {
     const post = await postModal.findByIdAndUpdate(post_id, {
       $pull: { like: user_id },
     });
-    const ref = {ref_id: post._id}
+    const ref = { ref_id: post._id };
     const likepost = await userModal.findByIdAndUpdate(user_id, {
-      $pull: { like : ref },
+      $pull: { like: ref },
     });
     res.json({
       message: "ok",

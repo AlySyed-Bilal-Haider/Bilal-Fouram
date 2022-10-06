@@ -78,7 +78,7 @@ function Post({ userid }) {
 
   const fetchPost = async () => {
     try {
-      const { data } = await axios.get(`${url}/fetchuserpost/${user_id}`);
+      const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
       console.log("data descussion allpost", data);
 
       data && setPoststate(data.data);
@@ -116,8 +116,6 @@ function Post({ userid }) {
     setDescriptionstate(descripton);
     setEditPopOpen(true);
   };
-
-  console.log("userposts", userposts);
 
   // ...................like and unlike post code sections.........................
 
@@ -240,7 +238,7 @@ function Post({ userid }) {
                         color="primary.main"
                         fontWeight="700"
                       >
-                        {userposts[i]?.user.name}
+                        {userposts[i]?.user?.name}
                       </Typography>
 
                       <Typography
