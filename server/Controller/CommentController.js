@@ -4,30 +4,30 @@ import userModal from "../Schema/UserSchema.js";
 
 export const commentHandler = async (req, res, next) => {
   try {
-    const { post_id, mention,username } = req.body;
+    const { post_id, mention, username } = req.body;
     console.log(username);
 
-    const user = await userModal.findOne({name: username});
+    const user = await userModal.findOne({ name: username });
     console.log(user._id);
 
     const newComment = new commentModal(req.body);
     await newComment.save();
-    const commentref = {ref_id: post_id}
+    const commentref = { ref_id: post_id }
 
-    const commentdata = await userModal.findByIdAndUpdate(user._id, {
+    await userModal.findByIdAndUpdate(user._id, {
       $push: { comment: commentref },
     });
 
     const ref = { ref_id: post_id };
 
     for (var i in mention) {
-      const data = await userModal.findByIdAndUpdate(mention[i], {
+      await userModal.findByIdAndUpdate(mention[i], {
         $push: { mention: ref },
       });
       console.log(mention[i]);
     }
 
-    const post = await postModal.findByIdAndUpdate(post_id, {
+    await postModal.findByIdAndUpdate(post_id, {
       $push: { comments: newComment._id },
     });
 
@@ -43,27 +43,27 @@ export const commentHandler = async (req, res, next) => {
 };
 export const replyHandler = async (req, res, next) => {
   try {
-    const { comment_id, mention,username,post_id } = req.body;
-    const user = await userModal.findOne({name: username});
+    const { comment_id, mention, username, post_id } = req.body;
+    const user = await userModal.findOne({ name: username });
     console.log(user._id);
 
     const newComment = new commentModal(req.body);
     await newComment.save();
-    const commentref = {ref_id: post_id}
+    const commentref = { ref_id: post_id }
 
-    const commentdata = await userModal.findByIdAndUpdate(user._id, {
+    await userModal.findByIdAndUpdate(user._id, {
       $push: { comment: commentref },
     });
 
     const ref = { ref_id: newComment._id };
     for (var i in mention) {
-      const data = await userModal.findByIdAndUpdate(mention[i], {
+      await userModal.findByIdAndUpdate(mention[i], {
         $push: { mention: ref },
       });
       console.log(mention[i]);
     }
 
-    const reply = await commentModal.findByIdAndUpdate(comment_id, {
+    await commentModal.findByIdAndUpdate(comment_id, {
       $push: { reply: newComment._id },
     });
     res.json({
@@ -104,7 +104,7 @@ export const CheckCommentLike = async (req, res) => {
 export const likeComment = async (req, res) => {
   try {
     const { comment_id, user_id } = req.body;
-    const comment = await commentModal.findByIdAndUpdate(comment_id, {
+    await commentModal.findByIdAndUpdate(comment_id, {
       $push: { like: user_id },
     });
     const likecomment = await commentModal.findById(comment_id);
@@ -123,7 +123,7 @@ export const likeComment = async (req, res) => {
 export const unlikeComment = async (req, res) => {
   try {
     const { comment_id, user_id } = req.body;
-    const comment = await commentModal.findByIdAndUpdate(comment_id, {
+    await commentModal.findByIdAndUpdate(comment_id, {
       $pull: { like: user_id },
     });
     const unlikecomment = await commentModal.findById(comment_id);
@@ -144,7 +144,7 @@ export const EditComment = async (req, res) => {
   try {
     console.log(req.body);
     const { comment_id, comment } = req.body;
-    const update = await commentModal.findByIdAndUpdate(comment_id, {
+    await commentModal.findByIdAndUpdate(comment_id, {
       comment: comment,
     });
 

@@ -70,17 +70,17 @@ export const VotePoll = async (req, res, next) => {
       { _id: poll_id, "answers._id": answer_id },
       { $push: { "answers.$.vote": user_id } }
     );
-    const increaseVote = await pollModal.findByIdAndUpdate(voteAnswer._id,{totalvote: voteAnswer.totalvote+1});
-    
-    const post = await postModal.find({poll: poll_id});
+    await pollModal.findByIdAndUpdate(voteAnswer._id, { totalvote: voteAnswer.totalvote + 1 });
+
+    const post = await postModal.find({ poll: poll_id });
     // console.log(post[0]._id);
 
-    const ref = {ref_id: post[0]._id};
-    const votepoll = await userModal.findByIdAndUpdate(user_id, {
+    const ref = { ref_id: post[0]._id };
+    await userModal.findByIdAndUpdate(user_id, {
       $push: { poll: ref },
     });
 
-    const data = await pollModal.find({ _id: poll_id,visibility: true});
+    await pollModal.find({ _id: poll_id, visibility: true });
     // console.log("Poll data:", data);
     res.status(200).json({
       status: "ok",
@@ -119,10 +119,10 @@ export const CheckPollLike = async (req, res) => {
 export const likeHandler = async (req, res) => {
   try {
     const { poll_id, user_id } = req.body;
-    const poll = await pollModal.findByIdAndUpdate(poll_id, {
+    await pollModal.findByIdAndUpdate(poll_id, {
       $push: { like: user_id },
     });
-    const pollLike = await pollModal.findById(poll_id);
+    await pollModal.findById(poll_id);
 
     // console.log(pollLike.like);
     res.json({
@@ -138,7 +138,7 @@ export const likeHandler = async (req, res) => {
 export const unlikeHandler = async (req, res) => {
   try {
     const { poll_id, user_id } = req.body;
-    const poll = await pollModal.findByIdAndUpdate(poll_id, {
+    await pollModal.findByIdAndUpdate(poll_id, {
       $pull: { like: user_id },
     });
     res.json({
