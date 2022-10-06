@@ -36,7 +36,7 @@ export const FetchPosts = async (req, res) => {
             modal: pollModal,
           },
         ],
-        
+
       })
       .populate("like.ref_id")
       .populate({
@@ -98,6 +98,36 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       })
+      .populate("comment.ref_id")
+      .populate({
+        path: "comment.ref_id",
+        populate: [
+          {
+            path: "comments",
+            modal: commentModal,
+            populate: [
+              {
+                path: "reply",
+                modal: commentModal,
+                populate: [
+                  {
+                    path: "reply",
+                    modal: commentModal,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: "user",
+            modal: userModal,
+          },
+          {
+            path: "poll",
+            modal: pollModal,
+          },
+        ],
+      })
       .populate("mention.ref_id")
       .populate({
         path: "mention.ref_id",
@@ -114,15 +144,15 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       });
-      // console.log(data[0].discussion);
+    // console.log(data[0].discussion);
     const combined = data[0].discussion
       .concat(data[0].poll)
       .concat(data[0].like)
       .concat(data[0].mention);
     console.log(combined);
-    const arr= {
-        "DATA": combined
-    }
+    // const arr = {
+    //   "DATA": combined
+    // }
 
     // const sortByDate = arr => {
     //     const sorter = (a, b) => {
@@ -310,14 +340,28 @@ export const FetchMentionComments = async (req, res) => {
         path: "mention.ref_id",
         populate: [
           {
-            path: "reply",
+            path: "comments",
             modal: commentModal,
             populate: [
               {
                 path: "reply",
                 modal: commentModal,
+                populate: [
+                  {
+                    path: "reply",
+                    modal: commentModal,
+                  },
+                ],
               },
             ],
+          },
+          {
+            path: "user",
+            modal: userModal,
+          },
+          {
+            path: "poll",
+            modal: pollModal,
           },
         ],
       });
