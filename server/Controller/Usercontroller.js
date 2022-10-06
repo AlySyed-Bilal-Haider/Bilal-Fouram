@@ -97,7 +97,7 @@ export const login = async (req, res) => {
           } else {
             res.json({
               status: "error",
-              message: "Please try gain! Password  not match",
+              message: "Please try again! Password  not match",
               user: false,
             });
           }
@@ -153,7 +153,7 @@ export const tokenVerifyHandler = async (req, res) => {
 };
 
 
-//fetch specific data from server of user
+//fetch specific data from server 
 
 export const fetchuser = async (req, res) => {
 
