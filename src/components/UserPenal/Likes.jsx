@@ -124,19 +124,21 @@ export default function Like() {
           </Box>
         )}
 
-        <Box my="15px" mx="10" px>
-          <Stack
-            direction={"row"}
-            alignItems="center"
-            justifyContent="flex-end"
-          >
-            <Pagination
-              count={pageCount}
-              page={currentPage}
-              onChange={handleChangepage}
-            />
-          </Stack>
-        </Box>
+        {likestate?.length > 0 && (
+          <Box my="15px" mx="10" px>
+            <Stack
+              direction={"row"}
+              alignItems="center"
+              justifyContent="flex-end"
+            >
+              <Pagination
+                count={pageCount}
+                page={currentPage}
+                onChange={handleChangepage}
+              />
+            </Stack>
+          </Box>
+        )}
       </Box>
     </>
   );

@@ -32,7 +32,7 @@ function Discussion() {
   const pageCount = Math.ceil(descussionstate?.length / postsPerPage);
   return (
     <Box pb={10}>
-      {descussionstate?.length > 0 &&
+      {descussionstate?.length > 0 ? (
         descussionstate
           ?.slice(
             currentPage * postsPerPage - postsPerPage,
@@ -152,16 +152,27 @@ function Discussion() {
                 ) : null}
               </>
             );
-          })}
-      <Box my="15px" mx="10" px>
-        <Stack direction={"row"} alignItems="center" justifyContent="flex-end">
-          <Pagination
-            count={pageCount}
-            page={currentPage}
-            onChange={handleChangepage}
-          />
-        </Stack>
-      </Box>
+          })
+      ) : (
+        <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
+          It looks vote there are no posts here.
+        </Box>
+      )}
+      {descussionstate?.length > 0 && (
+        <Box my="15px" mx="10" px>
+          <Stack
+            direction={"row"}
+            alignItems="center"
+            justifyContent="flex-end"
+          >
+            <Pagination
+              count={pageCount}
+              page={currentPage}
+              onChange={handleChangepage}
+            />
+          </Stack>
+        </Box>
+      )}
     </Box>
   );
 }
