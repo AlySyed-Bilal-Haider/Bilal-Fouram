@@ -28,10 +28,15 @@ export const FetchPosts = async (req, res) => {
             ],
           },
           {
+            path: "user",
+            modal: userModal,
+          },
+          {
             path: "poll",
             modal: pollModal,
           },
         ],
+        
       })
       .populate("like.ref_id")
       .populate({
@@ -52,6 +57,10 @@ export const FetchPosts = async (req, res) => {
                 ],
               },
             ],
+          },
+          {
+            path: "user",
+            modal: userModal,
           },
           {
             path: "poll",
@@ -78,6 +87,10 @@ export const FetchPosts = async (req, res) => {
                 ],
               },
             ],
+          },
+          {
+            path: "user",
+            modal: userModal,
           },
           {
             path: "poll",
@@ -161,6 +174,10 @@ export const FetchDiscussion = async (req, res) => {
             ],
           },
           {
+            path: "user",
+            modal: userModal,
+          },
+          {
             path: "poll",
             modal: pollModal,
           },
@@ -208,6 +225,10 @@ export const FetchLiked = async (req, res) => {
             ],
           },
           {
+            path: "user",
+            modal: userModal,
+          },
+          {
             path: "poll",
             modal: pollModal,
           },
@@ -252,6 +273,10 @@ export const FetchPollPosts = async (req, res) => {
                 ],
               },
             ],
+          },
+          {
+            path: "user",
+            modal: userModal,
           },
           {
             path: "poll",
