@@ -99,7 +99,8 @@ export default function MainPage() {
     const fetchallrecord = async () => {
       try {
         const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
-        console.log("main page all data", data);
+
+        setAlldatastate(data);
       } catch (error) {
         console.log("Likes error", error);
       }
@@ -442,7 +443,7 @@ export default function MainPage() {
                       <BiMessageRounded
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Post 0
+                      Post {alldata?.length}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">

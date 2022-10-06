@@ -55,8 +55,6 @@ const BpCheckbox = (props) => {
 };
 
 function Poll({ polldetails, user_id, checkedfunc }) {
-  console.log("polldetails:", polldetails);
-
   const [checkstatus, setCheckstate] = React.useState(false);
   const pollApproveUnapprove = async (poll_id, answer_id, user_id) => {
     try {
