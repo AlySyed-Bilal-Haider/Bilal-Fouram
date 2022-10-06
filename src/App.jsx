@@ -27,7 +27,7 @@ function App() {
   const [openLogin, setOpenLogin] = useState(false);
   const [userId, setUserId] = useState("");
   const [username, setusernameState] = React.useState("");
-
+  const [checkrole, setRolestate] = useState("");
   const tokenVerfiy = async () => {
     try {
       await fetch(`${url}/verifytoken`, {
@@ -42,6 +42,8 @@ function App() {
           localStorage.setItem("user_id", data.id);
           setusernameState(data.name);
           setUserId(data.id);
+
+          setRolestate(data?.role);
         });
     } catch (error) {
       alert(error);
@@ -113,7 +115,15 @@ function App() {
             element={<Detail userId={userId} username={username} />}
           />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/admin" element={<AdminPanel />} />
+          {checkrole === "admin" ? (
+            <Route path="/admin" element={<AdminPanel />} />
+          ) : (
+            <Route
+              exact
+              path="/"
+              element={<Home setOpenlogin={setOpenLogin} userid={userId} />}
+            />
+          )}
         </Routes>
       </Box>
     </>

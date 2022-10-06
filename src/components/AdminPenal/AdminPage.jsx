@@ -8,16 +8,14 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { MdPendingActions, MdDisabledByDefault } from "react-icons/md";
 import { FcApproval } from "react-icons/fc";
-// import moment from "moment";
-
+import { useNavigate } from "react-router-dom";
 import Approved from "./Approved";
 import Pending from "./Pending";
 import Rejected from "./Rejected";
-
 const useStyles = makeStyles({
   paperMenu: {
     background: "#3f385b !important",
@@ -26,13 +24,12 @@ const useStyles = makeStyles({
   },
 });
 export default function AdminPanel() {
-  //   const formData = new FormData();
+  const navigate = useNavigate();
   const classes = useStyles();
   const matches = useMediaQuery("(max-width:700px)");
   const [tabText, settabText] = useState("Approved");
   //   const [userProfilestate, setProfilestate] = useState("");
   //   const [userfile, setUserfile] = useState("");
-
   const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -42,7 +39,6 @@ export default function AdminPanel() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <>
       <Box bgcolor="primary.light">
