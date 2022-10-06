@@ -34,37 +34,12 @@ export const CreatePoll = async (req, res) => {
     });
   }
 };
-// export const DeletePoll = async (req, res) => {
-//   try {
-//     const id = req.params.id.trim();
 
-//     const data = await pollmodal.findByIdAndUpdate(id, { visibility: false });
-//     if (data) {
-//       res.status(200).json({
-//         status: "ok",
-//         success: true,
-//         message: "Poll remove successfully !",
-//       });
-//     } else {
-//       res.status(200).json({
-//         status: "error",
-//         success: false,
-//         message: "please try again ,poll not delete !",
-//       });
-//     }
-//   } catch (error) {
-//     res.status(505).json({
-//       status: "error",
-//       success: false,
-//       message: error,
-//     });
-//   }
-// };
+
 
 export const VotePoll = async (req, res, next) => {
   console.log("vote", req.body);
   try {
-    // console.log("vote", req.body);
     const { poll_id, answer_id, user_id } = req.body;
     const voteAnswer = await pollModal.findOneAndUpdate(
       { _id: poll_id, "answers._id": answer_id },
@@ -73,7 +48,7 @@ export const VotePoll = async (req, res, next) => {
     await pollModal.findByIdAndUpdate(voteAnswer._id, { totalvote: voteAnswer.totalvote + 1 });
 
     const post = await postModal.find({ poll: poll_id });
-    // console.log(post[0]._id);
+   
 
     const ref = { ref_id: post[0]._id };
     await userModal.findByIdAndUpdate(user_id, {
@@ -81,7 +56,7 @@ export const VotePoll = async (req, res, next) => {
     });
 
     await pollModal.find({ _id: poll_id, visibility: true });
-    // console.log("Poll data:", data);
+   
     res.status(200).json({
       status: "ok",
       success: true,
@@ -124,7 +99,7 @@ export const likeHandler = async (req, res) => {
     });
     await pollModal.findById(poll_id);
 
-    // console.log(pollLike.like);
+   
     res.json({
       message: "ok",
     });

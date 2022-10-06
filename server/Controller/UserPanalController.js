@@ -1,5 +1,4 @@
 import pollModal from "../Schema/PollSchema.js";
-// import postModal from "../Schema/PostSchema.js";
 import userModal from "../Schema/UserSchema.js";
 import commentModal from "../Schema/CommentSchema.js";
 export const FetchPosts = async (req, res) => {
@@ -158,29 +157,18 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       })
-    // console.log(data[0].discussion);
+    
     const combined = data[0].discussion
       .concat(data[0].poll)
       .concat(data[0].like)
       .concat(data[0].comment)
       .concat(data[0].mention);
-    console.log(combined);
-    // const arr = {
-    //   "DATA": combined
-    // }
-
-    // const sortByDate = arr => {
-    //     const sorter = (a, b) => {
-    //        return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
-    //     };
-    //     arr["DATA"].sort(sorter);
-    //     return arr;
-    //  };
-    //  console.log(sortByDate(arr));
+    console.log(combined.length);
+     
 
     res.json({
       status: true,
-      // length: length,
+      length: combined.length,
       data: combined,
     });
   } catch (error) {

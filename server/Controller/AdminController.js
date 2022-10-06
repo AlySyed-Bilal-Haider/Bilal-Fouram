@@ -1,6 +1,4 @@
 import postModal from "../Schema/PostSchema.js";
-import commentModal from "../Schema/CommentSchema.js";
-import pollModal from "../Schema/PollSchema.js";
 import userModal from "../Schema/UserSchema.js";
 
 export async function VerifyAdmin(req, res, next) {
@@ -22,7 +20,7 @@ export async function VerifyAdmin(req, res, next) {
 export const FetchApprovedPosts = async (req, res) => {
   try {
     const data = await postModal
-      .find({ status: "Approved",visibility: true })
+      .find({ status: "Approved", visibility: true })
       .populate("poll")
       .populate("user");
     res.json({
@@ -40,7 +38,7 @@ export const FetchApprovedPosts = async (req, res) => {
 export const FetchPendingPosts = async (req, res) => {
   try {
     const data = await postModal
-      .find({ status: "Pending" ,visibility: true})
+      .find({ status: "Pending", visibility: true })
       .populate("poll")
       .populate("user");
     res.json({
@@ -57,7 +55,7 @@ export const FetchPendingPosts = async (req, res) => {
 export const FetchRejectedPosts = async (req, res) => {
   try {
     const data = await postModal
-      .find({ status: "Rejected",visibility: true })
+      .find({ status: "Rejected", visibility: true })
       .populate("poll")
       .populate("user");
     res.json({
@@ -74,12 +72,11 @@ export const FetchRejectedPosts = async (req, res) => {
 
 export const ApprovePost = async (req, res) => {
   try {
-    // console.log(req);
     const id = req.params.id;
     console.log("Approve id", id);
     const data = await postModal.findByIdAndUpdate(id, { status: "Approved" });
     console.log(data);
-    const userdiscussion = await userModal.findByIdAndUpdate(data.user, {
+    await userModal.findByIdAndUpdate(data.user, {
       $push: { discussion: data._id },
     });
     res.json({
@@ -97,7 +94,7 @@ export const RejectPost = async (req, res) => {
   try {
     const id = req.params.id;
     console.log("reject id", id);
-    const data = await postModal.findByIdAndUpdate(id, { status: "Rejected" });
+    await postModal.findByIdAndUpdate(id, { status: "Rejected" });
     res.json({
       status: "ok",
       message: "Post has been Rejected",

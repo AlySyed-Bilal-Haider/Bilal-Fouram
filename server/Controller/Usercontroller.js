@@ -65,16 +65,12 @@ export const signupHandler = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    let user = userModal.findOne(
+    await userModal.findOne(
       { email: req.body.email },
       function (err, docs) {
         if (docs) {
-          // console.log(docs._doc.name);
           var decoded = jwt_decode(docs._doc.password);
-          // console.log(decoded);
-          if (decoded.password == req.body.password) {
-            // console.log("Password");
-
+          if (decoded.password === req.body.password) {
             let userToken = { id: docs._doc._id };
             jwt.sign(
               userToken,
@@ -83,7 +79,6 @@ export const login = async (req, res) => {
                 expiresIn: "6d",
               },
               (err, token) => {
-                // console.log(docs._doc);
                 res.json({
                   status: "ok",
                   message: "User login Successfully!",

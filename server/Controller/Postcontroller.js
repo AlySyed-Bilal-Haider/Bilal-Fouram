@@ -172,8 +172,6 @@ export const fetchPostDetails = async (req, res) => {
 export const removepost = async (req, res) => {
   try {
     const id = req.params.id.trim();
-    // console.log("id", id);
-
     const data = await postModal.findByIdAndUpdate(id, { visibility: false });
     await pollModal.findByIdAndUpdate(data.poll, { visibility: false });
 
@@ -265,8 +263,6 @@ export const likeHandler = async (req, res) => {
     });
     await postModal.findById(post_id);
 
-    // console.log("likehandler");
-    // console.log(postLike.like);
     res.json({
       message: "ok",
     });
