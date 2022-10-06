@@ -162,6 +162,7 @@ export const FetchPosts = async (req, res) => {
     const combined = data[0].discussion
       .concat(data[0].poll)
       .concat(data[0].like)
+      .concat(data[0].comment)
       .concat(data[0].mention);
     console.log(combined);
     // const arr = {
