@@ -4,7 +4,9 @@ import { FaRegComment } from "react-icons/fa";
 import axios from "axios";
 import { url } from "../../utils";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 export default function Like() {
+  const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id") || "";
   const [likestate, setlikestate] = useState([]);
   useEffect(() => {
@@ -27,6 +29,11 @@ export default function Like() {
     setCurrentPage(value);
   };
   const pageCount = Math.ceil(likestate?.length / postsPerPage);
+
+  const naviagteHandler = (id) => {
+    console.log("id", id);
+    navigate(`/detail/${id}`);
+  };
   return (
     <>
       <Box pb={10}>
@@ -42,6 +49,9 @@ export default function Like() {
                   {ref_id?.like?.includes(user_id) ? (
                     <>
                       <Box
+                        onClick={() => {
+                          naviagteHandler(ref_id?._id);
+                        }}
                         key={i}
                         p={2}
                         sx={{

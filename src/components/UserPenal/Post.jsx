@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import EditPopUp from "./EditPopUp";
 import { url } from "../../utils";
 import Login from "../Login";
+import { useNavigate } from "react-router-dom";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -49,6 +50,7 @@ const StyledMenu = styled((props) => (
 }));
 
 function Post({ username }) {
+  const navigate = useNavigate();
   const [editPopOpen, setEditPopOpen] = useState(false);
   const user_id = localStorage.getItem("user_id");
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -58,7 +60,6 @@ function Post({ username }) {
   const [descriptionstate, setDescriptionstate] = useState("");
   const [updatepost, setUpdatestate] = useState(false);
   const [openstate, setOpenlogin] = useState(false);
-  const [checklikeUnlike, setChecklikeUnlikestate] = useState(false);
   const userToken = localStorage.getItem("token");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -80,7 +81,18 @@ function Post({ username }) {
       const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
       console.log("data descussion allpost", data);
 
-      data && setPoststate(data?.data);
+      const result = data?.data
+        .map((item) => {
+          return {
+            ref_id: item.ref_id,
+            _id: item._id,
+            date: moment(item.date).format("X"),
+          };
+        })
+        .sort(function (a, b) {
+          return b.date - a.date;
+        });
+      data && setPoststate(result);
     } catch (error) {
       console.log("Discussions error:", error);
     }
@@ -121,7 +133,8 @@ function Post({ username }) {
   // ...................like and unlike post code sections.........................
 
   // ..........like handler ..........
-  const likeHandler = async (post_id) => {
+  const likeHandler = async (e, post_id) => {
+    e.stopPropagtion();
     const likevalue = { post_id, user_id };
     console.log("likevalue:", likevalue);
     try {
@@ -139,7 +152,8 @@ function Post({ username }) {
     }
   };
   // .........unliked handler section ..........
-  const unLikedHandler = async (post_id) => {
+  const unLikedHandler = async (e, post_id) => {
+    e.stopPropagtion();
     const unliked = { post_id, user_id };
     console.log("unliked:", unliked);
     try {
@@ -157,6 +171,10 @@ function Post({ username }) {
     }
   };
 
+  // const naviagteHandler = (id) => {
+  //   console.log("id", id);
+  //   navigate(`/detail/${id}`);
+  // };
   // start paginations code
   const [postsPerPage, setPostsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);

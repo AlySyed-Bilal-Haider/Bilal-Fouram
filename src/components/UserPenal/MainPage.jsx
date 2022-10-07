@@ -23,6 +23,7 @@ import Like from "./Likes";
 import Mention from "./Mention";
 
 import moment from "moment";
+import precisePlugin from "moment-precise-range-plugin";
 import avtar from "../../images/avtar.png";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -57,7 +58,7 @@ export default function MainPage() {
   const userProfileHandler = async () => {
     try {
       const { data } = await axios.get(`${url}/fetchuser/${user_id}`);
-      console.log("data", data);
+
       setProfilestate(data);
     } catch (error) {
       console.log("user profile issues", error);
@@ -82,7 +83,7 @@ export default function MainPage() {
         formData.append("file", userfile);
         formData.append("id", user_id);
         const response = await axios.post(`${url}/uploadimg`, formData);
-        console.log("response", response);
+
         if (user_id && response) {
           userProfileHandler();
         }
@@ -107,6 +108,12 @@ export default function MainPage() {
     };
     user_id && fetchallrecord();
   }, [user_id]);
+  // date difference between twoo dates
+  const currentdate = new Date().toLocaleDateString();
+  const joindate = new Date(userProfilestate?.addedAt).toLocaleDateString();
+  const date1 = moment(joindate, "YYYY-MM-DD");
+  const date2 = moment(currentdate, "YYYY-MM-DD");
+  let diff = moment.preciseDiff(date2, date1, true);
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
@@ -255,7 +262,9 @@ export default function MainPage() {
                       fontFamily="Open Sans"
                     >
                       Joined Date{" "}
-                      {moment(userProfilestate?.addedAt).format("LL")}
+                      {diff?.months > 0
+                        ? new Date().toLocaleDateString()
+                        : `${diff?.days} days ago`}
                     </Box>
                   </Box>
                   <Box display="flex" alignItems="center">

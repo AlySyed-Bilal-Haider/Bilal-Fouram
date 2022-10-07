@@ -5,10 +5,14 @@ import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import { url } from "../../utils";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 function Discussion() {
+  let count = 0;
+  const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id") || "";
   const [descussionstate, setDescussionState] = useState([]);
+
   useEffect(() => {
     const fetchdescussion = async () => {
       try {
@@ -30,6 +34,12 @@ function Discussion() {
     setCurrentPage(value);
   };
   const pageCount = Math.ceil(descussionstate?.length / postsPerPage);
+
+  // navigate form one page to another page
+  const naviagteHandler = (id) => {
+    console.log("id", id);
+    navigate(`/detail/${id}`);
+  };
   return (
     <Box pb={10}>
       {descussionstate?.length > 0 ? (
@@ -41,9 +51,10 @@ function Discussion() {
           ?.map(({ ref_id }, i) => {
             return (
               <>
-                {ref_id?.user?._id === user_id ? (
+                {ref_id?.user?._id === user_id &&
+                ref_id?.status === "Approved" ? (
                   <>
-                    <Box py={2} display="flex" alignItems="center">
+                    <Box key={i} py={2} display="flex" alignItems="center">
                       <Box
                         sx={{
                           width: "40px",
@@ -67,6 +78,7 @@ function Discussion() {
                           )}
                         </Avatar>
                       </Box>
+
                       <Typography
                         variant="body1"
                         color="primary.main"
@@ -94,8 +106,10 @@ function Discussion() {
                         {ref_id?.status}
                       </Typography>
                     </Box>
-
                     <Box
+                      onClick={() => {
+                        naviagteHandler(ref_id?._id);
+                      }}
                       p={2}
                       sx={{
                         boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
@@ -158,7 +172,7 @@ function Discussion() {
           It looks vote there are no posts here.
         </Box>
       )}
-      {descussionstate?.length > 0 && (
+      {count > 0 && (
         <Box my="15px" mx="10" px>
           <Stack
             direction={"row"}

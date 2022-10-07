@@ -13,7 +13,7 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 
-export default function AccountMenu({ name }) {
+export default function AccountMenu({ name, role }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -89,6 +89,19 @@ export default function AccountMenu({ name }) {
       >
         <Divider />
 
+        {role === "admin" && (
+          <MenuItem>
+            <Link
+              to="/admin"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <ListItemIcon>
+                <PersonAdd fontSize="small" />
+              </ListItemIcon>
+              Profile
+            </Link>
+          </MenuItem>
+        )}
         <MenuItem>
           <Link
             to="/profile"
@@ -100,7 +113,6 @@ export default function AccountMenu({ name }) {
             Profile
           </Link>
         </MenuItem>
-
         <MenuItem>
           <Link to="/logout" style={{ textDecoration: "none", color: "black" }}>
             <ListItemIcon>

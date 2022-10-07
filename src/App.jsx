@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
 // import Web3 from "web3";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,6 +21,14 @@ import { url } from "./utils";
 //     ? Web3.givenProvider
 //     : "https://data-seed-prebsc-1-s1.binance.org:8545/"
 // );
+
+const PrivateRoute = ({ children, checkrole }) => {
+  if (checkrole !== "admin") {
+    return <Navigate to="/" />;
+  }
+  return children;
+};
+
 function App() {
   const [open, setOpen] = useState(false);
   const [openSign, setOpenSign] = useState(false);
@@ -95,6 +103,7 @@ function App() {
           setOpensign={setOpenSign}
           setOpenlogin={setOpenLogin}
           name={username}
+          role={checkrole}
         />
         <Routes>
           <Route
@@ -115,15 +124,16 @@ function App() {
             element={<Detail userId={userId} username={username} />}
           />
           <Route path="/logout" element={<Logout />} />
-          {checkrole === "admin" ? (
-            <Route path="/admin" element={<AdminPanel />} />
-          ) : (
-            <Route
-              exact
-              path="/"
-              element={<Home setOpenlogin={setOpenLogin} userid={userId} />}
-            />
-          )}
+          <Route
+            path="/admin"
+            element={
+              <>
+                <PrivateRoute checkrole={checkrole}>
+                  <AdminPanel />
+                </PrivateRoute>
+              </>
+            }
+          />
         </Routes>
       </Box>
     </>

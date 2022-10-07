@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Container, Grid } from "@mui/material";
 import { useLocation, NavLink } from "react-router-dom";
 // import AutorenewIcon from "@mui/icons-material/Autorenew";
@@ -141,33 +141,16 @@ const mainHeader = (locationpath) => {
 function AllDiscussions({ modal, setOpenlogin, username }) {
   console.log("setOpen", modal);
   const location = useLocation();
+
   return (
     <>
       {location?.pathname && mainHeader(location?.pathname)}
-
       <Box
         sx={{ width: "100%", backgroundColor: "body.main", minHeight: "100vh" }}
       >
         <Container maxWidth="lg" sx={{ mt: 4 }}>
           <Grid container spacing={2}>
             <Grid item md={2} sx={{ display: { md: "block", xs: "none" } }}>
-              {/* <Button
-                sx={{
-                  width: "100%",
-                  height: "36px",
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  padding: "8px 30px 8px 30px",
-                  backgroundColor: "secondary.main",
-                  color: "text.main",
-                  "&:hover": {
-                    backgroundColor: "secondary.main",
-                  },
-                }}
-              >
-                Start a Discussion
-              </Button> */}
-
               <StartDiscussionButton
                 setOpenlogin={setOpenlogin}
                 username={username}

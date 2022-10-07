@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Header({ setOpensign, setOpenlogin, name }) {
+export default function Header({ setOpensign, setOpenlogin, name, role }) {
   // const { account, connect, disconnect, signer } = useContext(AppContext);
   // const tokenContract = useTokenContract(signer);
   const [namestate, setnamestate] = useState("");
@@ -287,7 +287,7 @@ export default function Header({ setOpensign, setOpenlogin, name }) {
                     />
                   </Box>
                   {name ? (
-                    <AccountMenu name={name} />
+                    <AccountMenu name={name} role={role} />
                   ) : (
                     <>
                       <Typography

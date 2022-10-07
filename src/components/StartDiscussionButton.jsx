@@ -22,6 +22,7 @@ import PopUp from "./UserPenal/AddPollPopup";
 import ChooseTag from "./UserPenal/ChooseTag";
 
 import { url } from "../utils";
+import { useNavigate } from "react-router-dom";
 
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -47,10 +48,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function StartDiscussionButton({ setOpenlogin }) {
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
-  // const [loginstate, setloginstate] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [pollstate, setPollstate] = useState("");
   const [tagsvalue, setTagsvalue] = useState("");
