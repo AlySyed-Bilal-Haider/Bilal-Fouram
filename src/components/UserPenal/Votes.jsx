@@ -128,7 +128,9 @@ export default function Vote() {
                         </Box>
                       </Box>
                     </>
-                  ) : null}
+                  ) : (
+                    ""
+                  )}
                 </>
               );
             })}

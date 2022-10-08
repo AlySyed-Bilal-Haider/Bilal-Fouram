@@ -21,7 +21,6 @@ import { toast } from "react-toastify";
 import EditPopUp from "./EditPopUp";
 import { url } from "../../utils";
 import Login from "../Login";
-import { useNavigate } from "react-router-dom";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -50,6 +49,7 @@ const StyledMenu = styled((props) => (
 }));
 
 function Post({ username }) {
+  const [loading, setLoading] = useState(false);
   const [editPopOpen, setEditPopOpen] = useState(false);
   const user_id = localStorage.getItem("user_id");
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -77,19 +77,21 @@ function Post({ username }) {
 
   const fetchPost = async () => {
     try {
-      const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
-      data && setPoststate(data?.data);
+      setLoading(true);
+      const { data } = await axios.post(`${url}/fetchuserposts/${user_id}`);
+      console.log(data, "data---=-->");
+      data && setPoststate(data);
+      setLoading(false);
     } catch (error) {
       console.log("Discussions error:", error);
     }
+    setLoading(false);
   };
 
   // post remove from server
   const removeHandler = async (id) => {
-    console.log("id", id);
     try {
       const { data } = await axios.delete(`${url}/removePost/${id}`);
-      console.log("remove post !", data);
       if (data.status == "ok") {
         toast.success(data.message);
         fetchPost();
@@ -110,7 +112,6 @@ function Post({ username }) {
   };
 
   const CommentHandler = (id, descripton) => {
-    console.log("id:", id, "descriptoon:", descripton);
     setPostID(id);
     setDescriptionstate(descripton);
     setEditPopOpen(true);
@@ -120,10 +121,8 @@ function Post({ username }) {
 
   // ..........like handler ..........
   const likeHandler = async (post_id) => {
-    console.log("post_id", post_id);
-    const likevalue = { post_id, user_id };
-
     try {
+      const likevalue = { post_id, user_id };
       if (userToken) {
         const { data } = await axios.post(`${url}/like`, likevalue);
         console.log("like response:", data);
@@ -163,7 +162,7 @@ function Post({ username }) {
     setCurrentPage(value);
   };
   const pageCount = Math.ceil(userposts?.length / postsPerPage);
-  console.log("userposts:", userposts);
+  // console.log("userposts:", userposts);
   return (
     <>
       <EditPopUp
@@ -190,195 +189,203 @@ function Post({ username }) {
             ?.map((item, i) => {
               return (
                 <>
-                  {item?.ref_id?.visibility == true && (
-                    <Box
-                      mt={i === 0 ? 0 : 2}
-                      key={i}
-                      sx={{
-                        boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
-                        borderRadius: "4px",
-                        "&:hover": {
-                          backgroundColor: "hover.primary",
-                          cursor: "pointer",
-                        },
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        color="primary.main"
-                        fontWeight="700"
-                      >
-                        {/* {item} */}
-                      </Typography>
-
-                      <Box pl={8} pb={3} borderBottom="1px solid #fff">
-                        <Box py={2} display="flex" alignItems="center">
+                  {item?.discussion.map((items, i) => {
+                    return (
+                      <>
+                        {items?.ref_id?.visibility == true && (
                           <Box
+                            mt={i === 0 ? 0 : 2}
+                            key={i}
                             sx={{
-                              width: "40px",
-                              height: "40px",
-                              borderRadius: "50%",
-                              mr: 1,
+                              boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
+                              borderRadius: "4px",
+                              "&:hover": {
+                                backgroundColor: "hover.primary",
+                                cursor: "pointer",
+                              },
                             }}
                           >
-                            <Avatar sx={{ width: 32, height: 32 }}>
-                              {userposts[i]?.ref_id?.user?.img ? (
-                                <img
-                                  style={{
+                            <Typography
+                              variant="body1"
+                              color="primary.main"
+                              fontWeight="700"
+                            >
+                              {/* {item} */}
+                            </Typography>
+
+                            <Box pl={8} pb={3} borderBottom="1px solid #fff">
+                              <Box py={2} display="flex" alignItems="center">
+                                <Box
+                                  sx={{
                                     width: "40px",
                                     height: "40px",
                                     borderRadius: "50%",
+                                    mr: 1,
                                   }}
-                                  src={`${url}/upload/${userposts[i]?.ref_id?.user?.img}`}
-                                  alt="Good"
-                                />
-                              ) : (
-                                userposts[i]?.ref_id?.user?.name
-                                  ?.toUpperCase()
-                                  .slice(0, 1)
-                              )}
-                            </Avatar>
-                          </Box>
-                          <Typography
-                            variant="body1"
-                            color="primary.main"
-                            fontWeight="700"
-                          >
-                            {userposts[i]?.ref_id?.user?.name}
-                          </Typography>
+                                >
+                                  <Avatar sx={{ width: 32, height: 32 }}>
+                                    {items?.ref_id?.user?.img ? (
+                                      <img
+                                        style={{
+                                          width: "40px",
+                                          height: "40px",
+                                          borderRadius: "50%",
+                                        }}
+                                        src={`${url}/upload/${items?.ref_id?.user?.img}`}
+                                        alt="Good"
+                                      />
+                                    ) : (
+                                      items?.ref_id?.user?.name
+                                        ?.toUpperCase()
+                                        .slice(0, 1)
+                                    )}
+                                  </Avatar>
+                                </Box>
+                                <Typography
+                                  variant="body1"
+                                  color="primary.main"
+                                  fontWeight="700"
+                                >
+                                  {items?.ref_id?.user?.name}
+                                </Typography>
 
-                          <Typography
-                            ml={2}
-                            variant="body1"
-                            color="primary.light"
-                            fontSize="13px"
-                          >
-                            {moment(item?.ref_id?.addedAt).format("LL")}
-                          </Typography>
-                          <Typography
-                            ml={2}
-                            variant="body1"
-                            color="primary.light"
-                            fontSize="13px"
-                          >
-                            {item?.ref_id?.status}
-                          </Typography>
-                        </Box>
+                                <Typography
+                                  ml={2}
+                                  variant="body1"
+                                  color="primary.light"
+                                  fontSize="13px"
+                                >
+                                  {moment(items?.ref_id?.addedAt).format("LL")}
+                                </Typography>
+                                <Typography
+                                  ml={2}
+                                  variant="body1"
+                                  color="primary.light"
+                                  fontSize="13px"
+                                >
+                                  {items?.ref_id?.status}
+                                </Typography>
+                              </Box>
 
-                        <Box fontSize="14px" color="text.paragraph">
-                          {item?.ref_id?.title}
-                          <br />
-                          <br />
-                          {item?.ref_id?.description}
-                          <br />
-                        </Box>
+                              <Box fontSize="14px" color="text.paragraph">
+                                {items?.ref_id?.title}
+                                <br />
+                                <br />
+                                {items?.ref_id?.description}
+                                <br />
+                              </Box>
 
-                        <Box
-                          mt={2}
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="flex-end"
-                        >
-                          <AiFillLike size="22px" />
-                          <AiFillDislike
-                            size="22px"
-                            style={{ marginLeft: "30px" }}
-                          />
-                          <Typography
-                            onClick={() => {
-                              CommentHandler(
-                                item?.ref_id?._id,
-                                item?.ref_id?.description
-                              );
-                            }}
-                            sx={{ cursor: "pointer" }}
-                            ml="30px"
-                            variant="body1"
-                            fontSize="14px"
-                            color="primary.light"
-                          >
-                            Reply
-                          </Typography>
-                          {userposts[i]?.ref_id?.like?.includes(user_id) ? (
-                            <Typography
-                              onClick={() => {
-                                unLikedHandler(item?.ref_id?._id);
-                              }}
-                              ml="30px"
-                              variant="body1"
-                              fontSize="14px"
-                              color="primary.light"
-                              sx={{ cursor: "pointer" }}
-                            >
-                              Unlike
-                            </Typography>
-                          ) : (
-                            <Typography
-                              onClick={() => {
-                                likeHandler(item?.ref_id?._id);
-                              }}
-                              ml="30px"
-                              variant="body1"
-                              fontSize="14px"
-                              color="primary.light"
-                              sx={{ cursor: "pointer" }}
-                            >
-                              Like
-                            </Typography>
-                          )}
-                          {userposts[i]?.ref_id?.user?._id === user_id ? (
-                            <Box>
-                              <BsThreeDots
-                                onClick={handleClick}
-                                size="22px"
-                                style={{
-                                  marginLeft: "30px",
-                                  cursor: "pointer",
-                                }}
-                              />
-
-                              <StyledMenu
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleClose}
+                              <Box
+                                mt={2}
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="flex-end"
                               >
-                                <MenuItem
+                                <AiFillLike size="22px" />
+                                <AiFillDislike
+                                  size="22px"
+                                  style={{ marginLeft: "30px" }}
+                                />
+                                <Typography
                                   onClick={() => {
-                                    editeHandler(
-                                      item?.ref_id?._id,
-                                      item?.description
+                                    CommentHandler(
+                                      items?.ref_id?._id,
+                                      items?.ref_id?.description
                                     );
                                   }}
-                                  disableRipple
-                                  sx={{ fontSize: "16px" }}
+                                  sx={{ cursor: "pointer" }}
+                                  ml="30px"
+                                  variant="body1"
+                                  fontSize="14px"
+                                  color="primary.light"
                                 >
-                                  <GrEdit style={{ marginRight: "15px" }} />
-                                  Edit
-                                </MenuItem>
-
-                                <MenuItem
-                                  onClick={handleClose}
-                                  disableRipple
-                                  sx={{ fontSize: "16px" }}
-                                >
-                                  <RiDeleteBin5Line
-                                    style={{ marginRight: "15px" }}
-                                  />
+                                  Reply
+                                </Typography>
+                                {items?.ref_id?.like?.includes(user_id) ? (
                                   <Typography
                                     onClick={() => {
-                                      removeHandler(item?.ref_id?._id);
+                                      unLikedHandler(items?.ref_id?._id);
                                     }}
+                                    ml="30px"
+                                    variant="body1"
+                                    fontSize="14px"
+                                    color="primary.light"
+                                    sx={{ cursor: "pointer" }}
                                   >
-                                    Delete
+                                    Unlike
                                   </Typography>
-                                </MenuItem>
-                              </StyledMenu>
+                                ) : (
+                                  <Typography
+                                    onClick={() => {
+                                      likeHandler(items?.ref_id?._id);
+                                    }}
+                                    ml="30px"
+                                    variant="body1"
+                                    fontSize="14px"
+                                    color="primary.light"
+                                    sx={{ cursor: "pointer" }}
+                                  >
+                                    Like
+                                  </Typography>
+                                )}
+                                {items?.ref_id?.user?._id === user_id ? (
+                                  <Box>
+                                    <BsThreeDots
+                                      onClick={handleClick}
+                                      size="22px"
+                                      style={{
+                                        marginLeft: "30px",
+                                        cursor: "pointer",
+                                      }}
+                                    />
+
+                                    <StyledMenu
+                                      anchorEl={anchorEl}
+                                      open={open}
+                                      onClose={handleClose}
+                                    >
+                                      <MenuItem
+                                        onClick={() => {
+                                          editeHandler(
+                                            items?.ref_id?._id,
+                                            items?.description
+                                          );
+                                        }}
+                                        disableRipple
+                                        sx={{ fontSize: "16px" }}
+                                      >
+                                        <GrEdit
+                                          style={{ marginRight: "15px" }}
+                                        />
+                                        Edit
+                                      </MenuItem>
+
+                                      <MenuItem
+                                        onClick={handleClose}
+                                        disableRipple
+                                        sx={{ fontSize: "16px" }}
+                                      >
+                                        <RiDeleteBin5Line
+                                          style={{ marginRight: "15px" }}
+                                        />
+                                        <Typography
+                                          onClick={() => {
+                                            removeHandler(items?.ref_id?._id);
+                                          }}
+                                        >
+                                          Delete
+                                        </Typography>
+                                      </MenuItem>
+                                    </StyledMenu>
+                                  </Box>
+                                ) : null}
+                              </Box>
                             </Box>
-                          ) : null}
-                        </Box>
-                      </Box>
-                    </Box>
-                  )}
+                          </Box>
+                        )}
+                      </>
+                    );
+                  })}
                 </>
               );
             })
@@ -388,7 +395,7 @@ function Post({ username }) {
           </Box>
         )}
       </Box>
-      {userposts?.length > 0 && (
+      {userposts?.length > 0 ? (
         <Box my="15px" mx="10" px>
           <Stack
             direction={"row"}
@@ -402,6 +409,8 @@ function Post({ username }) {
             />
           </Stack>
         </Box>
+      ) : (
+        ""
       )}
 
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}

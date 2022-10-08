@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Stack, Pagination } from "@mui/material";
-import { FaRegComment } from "react-icons/fa";
 import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import { url } from "../../utils";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
-function Discussion() {
+function Discussion({ username }) {
   let count = 0;
   const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id") || "";
   const [descussionstate, setDescussionState] = useState([]);
 
   useEffect(() => {
-    const fetchdescussion = async () => {
+    const fetchPost = async () => {
       try {
-        const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
-        console.log("data descussion", data?.data);
-        setDescussionState(data?.data);
+        const { data } = await axios.post(`${url}/fetchuserposts/${user_id}`);
+        console.log(data, "data---=-->");
+        setDescussionState(data);
       } catch (error) {
-        console.log("Descussion error", error);
+        console.log("Discussions error:", error);
       }
     };
-    user_id && fetchdescussion();
-  }, [user_id]);
+    fetchPost();
+  }, []);
 
   // start discussion here
   // start paginations code
@@ -40,133 +39,110 @@ function Discussion() {
     console.log("id", id);
     navigate(`/detail/${id}`);
   };
+
+  // console.log("descussionstate:", descussionstate);
   return (
     <Box pb={10}>
       {descussionstate?.length > 0 ? (
-        descussionstate
-          ?.slice(
-            currentPage * postsPerPage - postsPerPage,
-            currentPage * postsPerPage
-          )
-          ?.map(({ ref_id }, i) => {
-            return (
-              <>
-                {ref_id?.user?._id === user_id &&
-                ref_id?.status === "Approved" ? (
+        descussionstate?.map((item) => {
+          count++;
+          return (
+            <>
+              {item?.discussion?.map((items, i) => {
+                return (
                   <>
-                    <Box key={i} py={2} display="flex" alignItems="center">
-                      <Box
-                        sx={{
-                          width: "40px",
-                          height: "40px",
-                          borderRadius: "50%",
-                        }}
-                      >
-                        <Avatar sx={{ width: 32, height: 32 }}>
-                          {ref_id?.user?.img ? (
-                            <img
-                              style={{
-                                width: "40px",
-                                height: "40px",
-                                borderRadius: "50%",
-                              }}
-                              src={`${url}/upload/${ref_id?.user?.img}`}
-                              alt="Good"
-                            />
-                          ) : (
-                            ref_id?.user?.name.toUpperCase().slice(0, 1)
-                          )}
-                        </Avatar>
-                      </Box>
-
-                      <Typography
-                        variant="body1"
-                        color="primary.main"
-                        fontWeight="700"
-                      >
-                        {ref_id?.user?.name}
-                      </Typography>
-
-                      <Typography
-                        ml={2}
-                        variant="body1"
-                        color="primary.light"
-                        fontSize="13px"
-                      >
-                        {ref_id?.addedAt
-                          ? moment(ref_id?.addedAt).format("LL")
-                          : null}
-                      </Typography>
-                      <Typography
-                        ml={2}
-                        variant="body1"
-                        color="primary.light"
-                        fontSize="13px"
-                      >
-                        {ref_id?.status}
-                      </Typography>
-                    </Box>
-                    <Box
-                      onClick={() => {
-                        naviagteHandler(ref_id?._id);
-                      }}
-                      p={2}
-                      sx={{
-                        boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
-                        borderRadius: "4px",
-                        "&:hover": {
-                          backgroundColor: "hover.primary",
-                          cursor: "pointer",
-                        },
-                      }}
-                    >
-                      <Box
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Typography
-                          variant="body1"
-                          color="primary.main"
-                          fontWeight="700"
-                          fontSize="18px"
+                    {items?.ref_id?.visibility == true &&
+                      items?.ref_id?.status == "Approved" && (
+                        <Box
+                          mt={i === 0 ? 0 : 2}
+                          key={i}
+                          sx={{
+                            boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
+                            borderRadius: "4px",
+                            "&:hover": {
+                              backgroundColor: "hover.primary",
+                              cursor: "pointer",
+                            },
+                          }}
                         >
-                          {ref_id?.title}
-                        </Typography>
-
-                        <Box display="flex" alignItems="center">
                           <Typography
                             variant="body1"
-                            component="span"
-                            color="text.main"
-                            backgroundColor="primary.main"
-                            borderRadius="5px"
-                            px="7px"
-                            py="1px"
+                            color="primary.main"
+                            fontWeight="700"
                           >
-                            {ref_id?.tag}
+                            {/* {item} */}
                           </Typography>
-                          <FaRegComment
-                            style={{
-                              marginLeft: "15px",
-                              marginRight: "5px",
-                            }}
-                          />{" "}
-                          {ref_id?.[i]?.like?.length}
+
+                          <Box pl={8} pb={3} borderBottom="1px solid #fff">
+                            <Box py={2} display="flex" alignItems="center">
+                              <Box
+                                sx={{
+                                  width: "40px",
+                                  height: "40px",
+                                  borderRadius: "50%",
+                                  mr: 1,
+                                }}
+                              >
+                                <Avatar sx={{ width: 32, height: 32 }}>
+                                  {items?.ref_id?.user?.img ? (
+                                    <img
+                                      style={{
+                                        width: "40px",
+                                        height: "40px",
+                                        borderRadius: "50%",
+                                      }}
+                                      src={`${url}/upload/${items?.ref_id?.user?.img}`}
+                                      alt="Good"
+                                    />
+                                  ) : (
+                                    items?.ref_id?.user?.name
+                                      ?.toUpperCase()
+                                      .slice(0, 1)
+                                  )}
+                                </Avatar>
+                              </Box>
+                              <Typography
+                                variant="body1"
+                                color="primary.main"
+                                fontWeight="700"
+                              >
+                                {items?.ref_id?.user?.name}
+                              </Typography>
+
+                              <Typography
+                                ml={2}
+                                variant="body1"
+                                color="primary.light"
+                                fontSize="13px"
+                              >
+                                {moment(items?.ref_id?.addedAt).format("LL")}
+                              </Typography>
+                              <Typography
+                                ml={2}
+                                variant="body1"
+                                color="primary.light"
+                                fontSize="13px"
+                              >
+                                {items?.ref_id?.status}
+                              </Typography>
+                            </Box>
+
+                            <Box fontSize="14px" color="text.paragraph">
+                              {items?.ref_id?.title}
+                              <br />
+                              <br />
+                              {items?.ref_id?.description}
+                              <br />
+                            </Box>
+                          </Box>
                         </Box>
-                      </Box>
-
-                      <Box></Box>
-
-                      <Box mt={1} fontSize="14px" color="text.paragraph">
-                        {ref_id?.description}
-                      </Box>
-                    </Box>
+                      )}
                   </>
-                ) : null}
-              </>
-            );
-          })
+                );
+              })}
+            </>
+          );
+        })
       ) : (
         <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
           It looks vote there are no posts here.

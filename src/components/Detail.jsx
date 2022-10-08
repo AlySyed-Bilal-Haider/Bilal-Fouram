@@ -14,9 +14,11 @@ import {
 } from "@mui/material";
 import { FaRegComments, FaChalkboardTeacher, FaBook } from "react-icons/fa";
 import { RiGroupFill } from "react-icons/ri";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { CgNotes } from "react-icons/cg";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
-import { BsFillPinFill, BsFillHeartFill } from "react-icons/bs";
+import { BsFillHeartFill } from "react-icons/bs";
+import EditIcon from "@mui/icons-material/Edit";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -26,15 +28,11 @@ import moment from "moment";
 import Login from "./Login";
 import { url } from "../utils";
 import Poll from "./Poll";
-
+import Loading from "../loading";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
       vertical: "bottom",
-      horizontal: "center",
-    }}
-    transformOrigin={{
-      vertical: "top",
       horizontal: "center",
     }}
     {...props}
@@ -56,6 +54,7 @@ const StyledMenu = styled((props) => (
 export default function Detail({ userId, username }) {
   const param = useParams();
   //close menu tag on click
+  const [loading, setLoading] = useState(false);
   const userToken = localStorage.getItem("token");
   const user_id = localStorage.getItem("user_id");
   const [openstate, setOpenlogin] = useState(false);
@@ -93,17 +92,19 @@ export default function Detail({ userId, username }) {
 
   const fetchdetails = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(`${url}/fetchPostDetails/${param?.id}`);
       console.log("data fetch post", data);
       setPostdetails(data);
       setCommentData(data[0]?.comments);
       setPostDescription(data?.description);
       setPostIdstate(data._id);
+      setLoading(false);
     } catch (error) {
       console.log("error details pages", error);
     }
+    setLoading(false);
   };
-
   const CheckloginHandler = (title) => {
     setPostDescription(title);
     if (userToken) {
@@ -116,6 +117,7 @@ export default function Detail({ userId, username }) {
   // checkedlike and dislike  functionality here !
   const checkedLike = async () => {
     try {
+      setLoading(false);
       const { data } = await axios.get(
         `${url}/checklike/${param?.id}/${user_id}`
       );
@@ -125,9 +127,11 @@ export default function Detail({ userId, username }) {
       } else {
         setChecklikeUnlikestate(false);
       }
+      setLoading(false);
     } catch (error) {
       console.log("checked like error !", error);
     }
+    setLoading(false);
   };
   useEffect(() => {
     user_id && checkedLike();
@@ -135,9 +139,9 @@ export default function Detail({ userId, username }) {
 
   // ..........like handler ..........
   const likeHandler = async () => {
-    const likevalue = { post_id: param?.id, user_id: user_id };
-
     try {
+      setLoading(true);
+      const likevalue = { post_id: param?.id, user_id: user_id };
       if (userToken) {
         const { data } = await axios.post(`${url}/like`, likevalue);
         console.log("like response:", data);
@@ -147,14 +151,17 @@ export default function Detail({ userId, username }) {
       } else {
         setOpenlogin(true);
       }
+      setLoading(false);
     } catch (error) {
       console.log("like error", error);
     }
+    setLoading(false);
   };
   // .........unliked handler section ..........
   const unLikedHandler = async () => {
-    const unliked = { post_id: param?.id, user_id: user_id };
     try {
+      const unliked = { post_id: param?.id, user_id: user_id };
+      setLoading(true);
       if (userToken) {
         const { data } = await axios.post(`${url}/unlike`, unliked);
         console.log("unliked response:", data);
@@ -164,9 +171,11 @@ export default function Detail({ userId, username }) {
       } else {
         setOpenlogin(true);
       }
+      setLoading(false);
     } catch (error) {
       console.log("unliked code error", error);
     }
+    setLoading(false);
   };
 
   // .....reply Hanlder , open the reply modal Box......
@@ -183,26 +192,29 @@ export default function Detail({ userId, username }) {
 
   //  ......... liked reply handle ...........
   const likeReplyHandle = async (comment_id) => {
-    console.log("liked reply:", comment_id);
-    const likeReply = { comment_id, user_id: userId };
     try {
+      const likeReply = { comment_id, user_id: userId };
+      setLoading(true);
       if (userToken) {
         const { data } = await axios.post(`${url}/likecomment`, likeReply);
-        console.log("like replyed data", data);
+
         if (data.message === "ok") {
           fetchdetails();
         }
       } else {
         setOpenlogin(true);
       }
+      setLoading(false);
     } catch (error) {
       console.log("reply like error !", error);
     }
+    setLoading(false);
   };
   // unlike reply handler
   const unLikeReply = async (comment_id) => {
     const unlikeReply = { comment_id, user_id: userId };
     try {
+      setLoading(true);
       if (userToken) {
         const { data } = await axios.post(`${url}/unlikecomment`, unlikeReply);
         console.log("unlike replyed data", data);
@@ -211,9 +223,11 @@ export default function Detail({ userId, username }) {
         }
       } else {
       }
+      setLoading(false);
     } catch (error) {
       console.log("reple unlike error !", error);
     }
+    setLoading(false);
   };
 
   const renderDetails = () => {
@@ -223,14 +237,16 @@ export default function Detail({ userId, username }) {
   // ........remove comment here..........
 
   const removeComment = async (id) => {
-    console.log("remove comment Id !", id);
     try {
+      setLoading(true);
       const { data } = await axios.delete(`${url}/removeComment/${id}`);
       console.log("comment remove", data);
       data.status === "ok" && setRenderstate(!renderPost);
+      setLoading(false);
     } catch (error) {
       console.log("remove comment error:", error);
     }
+    setLoading(false);
   };
 
   // Update comment
@@ -243,17 +259,20 @@ export default function Detail({ userId, username }) {
   const updateComment = async (comment_id) => {
     try {
       const newComment = { comment_id, comment: editecommentValue };
+      setLoading(true);
       const { data } = await axios.put(`${url}/editcomment`, newComment);
-
       data.status === "ok" && setRenderstate(!renderPost);
+      setLoading(false);
     } catch (error) {
       console.log("comment edite error !", error);
     }
+    setLoading(false);
   };
 
   const commentEditeHandle = (e) => {
     setEditevalue(e.target.value);
   };
+
   return (
     <>
       <Comment
@@ -275,6 +294,7 @@ export default function Detail({ userId, username }) {
         post_id={postReplyId}
       />
       <Box bgcolor="primary.light">
+        <Loading loading={loading} />
         {postdetails?.map((items, index) => {
           return (
             <>
@@ -283,7 +303,7 @@ export default function Detail({ userId, username }) {
                 textAlign="center"
                 display="flex"
                 flexDirection="column"
-                key={index + "det"}
+                key={index + Math.random() * 15}
               >
                 <Box
                   display="flex"
@@ -354,140 +374,145 @@ export default function Detail({ userId, username }) {
                 sx={{ boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px" }}
                 key={index + Math.random() * 10}
               >
-                <Box pb={2}>
-                  <Box py={2.5} pl={6} borderBottom="1px solid #fff">
-                    <Box py={2} display="flex" alignItems="center">
-                      <Box
-                        sx={{
-                          width: "40px",
-                          height: "40px",
-                          borderRadius: "50%",
-                          mr: 1,
-                        }}
-                      >
-                        {postdetails[index]?.user?.img ? (
-                          <img
-                            style={{
-                              width: "40px",
-                              height: "40px",
-                              borderRadius: "50%",
-                            }}
-                            src={`${url}/upload/${postdetails[index]?.user?.img}`}
-                            alt="Good"
-                          />
-                        ) : (
-                          <Avatar sx={{ width: 32, height: 32 }}>
-                            {postdetails[index]?.user?.name
-                              ?.toUpperCase()
-                              .slice(0, 1)}
-                          </Avatar>
-                        )}
-                      </Box>
-                      <Typography
-                        variant="body1"
-                        color="primary.main"
-                        fontWeight="700"
-                      >
-                        {postdetails[0]?.user?.name}
-                      </Typography>
-
-                      <Typography
-                        ml={2}
-                        variant="body1"
-                        color="primary.light"
-                        fontSize="13px"
-                      >
-                        {moment(items?.enddate).format("LL")}
-                      </Typography>
+                <Box py={2.5} pl={6} borderBottom="1px solid #fff">
+                  <Box py={2} display="flex" alignItems="center">
+                    <Box
+                      sx={{
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50%",
+                        mr: 1,
+                      }}
+                    >
+                      {postdetails[index]?.user?.img ? (
+                        <img
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                          }}
+                          src={`${url}/upload/${postdetails[index]?.user?.img}`}
+                          alt="Good"
+                        />
+                      ) : (
+                        <Avatar sx={{ width: 32, height: 32 }}>
+                          {postdetails[0]?.user?.name
+                            ?.toUpperCase()
+                            .slice(0, 1)}
+                        </Avatar>
+                      )}
                     </Box>
-
-                    <Box pr={4} fontSize="14px" color="text.paragraph">
-                      {items?.description}
-                    </Box>
-                  </Box>
-                </Box>
-                {/* Poll start here, poll mean Questions and Ans */}
-                <Box py={2} pl={6}>
-                  <Poll
-                    polldetails={postdetails[index]?.poll}
-                    user_id={user_id}
-                    checkedfunc={HandleChecked}
-                  />
-
-                  {/* start comment sections start here */}
-                  <Box
-                    mt={2}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-end"
-                  >
-                    <AiFillLike size="22px" />
-                    <AiFillDislike
-                      size="22px"
-                      style={{ marginLeft: "30px", cursor: "unavailable" }}
-                    />
-                    <BsFillHeartFill
-                      size="22px"
-                      style={{ marginLeft: "30px", color: "#DD2E44" }}
-                    />
+                    <Typography
+                      variant="body1"
+                      color="primary.main"
+                      fontWeight="700"
+                    >
+                      {postdetails[index]?.user?.name}
+                    </Typography>
 
                     <Typography
-                      sx={{ cursor: "pointer" }}
-                      onClick={() => {
-                        CheckloginHandler(items?.description);
-                      }}
-                      ml="30px"
+                      ml={2}
                       variant="body1"
-                      fontSize="14px"
                       color="primary.light"
+                      fontSize="13px"
                     >
-                      Comment
+                      {moment(items?.enddate).format("LL")}
                     </Typography>
-                    {checklikeUnlike === true ? (
+                  </Box>
+
+                  <Box pr={4} fontSize="14px" color="text.paragraph">
+                    {items?.description}
+                  </Box>
+
+                  {/* Poll start here, poll mean Questions and Ans */}
+                  <Box pt={2} pl={6}>
+                    <Poll
+                      polldetails={postdetails[index]?.poll}
+                      user_id={user_id}
+                      checkedfunc={HandleChecked}
+                    />
+
+                    {/* start comment sections start here */}
+                    <Box
+                      mt={2}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="flex-end"
+                    >
+                      <AiFillLike size="16px" />
+                      <AiFillDislike
+                        size="16px"
+                        style={{ marginLeft: "30px", cursor: "unavailable" }}
+                      />
+                      <BsFillHeartFill
+                        size="16px"
+                        style={{ marginLeft: "30px", color: "#DD2E44" }}
+                      />
+
                       <Typography
-                        onClick={unLikedHandler}
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => {
+                          CheckloginHandler(items?.description);
+                        }}
                         ml="30px"
-                        mr="20px"
+                        mt="-2px"
                         variant="body1"
                         fontSize="14px"
                         color="primary.light"
-                        sx={{ cursor: "pointer" }}
                       >
-                        Unlike
+                        Comment
                       </Typography>
-                    ) : (
-                      <Typography
-                        onClick={likeHandler}
-                        ml="30px"
-                        mr="20px"
-                        variant="body1"
-                        sx={{
-                          cursor: "pointer",
-                          fontSize: "14px",
-                          color: "primary.light",
-                        }}
-                      >
-                        Like
-                      </Typography>
+                      {checklikeUnlike === true ? (
+                        <Typography
+                          onClick={unLikedHandler}
+                          ml="30px"
+                          mr="20px"
+                          mt="-2px"
+                          variant="body1"
+                          fontSize="14px"
+                          color="primary.light"
+                          sx={{ cursor: "pointer" }}
+                        >
+                          Unlike
+                        </Typography>
+                      ) : (
+                        <Typography
+                          onClick={likeHandler}
+                          ml="30px"
+                          mr="20px"
+                          mt="-2px"
+                          variant="body1"
+                          sx={{
+                            cursor: "pointer",
+                            fontSize: "14px",
+                            color: "primary.light",
+                          }}
+                        >
+                          Like
+                        </Typography>
+                      )}
+                    </Box>
+                    {checklikeUnlike === true && (
+                      <Typography>This is liked !</Typography>
                     )}
                   </Box>
-                  {checklikeUnlike === true && (
-                    <Typography>This is liked !</Typography>
-                  )}
                 </Box>
-                {/* comment data and reply like */}
 
+                {/* comment data and reply like */}
                 {commentData?.map(
                   ({ _id, addedAt, comment, visibility }, index) => {
-                    console.log("_id", _id);
                     return (
                       <>
                         {visibility === true && (
                           <div key={`index${_id}`}>
-                            <Box borderBottom="1px solid white" py={1}>
-                              <Box py={2} display="flex" alignItems="center">
+                            <Box
+                              pl={7}
+                              pt={3}
+                              pb={2}
+                              borderBottom="1px solid white"
+                            >
+                              <Box>
                                 <Typography
-                                  ml={2}
                                   variant="body1"
                                   color="primary.light"
                                   fontSize="13px"
@@ -496,126 +521,165 @@ export default function Detail({ userId, username }) {
                                 </Typography>
                               </Box>
                               <Box
-                                pr={4}
+                                mt={2}
                                 fontSize="14px"
                                 color="text.paragraph"
                               >
                                 {comment}
                               </Box>
-                            </Box>
 
-                            {/* like and dislike of comment */}
-                            <Box
-                              mt={2}
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="flex-end"
-                            >
-                              <AiFillLike size="22px" />
-                              <AiFillDislike
-                                size="22px"
-                                style={{
-                                  marginLeft: "30px",
-                                  cursor: "unavailable",
-                                }}
-                              />
-                              <BsFillHeartFill
-                                size="22px"
-                                style={{ marginLeft: "30px", color: "#DD2E44" }}
-                              />
-
-                              <Typography
-                                onClick={() => {
-                                  replyHandle(_id, comment, items?._id);
-                                }}
-                                sx={{ cursor: "pointer" }}
-                                ml="30px"
-                                variant="body1"
-                                fontSize="14px"
-                                color="primary.light"
+                              <Box
+                                mt={2}
+                                pr={5}
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="flex-end"
                               >
-                                Reply
-                              </Typography>
-
-                              {commentData[index]?.like?.includes(userId) ? (
-                                <Typography
-                                  onClick={() => {
-                                    unLikeReply(_id);
-                                  }}
-                                  ml="30px"
-                                  variant="body1"
-                                  fontSize="14px"
-                                  color="primary.light"
-                                  sx={{ cursor: "pointer" }}
-                                >
-                                  Unlike
-                                </Typography>
-                              ) : (
-                                <Typography
-                                  onClick={() => {
-                                    likeReplyHandle(_id);
-                                  }}
-                                  ml="30px"
-                                  variant="body1"
-                                  fontSize="14px"
-                                  color="primary.light"
-                                  sx={{ cursor: "pointer" }}
-                                >
-                                  like
-                                </Typography>
-                              )}
-                              {/* start remove and update comment */}
-                              <Box>
-                                <BsThreeDots
-                                  onClick={handleClick}
-                                  size="22px"
+                                <AiFillLike size="16px" />
+                                <AiFillDislike
+                                  size="16px"
                                   style={{
-                                    position: "relative",
                                     marginLeft: "30px",
-                                    cursor: "pointer",
+                                    cursor: "unavailable",
                                   }}
                                 />
-                                <StyledMenu
-                                  anchorEl={anchorEl}
-                                  open={open}
-                                  onClose={handleClose}
+                                <BsFillHeartFill
+                                  size="16px"
+                                  style={{
+                                    marginLeft: "30px",
+                                    color: "#DD2E44",
+                                  }}
+                                />
+
+                                <Typography
+                                  onClick={() => {
+                                    replyHandle(_id, comment, items?._id);
+                                  }}
+                                  sx={{ cursor: "pointer" }}
+                                  ml="30px"
+                                  mt="-2px"
+                                  variant="body1"
+                                  fontSize="14px"
+                                  color="primary.light"
                                 >
-                                  <MenuItem
-                                    disableRipple
-                                    sx={{ fontSize: "16px" }}
+                                  Reply
+                                </Typography>
+
+                                {commentData[index]?.like?.includes(userId) ? (
+                                  <Typography
+                                    onClick={() => {
+                                      unLikeReply(_id);
+                                    }}
+                                    ml="30px"
+                                    mt="-2px"
+                                    variant="body1"
+                                    fontSize="14px"
+                                    color="primary.light"
+                                    sx={{ cursor: "pointer" }}
+                                  >
+                                    Unlike
+                                  </Typography>
+                                ) : (
+                                  <Typography
+                                    onClick={() => {
+                                      likeReplyHandle(_id);
+                                    }}
+                                    ml="30px"
+                                    variant="body1"
+                                    fontSize="14px"
+                                    mt="-2px"
+                                    color="primary.light"
+                                    sx={{ cursor: "pointer" }}
+                                  >
+                                    like
+                                  </Typography>
+                                )}
+                                <Box>
+                                  <Typography
+                                    ml="30px"
+                                    variant="body1"
+                                    fontSize="14px"
+                                    mt="-2px"
+                                    color="primary.light"
+                                    sx={{ cursor: "pointer" }}
                                     onClick={() => {
                                       editecomment(comment, _id);
                                     }}
                                   >
-                                    <GrEdit style={{ marginRight: "15px" }} />
-                                    Edit
-                                  </MenuItem>
-
-                                  <MenuItem
+                                    <EditIcon />
+                                  </Typography>
+                                </Box>
+                                <Box>
+                                  <Typography
+                                    ml="30px"
+                                    variant="body1"
+                                    fontSize="14px"
+                                    mt="-2px"
+                                    color="primary.light"
+                                    sx={{ cursor: "pointer" }}
                                     onClick={() => {
                                       removeComment(_id);
                                     }}
-                                    disableRipple
-                                    sx={{ fontSize: "16px" }}
                                   >
-                                    <RiDeleteBin5Line
-                                      style={{ marginRight: "15px" }}
-                                    />
-                                    <Typography>Delete</Typography>
-                                  </MenuItem>
-                                </StyledMenu>
+                                    <DeleteIcon />
+                                  </Typography>
+                                </Box>
+                                {/* start remove and update comment */}
+                                <Box
+                                  sx={{ position: "relative", display: "none" }}
+                                >
+                                  <BsThreeDots
+                                    onClick={handleClick}
+                                    size="16px"
+                                    style={{
+                                      marginLeft: "20px",
+                                      marginTop: "7px",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                  <StyledMenu
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleClose}
+                                  >
+                                    <MenuItem
+                                      disableRipple
+                                      sx={{ fontSize: "16px" }}
+                                      onClick={() => {
+                                        editecomment(comment, _id);
+                                      }}
+                                    >
+                                      <GrEdit style={{ marginRight: "15px" }} />
+                                      Edit
+                                    </MenuItem>
+
+                                    <MenuItem
+                                      onClick={() => {
+                                        removeComment(_id);
+                                      }}
+                                      disableRipple
+                                      sx={{ fontSize: "16px" }}
+                                    >
+                                      <RiDeleteBin5Line
+                                        style={{ marginRight: "15px" }}
+                                      />
+                                      <Typography>Delete</Typography>
+                                    </MenuItem>
+                                  </StyledMenu>
+                                </Box>
                               </Box>
                             </Box>
+
+                            {/* like and dislike of comment */}
+
                             {/* comment Edite sections here */}
-                            {openCommentEdite == _id ? (
+                            {openCommentEdite === _id ? (
                               <Box m={1} p={1}>
                                 <Typography>Edite comment ....</Typography>
                                 <InputBase
                                   value={editecommentValue}
                                   name="commentvalue"
-                                  onChange={() => {
-                                    commentEditeHandle(_id);
-                                  }}
+                                  onChange={commentEditeHandle}
                                   sx={{
                                     border: "none",
                                     borderBottom: "1px solid white",
@@ -633,10 +697,10 @@ export default function Detail({ userId, username }) {
                                     mt: 0.5,
                                     width: "40px",
                                     height: "40px",
-                                    backgroundColor: "green",
+                                    backgroundColor: "secondary.main",
                                     color: "white",
                                     "&:hover": {
-                                      backgroundColor: "green",
+                                      backgroundColor: "secondary.main",
                                     },
                                   }}
                                 >
@@ -647,62 +711,27 @@ export default function Detail({ userId, username }) {
                             {/* Replay start here display */}
                             {commentData[index]?.reply
                               ? commentData[index]?.reply?.map(
-                                  (
-                                    { _id, addedAt, comment, userName },
-                                    index
-                                  ) => {
+                                  (replyitems, index) => {
                                     return (
                                       <>
                                         <Box
                                           py={2.5}
                                           pl={6}
-                                          key={`${_id}index`}
+                                          key={`${replyitems?._id}index`}
                                         >
-                                          <Box
-                                            py={2}
-                                            display="flex"
-                                            alignItems="center"
-                                          >
-                                            <Typography
-                                              variant="body1"
-                                              color="primary.main"
-                                              fontWeight="700"
-                                            >
-                                              {userName}
-                                            </Typography>
-                                          </Box>
-
-                                          {commentData[index]?.like?.includes(
-                                            userId
-                                          ) ? (
-                                            <Box>
-                                              <Typography
-                                                onClick={() => {
-                                                  unLikeReply(_id);
-                                                }}
-                                                ml="30px"
-                                                variant="body1"
-                                                fontSize="14px"
-                                                color="primary.light"
-                                                sx={{ cursor: "pointer" }}
-                                              >
-                                                unlike
-                                              </Typography>
-                                            </Box>
-                                          ) : null}
                                           <Typography
                                             variant="body1"
                                             color="primary.main"
                                             fontWeight="700"
                                           >
-                                            {userName}
+                                            {replyitems?.userName}
                                           </Typography>
                                           <Box
                                             pr={4}
                                             fontSize="14px"
                                             color="text.paragraph"
                                           >
-                                            {comment}
+                                            {replyitems?.comment}
                                           </Box>
                                           <Typography
                                             ml={2}

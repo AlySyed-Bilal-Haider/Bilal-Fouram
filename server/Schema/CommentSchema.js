@@ -10,22 +10,28 @@ const commentAdd = new Schema({
     type: Date,
     default: new Date(),
   },
-  like: [{
-    type: Schema.Types.ObjectId,
-    ref: "user"
-  }],
-  reply: [{
-    type: Schema.Types.ObjectId,
-    ref: "comment"
-  }],
-  mention:[{
-    type: Schema.Types.ObjectId,
-    ref: "user"
-  }],
-  visibility:{
+  like: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+  ],
+  reply: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "comment",
+    },
+  ],
+  mention: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+  ],
+  visibility: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 });
 const commentModal = mongoose.model("comment", commentAdd);
 export default commentModal;

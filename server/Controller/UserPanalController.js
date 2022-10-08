@@ -36,7 +36,6 @@ export const FetchPosts = async (req, res) => {
             modal: pollModal,
           },
         ],
-
       })
       .populate("like.ref_id")
       .populate({
@@ -161,15 +160,14 @@ export const FetchPosts = async (req, res) => {
             modal: pollModal,
           },
         ],
-      })
-    
+      });
+
     const combined = data[0].discussion
       .concat(data[0].poll)
       .concat(data[0].like)
       .concat(data[0].comment)
       .concat(data[0].mention);
     console.log(combined.length);
-     
 
     res.json({
       status: true,
@@ -183,6 +181,48 @@ export const FetchPosts = async (req, res) => {
       error: error,
     });
   }
+};
+
+export const FetchDatafrom = async (req, res) => {
+  try {
+    const id = req.params.id.trim();
+    const data = await userModal
+      .find({ _id: id })
+      .populate("discussion.ref_id")
+      .populate("discussion.ref_id")
+      .populate({
+        path: "discussion.ref_id",
+        populate: [
+          {
+            path: "comments",
+            modal: commentModal,
+            populate: [
+              {
+                path: "reply",
+                modal: commentModal,
+                populate: [
+                  {
+                    path: "reply",
+                    modal: commentModal,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: "user",
+            select: "_id name email img",
+            modal: userModal,
+          },
+          {
+            path: "poll",
+            modal: pollModal,
+          },
+        ],
+      });
+
+    return res.json(data);
+  } catch (e) {}
 };
 
 export const FetchDiscussion = async (req, res) => {

@@ -57,7 +57,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
     const fetchdetails = async () => {
       try {
         const { data } = await axios.get(`${url}/alldiscussion`);
-        setOptionsstate(data.allDiscussion);
+        // setOptionsstate(data.allDiscussion);
       } catch (error) {
         console.log(error);
       }
@@ -193,11 +193,11 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                   >
                     <SearchIcon
                       style={{
-                        fontSize: "32px",
+                        fontSize: "40px",
                         cursor: "pointer",
                         padding: "7px",
                         color: "text.secondary",
-                        marginTop: "3px",
+                        margin: "5px 0px 0px 5px",
                       }}
                     />
                     <Autocompletege
@@ -212,6 +212,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       sx={{
                         position: "relative",
                         width: { md: "230px", xs: "150px" },
+                        backgroundColor: "none",
 
                         padding: searchstate
                           ? "10px 20px 8px 10px"
@@ -238,15 +239,16 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       options={options}
                       groupBy={(option) => option.group}
                       // onChange={filterhandler}
-                      getOptionLabel={(option) => option.name}
+                      getOptionLabel={(option) =>
+                        option.name ? option.name : ""
+                      }
                       renderInput={(params) => (
                         <TextField
                           sx={{
                             height: "25px",
                             mt: -0.5,
                             position: "relative",
-                            backgroundColor: "primary.main",
-
+                            backgroundColor: "none",
                             "& .MuiOutlinedInput-root": {
                               padding: "0px !important",
                             },

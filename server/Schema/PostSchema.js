@@ -17,29 +17,32 @@ const Post = new Schema({
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: "user"
+    ref: "user",
   },
-  comments: [{
-    type: Schema.Types.ObjectId,
-    ref: "comment"
-  }],
-  like: [{
-    type: Schema.Types.ObjectId,
-    ref: "user"
-  }],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "comment",
+    },
+  ],
+  like: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+  ],
   poll: {
     type: Schema.Types.ObjectId,
-    ref: "poll"
+    ref: "poll",
   },
   visibility: {
     type: Boolean,
-    default: true
+    default: true,
   },
   status: {
     type: String,
-    default: "Pending"
-  }
-
+    default: "Pending",
+  },
 });
 const postModal = model("post", Post);
 export default postModal;

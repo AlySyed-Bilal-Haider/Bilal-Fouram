@@ -21,14 +21,13 @@ import Discussion from "./Discussion";
 import Vote from "./Votes";
 import Like from "./Likes";
 import Mention from "./Mention";
-
 import moment from "moment";
 import precisePlugin from "moment-precise-range-plugin";
 import avtar from "../../images/avtar.png";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { url } from "../../utils";
-
+import Loading from "../../loading";
 const useStyles = makeStyles({
   paperMenu: {
     background: "#3f385b !important",
@@ -47,6 +46,7 @@ export default function MainPage() {
   const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [alldata, setAlldatastate] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -57,11 +57,13 @@ export default function MainPage() {
   };
   const userProfileHandler = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(`${url}/fetchuser/${user_id}`);
-
       setProfilestate(data);
+      setLoading(false);
     } catch (error) {
       console.log("user profile issues", error);
+      setLoading(false);
     }
   };
 
@@ -117,6 +119,7 @@ export default function MainPage() {
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
+        <Loading loading={loading} />
         <Container maxWidth="lg">
           <Box display="flex" flexDirection="column">
             <Box
@@ -452,7 +455,7 @@ export default function MainPage() {
                       <BiMessageRounded
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Post {alldata?.length}
+                      Post 0
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -534,8 +537,8 @@ export default function MainPage() {
             <Grid item xs={12} sm={12} md={9}>
               {show === 0 ? (
                 <Post username={userProfilestate?.name} />
-              ) : show === 1 ? (
-                <Discussion />
+              ) : show == 1 ? (
+                <Discussion username={userProfilestate?.name} />
               ) : show === 2 ? (
                 <Like />
               ) : show === 3 ? (

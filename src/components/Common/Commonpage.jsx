@@ -22,11 +22,12 @@ import {
 } from "react-icons/fa";
 import { RiGroupFill } from "react-icons/ri";
 import { CgNotes } from "react-icons/cg";
-
+import Loading from "../../loading";
 import { url } from "../../utils";
 // /detail
 function Commonpage(props) {
   const naviagte = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [alldetailsstate, setDetailsState] = React.useState();
   const [categorystate, setCategorystate] = useState([]);
   const [allDescussionsstate, setAlldescussionsstate] = useState([]);
@@ -34,12 +35,14 @@ function Commonpage(props) {
   useEffect(() => {
     async function fetchcategory() {
       try {
+        setLoading(true);
         const { data } = await axios.get(`${url}/category/${props.tage}`);
-        console.log("data category", data);
         setCategorystate(data.data);
+        setLoading(false);
       } catch (error) {
         console.log("commonpage category error:", error);
       }
+      setLoading(false);
     }
     props?.title && fetchcategory();
   }, [props?.title]);
@@ -49,12 +52,14 @@ function Commonpage(props) {
   useEffect(() => {
     const fetchdetails = async () => {
       try {
+        setLoading(true);
         const { data } = await axios.get(`${url}/alldiscussion`);
-        console.log("data.allDiscussion", data.allDiscussion);
         setAlldescussionsstate(data.allDiscussion);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
+      setLoading(false);
     };
     fetchdetails();
   }, [allPost]);
@@ -81,6 +86,7 @@ function Commonpage(props) {
   const pageCount = Math.ceil(alldetailsstate?.length / postsPerPage);
   return (
     <Grid item md={10} xs={12}>
+      <Loading loading={loading} />
       <Box
         sx={{
           display: "flex",
@@ -154,24 +160,39 @@ function Commonpage(props) {
                     p: { md: 2, xs: 1 },
                   }}
                 >
-                  <Avatar
-                    sx={{
-                      width: { md: "40px", xs: "30px" },
-                      height: { md: "40px", xs: "30px" },
-                      bgcolor: deepPurple[500],
-                      mr: { md: 2, xs: 1 },
-                      fontSize: { md: "14px", xs: "12px" },
-                    }}
-                  >
-                    {/* {alldetailsstate[i]?.user?.img ? ( */}
-                    <img
-                      src={`${url}/upload/${alldetailsstate[i]?.user?.img}`}
-                      alt=""
-                    />
-                    {/* ) : (
-                      alldetailsstate[i]?.user?.name?.slice(0, 1).toUpperCase()
-                    )} */}
-                  </Avatar>
+                  {alldetailsstate[i]?.user?.img ? (
+                    <Box
+                      sx={{
+                        borderRadius: "50%",
+                        m: 1,
+                      }}
+                    >
+                      <img
+                        style={{
+                          width: "35px",
+                          height: "35px",
+                          borderRadius: "50%",
+                        }}
+                        src={`${url}/upload/${alldetailsstate[i]?.user?.img}`}
+                        alt=""
+                      />
+                    </Box>
+                  ) : (
+                    <Avatar
+                      sx={{
+                        width: { md: "40px", xs: "30px" },
+                        height: { md: "40px", xs: "30px" },
+                        bgcolor: deepPurple[500],
+                        mr: { md: 2, xs: 1 },
+                        fontSize: { md: "14px", xs: "12px" },
+                      }}
+                    >
+                      {alldetailsstate[i]?.user?.name
+                        ?.slice(0, 1)
+                        .toUpperCase()}
+                    </Avatar>
+                  )}
+
                   <Box
                     sx={{
                       width: "100%",
