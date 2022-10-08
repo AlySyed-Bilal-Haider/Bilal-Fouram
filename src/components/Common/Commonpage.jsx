@@ -163,14 +163,14 @@ function Commonpage(props) {
                       fontSize: { md: "14px", xs: "12px" },
                     }}
                   >
-                    {alldetailsstate[i]?.user?.img ? (
-                      <img
-                        src={`${url}/upload/${alldetailsstate[i]?.user?.img}`}
-                        alt=""
-                      />
-                    ) : (
+                    {/* {alldetailsstate[i]?.user?.img ? ( */}
+                    <img
+                      src={`${url}/upload/${alldetailsstate[i]?.user?.img}`}
+                      alt=""
+                    />
+                    {/* ) : (
                       alldetailsstate[i]?.user?.name?.slice(0, 1).toUpperCase()
-                    )}
+                    )} */}
                   </Avatar>
                   <Box
                     sx={{
@@ -276,15 +276,21 @@ function Commonpage(props) {
             );
           })
       )}
-      <Box my="15px" mx="10" px>
-        <Stack direction={"row"} alignItems="center" justifyContent="flex-end">
-          <Pagination
-            count={pageCount}
-            page={currentPage}
-            onChange={handleChangepage}
-          />
-        </Stack>
-      </Box>
+      {alldetailsstate?.length > 0 && (
+        <Box my="15px" mx="10" px>
+          <Stack
+            direction={"row"}
+            alignItems="center"
+            justifyContent="flex-end"
+          >
+            <Pagination
+              count={pageCount}
+              page={currentPage}
+              onChange={handleChangepage}
+            />
+          </Stack>
+        </Box>
+      )}
     </Grid>
   );
 }

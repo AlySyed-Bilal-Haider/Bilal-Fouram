@@ -53,76 +53,84 @@ export default function Rejected() {
   };
   return (
     <Box pb={10}>
-      {rejected?.map(
-        ({ _id, addedAt, description, status, user, tag, title }, i) => {
-          return (
-            <Box key={_id + i}>
-              <Box pl={8} pb={3} borderBottom="1px solid #fff">
-                <Box py={2} display="flex" alignItems="center">
-                  <Typography
-                    variant="body1"
-                    color="primary.main"
-                    fontWeight="700"
-                  >
-                    {user?.name}
-                  </Typography>
+      {rejected.length > 0 ? (
+        rejected?.map(
+          ({ _id, addedAt, description, status, user, tag, title }, i) => {
+            return (
+              <Box key={_id + i}>
+                <Box pl={8} pb={3} borderBottom="1px solid #fff">
+                  <Box py={2} display="flex" alignItems="center">
+                    <Typography
+                      variant="body1"
+                      color="primary.main"
+                      fontWeight="700"
+                    >
+                      {user?.name}
+                    </Typography>
 
-                  <Typography
-                    ml={2}
-                    variant="body1"
-                    color="primary.light"
-                    fontSize="13px"
-                  >
-                    {moment(addedAt).format("LL")}
-                  </Typography>
-                  <Typography
-                    ml={2}
-                    variant="body1"
-                    color="primary.light"
-                    fontSize="13px"
-                  >
-                    {status}
-                  </Typography>
-                </Box>
+                    <Typography
+                      ml={2}
+                      variant="body1"
+                      color="primary.light"
+                      fontSize="13px"
+                    >
+                      {moment(addedAt).format("LL")}
+                    </Typography>
+                    <Typography
+                      ml={2}
+                      variant="body1"
+                      color="primary.light"
+                      fontSize="13px"
+                    >
+                      {status}
+                    </Typography>
+                  </Box>
 
-                <Box fontSize="14px" color="text.paragraph">
-                  {title}
-                  <br />
-                  <br />
-                  {description}
-                  <br />
-                </Box>
+                  <Box fontSize="14px" color="text.paragraph">
+                    {title}
+                    <br />
+                    <br />
+                    {description}
+                    <br />
+                  </Box>
 
-                <Box
-                  mt={2}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="flex-end"
-                >
-                  <Button
-                    onClick={() => {
-                      approveHandle(_id);
-                    }}
-                    sx={{
-                      width: "120px",
-                      height: "36px",
-                      fontSize: "10px",
-                      fontWeight: 700,
-                      padding: "8px 30px 8px 30px",
-                      backgroundColor: "secondary.main",
-                      color: "text.main",
-                      "&:hover": {
+                  <Box
+                    mt={2}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                  >
+                    <Button
+                      onClick={() => {
+                        approveHandle(_id);
+                      }}
+                      sx={{
+                        width: "120px",
+                        height: "36px",
+                        fontSize: "10px",
+                        fontWeight: 700,
+                        padding: "8px 30px 8px 30px",
                         backgroundColor: "secondary.main",
-                      },
-                    }}
-                  >
-                    Approved
-                  </Button>
+                        color: "text.main",
+                        "&:hover": {
+                          backgroundColor: "secondary.main",
+                        },
+                      }}
+                    >
+                      Approved
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          );
-        }
+            );
+          }
+        )
+      ) : (
+        <Typography
+          sx={{ mt: 3, fontWeight: 700, textAlign: "center", fontSize: "20px" }}
+        >
+          Coming soon !
+        </Typography>
       )}
     </Box>
   );

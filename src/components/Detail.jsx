@@ -377,7 +377,7 @@ export default function Detail({ userId, username }) {
                           />
                         ) : (
                           <Avatar sx={{ width: 32, height: 32 }}>
-                            {postdetails[0]?.user?.name
+                            {postdetails[index]?.user?.name
                               ?.toUpperCase()
                               .slice(0, 1)}
                           </Avatar>

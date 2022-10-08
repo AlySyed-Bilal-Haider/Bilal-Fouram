@@ -98,7 +98,7 @@ export default function AccountMenu({ name, role }) {
               <ListItemIcon>
                 <PersonAdd fontSize="small" />
               </ListItemIcon>
-              Profile
+              Admin
             </Link>
           </MenuItem>
         )}

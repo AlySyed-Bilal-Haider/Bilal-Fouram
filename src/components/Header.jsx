@@ -143,17 +143,10 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
       outline: "none",
     },
     "& .css-rwpby0-MuiListSubheader-root-MuiAutocomplete-groupLabel": {
-      backgroundColor: theme.palette.text.light,
+      // backgroundColor: theme.palette.text.light,
     },
   }));
-  const _data = [
-    {
-      label: "First",
-    },
-    {
-      label: "second",
-    },
-  ];
+
   return (
     <>
       {/* <ToastNotify alertState={alertState} setAlertState={setAlertState} /> */}
@@ -198,92 +191,76 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       borderRadius: "4px",
                     }}
                   >
-                    <SearchIcon fontSize="small" sx={{ ml: 1 }} />
-                    {/* <Autocompletege
+                    <SearchIcon
+                      style={{
+                        fontSize: "32px",
+                        cursor: "pointer",
+                        padding: "7px",
+                        color: "text.secondary",
+                        marginTop: "3px",
+                      }}
+                    />
+                    <Autocompletege
+                      onClick={() => {
+                        setsearchstate(false);
+                      }}
+                      onMouseLeave={() => {
+                        setsearchstate(true);
+                      }}
+                      id="grouped-demo"
+                      disablePortal={true}
                       sx={{
                         position: "relative",
-                        width: { md: "300px", xs: "150px" },
-                        height: "60px",
-                        top: "10px",
-                        padding: "0px",
-                        borderRadius: "10px",
-                        color: "text.main",
-                        padding: searchstate ? "0px" : "10px 100px 8px 10px",
+                        width: { md: "230px", xs: "150px" },
+
+                        padding: searchstate
+                          ? "10px 20px 8px 10px"
+                          : "10px 100px 8px 10px",
+                        color: "text.primary",
                         transitionProperty: "padding",
                         transitionDuration: "0.5s",
                         transitionTimingFunction: "linear",
                         transitionDelay: "0s",
                         "& .MuiAutocomplete-popupIndicator": {
-                          color: "text.main",
+                          color: "text.secondary",
                         },
                         "& .MuiAutocomplete-clearIndicator": {
-                          color: "text.main",
+                          color: "text.secondary",
                         },
                         "& .MuiAutocomplete-root": {
                           backgroundColor: "secondary.main",
-                          border: "none !important",
-                          ouline: "none !important",
                           "&:hover": {
                             border: "none !important",
                             ouline: "none !important",
                           },
                         },
-                        "&:label": {
-                          backgroundColor: "secondary.main",
-                        },
                       }}
-                      onClick={() => {
-                        setsearchstate(false);
-                      }}
-                      onMouseLeave={() => {
-                        setsearchstate(true);
-                      }}
-                      autoComplete="off"
-                      disablePortal
-                      id="combo-box-demo"
-                      options={_data}
-                      getOptionLabel={(option) => {
-                        return option && option?.label;
-                      }}
+                      options={options}
+                      groupBy={(option) => option.group}
+                      // onChange={filterhandler}
+                      getOptionLabel={(option) => option.name}
                       renderInput={(params) => (
-                        <TextField {...params} placeholder="Mentions user" />
+                        <TextField
+                          sx={{
+                            height: "25px",
+                            mt: -0.5,
+                            position: "relative",
+                            backgroundColor: "primary.main",
+
+                            "& .MuiOutlinedInput-root": {
+                              padding: "0px !important",
+                            },
+                            "& fieldset": { border: "none", outline: "none" },
+                          }}
+                          {...params}
+                          // onChange={InputHandler}
+                          inputProps={{
+                            ...params.inputProps,
+                            autoComplete: "new-password",
+                          }}
+                          placeholder="Search...."
+                        />
                       )}
-                      renderOption={(props, option) => (
-                        <Box component="li" {...props}>
-                          {option.name}
-                        </Box>
-                      )}
-                    /> */}
-                    <InputBase
-                      autoComplete="off"
-                      label="Search here"
-                      value={filterstate || ""}
-                      type="text"
-                      name="search"
-                      sx={{
-                        backgroundColor: "secondary.main",
-                        color: "text.light",
-                        borderRadius: "4px",
-                        height: "36px",
-                        padding: searchstate
-                          ? "10px 20px 8px 10px"
-                          : "10px 100px 8px 10px",
-                        border: "none",
-                        outline: "none",
-                        transitionProperty: "padding",
-                        transitionDuration: "0.5s",
-                        transitionTimingFunction: "linear",
-                        transitionDelay: "0s",
-                        "&:label": {
-                          backgroundColor: "secondary.main",
-                        },
-                      }}
-                      onClick={() => {
-                        setsearchstate(false);
-                      }}
-                      onMouseLeave={() => {
-                        setsearchstate(true);
-                      }}
                     />
                   </Box>
                   {name ? (

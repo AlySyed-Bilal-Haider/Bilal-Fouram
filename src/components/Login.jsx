@@ -69,7 +69,6 @@ const TextInput = styled(InputBase)({
 });
 
 function Login({ open, setOpenlogin, setOpensign }) {
-  const navigate = useNavigate();
   const [menuItem, setMenuitem] = useState(false);
   const [userstate, setUserstate] = React.useState({
     email: "",
@@ -86,22 +85,22 @@ function Login({ open, setOpenlogin, setOpensign }) {
 
   //Submit form, after filling the user form;
   const loginHandler = async () => {
+    console.log("userstate:", userstate);
     try {
       const { data } = await axios.post(`${url}/login`, userstate);
       if (data.status == "ok") {
         toast.success(data.message);
         localStorage.setItem("token", data.user);
         localStorage.setItem("name", data.name);
-        localStorage.setItem("email",data.email);
+        localStorage.setItem("email", data.email);
         setTimeout(() => {
-          window.location.href="/";
+          window.location.href = "/";
         }, 0);
         handleClose();
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      
       toast.error(error.response?.data?.message);
     }
     setUserstate({

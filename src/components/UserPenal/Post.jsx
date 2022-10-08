@@ -50,7 +50,6 @@ const StyledMenu = styled((props) => (
 }));
 
 function Post({ username }) {
-  const navigate = useNavigate();
   const [editPopOpen, setEditPopOpen] = useState(false);
   const user_id = localStorage.getItem("user_id");
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -79,20 +78,7 @@ function Post({ username }) {
   const fetchPost = async () => {
     try {
       const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
-      console.log("data descussion allpost", data);
-
-      const result = data?.data
-        .map((item) => {
-          return {
-            ref_id: item.ref_id,
-            _id: item._id,
-            date: moment(item.date).format("X"),
-          };
-        })
-        .sort(function (a, b) {
-          return b.date - a.date;
-        });
-      data && setPoststate(result);
+      data && setPoststate(data?.data);
     } catch (error) {
       console.log("Discussions error:", error);
     }
@@ -133,10 +119,10 @@ function Post({ username }) {
   // ...................like and unlike post code sections.........................
 
   // ..........like handler ..........
-  const likeHandler = async (e, post_id) => {
-    e.stopPropagtion();
+  const likeHandler = async (post_id) => {
+    console.log("post_id", post_id);
     const likevalue = { post_id, user_id };
-    console.log("likevalue:", likevalue);
+
     try {
       if (userToken) {
         const { data } = await axios.post(`${url}/like`, likevalue);
@@ -152,8 +138,7 @@ function Post({ username }) {
     }
   };
   // .........unliked handler section ..........
-  const unLikedHandler = async (e, post_id) => {
-    e.stopPropagtion();
+  const unLikedHandler = async (post_id) => {
     const unliked = { post_id, user_id };
     console.log("unliked:", unliked);
     try {
@@ -171,10 +156,6 @@ function Post({ username }) {
     }
   };
 
-  // const naviagteHandler = (id) => {
-  //   console.log("id", id);
-  //   navigate(`/detail/${id}`);
-  // };
   // start paginations code
   const [postsPerPage, setPostsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
