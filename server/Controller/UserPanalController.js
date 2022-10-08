@@ -189,7 +189,6 @@ export const FetchDatafrom = async (req, res) => {
     const data = await userModal
       .find({ _id: id })
       .populate("discussion.ref_id")
-      .populate("discussion.ref_id")
       .populate({
         path: "discussion.ref_id",
         populate: [
@@ -222,7 +221,9 @@ export const FetchDatafrom = async (req, res) => {
       });
 
     return res.json(data);
-  } catch (e) {}
+  } catch (e) {
+    return res.json(e);
+  }
 };
 
 export const FetchDiscussion = async (req, res) => {

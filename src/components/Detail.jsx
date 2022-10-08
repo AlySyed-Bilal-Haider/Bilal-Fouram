@@ -439,7 +439,7 @@ export default function Detail({ userId, username }) {
                       alignItems="center"
                       justifyContent="flex-end"
                     >
-                      <AiFillLike size="16px" />
+                      {/* <AiFillLike size="16px" />
                       <AiFillDislike
                         size="16px"
                         style={{ marginLeft: "30px", cursor: "unavailable" }}
@@ -447,7 +447,7 @@ export default function Detail({ userId, username }) {
                       <BsFillHeartFill
                         size="16px"
                         style={{ marginLeft: "30px", color: "#DD2E44" }}
-                      />
+                      /> */}
 
                       <Typography
                         sx={{ cursor: "pointer" }}
@@ -535,7 +535,7 @@ export default function Detail({ userId, username }) {
                                 alignItems="center"
                                 justifyContent="flex-end"
                               >
-                                <AiFillLike size="16px" />
+                                {/* <AiFillLike size="16px" />
                                 <AiFillDislike
                                   size="16px"
                                   style={{
@@ -549,7 +549,7 @@ export default function Detail({ userId, username }) {
                                     marginLeft: "30px",
                                     color: "#DD2E44",
                                   }}
-                                />
+                                /> */}
 
                                 <Typography
                                   onClick={() => {
