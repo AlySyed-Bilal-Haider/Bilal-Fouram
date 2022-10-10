@@ -5,7 +5,7 @@ const commentAdd = new Schema({
     trim: true,
     required: true,
   },
-  userName: String,
+  username: String,
   addedAt: {
     type: Date,
     default: new Date(),
