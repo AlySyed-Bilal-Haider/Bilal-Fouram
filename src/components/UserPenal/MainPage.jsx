@@ -22,7 +22,7 @@ import Vote from "./Votes";
 import Like from "./Likes";
 import Mention from "./Mention";
 import moment from "moment";
-import precisePlugin from "moment-precise-range-plugin";
+// import precisePlugin from "moment-precise-range-plugin";
 import avtar from "../../images/avtar.png";
 import axios from "axios";
 import { toast } from "react-toastify";
