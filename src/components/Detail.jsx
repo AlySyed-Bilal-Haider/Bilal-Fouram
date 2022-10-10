@@ -16,8 +16,8 @@ import { FaRegComments, FaChalkboardTeacher, FaBook } from "react-icons/fa";
 import { RiGroupFill } from "react-icons/ri";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { CgNotes } from "react-icons/cg";
-import { AiFillLike, AiFillDislike } from "react-icons/ai";
-import { BsFillHeartFill } from "react-icons/bs";
+// import { AiFillLike, AiFillDislike } from "react-icons/ai";
+// import { BsFillHeartFill } from "react-icons/bs";
 import EditIcon from "@mui/icons-material/Edit";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
@@ -323,7 +323,7 @@ export default function Detail({ userId, username }) {
                     width="fit-content"
                     textTransform="capitalize"
                   >
-                    {items?.tag === "general" ? (
+                    {items?.tag === "General" ? (
                       <FaRegComments
                         size="15px"
                         style={{ marginRight: "5px" }}
@@ -509,7 +509,7 @@ export default function Detail({ userId, username }) {
                               pl={7}
                               pt={3}
                               pb={2}
-                              borderBottom="1px solid white"
+                              borderBottom="1px solid #fff"
                             >
                               <Box>
                                 <Typography
@@ -668,6 +668,64 @@ export default function Detail({ userId, username }) {
                                   </StyledMenu>
                                 </Box>
                               </Box>
+                              {/* Replay start here display */}
+
+                              {commentData[index]?.reply
+                                ? commentData[index]?.reply?.map(
+                                    (replyitems, index) => {
+                                      return (
+                                        <>
+                                          <Typography
+                                            variant="subtitle2"
+                                            display={
+                                              index === 0 ? "block" : "none"
+                                            }
+                                            ml={8}
+                                            mb={-1}
+                                            color="#8055CD"
+                                          >
+                                            Replies
+                                          </Typography>
+                                          <Box
+                                            py={1.5}
+                                            pl={3}
+                                            my={1}
+                                            ml={5}
+                                            key={`${replyitems?._id}index`}
+                                            sx={{
+                                              background: "#DFDEF6",
+                                              borderRadius: "50px",
+                                              width: "80%",
+                                            }}
+                                          >
+                                            <Typography
+                                              variant="body1"
+                                              color="primary.main"
+                                              fontWeight="700"
+                                            >
+                                              {replyitems?.userName}
+                                            </Typography>
+                                            <Box
+                                              pr={4}
+                                              fontSize="14px"
+                                              color="text.paragraph"
+                                            >
+                                              {replyitems?.comment}
+                                            </Box>
+                                            <Typography
+                                              ml={2}
+                                              variant="body1"
+                                              color="primary.light"
+                                              fontSize="13px"
+                                            >
+                                              {moment(addedAt).format("LL")}
+                                            </Typography>
+                                          </Box>
+                                        </>
+                                      );
+                                    }
+                                  )
+                                : null}
                             </Box>
 
                             {/* like and dislike of comment */}
@@ -708,45 +766,6 @@ export default function Detail({ userId, username }) {
                                 </Button>
                               </Box>
                             ) : null}
-                            {/* Replay start here display */}
-                            {commentData[index]?.reply
-                              ? commentData[index]?.reply?.map(
-                                  (replyitems, index) => {
-                                    return (
-                                      <>
-                                        <Box
-                                          py={2.5}
-                                          pl={6}
-                                          key={`${replyitems?._id}index`}
-                                        >
-                                          <Typography
-                                            variant="body1"
-                                            color="primary.main"
-                                            fontWeight="700"
-                                          >
-                                            {replyitems?.userName}
-                                          </Typography>
-                                          <Box
-                                            pr={4}
-                                            fontSize="14px"
-                                            color="text.paragraph"
-                                          >
-                                            {replyitems?.comment}
-                                          </Box>
-                                          <Typography
-                                            ml={2}
-                                            variant="body1"
-                                            color="primary.light"
-                                            fontSize="13px"
-                                          >
-                                            {moment(addedAt).format("LL")}
-                                          </Typography>
-                                        </Box>
-                                      </>
-                                    );
-                                  }
-                                )
-                              : null}
                           </div>
                         )}
                       </>
