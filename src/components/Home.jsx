@@ -61,7 +61,7 @@ const discussion = [
   },
 ];
 
-export default function Home({ setOpenlogin,userid }) {
+export default function Home({ setOpenlogin, userid }) {
   const navigate = useNavigate();
   // ..........end token verfication........
   const navigationHandler = (value) => {
@@ -79,10 +79,7 @@ export default function Home({ setOpenlogin,userid }) {
             alignItems: "center",
           }}
         >
-          <StartDiscussionButton
-            setOpenlogin={setOpenlogin}
-            userid={userid}
-          />
+          <StartDiscussionButton setOpenlogin={setOpenlogin} userid={userid} />
           <Link to="/AllDiscussions" style={{ textDecoration: "none" }}>
             <Button
               startIcon={<FaRegComments />}
@@ -100,7 +97,7 @@ export default function Home({ setOpenlogin,userid }) {
           </Link>
         </Box>
       </Container>
-      <Container maxWidth="lg" sx={{ mt: { md: 4, xs: 0.1 } }}>
+      <Container maxWidth="lg" sx={{ mt: { md: 4, xs: 0.1 }, mb: 10 }}>
         <Grid container>
           {discussion?.map((items, index) => {
             return (

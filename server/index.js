@@ -7,18 +7,16 @@ import userModal from "./Schema/UserSchema.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-
 const __dirname = path.resolve();
-
 dotenv.config();
 const urlDB =
   "mongodb+srv://bilal:minerdao12345@cluster0.flytvry.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
-const port = process.env.PORT || 4000;
-app.use(cors(""));
-app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("./build"));
 connectDB(urlDB);
 
 const storage = multer.diskStorage({
@@ -30,10 +28,9 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-
+app.use("/upload", express.static("./upload"));
 // .......start route update of profile pic.........
 app.post("/uploadimg", upload.single("file"), async (req, res) => {
- 
   try {
     const _id = req.body.id;
     console.log(req);
@@ -77,10 +74,12 @@ app.post("/uploadimg", upload.single("file"), async (req, res) => {
     });
   }
 });
-
 app.use(router);
-app.use("/upload", express.static("./upload"));
-app.use(express.static("./build"));
+
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).json({ status: false, data: error });
+});
 
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "./build/index.html"), function (err) {
@@ -89,6 +88,7 @@ app.get("/*", function (req, res) {
     }
   });
 });
-app.listen(port, (req, res) => {
-  console.log("server start");
+
+app.listen(process.env.PORT || 4000, function () {
+  console.log("Server Start at live");
 });

@@ -2,15 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import {
-  Button,
-  Box,
-  Typography,
-  Grid,
-  Stack,
-  Pagination,
-} from "@mui/material";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { Box, Typography, Grid, Stack, Pagination } from "@mui/material";
+// import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { deepPurple } from "@mui/material/colors";
 import Avatar from "@mui/material/Avatar";
 import {
@@ -87,7 +80,7 @@ function Commonpage(props) {
   return (
     <Grid item md={10} xs={12}>
       <Loading loading={loading} />
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -120,11 +113,11 @@ function Commonpage(props) {
         >
           <AutorenewIcon />
         </Button>
-      </Box>
+      </Box> */}
       {/* 
       .........start main sections here ............. */}
       {props.title && categorystate.length === 0 ? (
-        <Typography variant="h4" mt={2} fontWeight={700} align="center">
+        <Typography variant="h4" mt={8} fontWeight={700} align="center">
           Upcoming as soon {props.title} !
         </Typography>
       ) : (
@@ -137,12 +130,12 @@ function Commonpage(props) {
           .map((items, i) => {
             return (
               <Box
+                mt={i === 0 ? 8 : 2}
                 onClick={() => {
                   detailsHandler(items?._id);
                 }}
                 key={i}
                 sx={{
-                  mt: 2,
                   pb: { md: 2, xs: 1 },
                   boxShadow: "rgba(0, 0, 0, 0.09) 0px 3px 12px",
                   borderRadius: "4px",
@@ -221,12 +214,12 @@ function Commonpage(props) {
                         <Typography
                           sx={{ color: "text.paragraph", fontSize: "11px" }}
                         >
+                          alldetailsstate
                           <strong style={{ marginRight: "5px" }}>
                             {alldetailsstate[i]?.user?.name
-                              ? alldetailsstate[i]?.user?.name
+                              ? [i]?.user?.name
                               : "Admin"}
                           </strong>
-
                           {items?.addedAt
                             ? moment(items?.addedAt).format("LL")
                             : new Date()}
@@ -250,7 +243,7 @@ function Commonpage(props) {
                           alignItems: "center",
                         }}
                       >
-                        {items?.tag === "general" ? (
+                        {items?.tag === "General" ? (
                           <FaRegComments
                             size="15px"
                             style={{ marginRight: "5px" }}
