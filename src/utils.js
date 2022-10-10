@@ -64,7 +64,7 @@ export const gasEstimationForAll = async (account, fn, data) => {
 };
 export const url =
   process.env.NODE_ENV === "production"
-    ? "https://miner-dao-forum.herokuapp.com"
+    ? "https://miner-dao.herokuapp.com"
     : "http://localhost:4000";
 let initialState = {
   provider: null,

@@ -54,7 +54,7 @@ function App() {
           setRolestate(data?.role);
         });
     } catch (error) {
-      alert(error);
+      console.log("Token verify route", error);
     }
   };
 

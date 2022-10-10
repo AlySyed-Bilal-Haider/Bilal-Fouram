@@ -24,10 +24,10 @@ const Loader = () => {
   }, []);
   return (
     <svg viewBox="0 0 150 33.2" width="150" height="300">
-      <circle ref={blue} cx="16.1" cy="16.6" r="16.1" fill="#ff261e" />
+      <circle ref={blue} cx="16.1" cy="16.6" r="16.1" fill="#4905B4" />
       <circle ref={red} cx="55.2" cy="16.6" r="16.1" fill="#ffffff" />
-      <circle ref={yellow} cx="94.3" cy="16.6" r="16.1" fill="#4A2129" />
-      <circle ref={green} cx="133.4" cy="16.6" r="16.1" fill="#EB4640" />
+      <circle ref={yellow} cx="94.3" cy="16.6" r="16.1" fill="#3a285a" />
+      <circle ref={green} cx="133.4" cy="16.6" r="16.1" fill="#d7d6f7" />
     </svg>
   );
 };

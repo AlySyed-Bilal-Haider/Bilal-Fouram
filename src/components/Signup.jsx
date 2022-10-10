@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import Loading from "../loading";
 import {
   Typography,
   Dialog,
@@ -73,6 +74,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
   //input filed change handler;
   const changeHandler = (e) => {
     setUserstate({ ...userstate, [e.target.name]: e.target.value });
@@ -81,10 +83,13 @@ function Signup({ open, setOpensign, setOpenlogin }) {
   //Submit form, after filling the user form;
   const submitHandler = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.post(`${url}/usersignup`, userstate);
       toast.success(data.message);
+      setLoading(false);
     } catch (error) {
       toast.error(error.message);
+      setLoading(false);
     }
     setUserstate({
       name: "",
@@ -97,135 +102,138 @@ function Signup({ open, setOpensign, setOpenlogin }) {
     setOpensign(false);
   };
   return (
-    <StyledModal
-      open={open}
-      keepMounted
-      TransitionComponent={Transition}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-slide-title"
-      aria-describedby="alert-dialog-slide-description"
-    >
-      <DialogContent className="dialoge__content__section">
-        <Box sx={{ float: "right", p: 1, cursor: "pointer" }}>
-          <CloseIcon sx={{ color: "text.main" }} onClick={handleClose} />
-        </Box>
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            align: "center",
-          }}
-        >
-          <Box sx={{ width: "100%" }}>
-            <Typography
-              sx={{
-                textAlign: "center",
-                fontSize: "20px",
-                paddingBottom: "20px",
-                color: "text.main",
-                fontWeight: 700,
-              }}
-            >
-              Sign up
-            </Typography>
-            <Box
-              sx={{
-                width: "100%",
-                padding: "30px 25px",
-                backgroundColor: "formscheme.main",
-              }}
-            >
-              <TextInput
-                autoComplete="off"
-                fullWidth
-                value={userstate.name || ""}
-                type="text"
-                name="name"
-                placeholder="Username"
-                onChange={changeHandler}
-                required
-              />
-
-              <TextInput
-                fullWidth
-                autoComplete="off"
-                value={userstate.email || ""}
-                type="email"
-                name="email"
-                placeholder="Email"
-                onChange={changeHandler}
-                required
-              />
-
-              <TextInput
-                fullWidth
-                autoComplete="off"
-                value={userstate.password || ""}
-                type="password"
-                name="password"
-                placeholder="Password"
-                onChange={changeHandler}
-                required
-              />
-
-              <Button
-                onClick={submitHandler}
-                type="submit"
+    <>
+      <Loading loading={loading} />
+      <StyledModal
+        open={open}
+        keepMounted
+        TransitionComponent={Transition}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogContent className="dialoge__content__section">
+          <Box sx={{ float: "right", p: 1, cursor: "pointer" }}>
+            <CloseIcon sx={{ color: "text.main" }} onClick={handleClose} />
+          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              align: "center",
+            }}
+          >
+            <Box sx={{ width: "100%" }}>
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  fontSize: "20px",
+                  paddingBottom: "20px",
+                  color: "text.main",
+                  fontWeight: 700,
+                }}
+              >
+                Sign up
+              </Typography>
+              <Box
                 sx={{
                   width: "100%",
-                  my: 1,
-                  py: 1.5,
-                  color: "text.main",
-                  backgroundColor: "secondary.main",
-                  "&:hover": {
+                  padding: "30px 25px",
+                  backgroundColor: "formscheme.main",
+                }}
+              >
+                <TextInput
+                  autoComplete="off"
+                  fullWidth
+                  value={userstate.name || ""}
+                  type="text"
+                  name="name"
+                  placeholder="Username"
+                  onChange={changeHandler}
+                  required
+                />
+
+                <TextInput
+                  fullWidth
+                  autoComplete="off"
+                  value={userstate.email || ""}
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  onChange={changeHandler}
+                  required
+                />
+
+                <TextInput
+                  fullWidth
+                  autoComplete="off"
+                  value={userstate.password || ""}
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  onChange={changeHandler}
+                  required
+                />
+
+                <Button
+                  onClick={submitHandler}
+                  type="submit"
+                  sx={{
+                    width: "100%",
+                    my: 1,
+                    py: 1.5,
+                    color: "text.main",
                     backgroundColor: "secondary.main",
-                  },
-                }}
-                value="submit"
-              >
-                Submit
-              </Button>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-              }}
-            >
-              <Typography
-                variant="body1"
-                component="span"
-                sx={{
-                  padding: "20px",
-                  color: "text.light",
-                }}
-              >
-                Already have an account?
-              </Typography>
-              <NavLink to="/" style={{ textDecoration: "none" }}>
-                <Typography
-                  onClick={() => {
-                    setOpenlogin(true);
-                    setOpensign(false);
+                    "&:hover": {
+                      backgroundColor: "secondary.main",
+                    },
                   }}
+                  value="submit"
+                >
+                  Submit
+                </Button>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Typography
                   variant="body1"
                   component="span"
-                  fontWeight="700"
-                  color="text.main"
-                  borderBottom="1px solid #D9D9D9"
-                  sx={{ cursor: "pointer" }}
+                  sx={{
+                    padding: "20px",
+                    color: "text.light",
+                  }}
                 >
-                  Log In
+                  Already have an account?
                 </Typography>
-              </NavLink>
+                <NavLink to="/" style={{ textDecoration: "none" }}>
+                  <Typography
+                    onClick={() => {
+                      setOpenlogin(true);
+                      setOpensign(false);
+                    }}
+                    variant="body1"
+                    component="span"
+                    fontWeight="700"
+                    color="text.main"
+                    borderBottom="1px solid #D9D9D9"
+                    sx={{ cursor: "pointer" }}
+                  >
+                    Log In
+                  </Typography>
+                </NavLink>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </DialogContent>
-    </StyledModal>
+        </DialogContent>
+      </StyledModal>
+    </>
   );
 }
 

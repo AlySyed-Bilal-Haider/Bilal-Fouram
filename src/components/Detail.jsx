@@ -675,52 +675,54 @@ export default function Detail({ userId, username }) {
                                     (replyitems, index) => {
                                       return (
                                         <>
-                                          <Typography
-                                            variant="subtitle2"
-                                            display={
-                                              index === 0 ? "block" : "none"
-                                            }
-                                            ml={8}
-                                            mb={-1}
-                                            color="#8055CD"
-                                          >
-                                            Replies
-                                          </Typography>
-                                          <Box
-                                            py={1.5}
-                                            pl={3}
-                                            my={1}
-                                            ml={5}
-                                            key={`${replyitems?._id}index`}
-                                            sx={{
-                                              background: "#DFDEF6",
-                                              borderRadius: "50px",
-                                              width: "80%",
-                                            }}
-                                          >
+                                          <div ke={index}>
                                             <Typography
-                                              variant="body1"
-                                              color="primary.main"
-                                              fontWeight="700"
+                                              variant="subtitle2"
+                                              display={
+                                                index === 0 ? "block" : "none"
+                                              }
+                                              ml={8}
+                                              mb={-1}
+                                              color="#8055CD"
                                             >
-                                              {replyitems?.userName}
+                                              Replies
                                             </Typography>
                                             <Box
-                                              pr={4}
-                                              fontSize="14px"
-                                              color="text.paragraph"
+                                              py={1.5}
+                                              pl={3}
+                                              my={1}
+                                              ml={5}
+                                              key={`${replyitems?._id}index`}
+                                              sx={{
+                                                background: "#DFDEF6",
+                                                borderRadius: "50px",
+                                                width: "80%",
+                                              }}
                                             >
-                                              {replyitems?.comment}
+                                              <Typography
+                                                variant="body1"
+                                                color="primary.main"
+                                                fontWeight="700"
+                                              >
+                                                {replyitems?.userName}
+                                              </Typography>
+                                              <Box
+                                                pr={4}
+                                                fontSize="14px"
+                                                color="text.paragraph"
+                                              >
+                                                {replyitems?.comment}
+                                              </Box>
+                                              <Typography
+                                                ml={2}
+                                                variant="body1"
+                                                color="primary.light"
+                                                fontSize="13px"
+                                              >
+                                                {moment(addedAt).format("LL")}
+                                              </Typography>
                                             </Box>
-                                            <Typography
-                                              ml={2}
-                                              variant="body1"
-                                              color="primary.light"
-                                              fontSize="13px"
-                                            >
-                                              {moment(addedAt).format("LL")}
-                                            </Typography>
-                                          </Box>
+                                          </div>
                                         </>
                                       );
                                     }
