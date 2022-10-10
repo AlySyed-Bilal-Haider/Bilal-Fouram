@@ -6,6 +6,10 @@ const commentAdd = new Schema({
     required: true,
   },
   username: String,
+  userpic: {
+    type: String,
+    default: "",
+  },
   addedAt: {
     type: Date,
     default: new Date(),
