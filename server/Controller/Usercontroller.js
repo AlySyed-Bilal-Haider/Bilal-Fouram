@@ -202,9 +202,10 @@ export const fetchuser = async (req, res) => {
   }
 };
 
-export const searchHandle = async (req, res) => {
+export const searchHandle = async (req, res, next) => {
   try {
     const key = req.params.key;
+    console.log("key", key);
     const result = await userModal.find({
       $or: [
         {
@@ -212,7 +213,7 @@ export const searchHandle = async (req, res) => {
         },
       ],
     });
-    console.log("result:", result);
+    res.send(result);
   } catch (error) {
     console.log("search error", error);
     next();

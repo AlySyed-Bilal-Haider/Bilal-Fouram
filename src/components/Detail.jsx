@@ -537,6 +537,7 @@ export default function Detail({ userId, username }) {
                                   variant="body1"
                                   color="primary.light"
                                   fontSize="13px"
+                                  ml={1}
                                 >
                                   {moment(addedAt).format("LL")}
                                 </Typography>
@@ -776,11 +777,39 @@ export default function Detail({ userId, username }) {
                                               </Typography>
                                             </Box>
                                             <Box
-                                              pr={4}
-                                              fontSize="14px"
-                                              color="text.paragraph"
+                                              py={1.5}
+                                              pl={3}
+                                              my={1}
+                                              ml={5}
+                                              key={`${replyitems?._id}index`}
+                                              sx={{
+                                                background: "#DFDEF6",
+                                                borderRadius: "50px",
+                                                width: "80%",
+                                              }}
                                             >
-                                              {replyitems?.comment}
+                                              <Typography
+                                                variant="body1"
+                                                color="primary.main"
+                                                fontWeight="700"
+                                              >
+                                                {replyitems?.userName}
+                                              </Typography>
+                                              <Box
+                                                pr={4}
+                                                fontSize="14px"
+                                                color="text.paragraph"
+                                              >
+                                                {replyitems?.comment}
+                                              </Box>
+                                              <Typography
+                                                ml={2}
+                                                variant="body1"
+                                                color="primary.light"
+                                                fontSize="13px"
+                                              >
+                                                {moment(addedAt).format("LL")}
+                                              </Typography>
                                             </Box>
                                           </Box>
                                         </>

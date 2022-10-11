@@ -4,6 +4,7 @@ import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import AccountMenu from "./MenuItem";
+import Loading from "../loading";
 import {
   Typography,
   Dialog,
@@ -70,6 +71,7 @@ const TextInput = styled(InputBase)({
 
 function Login({ open, setOpenlogin, setOpensign }) {
   const [menuItem, setMenuitem] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userstate, setUserstate] = React.useState({
     email: "",
     password: "",
@@ -85,7 +87,9 @@ function Login({ open, setOpenlogin, setOpensign }) {
 
   //Submit form, after filling the user form;
   const loginHandler = async () => {
+    console.log("userstate", userstate);
     try {
+      setLoading(true);
       const { data } = await axios.post(`${url}/login`, userstate);
       if (data.status == "ok") {
         toast.success(data.message);
@@ -99,7 +103,9 @@ function Login({ open, setOpenlogin, setOpensign }) {
       } else {
         toast.error(data.message);
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error(error.response?.data?.message);
     }
     setUserstate({
@@ -114,6 +120,7 @@ function Login({ open, setOpenlogin, setOpensign }) {
   // };
   return (
     <>
+      <Loading loading={loading} />
       <StyledModal
         open={open}
         keepMounted

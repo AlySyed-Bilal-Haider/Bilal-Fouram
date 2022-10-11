@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import AccountMenu from "./MenuItem";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
 import {
   Paper,
   Box,
@@ -15,17 +13,12 @@ import {
   ListItem,
   ListItemText,
   InputBase,
-  styled,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import clsx from "clsx";
 import axios from "axios";
-
-// import { AppContext } from "../utils";
-// import { ToastNotify, useTokenContract } from "../ConnectivityAssets/hooks";
-
 import logo from "../images/logo.png";
 import { url } from "../utils";
 
@@ -66,7 +59,15 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
     fetchdetails();
   }, []);
 
-  const searchHandle = (e) => {};
+  const searchHandle = async (e) => {
+    const key = e.target.value;
+    try {
+      const { data } = await axios.get(`${url}/search/${key}`);
+      console.log("search data:", data);
+    } catch (error) {
+      console.log("search error:", error);
+    }
+  };
 
   const classes = useStyles();
   const [state, setState] = React.useState({
@@ -97,54 +98,52 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
           <img width="160px" src={logo} alt="" />
         </Link>
       </Box>
-      <List>
-        <ListItem
-          button
-          key="Log in"
-          onClick={() => {
-            setOpenlogin(true);
-          }}
-        >
-          <ListItemText
-            sx={{
-              textTransform: "capitalize",
-              textAlign: "center",
-              textDecoration: "none",
-              cursor: "pointer",
-              color: "text.main",
-              fontSize: "13px",
+      {name ? (
+        <AccountMenu name={name} role={role} />
+      ) : (
+        <List>
+          <ListItem
+            button
+            key="Log in"
+            onClick={() => {
+              setOpenlogin(true);
             }}
-            primary="Log in"
-          />
-        </ListItem>
-        <ListItem
-          button
-          key="Sign up"
-          onClick={() => {
-            setOpensign(true);
-          }}
-        >
-          <ListItemText
-            sx={{
-              textTransform: "capitalize",
-              textAlign: "center",
-              textDecoration: "none",
-              cursor: "pointer",
-              color: "text.main",
-              fontSize: "13px",
+          >
+            <ListItemText
+              sx={{
+                textTransform: "capitalize",
+                textAlign: "center",
+                textDecoration: "none",
+                cursor: "pointer",
+                color: "text.main",
+                fontSize: "13px",
+              }}
+              primary="Log in"
+            />
+          </ListItem>
+          <ListItem
+            button
+            key="Sign up"
+            onClick={() => {
+              setOpensign(true);
             }}
-            primary="Sign up"
-          />
-        </ListItem>
-      </List>
+          >
+            <ListItemText
+              sx={{
+                textTransform: "capitalize",
+                textAlign: "center",
+                textDecoration: "none",
+                cursor: "pointer",
+                color: "text.main",
+                fontSize: "13px",
+              }}
+              primary="Sign up"
+            />
+          </ListItem>
+        </List>
+      )}
     </div>
   );
-  const Autocompletege = styled(Autocomplete)(({ theme }) => ({
-    "& .MuiAutocomplete-inputFocused": {
-      border: "none",
-      outline: "none",
-    },
-  }));
 
   return (
     <>
@@ -181,6 +180,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                 <Hidden mdDown>
                   <Box
                     sx={{
+                      height: "40px",
                       display: "flex",
                       alignItems: "center",
                       cursor: "pointer",
@@ -195,72 +195,33 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                         cursor: "pointer",
                         padding: "7px",
                         color: "text.secondary",
-                        margin: "5px 0px 0px 5px",
+                        margin: "2px 0px 0px 5px",
                       }}
                     />
-                    <Autocompletege
+                    <InputBase
+                      autoComplete="false"
+                      type="text"
+                      sx={{
+                        position: "relative",
+                        width: { md: "230px", xs: "150px" },
+                        height: "50px",
+                        backgroundColor: "none",
+                        color: "text.primary",
+                        "&::placeholder": {
+                          color: "red",
+                        },
+                      }}
                       onClick={() => {
                         setsearchstate(false);
                       }}
                       onMouseLeave={() => {
                         setsearchstate(true);
                       }}
-                      id="grouped-demo"
-                      disablePortal={true}
-                      sx={{
-                        position: "relative",
-                        width: { md: "230px", xs: "150px" },
-                        backgroundColor: "none",
-
-                        padding: searchstate
-                          ? "10px 20px 8px 10px"
-                          : "10px 100px 8px 10px",
-                        color: "text.primary",
-                        transitionProperty: "padding",
-                        transitionDuration: "0.5s",
-                        transitionTimingFunction: "linear",
-                        transitionDelay: "0s",
-                        "& .MuiAutocomplete-popupIndicator": {
-                          color: "text.secondary",
-                        },
-                        "& .MuiAutocomplete-clearIndicator": {
-                          color: "text.secondary",
-                        },
-                        "& .MuiAutocomplete-root": {
-                          backgroundColor: "secondary.main",
-                          "&:hover": {
-                            border: "none !important",
-                            ouline: "none !important",
-                          },
-                        },
+                      onChange={(e) => {
+                        searchHandle(e);
                       }}
-                      options={options}
-                      groupBy={(option) => option.group}
-                      // onChange={filterhandler}
-                      getOptionLabel={(option) =>
-                        option.name ? option.name : ""
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          sx={{
-                            height: "25px",
-                            mt: -0.5,
-                            position: "relative",
-                            backgroundColor: "none",
-                            "& .MuiOutlinedInput-root": {
-                              padding: "0px !important",
-                            },
-                            "& fieldset": { border: "none", outline: "none" },
-                          }}
-                          {...params}
-                          // onChange={InputHandler}
-                          inputProps={{
-                            ...params.inputProps,
-                            autoComplete: "new-password",
-                          }}
-                          placeholder="Search...."
-                        />
-                      )}
+                      placeholder="search"
+                      autoFocus={false}
                     />
                   </Box>
                   {name ? (
