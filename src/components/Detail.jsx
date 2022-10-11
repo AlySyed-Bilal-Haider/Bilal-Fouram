@@ -500,7 +500,7 @@ export default function Detail({ userId, username }) {
 
                 {/* comment data and reply like */}
                 {commentData?.map(
-                  ({ _id, addedAt, comment, visibility }, index) => {
+                  ({ _id, addedAt, comment, visibility, username }, index) => {
                     return (
                       <>
                         {visibility === true && (
@@ -511,11 +511,15 @@ export default function Detail({ userId, username }) {
                               pb={2}
                               borderBottom="1px solid #fff"
                             >
-                              <Box>
+                              <Box
+                                sx={{ display: "flex", alignItems: "center" }}
+                              >
+                                <Typography>{username}</Typography>
                                 <Typography
                                   variant="body1"
                                   color="primary.light"
                                   fontSize="13px"
+                                  ml={1}
                                 >
                                   {moment(addedAt).format("LL")}
                                 </Typography>
