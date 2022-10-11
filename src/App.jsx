@@ -65,14 +65,6 @@ function App() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   let chain = async () => {
-  //     const chainid = await web3.eth.getChainId();
-  //     if (chainid !== 97) {
-  //       setOpen(true);
-  //     }
-  //   };
-  //   chain();
   return (
     <>
       <ToastContainer
@@ -111,7 +103,7 @@ function App() {
             path="/"
             element={<Home setOpenlogin={setOpenLogin} userid={userId} />}
           />
-          <Route path="/profile" element={<MainPage />} />
+          <Route path="/profile/:id" element={<MainPage />} />
           <Route
             path="/AllDiscussions"
             element={

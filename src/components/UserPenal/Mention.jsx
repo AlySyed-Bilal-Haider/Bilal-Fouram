@@ -4,22 +4,27 @@ import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import { url } from "../../utils";
 import moment from "moment";
-export default function Mention() {
+import Loading from "../../loading";
+export default function Mention({ id }) {
   let count = 0;
+  const [loading, setLoading] = useState(false);
   const user_id = localStorage.getItem("user_id") || "";
   const [mentionState, setMentionState] = useState([]);
   useEffect(() => {
     const fetchlikepost = async () => {
       try {
-        const { data } = await axios.post(`${url}/fetchuserposts/${user_id}`);
+        setLoading(true);
+        const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
         console.log("mentions data", data);
         setMentionState(data);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         console.log("Likes error", error);
       }
     };
-    user_id && fetchlikepost();
-  }, [user_id]);
+    id && fetchlikepost();
+  }, [id]);
 
   // start paginations code
   const [postsPerPage, setPostsPerPage] = useState(5);
@@ -31,6 +36,7 @@ export default function Mention() {
   console.log("count:", count);
   return (
     <>
+      <Loading loading={loading} />
       <Box pb={10}>
         {mentionState?.length > 0 ? (
           mentionState?.map((item) => {

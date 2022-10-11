@@ -16,8 +16,6 @@ import { FaRegComments, FaChalkboardTeacher, FaBook } from "react-icons/fa";
 import { RiGroupFill } from "react-icons/ri";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { CgNotes } from "react-icons/cg";
-// import { AiFillLike, AiFillDislike } from "react-icons/ai";
-// import { BsFillHeartFill } from "react-icons/bs";
 import EditIcon from "@mui/icons-material/Edit";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
@@ -119,7 +117,7 @@ export default function Detail({ userId, username }) {
   // checkedlike and dislike  functionality here !
   const checkedLike = async () => {
     try {
-      setLoading(false);
+      setLoading(true);
       const { data } = await axios.get(
         `${url}/checklike/${param?.id}/${user_id}`
       );
@@ -132,8 +130,8 @@ export default function Detail({ userId, username }) {
       setLoading(false);
     } catch (error) {
       console.log("checked like error !", error);
+      setLoading(false);
     }
-    setLoading(false);
   };
   useEffect(() => {
     user_id && checkedLike();
@@ -156,8 +154,8 @@ export default function Detail({ userId, username }) {
       setLoading(false);
     } catch (error) {
       console.log("like error", error);
+      setLoading(false);
     }
-    setLoading(false);
   };
   // .........unliked handler section ..........
   const unLikedHandler = async () => {
@@ -176,8 +174,8 @@ export default function Detail({ userId, username }) {
       setLoading(false);
     } catch (error) {
       console.log("unliked code error", error);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // .....reply Hanlder , open the reply modal Box......
@@ -209,8 +207,8 @@ export default function Detail({ userId, username }) {
       setLoading(false);
     } catch (error) {
       console.log("reply like error !", error);
+      setLoading(false);
     }
-    setLoading(false);
   };
   // unlike reply handler
   const unLikeReply = async (comment_id) => {
@@ -228,8 +226,8 @@ export default function Detail({ userId, username }) {
       setLoading(false);
     } catch (error) {
       console.log("reple unlike error !", error);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const renderDetails = () => {
@@ -247,8 +245,8 @@ export default function Detail({ userId, username }) {
       setLoading(false);
     } catch (error) {
       console.log("remove comment error:", error);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // Update comment
@@ -267,8 +265,8 @@ export default function Detail({ userId, username }) {
       setLoading(false);
     } catch (error) {
       console.log("comment edite error !", error);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const commentEditeHandle = (e) => {
@@ -788,13 +786,6 @@ export default function Detail({ userId, username }) {
                                                 width: "80%",
                                               }}
                                             >
-                                              <Typography
-                                                variant="body1"
-                                                color="primary.main"
-                                                fontWeight="700"
-                                              >
-                                                {replyitems?.userName}
-                                              </Typography>
                                               <Box
                                                 pr={4}
                                                 fontSize="14px"
@@ -802,14 +793,6 @@ export default function Detail({ userId, username }) {
                                               >
                                                 {replyitems?.comment}
                                               </Box>
-                                              <Typography
-                                                ml={2}
-                                                variant="body1"
-                                                color="primary.light"
-                                                fontSize="13px"
-                                              >
-                                                {moment(addedAt).format("LL")}
-                                              </Typography>
                                             </Box>
                                           </Box>
                                         </>

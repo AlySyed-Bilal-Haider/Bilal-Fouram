@@ -15,6 +15,7 @@ import Logout from "@mui/icons-material/Logout";
 
 export default function AccountMenu({ name, role }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const userid = localStorage.getItem("user_id");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -104,7 +105,7 @@ export default function AccountMenu({ name, role }) {
         )}
         <MenuItem>
           <Link
-            to="/profile"
+            to={`/profile/${userid}`}
             style={{ textDecoration: "none", color: "black" }}
           >
             <ListItemIcon>

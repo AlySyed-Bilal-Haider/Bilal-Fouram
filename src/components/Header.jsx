@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AccountMenu from "./MenuItem";
 import {
   Paper,
@@ -12,7 +12,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  InputBase,
+  styled,
+  TextField,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -20,8 +21,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import clsx from "clsx";
 import axios from "axios";
 import logo from "../images/logo.png";
+import Autocomplete from "@mui/material/Autocomplete";
 import { url } from "../utils";
-
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -36,34 +37,29 @@ const useStyles = makeStyles({
   },
 });
 
+const Autocompletege = styled(Autocomplete)(({ theme }) => ({
+  "& .MuiAutocomplete-inputFocused": {
+    border: "none",
+    outline: "none",
+  },
+  "& .css-rwpby0-MuiListSubheader-root-MuiAutocomplete-groupLabel": {
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
 export default function Header({ setOpensign, setOpenlogin, name, role }) {
   // const { account, connect, disconnect, signer } = useContext(AppContext);
   // const tokenContract = useTokenContract(signer);
-  const [namestate, setnamestate] = useState("");
-  const [searchstate, setsearchstate] = useState(true);
-  const [options, setOptionsstate] = useState([]);
-  const [filterstate, setfilterstate] = useState("Search here");
-  // const [anchorEl, setAnchorEl] = React.useState(null);
-
-  // fetch all details from sever
-  useEffect(() => {
-    const fetchdetails = async () => {
-      try {
-        const { data } = await axios.get(`${url}/alldiscussion`);
-        // setOptionsstate(data.allDiscussion);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchdetails();
-  }, []);
-
-  const searchHandle = async (e) => {
-    const key = e.target.value;
+  const navigate = useNavigate();
+  const [filterState, setFilterstate] = useState([]);
+  const searchHandle = async (e, value) => {
+    const key = e.target.value || "";
     try {
-      const { data } = await axios.get(`${url}/search/${key}`);
-      console.log("search data:", data);
+      if (key || value?.name) {
+        const searchvalue = key || value?.name;
+        console.log("searchvalue:", searchvalue);
+        const { data } = await axios.get(`${url}/search/${searchvalue}`);
+        setFilterstate(data);
+      }
     } catch (error) {
       console.log("search error:", error);
     }
@@ -73,7 +69,6 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
   const [state, setState] = React.useState({
     left: false,
   });
-
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event &&
@@ -83,6 +78,11 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
       return;
     }
     setState({ ...state, [anchor]: open });
+  };
+
+  // navigation from one component to userProfile
+  const navigateHandle = (id) => {
+    navigate(`/profile/${id}`);
   };
   const list = (anchor) => (
     <div
@@ -198,30 +198,86 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                         margin: "2px 0px 0px 5px",
                       }}
                     />
-                    <InputBase
-                      autoComplete="false"
-                      type="text"
+
+                    <Autocompletege
+                      autoComplete="off"
+                      id="grouped-demo"
+                      disablePortal={true}
                       sx={{
                         position: "relative",
-                        width: { md: "230px", xs: "150px" },
-                        height: "50px",
-                        backgroundColor: "none",
+                        width: { md: "300px", xs: "200px" },
+                        padding: "0px",
                         color: "text.primary",
-                        "&::placeholder": {
-                          color: "red",
+
+                        "& .MuiAutocomplete-popupIndicator": {
+                          color: "text.secondary",
+                        },
+                        "& .MuiAutocomplete-clearIndicator": {
+                          color: "text.secondary",
+                        },
+                        "& .MuiAutocomplete-root": {
+                          backgroundColor: "primary.main",
+                          // color: "#fff"
+                          "&:hover": {
+                            border: "none !important",
+                            ouline: "none !important",
+                          },
                         },
                       }}
-                      onClick={() => {
-                        setsearchstate(false);
-                      }}
-                      onMouseLeave={() => {
-                        setsearchstate(true);
-                      }}
-                      onChange={(e) => {
-                        searchHandle(e);
-                      }}
-                      placeholder="search"
-                      autoFocus={false}
+                      multiple={false}
+                      options={filterState}
+                      onChange={searchHandle}
+                      isOptionEqualToValue={(option, value) =>
+                        option?._id === value?._id
+                      }
+                      getOptionLabel={(option) => option?.name}
+                      renderOption={(props, option) => (
+                        <Box
+                          sx={{
+                            color: "text.primary",
+                            fontSize: "10px",
+                            py: 1,
+                            borderBottom: "1px solid #32241A",
+                            cursor: "pointer",
+                            outline: "none",
+                            "&:hover": {
+                              outline: "none",
+                            },
+                          }}
+                          {...props}
+                          onClick={() => {
+                            navigateHandle(option._id);
+                          }}
+                        >
+                          {option.name || ""}{" "}
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          autoComplete="off"
+                          autoFocus={false}
+                          sx={{
+                            height: "25px",
+                            mt: -0.5,
+                            position: "relative",
+                            backgroundColor: "none",
+
+                            "& .MuiOutlinedInput-root": {
+                              padding: "0px !important",
+                            },
+                            "& fieldset": { border: "none", outline: "none" },
+                          }}
+                          {...params}
+                          onChange={(e) => {
+                            searchHandle(e);
+                          }}
+                          inputProps={{
+                            ...params.inputProps,
+                            autoComplete: "new-password",
+                          }}
+                          placeholder="Search...."
+                        />
+                      )}
                     />
                   </Box>
                   {name ? (
@@ -259,46 +315,6 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       </Typography>
                     </>
                   )}
-
-                  {/* {account ? (
-                    <Box
-                      width="130px"
-                      height="42px"
-                      bgcolor="#098CDC"
-                      borderRadius="8px"
-                      sx={{ cursor: "pointer" }}
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      color="#ffffff"
-                      fontWeight="500"
-                      fontSize="16px"
-                      onClick={() => disconnect()}
-                      style={{ zIndex: 1 }}
-                    >
-                      {account.slice(0, 4) + "..." + account.slice(-4)}
-                    </Box>
-                  ) : (
-                    <Box
-                      zIndex={1}
-                      style={{
-                        cursor: "pointer",
-                      }}
-                      bgcolor="#098CDC"
-                      width="130px"
-                      height="42px"
-                      fontWeight="500"
-                      borderRadius="8px"
-                      fontSize="20px"
-                      color="#ffffff"
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      onClick={() => connect()}
-                    >
-                      Connect
-                    </Box>
-                  )} */}
                 </Hidden>
               </Box>
 

@@ -4,23 +4,26 @@ import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import { url } from "../../utils";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
-export default function Like() {
-  const navigate = useNavigate();
+import Loading from "../../loading";
+export default function Like({ id }) {
   const user_id = localStorage.getItem("user_id") || "";
   const [likestate, setlikestate] = useState([]);
+  const [loading, setLoading] = useState(false);
   let count = 0;
   useEffect(() => {
     const fetchlikepost = async () => {
       try {
-        const { data } = await axios.post(`${url}/fetchuserposts/${user_id}`);
+        setLoading(true);
+        const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
         setlikestate(data);
+        setLoading(false);
       } catch (error) {
         console.log("Likes error", error);
+        setLoading(false);
       }
     };
-    user_id && fetchlikepost();
-  }, [user_id]);
+    id && fetchlikepost();
+  }, [id]);
 
   // start paginations code
   const [postsPerPage, setPostsPerPage] = useState(5);
@@ -29,13 +32,9 @@ export default function Like() {
     setCurrentPage(value);
   };
   const pageCount = Math.ceil(likestate?.length / postsPerPage);
-
-  const naviagteHandler = (id) => {
-    console.log("id", id);
-    navigate(`/detail/${id}`);
-  };
   return (
     <>
+      <Loading loading={loading} />
       <Box pb={10}>
         {likestate?.length > 0 ? (
           likestate?.map((item) => {

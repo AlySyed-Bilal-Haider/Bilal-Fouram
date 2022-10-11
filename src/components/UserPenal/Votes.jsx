@@ -5,23 +5,28 @@ import axios from "axios";
 import { url } from "../../utils";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-export default function Vote() {
+import Loading from "../../loading";
+export default function Vote({ id }) {
   let count = 0;
   const navigate = useNavigate();
   const user_id = localStorage.getItem("user_id") || "";
   const [votestate, setVotestate] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchvote = async () => {
       try {
-        const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
+        setLoading(true);
+        const { data } = await axios.get(`${url}/fetchuserposts/${id}`);
         setVotestate(data?.data);
         console.log("vote component:", data?.data);
+        setLoading(false);
       } catch (error) {
         console.log("votes error", error);
+        setLoading(false);
       }
     };
-    user_id && fetchvote();
-  }, [user_id]);
+    id && fetchvote();
+  }, [id]);
 
   // start paginations code
   const [postsPerPage, setPostsPerPage] = useState(5);
@@ -37,6 +42,7 @@ export default function Vote() {
   };
   return (
     <>
+      <Loading loading={loading} />
       <Box pb={10}>
         {votestate?.length > 0 &&
           votestate

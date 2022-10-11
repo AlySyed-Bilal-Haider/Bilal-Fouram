@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import EditPopUp from "./EditPopUp";
 import { url } from "../../utils";
 import Login from "../Login";
+import Loading from "../../loading";
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -48,10 +49,9 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-function Post({ username }) {
+function Post({ username, id }) {
   const [loading, setLoading] = useState(false);
   const [editPopOpen, setEditPopOpen] = useState(false);
-  const user_id = localStorage.getItem("user_id");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userposts, setPoststate] = useState([]);
   const [postIDstate, setPostIdstate] = useState();
@@ -60,6 +60,7 @@ function Post({ username }) {
   const [updatepost, setUpdatestate] = useState(false);
   const [openstate, setOpenlogin] = useState(false);
   const userToken = localStorage.getItem("token");
+  const user_id = localStorage.getItem("user_id");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,30 +68,29 @@ function Post({ username }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   // fetch post details and display here
   useEffect(() => {
-    if (user_id) {
+    if (id) {
       fetchPost();
     }
-  }, [user_id, editPopOpen, updatepost]);
+  }, [id, editPopOpen, updatepost]);
 
   const fetchPost = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post(`${url}/fetchuserposts/${user_id}`);
-      console.log(data, "data---=-->");
+      const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
       data && setPoststate(data);
       setLoading(false);
     } catch (error) {
       console.log("Discussions error:", error);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   // post remove from server
   const removeHandler = async (id) => {
     try {
+      setLoading(true);
       const { data } = await axios.delete(`${url}/removePost/${id}`);
       if (data.status == "ok") {
         toast.success(data.message);
@@ -98,8 +98,10 @@ function Post({ username }) {
       } else {
         toast.error(data.message);
       }
+      setLoading(false);
     } catch (error) {
       toast.error(error.message);
+      setLoading(false);
     }
   };
   const editeHandler = (id, descripton) => {
@@ -122,6 +124,7 @@ function Post({ username }) {
   // ..........like handler ..........
   const likeHandler = async (post_id) => {
     try {
+      setLoading(true);
       const likevalue = { post_id, user_id };
       if (userToken) {
         const { data } = await axios.post(`${url}/like`, likevalue);
@@ -132,8 +135,10 @@ function Post({ username }) {
       } else {
         setOpenlogin(true);
       }
+      setLoading(false);
     } catch (error) {
       console.log("like error", error);
+      setLoading(false);
     }
   };
   // .........unliked handler section ..........
@@ -141,6 +146,7 @@ function Post({ username }) {
     const unliked = { post_id, user_id };
     console.log("unliked:", unliked);
     try {
+      setLoading(true);
       if (userToken) {
         const { data } = await axios.post(`${url}/unlike`, unliked);
         console.log("unliked response:", data);
@@ -150,8 +156,10 @@ function Post({ username }) {
       } else {
         setOpenlogin(true);
       }
+      setLoading(false);
     } catch (error) {
       console.log("unliked code error", error);
+      setLoading(false);
     }
   };
 
@@ -165,6 +173,7 @@ function Post({ username }) {
   // console.log("userposts:", userposts);
   return (
     <>
+      <Loading loading={loading} />
       <EditPopUp
         open={updatepost}
         setOpen={setUpdatestate}
@@ -412,7 +421,6 @@ function Post({ username }) {
       ) : (
         ""
       )}
-
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}
     </>
   );

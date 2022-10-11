@@ -28,6 +28,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { url } from "../../utils";
 import Loading from "../../loading";
+import { useParams } from "react-router-dom";
 const useStyles = makeStyles({
   paperMenu: {
     background: "#3f385b !important",
@@ -36,6 +37,8 @@ const useStyles = makeStyles({
   },
 });
 export default function MainPage() {
+  const params = useParams();
+  const id = params?.id;
   const formData = new FormData();
   const classes = useStyles();
   const matches = useMediaQuery("(max-width:700px)");
@@ -57,8 +60,9 @@ export default function MainPage() {
   };
   const userProfileHandler = async () => {
     try {
-      setLoading(true);
-      const { data } = await axios.get(`${url}/fetchuser/${user_id}`);
+      // setLoading(true);
+      const { data } = await axios.post(`${url}/fetchuser/${id}`);
+      console.log("data", data);
       setProfilestate(data);
       setLoading(false);
     } catch (error) {
@@ -68,10 +72,21 @@ export default function MainPage() {
   };
 
   useEffect(() => {
-    if (user_id) {
+    if (id) {
       userProfileHandler();
     }
-  }, [user_id]);
+  }, [id]);
+
+  // fetch all record from server
+  const fetchallrecord = async () => {
+    try {
+      const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
+      console.log(data, "data--hi hsdasdfas asdfa sd-=-->");
+      setAlldatastate(data);
+    } catch (error) {
+      console.log("Likes error", error);
+    }
+  };
 
   // image upload from server
   const handleFile = async (event) => {
@@ -83,11 +98,11 @@ export default function MainPage() {
     try {
       if (userfile) {
         formData.append("file", userfile);
-        formData.append("id", user_id);
+        formData.append("id", params?.id);
         const response = await axios.post(`${url}/uploadimg`, formData);
-
         if (user_id && response) {
           userProfileHandler();
+          fetchallrecord();
         }
         setUserfile("");
       } else {
@@ -98,24 +113,17 @@ export default function MainPage() {
     }
   };
 
+  // fetch all records post
   useEffect(() => {
-    const fetchallrecord = async () => {
-      try {
-        const { data } = await axios.get(`${url}/fetchuserposts/${user_id}`);
-
-        setAlldatastate(data);
-      } catch (error) {
-        console.log("Likes error", error);
-      }
-    };
-    user_id && fetchallrecord();
-  }, [user_id]);
+    id && fetchallrecord();
+  }, [id]);
   // date difference between twoo dates
   const currentdate = new Date().toLocaleDateString();
   const joindate = new Date(userProfilestate?.addedAt).toLocaleDateString();
   const date1 = moment(joindate, "YYYY-MM-DD");
   const date2 = moment(currentdate, "YYYY-MM-DD");
   let diff = moment.preciseDiff(date2, date1, true);
+
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
@@ -536,15 +544,15 @@ export default function MainPage() {
 
             <Grid item xs={12} sm={12} md={9}>
               {show === 0 ? (
-                <Post username={userProfilestate?.name} />
+                <Post username={userProfilestate?.name} id={id} />
               ) : show == 1 ? (
-                <Discussion username={userProfilestate?.name} />
+                <Discussion id={id} />
               ) : show === 2 ? (
-                <Like />
+                <Like id={id} />
               ) : show === 3 ? (
-                <Vote />
+                <Vote id={id} />
               ) : (
-                <Mention />
+                <Mention id={id} />
               )}
             </Grid>
           </Grid>
