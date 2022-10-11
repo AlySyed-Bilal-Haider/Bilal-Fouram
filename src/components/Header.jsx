@@ -66,6 +66,8 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
     fetchdetails();
   }, []);
 
+  const searchHandle = (e) => {};
+
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false,
@@ -142,14 +144,10 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
       border: "none",
       outline: "none",
     },
-    "& .css-rwpby0-MuiListSubheader-root-MuiAutocomplete-groupLabel": {
-      // backgroundColor: theme.palette.text.light,
-    },
   }));
 
   return (
     <>
-      {/* <ToastNotify alertState={alertState} setAlertState={setAlertState} /> */}
       <Box
         display="flex"
         justifyContent="space-between"

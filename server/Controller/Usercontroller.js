@@ -201,3 +201,20 @@ export const fetchuser = async (req, res) => {
     console.log(error);
   }
 };
+
+export const searchHandle = async (req, res) => {
+  try {
+    const key = req.params.key;
+    const result = await userModal.find({
+      $or: [
+        {
+          name: { $regex: key },
+        },
+      ],
+    });
+    console.log("result:", result);
+  } catch (error) {
+    console.log("search error", error);
+    next();
+  }
+};

@@ -23,12 +23,14 @@ import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
 import axios from "axios";
 import moment from "moment";
 import Login from "./Login";
 import { url } from "../utils";
 import Poll from "./Poll";
 import Loading from "../loading";
+
 const StyledMenu = styled((props) => (
   <Menu
     anchorOrigin={{
@@ -439,16 +441,6 @@ export default function Detail({ userId, username }) {
                       alignItems="center"
                       justifyContent="flex-end"
                     >
-                      {/* <AiFillLike size="16px" />
-                      <AiFillDislike
-                        size="16px"
-                        style={{ marginLeft: "30px", cursor: "unavailable" }}
-                      />
-                      <BsFillHeartFill
-                        size="16px"
-                        style={{ marginLeft: "30px", color: "#DD2E44" }}
-                      /> */}
-
                       <Typography
                         sx={{ cursor: "pointer" }}
                         onClick={() => {
@@ -500,7 +492,10 @@ export default function Detail({ userId, username }) {
 
                 {/* comment data and reply like */}
                 {commentData?.map(
-                  ({ _id, addedAt, comment, visibility }, index) => {
+                  (
+                    { _id, addedAt, comment, visibility, username, userpic },
+                    index
+                  ) => {
                     return (
                       <>
                         {visibility === true && (
@@ -511,7 +506,33 @@ export default function Detail({ userId, username }) {
                               pb={2}
                               borderBottom="1px solid #fff"
                             >
-                              <Box>
+                              <Stack direction="row" spacing={2}>
+                                <Box>
+                                  {userpic ? (
+                                    <img
+                                      style={{
+                                        width: "40px",
+                                        height: "40px",
+                                        borderRadius: "50%",
+                                        m: 1,
+                                      }}
+                                      src={`${url}/upload/${userpic}`}
+                                      alt=""
+                                    />
+                                  ) : (
+                                    <Avatar
+                                      sx={{
+                                        marginTop: "-20%",
+                                        bgcolor: "secondary.light",
+                                      }}
+                                    >
+                                      {username?.slice(0, 1)?.toUpperCase()}
+                                    </Avatar>
+                                  )}
+                                </Box>
+                                <Typography variant="p" m={1}>
+                                  {username}
+                                </Typography>
                                 <Typography
                                   variant="body1"
                                   color="primary.light"
@@ -519,7 +540,7 @@ export default function Detail({ userId, username }) {
                                 >
                                   {moment(addedAt).format("LL")}
                                 </Typography>
-                              </Box>
+                              </Stack>
                               <Box
                                 mt={2}
                                 fontSize="14px"
@@ -698,13 +719,62 @@ export default function Detail({ userId, username }) {
                                               width: "80%",
                                             }}
                                           >
-                                            <Typography
-                                              variant="body1"
-                                              color="primary.main"
-                                              fontWeight="700"
+                                            <Box
+                                              sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                              }}
                                             >
-                                              {replyitems?.userName}
-                                            </Typography>
+                                              <Box
+                                                sx={{
+                                                  width: "40px",
+                                                  height: "40px",
+                                                  borderRadius: "50%",
+                                                  mr: 1,
+                                                }}
+                                              >
+                                                {replyitems?.userpic ? (
+                                                  <img
+                                                    style={{
+                                                      width: "40px",
+                                                      height: "40px",
+                                                      borderRadius: "50%",
+                                                    }}
+                                                    src={`${url}/upload/${replyitems?.userpic}`}
+                                                    alt="Good"
+                                                  />
+                                                ) : (
+                                                  <Avatar
+                                                    sx={{
+                                                      width: 32,
+                                                      height: 32,
+                                                      bgcolor: "",
+                                                    }}
+                                                  >
+                                                    {replyitems?.name
+                                                      ?.toUpperCase()
+                                                      .slice(0, 1)}
+                                                  </Avatar>
+                                                )}
+                                              </Box>
+                                              <Typography
+                                                variant="body1"
+                                                color="primary.main"
+                                                fontWeight="700"
+                                                ml={1}
+                                              >
+                                                {replyitems?.username}
+                                              </Typography>
+
+                                              <Typography
+                                                ml={2}
+                                                variant="body1"
+                                                color="primary.light"
+                                                fontSize="13px"
+                                              >
+                                                {moment(addedAt).format("LL")}
+                                              </Typography>
+                                            </Box>
                                             <Box
                                               pr={4}
                                               fontSize="14px"
@@ -712,14 +782,6 @@ export default function Detail({ userId, username }) {
                                             >
                                               {replyitems?.comment}
                                             </Box>
-                                            <Typography
-                                              ml={2}
-                                              variant="body1"
-                                              color="primary.light"
-                                              fontSize="13px"
-                                            >
-                                              {moment(addedAt).format("LL")}
-                                            </Typography>
                                           </Box>
                                         </>
                                       );

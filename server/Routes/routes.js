@@ -30,6 +30,7 @@ router.get("/checklike/:post_id/:user_id", Post.CheckPostLike);
 router.get("/fetchuserpost/:id", Post.getSpecificDiscussion);
 router.get("/fetchPostDetails/:id", Post.fetchPostDetails);
 router.get("/fetchuser/:id", Users.fetchuser);
+router.get("/search:key", searchHandle);
 
 router.delete("/removePost/:id", Post.removepost);
 // router.delete("/removePoll/:id", Poll.DeletePoll);
