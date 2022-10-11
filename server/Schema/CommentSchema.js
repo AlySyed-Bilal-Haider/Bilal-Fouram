@@ -5,7 +5,11 @@ const commentAdd = new Schema({
     trim: true,
     required: true,
   },
-  userName: String,
+  username: String,
+  userpic: {
+    type: String,
+    default: "",
+  },
   addedAt: {
     type: Date,
     default: new Date(),

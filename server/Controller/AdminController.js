@@ -4,6 +4,7 @@ import userModal from "../Schema/UserSchema.js";
 export async function VerifyAdmin(req, res, next) {
   try {
     const id = req.headers["x-access-token"];
+    console.log(id);
     const admin = await userModal.findOne({ _id: id, role: "admin" });
     if (admin) {
       next();
