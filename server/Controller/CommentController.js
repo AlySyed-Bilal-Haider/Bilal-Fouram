@@ -9,6 +9,7 @@ export const commentHandler = async (req, res, next) => {
     const user = await userModal.findOne({ name: username });
     const newComment = new commentModal(req.body);
     await newComment.save();
+    await commentModal.findByIdAndUpdate(newComment._id,{userpic:user.img});
     const commentref = { ref_id: post_id };
 
     await userModal.findByIdAndUpdate(user._id, {
@@ -45,6 +46,8 @@ export const replyHandler = async (req, res, next) => {
 
     const newComment = new commentModal(req.body);
     await newComment.save();
+    await commentModal.findByIdAndUpdate(newComment._id,{userpic:user.img});
+
     const commentref = { ref_id: post_id };
 
     await userModal.findByIdAndUpdate(user._id, {
