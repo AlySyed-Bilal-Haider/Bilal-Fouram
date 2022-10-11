@@ -85,7 +85,6 @@ function Login({ open, setOpenlogin, setOpensign }) {
 
   //Submit form, after filling the user form;
   const loginHandler = async () => {
-    console.log("userstate:", userstate);
     try {
       const { data } = await axios.post(`${url}/login`, userstate);
       if (data.status == "ok") {
