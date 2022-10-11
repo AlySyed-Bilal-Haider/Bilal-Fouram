@@ -2,6 +2,8 @@ import userModal from "../Schema/UserSchema.js";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
 import { config } from "./config.js";
+import postModal from "../Schema/PostSchema.js";
+import commentModal from "../Schema/CommentSchema.js";
 // ......Signup here routes start..............
 
 export const signupHandler = async (req, res) => {
@@ -216,6 +218,49 @@ export const searchHandle = async (req, res, next) => {
     res.send(result);
   } catch (error) {
     console.log("search error", error);
-    next();
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+    });
+  }
+};
+
+export const searchHandleAll = async (req, res, next) => {
+  try {
+    const key = req.params.key;
+    console.log("key", key);
+    const user = await userModal.find({
+      $or: [
+        {
+          name: { $regex: key },
+        },
+      ],
+    });
+    const discussion = await postModal.find({
+      $or: [
+        {
+          description: { $regex: key },
+        },
+      ],
+    });
+    const comment = await commentModal.find({
+      $or: [
+        {
+          comment: { $regex: key },
+        },
+      ],
+    });
+    res.json({
+      status: "success",
+      users: user,
+      discussions: discussion,
+      comments: comment
+    })
+  } catch (error) {
+    console.log("search error", error);
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+    });
   }
 };
