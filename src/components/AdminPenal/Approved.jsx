@@ -4,14 +4,15 @@ import moment from "moment";
 import { url } from "../../utils";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Loading from "../../loading";
 export default function Approved() {
   const [Approvedstate, setApprovedstate] = useState([]);
   const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
-
+  const [loading, setLoading] = useState(false);
   // Approved post fetch
   const fetchApproved = async () => {
     try {
+      setLoading(true);
       await fetch(`${url}/fetchapprovedposts`, {
         method: "GET",
         headers: {
@@ -23,8 +24,10 @@ export default function Approved() {
           console.log("Approved data !", data);
           setApprovedstate(data?.posts);
         });
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -52,86 +55,95 @@ export default function Approved() {
     }
   };
   return (
-    <Box pb={10}>
-      {Approvedstate?.length > 0 ? (
-        Approvedstate?.map(
-          ({ _id, addedAt, description, status, tag, title, user }, i) => {
-            return (
-              <Box key={_id + i}>
-                <Box pl={8} pb={3} borderBottom="1px solid #fff">
-                  <Box py={2} display="flex" alignItems="center">
-                    <Typography
-                      variant="body1"
-                      color="primary.main"
-                      fontWeight="700"
-                    >
-                      {user?.name}
-                    </Typography>
+    <>
+      <Loading loading={loading} />
 
-                    <Typography
-                      ml={2}
-                      variant="body1"
-                      color="primary.light"
-                      fontSize="13px"
-                    >
-                      {moment(addedAt).format("LL")}
-                    </Typography>
-                    <Typography
-                      ml={2}
-                      variant="body1"
-                      color="primary.light"
-                      fontSize="13px"
-                    >
-                      {status}
-                    </Typography>
-                  </Box>
+      <Box pb={10}>
+        {Approvedstate?.length > 0 &&
+          Approvedstate?.map(
+            ({ _id, addedAt, description, status, tag, title, user }, i) => {
+              return (
+                <Box key={_id + i}>
+                  <Box pl={8} pb={3} borderBottom="1px solid #fff">
+                    <Box py={2} display="flex" alignItems="center">
+                      <Typography
+                        variant="body1"
+                        color="primary.main"
+                        fontWeight="700"
+                      >
+                        {user?.name}
+                      </Typography>
 
-                  <Box fontSize="14px" color="text.paragraph">
-                    {title}
-                    <br />
-                    <br />
-                    {description}
-                    <br />
-                  </Box>
+                      <Typography
+                        ml={2}
+                        variant="body1"
+                        color="primary.light"
+                        fontSize="13px"
+                      >
+                        {moment(addedAt).format("LL")}
+                      </Typography>
+                      <Typography
+                        ml={2}
+                        variant="body1"
+                        color="primary.light"
+                        fontSize="13px"
+                      >
+                        {status}
+                      </Typography>
+                    </Box>
 
-                  <Box
-                    mt={2}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-end"
-                  >
-                    <Button
-                      onClick={() => {
-                        rejected(_id);
-                      }}
-                      sx={{
-                        width: "120px",
-                        height: "36px",
-                        fontSize: "10px",
-                        fontWeight: 700,
-                        padding: "8px 30px 8px 30px",
-                        backgroundColor: "secondary.main",
-                        color: "text.main",
-                        "&:hover": {
+                    <Box fontSize="14px" color="text.paragraph">
+                      {title}
+                      <br />
+                      <br />
+                      {description}
+                      <br />
+                    </Box>
+
+                    <Box
+                      mt={2}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="flex-end"
+                    >
+                      <Button
+                        onClick={() => {
+                          rejected(_id);
+                        }}
+                        sx={{
+                          width: "120px",
+                          height: "36px",
+                          fontSize: "10px",
+                          fontWeight: 700,
+                          padding: "8px 30px 8px 30px",
                           backgroundColor: "secondary.main",
-                        },
-                      }}
-                    >
-                      Rejected
-                    </Button>
+                          color: "text.main",
+                          "&:hover": {
+                            backgroundColor: "secondary.main",
+                          },
+                        }}
+                      >
+                        Rejected
+                      </Button>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            );
-          }
-        )
-      ) : (
-        <Typography
-          sx={{ mt: 3, fontWeight: 700, textAlign: "center", fontSize: "20px" }}
-        >
-          Coming soon !
-        </Typography>
-      )}
-    </Box>
+              );
+            }
+          )}
+        {Approvedstate?.length == 0 && (
+          <Typography
+            sx={{
+              mt: 3,
+              fontWeight: 700,
+              textAlign: "center",
+              fontSize: "20px",
+            }}
+          >
+            Coming soon !
+          </Typography>
+        )}
+      </Box>
+    </>
   );
 }

@@ -189,7 +189,7 @@ function StartDiscussionButton({ setOpenlogin }) {
                   cursor: "pointer",
                 }}
               >
-                Choose Tags
+                {tagsvalue ? tagsvalue : "choose tags"}
               </Typography>
               <Typography
                 onClick={handleClickOpen1}
