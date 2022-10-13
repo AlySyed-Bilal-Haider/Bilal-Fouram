@@ -405,16 +405,18 @@ export default function Detail({ userId, username }) {
                     <Typography
                       variant="body1"
                       color="primary.main"
-                      fontWeight="700"
+                      fontSize="18px"
+                      fontWeight="800"
                     >
                       {postdetails[index]?.user?.name}
                     </Typography>
 
                     <Typography
-                      ml={2}
+                      ml={1}
+                      pt={0.5}
                       variant="body1"
                       color="primary.light"
-                      fontSize="13px"
+                      fontSize="11px"
                     >
                       {moment(items?.enddate).format("LL")}
                     </Typography>
@@ -504,7 +506,7 @@ export default function Detail({ userId, username }) {
                               pb={2}
                               borderBottom="1px solid #fff"
                             >
-                              <Stack direction="row" spacing={2}>
+                              <Stack direction="row" alignItems="center">
                                 <Box>
                                   {userpic ? (
                                     <img
@@ -512,7 +514,6 @@ export default function Detail({ userId, username }) {
                                         width: "40px",
                                         height: "40px",
                                         borderRadius: "50%",
-                                        m: 1,
                                       }}
                                       src={`${url}/upload/${userpic}`}
                                       alt=""
@@ -520,7 +521,6 @@ export default function Detail({ userId, username }) {
                                   ) : (
                                     <Avatar
                                       sx={{
-                                        marginTop: "-20%",
                                         bgcolor: "secondary.light",
                                       }}
                                     >
@@ -528,20 +528,26 @@ export default function Detail({ userId, username }) {
                                     </Avatar>
                                   )}
                                 </Box>
-                                <Typography variant="p" m={1}>
+                                <Typography
+                                  variant="body1"
+                                  color="primary.main"
+                                  fontWeight="700"
+                                  ml={1}
+                                >
                                   {username}
                                 </Typography>
                                 <Typography
                                   variant="body1"
                                   color="primary.light"
-                                  fontSize="13px"
+                                  fontSize="11px"
                                   ml={1}
                                 >
                                   {moment(addedAt).format("LL")}
                                 </Typography>
                               </Stack>
                               <Box
-                                mt={2}
+                                mt={1}
+                                ml={4}
                                 fontSize="14px"
                                 color="text.paragraph"
                               >
@@ -691,7 +697,7 @@ export default function Detail({ userId, username }) {
                                             Replies
                                           </Typography>
                                           <Box
-                                            py={1.5}
+                                            pt={1.5}
                                             pl={3}
                                             my={1}
                                             ml={5}
@@ -744,7 +750,8 @@ export default function Detail({ userId, username }) {
                                                 <Typography
                                                   variant="body1"
                                                   color="primary.main"
-                                                  fontWeight="700"
+                                                  fontSize="15px"
+                                                  fontWeight="600"
                                                   ml={1}
                                                 >
                                                   {replyitems?.username}
@@ -755,16 +762,14 @@ export default function Detail({ userId, username }) {
                                                 ml={1}
                                                 variant="body1"
                                                 color="primary.light"
-                                                fontSize="13px"
+                                                fontSize="11px"
                                               >
                                                 {moment(addedAt).format("LL")}
                                               </Typography>
                                             </Box>
                                             <Box
-                                              py={1.5}
-                                              pl={3}
-                                              my={1}
-                                              ml={5}
+                                              py={1}
+                                              pl={7}
                                               key={`${replyitems?._id}index`}
                                               sx={{
                                                 background: "#DFDEF6",
