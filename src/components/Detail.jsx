@@ -86,10 +86,6 @@ export default function Detail({ userId, username }) {
     setAnchorEl(null);
   };
   // .........fetch post details and set states.........
-  useEffect(() => {
-    fetchdetails();
-  }, [param?.id, renderPost, checkedPoll]);
-
   const fetchdetails = async () => {
     try {
       setLoading(true);
@@ -105,6 +101,10 @@ export default function Detail({ userId, username }) {
     }
     setLoading(false);
   };
+  useEffect(() => {
+    fetchdetails();
+  }, [param?.id, renderPost, checkedPoll]);
+
   const CheckloginHandler = (title) => {
     setPostDescription(title);
     if (userToken) {
@@ -366,7 +366,7 @@ export default function Detail({ userId, username }) {
         })}
       </Box>
       <Container>
-        {postdetails?.length > 0 ? (
+        {postdetails?.length > 0 &&
           postdetails?.map((items, index) => {
             return (
               <Box
@@ -555,22 +555,6 @@ export default function Detail({ userId, username }) {
                                 alignItems="center"
                                 justifyContent="flex-end"
                               >
-                                {/* <AiFillLike size="16px" />
-                                <AiFillDislike
-                                  size="16px"
-                                  style={{
-                                    marginLeft: "30px",
-                                    cursor: "unavailable",
-                                  }}
-                                />
-                                <BsFillHeartFill
-                                  size="16px"
-                                  style={{
-                                    marginLeft: "30px",
-                                    color: "#DD2E44",
-                                  }}
-                                /> */}
-
                                 <Typography
                                   onClick={() => {
                                     replyHandle(_id, comment, items?._id);
@@ -799,47 +783,8 @@ export default function Detail({ userId, username }) {
                                       );
                                     }
                                   )
-                                : null}
+                                : ""}
                             </Box>
-
-                            {/* like and dislike of comment */}
-
-                            {/* comment Edite sections here */}
-                            {openCommentEdite === _id ? (
-                              <Box m={1} p={1}>
-                                <Typography>Edite comment ....</Typography>
-                                <InputBase
-                                  value={editecommentValue}
-                                  name="commentvalue"
-                                  onChange={commentEditeHandle}
-                                  sx={{
-                                    border: "none",
-                                    borderBottom: "1px solid white",
-                                    outline: "none",
-                                    borderRadius: "5px",
-                                    p: 1,
-                                  }}
-                                  fullWidth
-                                />
-                                <Button
-                                  onClick={() => {
-                                    updateComment(_id);
-                                  }}
-                                  sx={{
-                                    mt: 0.5,
-                                    width: "40px",
-                                    height: "40px",
-                                    backgroundColor: "secondary.main",
-                                    color: "white",
-                                    "&:hover": {
-                                      backgroundColor: "secondary.main",
-                                    },
-                                  }}
-                                >
-                                  POST
-                                </Button>
-                              </Box>
-                            ) : null}
                           </div>
                         )}
                       </>
@@ -848,15 +793,7 @@ export default function Detail({ userId, username }) {
                 )}
               </Box>
             );
-          })
-        ) : (
-          <Typography
-            align="center"
-            sx={{ fontWeight: "bold", m: 6, fonSize: "22px" }}
-          >
-            This post is not Approved from Admin !
-          </Typography>
-        )}
+          })}
       </Container>
 
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}

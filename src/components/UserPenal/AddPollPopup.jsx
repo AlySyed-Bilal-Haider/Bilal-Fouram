@@ -7,7 +7,8 @@ import { withStyles, styled } from "@mui/styles";
 import { useState } from "react";
 import axios from "axios";
 import { url } from "../../utils";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const StyleTextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
@@ -87,12 +88,22 @@ function PopUp({ open, setOpen, pollHandle }) {
       return acc;
     }, []);
     addpoll.answers = res;
-    console.log("addpoll:", addpoll);
     try {
-      const { data } = await axios.post(`${url}/createpoll`, addpoll);
-      console.log("poll data", data);
-      (await data.message) == "ok" && pollHandle(data.poll);
-      await setOpen(false);
+      if (
+        addpoll?.question &&
+        typeof addpoll?.answers != "undefined" &&
+        addpoll?.answers.length > 0
+      ) {
+        const { data } = await axios.post(`${url}/createpoll`, addpoll);
+        console.log("poll data", data);
+        if (data.message == "ok") {
+          toast.success("Poll add success fully ");
+          pollHandle(data.poll);
+        }
+        await setOpen(false);
+      } else {
+        toast.error("Fill complete Poll form ! ");
+      }
     } catch (error) {
       console.log("poll error !", error);
     }
@@ -151,6 +162,7 @@ function PopUp({ open, setOpen, pollHandle }) {
             name="question"
             value={addpoll.question || ""}
             onChange={pollHandler}
+            required
           />
 
           <Typography
@@ -172,6 +184,7 @@ function PopUp({ open, setOpen, pollHandle }) {
                   placeholder={`Answer #${index + 1}`}
                   name={"input" + index}
                   onChange={(e) => addAnsHandler(e)}
+                  required
                 />
               </Box>
             );
@@ -208,6 +221,7 @@ function PopUp({ open, setOpen, pollHandle }) {
             value={addpoll.enddate}
             name="enddate"
             onChange={pollHandler}
+            required
           />
 
           <Button

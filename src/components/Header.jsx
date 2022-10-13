@@ -226,7 +226,9 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       }}
                       multiple={false}
                       options={filterState}
-                      onChange={searchHandle}
+                      onChange={() => {
+                        searchHandle();
+                      }}
                       isOptionEqualToValue={(option, value) =>
                         option?._id === value?._id
                       }

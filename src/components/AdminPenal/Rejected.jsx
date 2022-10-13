@@ -4,14 +4,15 @@ import { url } from "../../utils";
 import moment from "moment";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Loading from "../../loading";
 export default function Rejected() {
   const [rejected, setRejectedstate] = useState([]);
   const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
-
+  const [loading, setLoading] = useState(false);
   // fetch rejectd post from server
   const fetchRejected = async () => {
     try {
+      setLoading(true);
       await fetch(`${url}/fetchrejectedposts`, {
         method: "GET",
         headers: {
@@ -23,8 +24,10 @@ export default function Rejected() {
           console.log("Rejected data !", data);
           setRejectedstate(data?.posts);
         });
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -53,7 +56,8 @@ export default function Rejected() {
   };
   return (
     <Box pb={10}>
-      {rejected.length > 0 ? (
+      <Loading loading={loading} />
+      {rejected?.length > 0 &&
         rejected?.map(
           ({ _id, addedAt, description, status, user, tag, title }, i) => {
             return (
@@ -124,8 +128,8 @@ export default function Rejected() {
               </Box>
             );
           }
-        )
-      ) : (
+        )}{" "}
+      {rejected.length == 0 && (
         <Typography
           sx={{ mt: 3, fontWeight: 700, textAlign: "center", fontSize: "20px" }}
         >
