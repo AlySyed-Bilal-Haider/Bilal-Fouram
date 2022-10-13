@@ -165,6 +165,13 @@ function StartDiscussionButton({ setOpenlogin }) {
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
+        // sx={{ backgroundColor: "red" }}
+        PaperProps={{
+          style: {
+            backgroundColor: "#d7d6f7",
+            boxShadow: "none",
+          },
+        }}
       >
         <AppBar
           sx={{
@@ -230,7 +237,7 @@ function StartDiscussionButton({ setOpenlogin }) {
             >
               <CloseIcon
                 fontSize="small"
-                sx={{ color: "primary.light", marginTop: "-45px" }}
+                sx={{ color: "secondary.main", marginTop: "-45px" }}
               />
             </IconButton>
           </Toolbar>
