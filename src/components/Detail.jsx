@@ -713,7 +713,7 @@ export default function Detail({ userId, username }) {
                                                   width: "40px",
                                                   height: "40px",
                                                   borderRadius: "50%",
-                                                  mr: 1,
+                                                  ml: 1,
                                                 }}
                                               >
                                                 {replyitems?.userpic ? (
@@ -731,7 +731,7 @@ export default function Detail({ userId, username }) {
                                                     sx={{
                                                       width: 32,
                                                       height: 32,
-                                                      bgcolor: "",
+                                                      mt: 0.5,
                                                     }}
                                                   >
                                                     {replyitems?.name
@@ -740,17 +740,19 @@ export default function Detail({ userId, username }) {
                                                   </Avatar>
                                                 )}
                                               </Box>
-                                              <Typography
-                                                variant="body1"
-                                                color="primary.main"
-                                                fontWeight="700"
-                                                ml={1}
-                                              >
-                                                {replyitems?.username}
-                                              </Typography>
+                                              {replyitems?.username && (
+                                                <Typography
+                                                  variant="body1"
+                                                  color="primary.main"
+                                                  fontWeight="700"
+                                                  ml={1}
+                                                >
+                                                  {replyitems?.username}
+                                                </Typography>
+                                              )}
 
                                               <Typography
-                                                ml={2}
+                                                ml={1}
                                                 variant="body1"
                                                 color="primary.light"
                                                 fontSize="13px"
