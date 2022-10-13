@@ -256,8 +256,8 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       )}
                       renderInput={(params) => (
                         <TextField
+                          value=""
                           autoComplete="off"
-                          autoFill="off"
                           autoFocus={false}
                           sx={{
                             height: "25px",
@@ -276,7 +276,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                           }}
                           inputProps={{
                             ...params.inputProps,
-                            autoComplete: "new-password",
+                            autoComplete: "none",
                           }}
                           placeholder="Search...."
                         />
