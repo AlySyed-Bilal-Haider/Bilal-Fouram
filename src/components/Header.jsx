@@ -257,6 +257,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       renderInput={(params) => (
                         <TextField
                           autoComplete="off"
+                          autoFill="off"
                           autoFocus={false}
                           sx={{
                             height: "25px",
