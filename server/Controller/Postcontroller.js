@@ -160,6 +160,10 @@ export const fetchPostDetails = async (req, res) => {
     const data = await postModal
       .find({ _id: id, visibility: true })
       .populate("user")
+      .populate({
+        path: "user",
+        select: "_id name email img",
+      })
       .populate("poll")
       .populate("comments")
       .populate({
