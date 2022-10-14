@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Box } from "@mui/material";
-// import Web3 from "web3";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import "./App.css";
@@ -16,12 +15,6 @@ import Detail from "./components/Detail";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import { url } from "./utils";
-// const web3 = new Web3(
-//   Web3.givenProvider
-//     ? Web3.givenProvider
-//     : "https://data-seed-prebsc-1-s1.binance.org:8545/"
-// );
-
 const PrivateRoute = ({ children, checkrole }) => {
   if (checkrole !== "admin") {
     return <Navigate to="/" />;

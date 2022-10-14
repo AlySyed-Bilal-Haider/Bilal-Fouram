@@ -63,6 +63,7 @@ export default function Approved() {
   const detailsHandle = (id) => {
     console.log("navigate:", id);
   };
+
   return (
     <>
       <Loading loading={loading} />
