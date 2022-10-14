@@ -9,19 +9,34 @@ export const FetchPosts = async (req, res) => {
       .populate("discussion.ref_id")
       .populate({
         path: "discussion.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
+
                 ],
               },
             ],
@@ -34,24 +49,39 @@ export const FetchPosts = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       })
       .populate("like.ref_id")
       .populate({
         path: "like.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
                 ],
               },
@@ -65,24 +95,39 @@ export const FetchPosts = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       })
       .populate("poll.ref_id")
       .populate({
         path: "poll.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
                 ],
               },
@@ -96,24 +141,39 @@ export const FetchPosts = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       })
       .populate("comment.ref_id")
       .populate({
         path: "comment.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
                 ],
               },
@@ -127,24 +187,39 @@ export const FetchPosts = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       })
       .populate("mention.ref_id")
       .populate({
         path: "mention.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
                 ],
               },
@@ -158,6 +233,7 @@ export const FetchPosts = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       });
@@ -191,18 +267,32 @@ export const FetchDatafrom = async (req, res) => {
       .populate("discussion.ref_id")
       .populate({
         path: "discussion.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
                 ],
               },
@@ -216,6 +306,7 @@ export const FetchDatafrom = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       });
@@ -235,18 +326,32 @@ export const FetchDiscussion = async (req, res) => {
       .populate("discussion.ref_id")
       .populate({
         path: "discussion.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
                 ],
               },
@@ -259,6 +364,7 @@ export const FetchDiscussion = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       });
@@ -286,18 +392,32 @@ export const FetchLiked = async (req, res) => {
       .populate("like.ref_id")
       .populate({
         path: "like.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
                 ],
               },
@@ -310,6 +430,7 @@ export const FetchLiked = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       });
@@ -336,18 +457,32 @@ export const FetchPollPosts = async (req, res) => {
       .populate("poll.ref_id")
       .populate({
         path: "poll.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
                 ],
               },
@@ -360,6 +495,7 @@ export const FetchPollPosts = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       });
@@ -387,18 +523,32 @@ export const FetchMentionComments = async (req, res) => {
       .populate("mention.ref_id")
       .populate({
         path: "mention.ref_id",
+        match: { visibility: true },
         populate: [
           {
             path: "comments",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
                 populate: [
+                  {
+                    path: "user",
+                    select: "_id name email img",
+                    modal: userModal,
+                  },
                   {
                     path: "reply",
                     modal: commentModal,
+                    match: { visibility: true },
                   },
                 ],
               },
@@ -411,6 +561,7 @@ export const FetchMentionComments = async (req, res) => {
           {
             path: "poll",
             modal: pollModal,
+            match: { visibility: true },
           },
         ],
       });

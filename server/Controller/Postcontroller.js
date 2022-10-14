@@ -45,14 +45,27 @@ export const fetchAlldiscussion = async (req, res) => {
       .populate("comments")
       .populate({
         path: "comments",
+        match: { visibility: true },
         populate: [
+          {
+            path: "user",
+            select: "_id name email img",
+            modal: userModal,
+          },
           {
             path: "reply",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
               },
             ],
           },
@@ -104,14 +117,27 @@ export const getSpecificDiscussion = async (req, res, next) => {
       .populate("comments")
       .populate({
         path: "comments",
+        match: { visibility: true },
         populate: [
+          {
+            path: "user",
+            select: "_id name email img",
+            modal: userModal,
+          },
           {
             path: "reply",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
               },
             ],
           },
@@ -132,20 +158,33 @@ export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
   try {
     const data = await postModal
-      .find({ _id: id, visibility: true, status: "Approved" })
+      .find({ _id: id, visibility: true })
       .populate("user")
       .populate("poll")
       .populate("comments")
       .populate({
         path: "comments",
+        match: { visibility: true },
         populate: [
+          {
+            path: "user",
+            select: "_id name email img",
+            modal: userModal,
+          },
           {
             path: "reply",
             modal: commentModal,
+            match: { visibility: true },
             populate: [
+              {
+                path: "user",
+                select: "_id name email img",
+                modal: userModal,
+              },
               {
                 path: "reply",
                 modal: commentModal,
+                match: { visibility: true },
               },
             ],
           },
