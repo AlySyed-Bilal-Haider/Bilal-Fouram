@@ -5,14 +5,12 @@ import userModal from "../Schema/UserSchema.js";
 export const commentHandler = async (req, res, next) => {
   try {
     console.log("comment !", req.body);
-    const { post_id, mention, username } = req.body;
-    const user = await userModal.findOne({ name: username });
+    const { post_id, mention, user } = req.body;
     const newComment = new commentModal(req.body);
     await newComment.save();
-    await commentModal.findByIdAndUpdate(newComment._id,{userpic:user.img});
     const commentref = { ref_id: post_id };
 
-    await userModal.findByIdAndUpdate(user._id, {
+    await userModal.findByIdAndUpdate(user, {
       $push: { comment: commentref },
     });
 
@@ -41,16 +39,14 @@ export const commentHandler = async (req, res, next) => {
 export const replyHandler = async (req, res, next) => {
   try {
     console.log("reply body:", req.body);
-    const { comment_id, mention, username, post_id } = req.body;
-    const user = await userModal.findOne({ name: username });
+    const { comment_id, mention, user, post_id } = req.body;
 
     const newComment = new commentModal(req.body);
     await newComment.save();
-    await commentModal.findByIdAndUpdate(newComment._id,{userpic:user.img});
 
     const commentref = { ref_id: post_id };
 
-    await userModal.findByIdAndUpdate(user._id, {
+    await userModal.findByIdAndUpdate(user, {
       $push: { comment: commentref },
     });
 

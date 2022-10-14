@@ -1,5 +1,5 @@
 
-import { model, mongoose, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 const Poll = new Schema({
     question: {
         type: String,
@@ -22,11 +22,6 @@ const Poll = new Schema({
         type: Boolean,
         default: true
     },
-
-    like: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],
     totalvotes: {
         type: Number,
         default: 0,
