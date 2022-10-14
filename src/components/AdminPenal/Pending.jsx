@@ -176,7 +176,7 @@ export default function Pending() {
                             },
                           }}
                         >
-                          Approved
+                          Approve
                         </Button>
                         <Button
                           style={btn}

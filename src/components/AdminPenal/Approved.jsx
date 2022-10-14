@@ -6,10 +6,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../loading";
 import Avatar from "@mui/material/Avatar";
+import { useNavigate } from "react-router-dom";
 export default function Approved() {
+  const navigate = useNavigate();
   const [Approvedstate, setApprovedstate] = useState([]);
   const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
   const [loading, setLoading] = useState(false);
+  const [isActive, setActivestate] = useState(true);
   // Approved post fetch
   const fetchApproved = async () => {
     try {
@@ -37,6 +40,7 @@ export default function Approved() {
 
   const rejected = async (post_id) => {
     console.log("post_id", post_id);
+
     try {
       await fetch(`${url}/rejectpost/${post_id}`, {
         method: "GET",
@@ -55,6 +59,10 @@ export default function Approved() {
       toast.error(error.message);
     }
   };
+
+  const detailsHandle = (id) => {
+    console.log("navigate:", id);
+  };
   return (
     <>
       <Loading loading={loading} />
@@ -64,7 +72,12 @@ export default function Approved() {
           Approvedstate?.map(
             ({ _id, addedAt, description, status, tag, title, user }, i) => {
               return (
-                <Box key={_id + i}>
+                <Box
+                  key={_id + i}
+                  onClick={() => {
+                    detailsHandle(_id);
+                  }}
+                >
                   <Box pl={8} pb={3} borderBottom="1px solid #fff">
                     <Box py={2} display="flex" alignItems="center">
                       <Box
@@ -138,7 +151,8 @@ export default function Approved() {
                       justifyContent="flex-end"
                     >
                       <Button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           rejected(_id);
                         }}
                         sx={{
@@ -154,7 +168,7 @@ export default function Approved() {
                           },
                         }}
                       >
-                        Rejected
+                        Reject
                       </Button>
                     </Box>
                   </Box>

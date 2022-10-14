@@ -152,7 +152,7 @@ export default function Rejected() {
                         },
                       }}
                     >
-                      Approved
+                      Approve
                     </Button>
                   </Box>
                 </Box>
