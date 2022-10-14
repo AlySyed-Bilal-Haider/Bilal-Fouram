@@ -132,7 +132,7 @@ export const fetchPostDetails = async (req, res) => {
   const id = req.params.id;
   try {
     const data = await postModal
-      .find({ _id: id, visibility: true, status: "Approved" })
+      .find({ _id: id, visibility: true })
       .populate("user")
       .populate("poll")
       .populate("comments")
