@@ -6,6 +6,7 @@ export const FetchPosts = async (req, res) => {
     const id = req.params.id.trim();
     const data = await userModal
       .find({ _id: id })
+      .select("-password")
       .populate("discussion.ref_id")
       .populate({
         path: "discussion.ref_id",
@@ -264,6 +265,7 @@ export const FetchDatafrom = async (req, res) => {
     const id = req.params.id.trim();
     const data = await userModal
       .find({ _id: id })
+      .select("-password")
       .populate("discussion.ref_id")
       .populate({
         path: "discussion.ref_id",
@@ -323,6 +325,7 @@ export const FetchDiscussion = async (req, res) => {
     console.log(id);
     const data = await userModal
       .find({ _id: id })
+      .select("-password")
       .populate("discussion.ref_id")
       .populate({
         path: "discussion.ref_id",
@@ -389,6 +392,7 @@ export const FetchLiked = async (req, res) => {
     console.log(id);
     const data = await userModal
       .find({ _id: id })
+      .select("-password")
       .populate("like.ref_id")
       .populate({
         path: "like.ref_id",
@@ -454,6 +458,7 @@ export const FetchPollPosts = async (req, res) => {
     const id = req.params.id.trim();
     const data = await userModal
       .find({ _id: id })
+      .select("-password")
       .populate("poll.ref_id")
       .populate({
         path: "poll.ref_id",
@@ -520,6 +525,7 @@ export const FetchMentionComments = async (req, res) => {
     console.log("id:", id);
     const data = await userModal
       .find({ _id: id })
+      .select("-password")
       .populate("mention.ref_id")
       .populate({
         path: "mention.ref_id",

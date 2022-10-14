@@ -197,7 +197,7 @@ export const tokenVerifyHandler = async (req, res) => {
 export const fetchuser = async (req, res) => {
   try {
     const id = req.params.id;
-    const data = await userModal.findOne({ _id: id });
+    const data = await userModal.findOne({ _id: id }).select("-password");
     console.log("data user", data);
     return res.send(data);
   } catch (error) {
@@ -216,7 +216,7 @@ export const searchHandle = async (req, res, next) => {
           name: { $regex: key },
         },
       ],
-    });
+    }).select("-password");
     res.send(result);
   } catch (error) {
     console.log("search error", error);
@@ -237,7 +237,7 @@ export const searchHandleAll = async (req, res, next) => {
           name: { $regex: key },
         },
       ],
-    });
+    }).select("-password");
     const discussion = await postModal.find({
       $or: [
         {
