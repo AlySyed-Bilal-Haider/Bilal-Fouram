@@ -5,6 +5,7 @@ import { url } from "../../utils";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../loading";
+import Avatar from "@mui/material/Avatar";
 export default function Approved() {
   const [Approvedstate, setApprovedstate] = useState([]);
   const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
@@ -66,6 +67,36 @@ export default function Approved() {
                 <Box key={_id + i}>
                   <Box pl={8} pb={3} borderBottom="1px solid #fff">
                     <Box py={2} display="flex" alignItems="center">
+                      <Box
+                        sx={{
+                          width: "40px",
+                          height: "40px",
+                          borderRadius: "50%",
+                          mr: 1,
+                        }}
+                      >
+                        {user?.img ? (
+                          <img
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              borderRadius: "50%",
+                            }}
+                            src={`${url}/upload/${user?.img}`}
+                            alt=""
+                          />
+                        ) : (
+                          <Avatar
+                            sx={{
+                              width: 32,
+                              height: 32,
+                              bgcolor: "secondary.light",
+                            }}
+                          >
+                            {user?.name?.toUpperCase().slice(0, 1)}
+                          </Avatar>
+                        )}
+                      </Box>
                       <Typography
                         variant="body1"
                         color="primary.main"

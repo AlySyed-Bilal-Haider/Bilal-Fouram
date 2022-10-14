@@ -25,7 +25,7 @@ const TextInput = styled(InputBase)({
     position: "relative",
     borderRadius: "5px",
     color: "#3f385b",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#DFDEF6",
     padding: "5px",
     paddingLeft: "10px",
     "&::-webkit-outer-spin-button": {
@@ -117,17 +117,24 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
     <>
       <Loading />
       <Dialog
-        fullScreen
+        // fullScreen
+        fullWidth
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
+        PaperProps={{
+          style: {
+            backgroundColor: "#d7d6f7",
+            boxShadow: "none",
+          },
+        }}
       >
         <AppBar
           sx={{
             position: "relative",
             boxShadow: "none",
             background: "transparent",
-            paddingY: "20px",
+            paddingY: "10px",
           }}
         >
           <Toolbar>
@@ -138,12 +145,12 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
             >
               <CloseIcon
                 fontSize="small"
-                sx={{ color: "primary.light", marginTop: "-45px" }}
+                sx={{ color: "secondary.main", marginTop: "-40px" }}
               />
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Box mt={-5} mb={3} mx={4.5}>
+        <Box mt={-5} mb={3} mx={4}>
           <Typography sx={{ m: 1 }}>{title}</Typography>
           {_usernamedropDown?.length > 0 && (
             <Autocomplete
@@ -173,10 +180,10 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
           <TextInput
             type="text"
             name="description"
-            placeholder="Reply here !"
+            placeholder="Comment here!"
             fullWidth
             multiline
-            rows={2}
+            rows={5}
             sx={{ fontSize: "15px" }}
             onChange={Inputvalue}
           />
@@ -194,9 +201,8 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
             color: "text.main",
             textTransform: "capitalize",
             width: "150px",
-            marginTop: "20px",
+            marginY: "20px",
             marginLeft: "20px",
-            cursor: "pointer",
             "&:hover": {
               backgroundColor: "secondary.main",
             },
