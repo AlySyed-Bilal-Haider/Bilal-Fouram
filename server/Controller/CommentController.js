@@ -213,12 +213,12 @@ export const FetchUsers = async (req, res) => {
     if (name == null) {
       userModal.find({}, function (err, data) {
         res.send(data);
-      });
+      }).select("-password");
     } else {
       const regex = new RegExp(name, "i");
       userModal.find({ name: regex }, function (err, data) {
         res.send(data);
-      });
+      }).select("-password");
     }
   } catch (error) {
     res.status(505).json({
