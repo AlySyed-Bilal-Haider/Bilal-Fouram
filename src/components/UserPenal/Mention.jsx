@@ -38,9 +38,8 @@ export default function Mention({ id }) {
     <>
       <Loading loading={loading} />
       <Box pb={10}>
-        {mentionState?.length > 0 ? (
+        {mentionState?.length > 0 &&
           mentionState?.map((item) => {
-            count++;
             return (
               <>
                 {item?.discussion?.map((items, i) => {
@@ -143,13 +142,8 @@ export default function Mention({ id }) {
                 })}
               </>
             );
-          })
-        ) : (
-          <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
-            It looks vote there are no posts here.
-          </Box>
-        )}
-        {count != 0 ? (
+          })}
+        {count > 0 ? (
           <Box my="15px" mx="10" px>
             <Stack
               direction={"row"}
@@ -164,7 +158,9 @@ export default function Mention({ id }) {
             </Stack>
           </Box>
         ) : (
-          ""
+          <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
+            It looks Mentions there are no posts here.
+          </Box>
         )}
       </Box>
     </>

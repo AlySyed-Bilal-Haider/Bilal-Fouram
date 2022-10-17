@@ -178,20 +178,24 @@ export default function MainPage() {
                         />
                       </div>
                       <Box py={1} textAlign="center">
-                        <Button
-                          type="submit"
-                          sx={{
-                            color: "text.main",
-                            backgroundColor: "secondary.main",
-                            textTransform: "capitalize",
-                            width: "80px",
-                            "&:hover": {
-                              backgroundColor: "secondary.light",
-                            },
-                          }}
-                        >
-                          Save
-                        </Button>
+                        {user_id == id ? (
+                          <Button
+                            type="submit"
+                            sx={{
+                              color: "text.main",
+                              backgroundColor: "secondary.main",
+                              textTransform: "capitalize",
+                              width: "80px",
+                              "&:hover": {
+                                backgroundColor: "secondary.light",
+                              },
+                            }}
+                          >
+                            Save
+                          </Button>
+                        ) : (
+                          ""
+                        )}
                       </Box>
                     </form>
                   ) : (

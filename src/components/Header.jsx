@@ -226,7 +226,9 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       }}
                       multiple={false}
                       options={filterState}
-                      onChange={searchHandle}
+                      onChange={() => {
+                        searchHandle();
+                      }}
                       isOptionEqualToValue={(option, value) =>
                         option?._id === value?._id
                       }
@@ -254,6 +256,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       )}
                       renderInput={(params) => (
                         <TextField
+                          value=""
                           autoComplete="off"
                           autoFocus={false}
                           sx={{
@@ -273,7 +276,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                           }}
                           inputProps={{
                             ...params.inputProps,
-                            autoComplete: "new-password",
+                            autoComplete: "none",
                           }}
                           placeholder="Search...."
                         />

@@ -5,10 +5,9 @@ const commentAdd = new Schema({
     trim: true,
     required: true,
   },
-  username: String,
-  userpic: {
-    type: String,
-    default: "",
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
   },
   addedAt: {
     type: Date,

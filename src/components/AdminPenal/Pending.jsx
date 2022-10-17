@@ -4,14 +4,17 @@ import { url } from "../../utils";
 import moment from "moment";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Loading from "../../loading";
+import Avatar from "@mui/material/Avatar";
 export default function Pending() {
   const [pendingpost, setPendingpost] = useState([]);
   const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
+  const [loading, setLoading] = useState(false);
 
   // fetch pending post
   const fetchPending = async () => {
     try {
+      setLoading(true);
       await fetch(`${url}/fetchpendingposts`, {
         method: "GET",
         headers: {
@@ -23,8 +26,10 @@ export default function Pending() {
           console.log("Approved data !", data);
           setPendingpost(data?.posts);
         });
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -35,6 +40,7 @@ export default function Pending() {
   const approveAndReactHandle = async (path, post_id) => {
     console.log("post_id", post_id);
     try {
+      setLoading(true);
       await fetch(`${url}/${path}/${post_id}`, {
         method: "GET",
         headers: {
@@ -47,9 +53,11 @@ export default function Pending() {
           data?.status == "ok" && toast.success(data.message);
           data?.status == "ok" && fetchPending();
         });
+      setLoading(false);
     } catch (error) {
       console.log("Approved post error", error);
       toast.error(error.message);
+      setLoading(false);
     }
   };
 
@@ -70,118 +78,155 @@ export default function Pending() {
   };
   const pageCount = Math.ceil(pendingpost?.length / postsPerPage);
   return (
-    <Box pb={10}>
-      {pendingpost?.length > 0 ? (
-        pendingpost
-          ?.slice(
-            currentPage * postsPerPage - postsPerPage,
-            currentPage * postsPerPage
-          )
-          ?.map(
-            ({ _id, addedAt, description, status, user, tag, title }, i) => {
-              return (
-                <Box key={_id + i}>
-                  <Box pl={8} pb={3} borderBottom="1px solid #fff">
-                    <Box py={2} display="flex" alignItems="center">
-                      <Typography
-                        variant="body1"
-                        color="primary.main"
-                        fontWeight="700"
-                      >
-                        {user?.name}
-                      </Typography>
+    <>
+      <Loading loading={loading} />
+      <Box pb={10}>
+        {pendingpost?.length > 0 &&
+          pendingpost
+            ?.slice(
+              currentPage * postsPerPage - postsPerPage,
+              currentPage * postsPerPage
+            )
+            ?.map(
+              ({ _id, addedAt, description, status, user, tag, title }, i) => {
+                return (
+                  <Box key={_id + i}>
+                    <Box pl={8} pb={3} borderBottom="1px solid #fff">
+                      <Box py={2} display="flex" alignItems="center">
+                        <Box
+                          sx={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            mr: 1,
+                          }}
+                        >
+                          {user?.img ? (
+                            <img
+                              style={{
+                                width: "40px",
+                                height: "40px",
+                                borderRadius: "50%",
+                              }}
+                              src={`${url}/upload/${user?.img}`}
+                              alt="Good"
+                            />
+                          ) : (
+                            <Avatar
+                              sx={{
+                                width: 32,
+                                height: 32,
+                                bgcolor: "secondary.light",
+                              }}
+                            >
+                              {user?.name?.toUpperCase().slice(0, 1)}
+                            </Avatar>
+                          )}
+                        </Box>
+                        <Typography
+                          variant="body1"
+                          color="primary.main"
+                          fontWeight="700"
+                        >
+                          {user?.name}
+                        </Typography>
 
-                      <Typography
-                        ml={2}
-                        variant="body1"
-                        color="primary.light"
-                        fontSize="13px"
-                      >
-                        {moment(addedAt).format("LL")}
-                      </Typography>
-                      <Typography
-                        ml={2}
-                        variant="body1"
-                        color="primary.light"
-                        fontSize="13px"
-                      >
-                        {status}
-                      </Typography>
-                    </Box>
+                        <Typography
+                          ml={2}
+                          variant="body1"
+                          color="primary.light"
+                          fontSize="13px"
+                        >
+                          {moment(addedAt).format("LL")}
+                        </Typography>
+                        <Typography
+                          ml={2}
+                          variant="body1"
+                          color="primary.light"
+                          fontSize="13px"
+                        >
+                          {status}
+                        </Typography>
+                      </Box>
 
-                    <Box fontSize="14px" color="text.paragraph">
-                      {title}
-                      <br />
-                      <br />
-                      {description}
-                      <br />
-                    </Box>
+                      <Box fontSize="14px" color="text.paragraph">
+                        {title}
+                        <br />
+                        <br />
+                        {description}
+                        <br />
+                      </Box>
 
-                    <Box
-                      mt={2}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="flex-end"
-                    >
-                      <Button
-                        onClick={() => {
-                          approveAndReactHandle("approvepost", _id);
-                        }}
-                        style={btn}
-                        sx={{
-                          backgroundColor: "secondary.main",
-                          color: "text.main",
-                          "&:hover": {
+                      <Box
+                        mt={2}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="flex-end"
+                      >
+                        <Button
+                          onClick={() => {
+                            approveAndReactHandle("approvepost", _id);
+                          }}
+                          style={btn}
+                          sx={{
                             backgroundColor: "secondary.main",
-                          },
-                        }}
-                      >
-                        Approved
-                      </Button>
-                      <Button
-                        style={btn}
-                        sx={{
-                          m: 1,
-                          backgroundColor: "secondary.main",
-                          color: "text.main",
-                          "&:hover": {
+                            color: "text.main",
+                            "&:hover": {
+                              backgroundColor: "secondary.main",
+                            },
+                          }}
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          style={btn}
+                          sx={{
+                            m: 1,
                             backgroundColor: "secondary.main",
-                          },
-                        }}
-                        onClick={() => {
-                          approveAndReactHandle("rejectpost", _id);
-                        }}
-                      >
-                        Reject
-                      </Button>
+                            color: "text.main",
+                            "&:hover": {
+                              backgroundColor: "secondary.main",
+                            },
+                          }}
+                          onClick={() => {
+                            approveAndReactHandle("rejectpost", _id);
+                          }}
+                        >
+                          Reject
+                        </Button>
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-              );
-            }
-          )
-      ) : (
-        <Typography
-          sx={{ mt: 3, fontWeight: 700, textAlign: "center", fontSize: "20px" }}
-        >
-          Coming soon !
-        </Typography>
-      )}
-      {pendingpost?.length > 0 && (
-        <Box my="15px" mx="10" px>
-          <Stack
-            direction={"row"}
-            alignItems="center"
-            justifyContent="flex-end"
+                );
+              }
+            )}{" "}
+        {pendingpost?.length > 0 ? (
+          <Box my="15px" mx="10" px>
+            <Stack
+              direction={"row"}
+              alignItems="center"
+              justifyContent="flex-end"
+            >
+              <Pagination
+                count={pageCount}
+                page={currentPage}
+                onChange={handleChangepage}
+              />
+            </Stack>
+          </Box>
+        ) : (
+          <Typography
+            sx={{
+              mt: 3,
+              fontWeight: 700,
+              textAlign: "center",
+              fontSize: "20px",
+            }}
           >
-            <Pagination
-              count={pageCount}
-              page={currentPage}
-              onChange={handleChangepage}
-            />
-          </Stack>
-        </Box>
-      )}
-    </Box>
+            Coming soon !
+          </Typography>
+        )}
+      </Box>
+    </>
   );
 }
