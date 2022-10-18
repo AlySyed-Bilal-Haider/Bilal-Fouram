@@ -112,18 +112,10 @@ export default function MainPage() {
       console.log("error upload", error);
     }
   };
-
   // fetch all records post
   useEffect(() => {
     id && fetchallrecord();
   }, [id]);
-  // date difference between twoo dates
-  const currentdate = new Date().toLocaleDateString();
-  const joindate = new Date(userProfilestate?.addedAt).toLocaleDateString();
-  const date1 = moment(joindate, "YYYY-MM-DD");
-  const date2 = moment(currentdate, "YYYY-MM-DD");
-  let diff = moment.preciseDiff(date2, date1, true);
-
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
@@ -277,9 +269,7 @@ export default function MainPage() {
                       fontFamily="Open Sans"
                     >
                       Joined Date{" "}
-                      {diff?.months > 0
-                        ? new Date().toLocaleDateString()
-                        : `${diff?.days} days ago`}
+                      {moment(userProfilestate?.addedAt).format("LL")}
                     </Box>
                   </Box>
                   <Box display="flex" alignItems="center">

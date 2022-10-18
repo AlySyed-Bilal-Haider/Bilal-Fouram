@@ -304,7 +304,7 @@ function Post({ username, id }) {
                                     fontSize="14px"
                                     color="primary.light"
                                   >
-                                    Reply
+                                    Comment
                                   </Typography>
                                   {items?.ref_id?.like?.includes(user_id) ? (
                                     <Typography

@@ -8,10 +8,9 @@ import {
   Typography,
   styled,
   Menu,
-  InputBase,
   MenuItem,
-  Button,
 } from "@mui/material";
+import CommentEdite from "./CommentEdite";
 import { FaRegComments, FaChalkboardTeacher, FaBook } from "react-icons/fa";
 import { RiGroupFill } from "react-icons/ri";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -70,18 +69,17 @@ export default function Detail({ userId, username }) {
   const [commentValue, setcommentValue] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openCommentEdite, setCommentsection] = useState("");
-  const [editecommentValue, setEditevalue] = useState("");
   const [checkedPoll, setCheckPollstate] = useState(false);
   const [postReplyId, setPostReplyID] = useState("");
+  const [editecommentValue, setEditevalue] = useState("");
+  const [editeCommentOpen, setOpenedite] = useState(false);
   const open = Boolean(anchorEl);
   const HandleChecked = (value) => {
     setCheckPollstate(value);
   };
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -103,7 +101,7 @@ export default function Detail({ userId, username }) {
   };
   useEffect(() => {
     fetchdetails();
-  }, [param?.id, renderPost, checkedPoll]);
+  }, [param?.id, renderPost, checkedPoll, editeCommentOpen]);
 
   const CheckloginHandler = (title) => {
     setPostDescription(title);
@@ -177,7 +175,6 @@ export default function Detail({ userId, username }) {
       setLoading(false);
     }
   };
-
   // .....reply Hanlder , open the reply modal Box......
   const replyHandle = (commentID, commentvalue, post_id) => {
     setCommentIDstate(commentID);
@@ -189,7 +186,6 @@ export default function Detail({ userId, username }) {
       setOpenlogin(true);
     }
   };
-
   //  ......... liked reply handle ...........
   const likeReplyHandle = async (comment_id) => {
     try {
@@ -255,22 +251,7 @@ export default function Detail({ userId, username }) {
     setEditevalue(value);
     setCommentsection(id);
     setAnchorEl(null);
-  };
-  const updateComment = async (comment_id) => {
-    try {
-      const newComment = { comment_id, comment: editecommentValue };
-      setLoading(true);
-      const { data } = await axios.put(`${url}/editcomment`, newComment);
-      data.status === "ok" && setRenderstate(!renderPost);
-      setLoading(false);
-    } catch (error) {
-      console.log("comment edite error !", error);
-      setLoading(false);
-    }
-  };
-
-  const commentEditeHandle = (e) => {
-    setEditevalue(e.target.value);
+    setOpenedite(true);
   };
 
   return (
@@ -292,6 +273,12 @@ export default function Detail({ userId, username }) {
         userid={userId}
         renderFetchpost={renderDetails}
         post_id={postReplyId}
+      />
+      <CommentEdite
+        openCommentEdite={openCommentEdite}
+        commentValue={editecommentValue}
+        setOpen={setOpenedite}
+        open={editeCommentOpen}
       />
       <Box bgcolor="primary.light">
         <Loading loading={loading} />

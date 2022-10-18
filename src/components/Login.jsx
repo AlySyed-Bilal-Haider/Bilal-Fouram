@@ -4,6 +4,8 @@ import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import AccountMenu from "./MenuItem";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Loading from "../loading";
 import {
   Typography,
@@ -72,6 +74,7 @@ const TextInput = styled(InputBase)({
 function Login({ open, setOpenlogin, setOpensign }) {
   const [menuItem, setMenuitem] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [passwordHideshow, setPasswordState] = useState(false);
   const [userstate, setUserstate] = React.useState({
     email: "",
     password: "",
@@ -98,7 +101,7 @@ function Login({ open, setOpenlogin, setOpensign }) {
         localStorage.setItem("email", data.email);
         setTimeout(() => {
           window.location.href = "/";
-        }, 0);
+        }, 500);
         handleClose();
       } else {
         toast.error(data.message);
@@ -118,6 +121,9 @@ function Login({ open, setOpenlogin, setOpensign }) {
   //   // setOpensign(true);
   //   setloginstate(false);
   // };
+  const passwordHideshowfunc = () => {
+    setPasswordState(!passwordHideshow);
+  };
   return (
     <>
       <Loading loading={loading} />
@@ -170,18 +176,49 @@ function Login({ open, setOpenlogin, setOpensign }) {
                   autoComplete="off"
                   autoFocus
                 />
-
-                <TextInput
-                  fullWidth
-                  type="password"
-                  value={userstate.password || ""}
-                  onChange={changeHandler}
-                  placeholder="Password"
-                  name="password"
-                  autoComplete="off"
-                  autoFocus
-                />
-
+                <Box
+                  sx={{
+                    backgroundColor: "#D9D9D9",
+                    my: 0.5,
+                    height: "60px",
+                    borderRadius: "5px",
+                    mt: 1,
+                  }}
+                >
+                  <TextInput
+                    fullWidth
+                    type={passwordHideshow ? "text" : "password"}
+                    value={userstate.password || ""}
+                    onChange={changeHandler}
+                    placeholder="Password"
+                    name="password"
+                    autoComplete="off"
+                    autoFocus
+                    endAdornment={
+                      passwordHideshow ? (
+                        <Visibility
+                          sx={{
+                            cursor: "pointer",
+                            width: "30px",
+                            height: "30px",
+                            m: 1,
+                          }}
+                          onClick={passwordHideshowfunc}
+                        />
+                      ) : (
+                        <VisibilityOff
+                          sx={{
+                            cursor: "pointer",
+                            width: "30px",
+                            height: "30px",
+                            m: 1,
+                          }}
+                          onClick={passwordHideshowfunc}
+                        />
+                      )
+                    }
+                  />
+                </Box>
                 <Button
                   onClick={loginHandler}
                   type="submit"

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Loading from "../loading";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
   Typography,
   Dialog,
@@ -9,11 +11,11 @@ import {
   Box,
   InputBase,
   Button,
+  FormControl,
 } from "@mui/material";
 import { styled } from "@mui/styles";
 import { withStyles } from "@mui/styles";
 import CloseIcon from "@mui/icons-material/Close";
-
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
@@ -57,6 +59,9 @@ const TextInput = styled(InputBase)({
     padding: "12px 20px",
     marginTop: "10px",
     textAlign: "center",
+    "&:focus": {
+      backgroundColor: "#D9D9D9",
+    },
     "&::-webkit-outer-spin-button": {
       WebkitAppearance: "none",
       margin: 0,
@@ -74,6 +79,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
     email: "",
     password: "",
   });
+  const [passwordHideshow, setPasswordState] = useState(false);
   const [loading, setLoading] = useState(false);
   //input filed change handler;
   const changeHandler = (e) => {
@@ -101,6 +107,10 @@ function Signup({ open, setOpensign, setOpenlogin }) {
   const handleClose = () => {
     setOpensign(false);
   };
+
+  const passwordHideshowfunc = () => {
+    setPasswordState(!passwordHideshow);
+  };
   return (
     <>
       <Loading loading={loading} />
@@ -116,6 +126,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
           <Box sx={{ float: "right", p: 1, cursor: "pointer" }}>
             <CloseIcon sx={{ color: "text.main" }} onClick={handleClose} />
           </Box>
+
           <Box
             sx={{
               width: "100%",
@@ -124,112 +135,151 @@ function Signup({ open, setOpensign, setOpenlogin }) {
               align: "center",
             }}
           >
-            <Box sx={{ width: "100%" }}>
-              <Typography
-                sx={{
-                  textAlign: "center",
-                  fontSize: "20px",
-                  paddingBottom: "20px",
-                  color: "text.main",
-                  fontWeight: 700,
-                }}
-              >
-                Sign up
-              </Typography>
-              <Box
-                sx={{
-                  width: "100%",
-                  padding: "30px 25px",
-                  backgroundColor: "formscheme.main",
-                }}
-              >
-                <TextInput
-                  autoComplete="off"
-                  fullWidth
-                  value={userstate.name || ""}
-                  type="text"
-                  name="name"
-                  placeholder="Username"
-                  onChange={changeHandler}
-                  required
-                />
-
-                <TextInput
-                  fullWidth
-                  autoComplete="off"
-                  value={userstate.email || ""}
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  onChange={changeHandler}
-                  required
-                />
-
-                <TextInput
-                  fullWidth
-                  autoComplete="off"
-                  value={userstate.password || ""}
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  onChange={changeHandler}
-                  required
-                />
-
-                <Button
-                  onClick={submitHandler}
-                  type="submit"
+            <FormControl onSubmit={submitHandler} onkeyPress={submitHandler}>
+              <Box sx={{ width: "100%" }}>
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                    fontSize: "20px",
+                    paddingBottom: "20px",
+                    color: "text.main",
+                    fontWeight: 700,
+                  }}
+                >
+                  Sign up
+                </Typography>
+                <Box
                   sx={{
                     width: "100%",
-                    my: 1,
-                    py: 1.5,
-                    color: "text.main",
-                    backgroundColor: "secondary.main",
-                    "&:hover": {
-                      backgroundColor: "secondary.main",
-                    },
-                  }}
-                  value="submit"
-                >
-                  Submit
-                </Button>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  textAlign: "center",
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  component="span"
-                  sx={{
-                    padding: "20px",
-                    color: "text.light",
+                    padding: "30px 25px",
+                    backgroundColor: "formscheme.main",
                   }}
                 >
-                  Already have an account?
-                </Typography>
-                <NavLink to="/" style={{ textDecoration: "none" }}>
-                  <Typography
-                    onClick={() => {
-                      setOpenlogin(true);
-                      setOpensign(false);
+                  <TextInput
+                    autoComplete="off"
+                    fullWidth
+                    value={userstate.name || ""}
+                    type="text"
+                    name="name"
+                    placeholder="Username"
+                    onChange={changeHandler}
+                    required
+                  />
+
+                  <TextInput
+                    fullWidth
+                    autoComplete="off"
+                    value={userstate.email || ""}
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    onChange={changeHandler}
+                    required
+                  />
+
+                  <Box
+                    sx={{
+                      backgroundColor: "#D9D9D9",
+                      my: 0.5,
+                      height: "60px",
+                      borderRadius: "5px",
+                      mt: 1,
                     }}
+                  >
+                    <TextInput
+                      fullWidth
+                      type={passwordHideshow ? "text" : "password"}
+                      value={userstate.password || ""}
+                      onChange={changeHandler}
+                      placeholder="Password"
+                      name="password"
+                      autoComplete="off"
+                      autoFocus
+                      endAdornment={
+                        passwordHideshow ? (
+                          <Visibility
+                            sx={{
+                              cursor: "pointer",
+                              width: "30px",
+                              height: "30px",
+                              m: 1,
+                            }}
+                            onClick={passwordHideshowfunc}
+                          />
+                        ) : (
+                          <VisibilityOff
+                            sx={{
+                              cursor: "pointer",
+                              width: "30px",
+                              height: "30px",
+                              m: 1,
+                            }}
+                            onClick={passwordHideshowfunc}
+                          />
+                        )
+                      }
+                      required
+                    />
+                  </Box>
+
+                  <Button
+                    onClick={submitHandler}
+                    onKeyDown={(e) => {
+                      e.key == "Enter" && submitHandler();
+                    }}
+                    type="submit"
+                    sx={{
+                      width: "100%",
+                      my: 1,
+                      py: 1.5,
+                      color: "text.main",
+                      backgroundColor: "secondary.main",
+                      "&:hover": {
+                        backgroundColor: "secondary.main",
+                      },
+                    }}
+                    value="submit"
+                  >
+                    Submit
+                  </Button>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography
                     variant="body1"
                     component="span"
-                    fontWeight="700"
-                    color="text.main"
-                    borderBottom="1px solid #D9D9D9"
-                    sx={{ cursor: "pointer" }}
+                    sx={{
+                      padding: "20px",
+                      color: "text.light",
+                    }}
                   >
-                    Log In
+                    Already have an account?
                   </Typography>
-                </NavLink>
+                  <NavLink to="/" style={{ textDecoration: "none" }}>
+                    <Typography
+                      onClick={() => {
+                        setOpenlogin(true);
+                        setOpensign(false);
+                      }}
+                      variant="body1"
+                      component="span"
+                      fontWeight="700"
+                      color="text.main"
+                      borderBottom="1px solid #D9D9D9"
+                      sx={{ cursor: "pointer" }}
+                    >
+                      Log In
+                    </Typography>
+                  </NavLink>
+                </Box>
               </Box>
-            </Box>
+            </FormControl>
           </Box>
         </DialogContent>
       </StyledModal>

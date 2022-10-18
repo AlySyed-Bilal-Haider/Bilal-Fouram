@@ -210,13 +210,15 @@ export const searchHandle = async (req, res, next) => {
     const key = req.params.key;
     console.log(key, "key");
     console.log("key", key);
-    const result = await userModal.find({
-      $or: [
-        {
-          name: { $regex: key },
-        },
-      ],
-    }).select("-password");
+    const result = await userModal
+      .find({
+        $or: [
+          {
+            name: { $regex: key },
+          },
+        ],
+      })
+      .select("-password");
     res.send(result);
   } catch (error) {
     console.log("search error", error);
@@ -231,13 +233,15 @@ export const searchHandleAll = async (req, res, next) => {
   try {
     const key = req.params.key;
     console.log("key", key);
-    const user = await userModal.find({
-      $or: [
-        {
-          name: { $regex: key },
-        },
-      ],
-    }).select("-password");
+    const user = await userModal
+      .find({
+        $or: [
+          {
+            name: { $regex: key },
+          },
+        ],
+      })
+      .select("-password");
     const discussion = await postModal.find({
       $or: [
         {
@@ -256,8 +260,8 @@ export const searchHandleAll = async (req, res, next) => {
       status: "success",
       users: user,
       discussions: discussion,
-      comments: comment
-    })
+      comments: comment,
+    });
   } catch (error) {
     console.log("search error", error);
     res.status(404).json({

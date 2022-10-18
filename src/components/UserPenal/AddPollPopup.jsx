@@ -226,6 +226,9 @@ function PopUp({ open, setOpen, pollHandle }) {
 
           <Button
             onClick={addPollHandler}
+            onKeyPress={(e) => {
+              e.key === "Enter" || (e.key === "enter" && e.preventDefault());
+            }}
             type="submit"
             disableRipple={true}
             sx={{

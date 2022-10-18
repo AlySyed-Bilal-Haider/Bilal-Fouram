@@ -46,6 +46,10 @@ const Autocompletege = styled(Autocomplete)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
   },
 }));
+const typostyle = {
+  fontSize: "14px",
+  color: "red",
+};
 export default function Header({ setOpensign, setOpenlogin, name, role }) {
   // const { account, connect, disconnect, signer } = useContext(AppContext);
   // const tokenContract = useTokenContract(signer);
