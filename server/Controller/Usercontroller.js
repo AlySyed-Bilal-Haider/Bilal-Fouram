@@ -66,13 +66,15 @@ export const signupHandler = async (req, res) => {
 // ........Login routes start...jsonwebtoken.....
 
 export const login = async (req, res) => {
-  console.log(req.body);
+
   try {
-    const user = await userModal.findOne({ email: req.body.email });
+    console.log(req.body);
+    const { email, password } = req.body;
+    const user = await userModal.findOne({ email: email });
     console.log("user", user);
     if (user) {
       var decoded = jwt_decode(user.password);
-      if (decoded.password === req.body.password) {
+      if (decoded.password === password) {
         let userToken = { id: user._id };
         let sign = await jwt.sign(userToken, config.secret, {
           expiresIn: "6d",
@@ -102,64 +104,19 @@ export const login = async (req, res) => {
           user: false,
         });
       }
+    } else {
+      res.setHeader("Content-Type", "application/json");
+      res.status(404).json({
+        status: "error",
+        message: "SignUp First..!",
+        user: false,
+      });
     }
   } catch (e) {
     console.log(e);
   }
 };
 
-// try {
-
-// await userModal.findOne({ email: req.body.email }, function (err, docs) {
-//   if (docs) {
-//     var decoded = jwt_decode(docs._doc.password);
-//     if (decoded.password === req.body.password) {
-//       let userToken = { id: docs._doc._id };
-//       jwt.sign(
-//         userToken,
-//         config.secret,
-//         {
-//           expiresIn: "6d",
-//         },
-//         (err, token) => {
-//           res.json({
-//             status: "ok",
-//             message: "User login Successfully!",
-//             user: token,
-//             name: docs._doc.name,
-//             email: docs._doc.email,
-//             role: docs._doc.role,
-//           });
-//         }
-//       );
-//     } else {
-//       res.setHeader("Content-Type", "application/json");
-//       res.json({
-//         status: "error",
-//         message: "Please try again! Password  not match",
-//         user: false,
-//       });
-//     }
-//   } else {
-//     res.setHeader("Content-Type", "application/json");
-//     res.status(404).json({
-//       status: "error",
-//       message: "SignUp First..!",
-//       user: false,
-//     });
-//   }
-// });
-
-//  catch (error) {
-//   console.log(error);
-//   res.setHeader("Content-Type", "application/json");
-//   res.status(404).json({
-//     status: "error",
-//     message: "Please wait server error!",
-//     user: false,
-//   });
-// }
-// };
 
 // .........verify token here start here...........
 
