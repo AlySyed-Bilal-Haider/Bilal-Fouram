@@ -5,12 +5,15 @@ import userModal from "../Schema/UserSchema.js";
 export const commentHandler = async (req, res, next) => {
   try {
     console.log("comment !", req.body);
-    const { post_id, mention, user } = req.body;
+    const { post_id, mention, username } = req.body;
     const newComment = new commentModal(req.body);
     await newComment.save();
+    const user = await userModal.find({ name: username });
+
+    await commentModal.findByIdAndUpdate(newComment._id, { user: user[0]._id })
     const commentref = { ref_id: post_id };
 
-    await userModal.findByIdAndUpdate(user, {
+    await userModal.findByIdAndUpdate(user[0]._id, {
       $push: { comment: commentref },
     });
 
@@ -33,20 +36,25 @@ export const commentHandler = async (req, res, next) => {
       id: newComment._id,
     });
   } catch (error) {
-    next(error);
+    res.json({
+      error: error,
+      success: false,
+      message: "Error Occurs!",
+    });
   }
 };
 export const replyHandler = async (req, res, next) => {
   try {
     console.log("reply body:", req.body);
-    const { comment_id, mention, user, post_id } = req.body;
+    const { comment_id, mention, username, post_id } = req.body;
 
     const newComment = new commentModal(req.body);
     await newComment.save();
-
+    const user = await userModal.find({ name: username });
+    await commentModal.findByIdAndUpdate(newComment._id, { user: user[0]._id })
     const commentref = { ref_id: post_id };
 
-    await userModal.findByIdAndUpdate(user, {
+    await userModal.findByIdAndUpdate(user[0]._id, {
       $push: { comment: commentref },
     });
 
@@ -67,7 +75,11 @@ export const replyHandler = async (req, res, next) => {
       id: newComment._id,
     });
   } catch (error) {
-    next(error);
+    res.json({
+      error: error,
+      success: false,
+      message: "Error Occurs!",
+    });
   }
 };
 
