@@ -81,40 +81,7 @@ function Commonpage(props) {
   return (
     <Grid item md={10} xs={12}>
       <Loading loading={loading} />
-      {/* <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Button
-          disableRipple={true}
-          sx={{
-            width: "36px",
-            height: "36px",
-            backgroundColor: "tranparent",
-            borderRadius: "4px",
-            "&:hover": {
-              backgroundColor: "secondary.light",
-              color: "text.main",
-            },
-          }}
-        >
-          Latest
-        </Button>
-        <Button
-          sx={{
-            width: "36px",
-            height: "36px",
-            backgroundColor: "secondary.main",
-            color: "text.main",
-            border: "4px",
-          }}
-        >
-          <AutorenewIcon />
-        </Button>
-      </Box> */}
+
       {/* 
       .........start main sections here ............. */}
       {props.title && categorystate.length === 0 ? (
@@ -215,10 +182,9 @@ function Commonpage(props) {
                         <Typography
                           sx={{ color: "text.paragraph", fontSize: "11px" }}
                         >
-                          alldetailsstate
                           <strong style={{ marginRight: "5px" }}>
                             {alldetailsstate[i]?.user?.name
-                              ? [i]?.user?.name
+                              ? alldetailsstate[i]?.user?.name
                               : "Admin"}
                           </strong>
                           {items?.addedAt

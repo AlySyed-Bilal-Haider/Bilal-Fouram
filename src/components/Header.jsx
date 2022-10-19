@@ -203,7 +203,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                     />
 
                     <Autocompletege
-                      autoComplete="off"
+                      autocomplete="false"
                       id="grouped-demo"
                       disablePortal={true}
                       sx={{
@@ -258,6 +258,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       )}
                       renderInput={(params) => (
                         <TextField
+                          autocomplete="false"
                           value=""
                           autoComplete="off"
                           autoFocus={false}

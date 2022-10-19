@@ -55,7 +55,6 @@ export default function Vote({ id }) {
                 <>
                   {ref_id?.poll?.answers?.vote?.includes(user_id) ? (
                     <>
-                      count++;
                       <Box
                         onClick={() => {
                           naviagteHandler(ref_id?._id);

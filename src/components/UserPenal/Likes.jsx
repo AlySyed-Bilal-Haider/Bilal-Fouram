@@ -16,6 +16,7 @@ export default function Like({ id }) {
         setLoading(true);
         const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
         setlikestate(data);
+        console.log("like", data);
         setLoading(false);
       } catch (error) {
         console.log("Likes error", error);
@@ -25,13 +26,6 @@ export default function Like({ id }) {
     id && fetchlikepost();
   }, [id]);
 
-  // start paginations code
-  const [postsPerPage, setPostsPerPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
-  const handleChangepage = (event, value) => {
-    setCurrentPage(value);
-  };
-  const pageCount = Math.ceil(likestate?.length / postsPerPage);
   return (
     <>
       <Loading loading={loading} />
@@ -47,7 +41,6 @@ export default function Like({ id }) {
                           items?.ref_id?.status == "Approved" &&
                           items?.ref_id?.like?.includes(user_id) && (
                             <>
-                              count++
                               <Box
                                 mt={i === 0 ? 0 : 2}
                                 key={i}
@@ -150,26 +143,6 @@ export default function Like({ id }) {
               );
             })
           : ""}
-
-        {count > 0 ? (
-          <Box my="15px" mx="10" px>
-            <Stack
-              direction={"row"}
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              <Pagination
-                count={pageCount}
-                page={currentPage}
-                onChange={handleChangepage}
-              />
-            </Stack>
-          </Box>
-        ) : (
-          <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
-            It looks vote there are no posts here.
-          </Box>
-        )}
       </Box>
     </>
   );

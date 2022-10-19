@@ -73,7 +73,7 @@ function Post({ username, id }) {
     if (id) {
       fetchPost();
     }
-  }, [id, editPopOpen, updatepost]);
+  }, [id, editPopOpen, updatepost, openstate]);
 
   const fetchPost = async () => {
     try {

@@ -491,7 +491,7 @@ export default function Detail({ userId, username }) {
                               borderBottom="1px solid #fff"
                             >
                               <Stack direction="row" alignItems="center">
-                                <Box>
+                                <Box style={{ marginTop: "3px" }}>
                                   {user?.img ? (
                                     <img
                                       style={{

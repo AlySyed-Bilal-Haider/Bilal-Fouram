@@ -27,13 +27,7 @@ export default function Mention({ id }) {
   }, [id]);
 
   // start paginations code
-  const [postsPerPage, setPostsPerPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
-  const handleChangepage = (event, value) => {
-    setCurrentPage(value);
-  };
-  const pageCount = Math.ceil(mentionState?.length / postsPerPage);
-  console.log("count:", count);
+
   return (
     <>
       <Loading loading={loading} />
@@ -49,7 +43,6 @@ export default function Mention({ id }) {
                       items?.ref_id?.status == "Approved" &&
                       items?.ref_id?.mention?.includes(user_id) ? (
                         <>
-                          count++;
                           <Box
                             mt={i === 0 ? 0 : 2}
                             key={i}
@@ -143,25 +136,6 @@ export default function Mention({ id }) {
               </>
             );
           })}
-        {count > 0 ? (
-          <Box my="15px" mx="10" px>
-            <Stack
-              direction={"row"}
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              <Pagination
-                count={pageCount}
-                page={currentPage}
-                onChange={handleChangepage}
-              />
-            </Stack>
-          </Box>
-        ) : (
-          <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
-            It looks Mentions there are no posts here.
-          </Box>
-        )}
       </Box>
     </>
   );

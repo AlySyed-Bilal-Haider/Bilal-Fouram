@@ -168,7 +168,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
                   }}
                 >
                   <TextInput
-                    autoComplete="off"
+                    autocomplete="false"
                     fullWidth
                     value={userstate.name || ""}
                     type="text"
@@ -180,7 +180,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
 
                   <TextInput
                     fullWidth
-                    autoComplete="off"
+                    autocomplete="false"
                     value={userstate.email || ""}
                     type="email"
                     name="email"

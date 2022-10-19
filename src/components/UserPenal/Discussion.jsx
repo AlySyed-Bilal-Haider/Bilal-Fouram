@@ -6,7 +6,6 @@ import { url } from "../../utils";
 import moment from "moment";
 import Loading from "../../loading";
 function Discussion({ id }) {
-  let count = 0;
   const [descussionstate, setDescussionState] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -15,6 +14,7 @@ function Discussion({ id }) {
         setLoading(true);
         const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
         setDescussionState(data);
+        console.log(data, "all descusssion");
         setLoading(false);
       } catch (error) {
         console.log("Discussions error:", error);
@@ -23,14 +23,7 @@ function Discussion({ id }) {
     };
     fetchPost();
   }, []);
-  // start discussion here
-  const [postsPerPage, setPostsPerPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
-  const handleChangepage = (event, value) => {
-    setCurrentPage(value);
-  };
-  const pageCount = Math.ceil(descussionstate?.length / postsPerPage);
-  // console.log("descussionstate:", descussionstate);
+
   return (
     <>
       <Loading loading={loading} />
@@ -45,7 +38,6 @@ function Discussion({ id }) {
                       {items?.ref_id?.visibility == true &&
                         items?.ref_id?.status == "Approved" && (
                           <>
-                            count++
                             <Box
                               mt={i === 0 ? 0 : 2}
                               key={i}
@@ -139,26 +131,6 @@ function Discussion({ id }) {
               </>
             );
           })}
-
-        {count > 0 ? (
-          <Box my="15px" mx="10" px>
-            <Stack
-              direction={"row"}
-              alignItems="center"
-              justifyContent="flex-end"
-            >
-              <Pagination
-                count={pageCount}
-                page={currentPage}
-                onChange={handleChangepage}
-              />
-            </Stack>
-          </Box>
-        ) : (
-          <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
-            It looks vote there are no posts here.
-          </Box>
-        )}
       </Box>
     </>
   );

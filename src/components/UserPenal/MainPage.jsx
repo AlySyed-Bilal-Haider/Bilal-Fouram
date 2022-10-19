@@ -92,6 +92,7 @@ export default function MainPage() {
     let file = event.target.files[0];
     setUserfile(file);
     const urlFILE = URL.createObjectURL(file);
+    setBaseURLstate(urlFILE);
   };
   const handlerSubmit = async (e) => {
     e.preventDefault();
@@ -101,6 +102,7 @@ export default function MainPage() {
         formData.append("id", params?.id);
         const response = await axios.post(`${url}/uploadimg`, formData);
         if (user_id && response) {
+          setBaseURLstate("");
           userProfileHandler();
           fetchallrecord();
         }
@@ -148,17 +150,31 @@ export default function MainPage() {
                     <form onSubmit={handlerSubmit}>
                       <div className="image-show">
                         <label for="file-input">
-                          <img
-                            src={`${url}/upload/${userProfilestate?.img}`}
-                            alt="avtar"
-                            style={{
-                              width: "150px",
-                              height: "150px",
-                              borderRadius: "50%",
-                              cursor: "pointer",
-                            }}
-                            loading="lazy"
-                          />
+                          {baseURL ? (
+                            <img
+                              src={baseURL}
+                              alt="avtar"
+                              style={{
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                              loading="lazy"
+                            />
+                          ) : (
+                            <img
+                              src={`${url}/upload/${userProfilestate?.img}`}
+                              alt="avtar"
+                              style={{
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                              loading="lazy"
+                            />
+                          )}
                         </label>
 
                         {user_id == id ? (
@@ -198,11 +214,24 @@ export default function MainPage() {
                     <form onSubmit={handlerSubmit}>
                       <div className="image-upload">
                         <label for="file-input">
-                          <img
-                            src={avtar}
-                            alt=""
-                            style={{ width: "100%", cursor: "pointer" }}
-                          />
+                          {baseURL ? (
+                            <img
+                              src={baseURL}
+                              alt=""
+                              style={{
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={avtar}
+                              alt=""
+                              style={{ width: "100%", cursor: "pointer" }}
+                            />
+                          )}
                         </label>
 
                         {user_id == id ? (
