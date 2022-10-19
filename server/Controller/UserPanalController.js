@@ -245,10 +245,19 @@ export const FetchPosts = async (req, res) => {
       .concat(data[0].comment)
       .concat(data[0].mention);
     console.log(combined.length);
+    const discussionLength = data[0].discussion.length;
+    const likedLength = data[0].like.length;
+    const pollLength = data[0].poll.length;
+    const mentionLength = data[0].mention.length;
+    const commentLength = data[0].comment.length;
 
     res.json({
       status: true,
-      length: combined.length,
+      discussion: discussionLength,
+      like: likedLength,
+      poll: pollLength,
+      mention: mentionLength,
+      comment: commentLength,
       data: combined,
     });
   } catch (error) {

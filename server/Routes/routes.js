@@ -52,7 +52,7 @@ router.get("/rejectpost/:id", Admin.VerifyAdmin, Admin.RejectPost);
 
 //user panal routes
 
-router.post("/fetchuserposts/:id", UserPanal.FetchDatafrom);
+router.post("/fetchuserposts/:id", UserPanal.FetchPosts);
 router.get("/fetchuserdiscussion/:id", UserPanal.FetchDiscussion);
 router.get("/fetchlikedposts/:id", UserPanal.FetchLiked);
 router.get("/fetchvotedpolls/:id", UserPanal.FetchPollPosts);
