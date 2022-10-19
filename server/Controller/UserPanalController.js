@@ -312,10 +312,19 @@ export const FetchDatafrom = async (req, res) => {
           },
         ],
       });
+    const length = data[0].discussion.length;
+    console.log(length);
 
-    return res.json(data);
-  } catch (e) {
-    return res.json(e);
+    res.json({
+      status: true,
+      length: length,
+      data: data,
+    });
+  } catch (error) {
+    res.json({
+      status: false,
+      error: error,
+    });
   }
 };
 
