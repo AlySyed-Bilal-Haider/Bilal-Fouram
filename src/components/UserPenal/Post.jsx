@@ -78,7 +78,7 @@ function Post({ username, id }) {
   const fetchPost = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
+      const data = await axios.post(`${url}/fetchuserposts/${id}`);
       data && setPoststate(data);
       console.log("Post value", data);
       setLoading(false);
