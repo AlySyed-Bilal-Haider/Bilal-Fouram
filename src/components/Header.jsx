@@ -51,17 +51,16 @@ const typostyle = {
   color: "red",
 };
 export default function Header({ setOpensign, setOpenlogin, name, role }) {
-  // const { account, connect, disconnect, signer } = useContext(AppContext);
-  // const tokenContract = useTokenContract(signer);
   const navigate = useNavigate();
   const [filterState, setFilterstate] = useState([]);
   const searchHandle = async (e, value) => {
     const key = e.target.value || "";
     try {
       if (key || value?.name) {
-        const searchvalue = key || value?.name;
+        const searchvalue = key.toLowerCase() || value?.name.toLowerCase();
         console.log("searchvalue:", searchvalue);
         const { data } = await axios.get(`${url}/search/${searchvalue}`);
+        console.log("data search key !", data);
         setFilterstate(data);
       }
     } catch (error) {
@@ -240,7 +239,6 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       renderOption={(props, option) => (
                         <Box
                           sx={{
-                            color: "text.primary",
                             fontSize: "10px",
                             py: 1,
                             borderBottom: "1px solid #32241A",
@@ -281,6 +279,10 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                           inputProps={{
                             ...params.inputProps,
                             autoComplete: "none",
+                            "&::placeholder": {
+                              fontStyle: "italic",
+                              color: "white",
+                            },
                           }}
                           placeholder="Search...."
                         />

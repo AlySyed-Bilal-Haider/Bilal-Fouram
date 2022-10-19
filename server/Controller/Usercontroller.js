@@ -66,7 +66,6 @@ export const signupHandler = async (req, res) => {
 // ........Login routes start...jsonwebtoken.....
 
 export const login = async (req, res) => {
-
   try {
     console.log(req.body);
     const { email, password } = req.body;
@@ -117,7 +116,6 @@ export const login = async (req, res) => {
   }
 };
 
-
 // .........verify token here start here...........
 
 export const tokenVerifyHandler = async (req, res) => {
@@ -165,7 +163,6 @@ export const fetchuser = async (req, res) => {
 export const searchHandle = async (req, res, next) => {
   try {
     const key = req.params.key;
-    console.log(key, "key");
     console.log("key", key);
     const result = await userModal
       .find({
@@ -176,6 +173,7 @@ export const searchHandle = async (req, res, next) => {
         ],
       })
       .select("-password");
+    console.log("result:", result);
     res.send(result);
   } catch (error) {
     console.log("search error", error);

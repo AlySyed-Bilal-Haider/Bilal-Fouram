@@ -161,13 +161,17 @@ export default function MainPage() {
                           />
                         </label>
 
-                        <input
-                          id="file-input"
-                          type="file"
-                          name="file"
-                          accept="image/*"
-                          onChange={handleFile}
-                        />
+                        {user_id == id ? (
+                          <input
+                            id="file-input"
+                            type="file"
+                            name="file"
+                            accept="image/*"
+                            onChange={handleFile}
+                          />
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <Box py={1} textAlign="center">
                         {user_id == id ? (
@@ -201,13 +205,17 @@ export default function MainPage() {
                           />
                         </label>
 
-                        <input
-                          id="file-input"
-                          type="file"
-                          name="file"
-                          accept="image/*"
-                          onChange={handleFile}
-                        />
+                        {user_id == id ? (
+                          <input
+                            id="file-input"
+                            type="file"
+                            name="file"
+                            accept="image/*"
+                            onChange={handleFile}
+                          />
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <Box py={1} textAlign="center">
                         <Button

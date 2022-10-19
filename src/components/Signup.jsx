@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import Loading from "../loading";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
 import {
   Typography,
   Dialog,
@@ -185,50 +186,35 @@ function Signup({ open, setOpensign, setOpenlogin }) {
                     required
                   />
 
-                  <Box
-                    sx={{
-                      backgroundColor: "#D9D9D9",
-                      my: 0.5,
-                      height: "60px",
-                      borderRadius: "5px",
-                      mt: 1,
-                    }}
-                  >
-                    <TextInput
-                      fullWidth
-                      type={passwordHideshow ? "text" : "password"}
-                      value={userstate.password || ""}
-                      onChange={changeHandler}
-                      placeholder="Password"
-                      name="password"
-                      autoComplete="off"
-                      autoFocus
-                      endAdornment={
-                        passwordHideshow ? (
-                          <Visibility
-                            sx={{
-                              cursor: "pointer",
-                              width: "30px",
-                              height: "30px",
-                              m: 1,
-                            }}
-                            onClick={passwordHideshowfunc}
-                          />
-                        ) : (
-                          <VisibilityOff
-                            sx={{
-                              cursor: "pointer",
-                              width: "30px",
-                              height: "30px",
-                              m: 1,
-                            }}
-                            onClick={passwordHideshowfunc}
-                          />
-                        )
-                      }
-                      required
-                    />
-                  </Box>
+                  <TextInput
+                    fullWidth
+                    type={passwordHideshow ? "text" : "password"}
+                    value={userstate.password || ""}
+                    onChange={changeHandler}
+                    placeholder="Password"
+                    name="password"
+                    autoComplete="off"
+                    autoFocus
+                    endAdornment={
+                      <IconButton
+                        style={{
+                          backgroundColor: "#D9D9D9",
+                          height: "50px",
+                          marginTop: "10px",
+                          borderTopRightRadius: "5px",
+                          borderTopLeftRadius: "5px",
+                          borderBottomRightRadius: "5px",
+                          borderBottomLeftRadius: "0px",
+                          pl: 2,
+                          marginLeft: "-7px",
+                        }}
+                        onClick={passwordHideshowfunc}
+                      >
+                        {passwordHideshow ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    }
+                    required
+                  />
 
                   <Button
                     onClick={submitHandler}

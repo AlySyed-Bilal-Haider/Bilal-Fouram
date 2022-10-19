@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import "react-toastify/dist/ReactToastify.css";
@@ -181,57 +180,35 @@ function Login({ open, setOpenlogin, setOpensign }) {
                   autoComplete="off"
                   autoFocus
                 />
-                <Box
-                  sx={{
-                    backgroundColor: "#D9D9D9",
-                    my: 0.5,
-                    height: "60px",
-                    borderRadius: "5px",
-                    mt: 1,
-                  }}
-                >
-                  <TextInput
-                    fullWidth
-                    type={passwordHideshow ? "text" : "password"}
-                    value={userstate.password || ""}
-                    onChange={changeHandler}
-                    placeholder="Password"
-                    name="password"
-                    autoComplete="off"
-                    autoFocus
-                    endAdornment={
-                      <IconButton
-                        style={{
-                          borderTopRightRadius: "5px",
-                          borderTopLeftRadius: "0px",
-                          borderBottomRightRadius: "5px",
-                          borderBottomLeftRadius: "0px",
-                        }}
-                        onClick={passwordHideshowfunc}
-                      >
-                        passwordHideshow ? (
-                        <Visibility
-                          sx={{
-                            cursor: "pointer",
-                            width: "30px",
-                            height: "30px",
-                            m: 1,
-                          }}
-                        />
-                        ) : (
-                        <VisibilityOff
-                          sx={{
-                            cursor: "pointer",
-                            width: "30px",
-                            height: "30px",
-                            m: 1,
-                          }}
-                        />
-                        )
-                      </IconButton>
-                    }
-                  />
-                </Box>
+
+                <TextInput
+                  fullWidth
+                  type={passwordHideshow ? "text" : "password"}
+                  value={userstate.password || ""}
+                  onChange={changeHandler}
+                  placeholder="Password"
+                  name="password"
+                  autoComplete="off"
+                  endAdornment={
+                    <IconButton
+                      style={{
+                        backgroundColor: "#D9D9D9",
+                        height: "50px",
+                        marginTop: "10px",
+                        borderTopRightRadius: "5px",
+                        borderTopLeftRadius: "5px",
+                        borderBottomRightRadius: "5px",
+                        borderBottomLeftRadius: "0px",
+                        pl: 2,
+                        marginLeft: "-7px",
+                      }}
+                      onClick={passwordHideshowfunc}
+                    >
+                      {passwordHideshow ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  }
+                />
+                {/* </Box> */}
                 <Button
                   onClick={loginHandler}
                   type="submit"
