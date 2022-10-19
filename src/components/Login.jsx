@@ -85,6 +85,11 @@ function Login({ open, setOpenlogin, setOpensign }) {
   };
 
   const handleClose = () => {
+    setUserstate({
+      name: "",
+      email: "",
+      password: "",
+    });
     setOpenlogin(false);
   };
 
@@ -92,10 +97,10 @@ function Login({ open, setOpenlogin, setOpensign }) {
   const loginHandler = async () => {
     console.log("userstate", userstate);
     try {
-      if (userstate.email != "" || userstate.password != "") {
+      if (userstate.email !== "" || userstate.password !== "") {
         setLoading(true);
         const { data } = await axios.post(`${url}/login`, userstate);
-        if (data.status == "ok") {
+        if (data.status === "ok") {
           toast.success(data.message);
           localStorage.setItem("token", data.user);
           localStorage.setItem("name", data.name);
@@ -103,6 +108,7 @@ function Login({ open, setOpenlogin, setOpensign }) {
           setTimeout(() => {
             window.location.href = "/";
           }, 500);
+
           handleClose();
         } else {
           toast.error(data.message);
@@ -115,11 +121,7 @@ function Login({ open, setOpenlogin, setOpensign }) {
       setLoading(false);
       toast.error(error.response?.data?.message);
     }
-    setUserstate({
-      name: "",
-      email: "",
-      password: "",
-    });
+
   };
   // const signupHandler = () => {
   //   // setOpensign(true);

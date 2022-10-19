@@ -94,13 +94,18 @@ function Signup({ open, setOpensign, setOpenlogin }) {
   const submitHandler = async () => {
     try {
       if (
-        userstate.name != "" ||
-        userstate.email != "" ||
-        userstate.password != ""
+        userstate.name !== "" ||
+        userstate.email !== "" ||
+        userstate.password !== ""
       ) {
         setLoading(true);
         const { data } = await axios.post(`${url}/usersignup`, userstate);
         toast.success(data.message);
+        setUserstate({
+          name: "",
+          email: "",
+          password: "",
+        });
       } else {
         toast.error("Please fill Signup form !");
       }
@@ -109,11 +114,6 @@ function Signup({ open, setOpensign, setOpenlogin }) {
       toast.error(error.message);
       setLoading(false);
     }
-    setUserstate({
-      name: "",
-      email: "",
-      password: "",
-    });
   };
 
   const handleClose = () => {
@@ -221,7 +221,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
                   <Button
                     onClick={submitHandler}
                     onKeyDown={(e) => {
-                      e.key == "Enter" && submitHandler();
+                      e.key === "Enter" && submitHandler();
                     }}
                     type="submit"
                     sx={{
