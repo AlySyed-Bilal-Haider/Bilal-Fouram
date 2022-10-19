@@ -71,6 +71,9 @@ const TextInput = styled(InputBase)({
       WebkitAppearance: "none",
       margin: 0,
     },
+    "input:-internal-autofill-selected": {
+      backgroundColor: "#D9D9D9 !important",
+    },
   },
 });
 
@@ -194,7 +197,6 @@ function Signup({ open, setOpensign, setOpenlogin }) {
                     placeholder="Password"
                     name="password"
                     autoComplete="off"
-                    autoFocus
                     endAdornment={
                       <IconButton
                         style={{

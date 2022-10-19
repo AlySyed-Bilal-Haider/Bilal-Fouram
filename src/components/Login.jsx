@@ -178,7 +178,6 @@ function Login({ open, setOpenlogin, setOpensign }) {
                   placeholder="Email"
                   name="email"
                   autoComplete="off"
-                  autoFocus
                 />
 
                 <TextInput

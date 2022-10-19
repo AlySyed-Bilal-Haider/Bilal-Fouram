@@ -50,7 +50,7 @@ export default function MainPage() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [alldata, setAlldatastate] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [baseURL, setBaseURLstate] = useState("");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -87,11 +87,11 @@ export default function MainPage() {
       console.log("Likes error", error);
     }
   };
-
   // image upload from server
   const handleFile = async (event) => {
     let file = event.target.files[0];
     setUserfile(file);
+    const urlFILE = URL.createObjectURL(file);
   };
   const handlerSubmit = async (e) => {
     e.preventDefault();
