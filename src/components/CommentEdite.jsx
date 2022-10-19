@@ -10,7 +10,6 @@ import {
   Slide,
   styled,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -63,7 +62,7 @@ function CommentEdite({ openCommentEdite, commentValue, setOpen, open }) {
       setLoading(true);
       const { data } = await axios.put(`${url}/editcomment`, newComment);
       console.log("data:", data);
-      data.status == "ok" && setOpen(false);
+      data.status === "ok" && setOpen(false);
       setLoading(false);
     } catch (error) {
       console.log("comment edite error !", error);
@@ -140,7 +139,7 @@ function CommentEdite({ openCommentEdite, commentValue, setOpen, open }) {
             },
           }}
         >
-          Edite Comment
+          Edit Comment
         </Button>
       </Dialog>
     </>
