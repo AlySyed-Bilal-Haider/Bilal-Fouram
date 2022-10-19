@@ -56,7 +56,7 @@ function StartDiscussionButton({ setOpenlogin }) {
   const [pollstate, setPollstate] = useState("");
   const [tagsvalue, setTagsvalue] = useState("");
   const [addpoststate, setPoststate] = useState({
-    tag: "wow",
+    tag: "",
     title: "",
     description:
       "Before you post this: 1. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines 2. If this proposal is going to the Proposal section, make sure you have read the Proposal  guidelines:  https://discord.com/invite/olympusdao ",
@@ -226,6 +226,7 @@ function StartDiscussionButton({ setOpenlogin }) {
                     width: { xs: "100%", md: "40%" },
                   }}
                   onChange={discussionHandler}
+                  required
                 />
               </Box>
             </Box>
@@ -252,6 +253,7 @@ function StartDiscussionButton({ setOpenlogin }) {
             fullWidth
             multiline
             rows={5}
+            required
           />
         </Box>
         <Divider />

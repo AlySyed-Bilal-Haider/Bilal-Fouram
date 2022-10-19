@@ -66,7 +66,6 @@ export const signupHandler = async (req, res) => {
 // ........Login routes start...jsonwebtoken.....
 
 export const login = async (req, res) => {
-
   try {
     console.log(req.body);
     const { email, password } = req.body;
@@ -117,7 +116,6 @@ export const login = async (req, res) => {
   }
 };
 
-
 // .........verify token here start here...........
 
 export const tokenVerifyHandler = async (req, res) => {
@@ -165,15 +163,17 @@ export const fetchuser = async (req, res) => {
 export const searchHandle = async (req, res, next) => {
   try {
     const key = req.params.key;
-    console.log(key, "key");
     console.log("key", key);
-    const result = await userModal.find({
-      $or: [
-        {
-          name: { $regex: key },
-        },
-      ],
-    }).select("-password");
+    const result = await userModal
+      .find({
+        $or: [
+          {
+            name: { $regex: key },
+          },
+        ],
+      })
+      .select("-password");
+    console.log("result:", result);
     res.send(result);
   } catch (error) {
     console.log("search error", error);
@@ -188,13 +188,15 @@ export const searchHandleAll = async (req, res, next) => {
   try {
     const key = req.params.key;
     console.log("key", key);
-    const user = await userModal.find({
-      $or: [
-        {
-          name: { $regex: key },
-        },
-      ],
-    }).select("-password");
+    const user = await userModal
+      .find({
+        $or: [
+          {
+            name: { $regex: key },
+          },
+        ],
+      })
+      .select("-password");
     const discussion = await postModal.find({
       $or: [
         {
@@ -213,8 +215,8 @@ export const searchHandleAll = async (req, res, next) => {
       status: "success",
       users: user,
       discussions: discussion,
-      comments: comment
-    })
+      comments: comment,
+    });
   } catch (error) {
     console.log("search error", error);
     res.status(404).json({

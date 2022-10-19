@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import IconButton from "@mui/material/IconButton";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import AccountMenu from "./MenuItem";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Loading from "../loading";
 import {
   Typography,
@@ -72,6 +74,7 @@ const TextInput = styled(InputBase)({
 function Login({ open, setOpenlogin, setOpensign }) {
   const [menuItem, setMenuitem] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [passwordHideshow, setPasswordState] = useState(false);
   const [userstate, setUserstate] = React.useState({
     email: "",
     password: "",
@@ -89,19 +92,23 @@ function Login({ open, setOpenlogin, setOpensign }) {
   const loginHandler = async () => {
     console.log("userstate", userstate);
     try {
-      setLoading(true);
-      const { data } = await axios.post(`${url}/login`, userstate);
-      if (data.status == "ok") {
-        toast.success(data.message);
-        localStorage.setItem("token", data.user);
-        localStorage.setItem("name", data.name);
-        localStorage.setItem("email", data.email);
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 0);
-        handleClose();
+      if (userstate.email != "" || userstate.password != "") {
+        setLoading(true);
+        const { data } = await axios.post(`${url}/login`, userstate);
+        if (data.status == "ok") {
+          toast.success(data.message);
+          localStorage.setItem("token", data.user);
+          localStorage.setItem("name", data.name);
+          localStorage.setItem("email", data.email);
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 500);
+          handleClose();
+        } else {
+          toast.error(data.message);
+        }
       } else {
-        toast.error(data.message);
+        toast.error("Please fill login form !");
       }
       setLoading(false);
     } catch (error) {
@@ -118,6 +125,9 @@ function Login({ open, setOpenlogin, setOpensign }) {
   //   // setOpensign(true);
   //   setloginstate(false);
   // };
+  const passwordHideshowfunc = () => {
+    setPasswordState(!passwordHideshow);
+  };
   return (
     <>
       <Loading loading={loading} />
@@ -168,20 +178,36 @@ function Login({ open, setOpenlogin, setOpensign }) {
                   placeholder="Email"
                   name="email"
                   autoComplete="off"
-                  autoFocus
                 />
 
                 <TextInput
                   fullWidth
-                  type="password"
+                  type={passwordHideshow ? "text" : "password"}
                   value={userstate.password || ""}
                   onChange={changeHandler}
                   placeholder="Password"
                   name="password"
                   autoComplete="off"
-                  autoFocus
+                  endAdornment={
+                    <IconButton
+                      style={{
+                        backgroundColor: "#D9D9D9",
+                        height: "50px",
+                        marginTop: "10px",
+                        borderTopRightRadius: "5px",
+                        borderTopLeftRadius: "5px",
+                        borderBottomRightRadius: "5px",
+                        borderBottomLeftRadius: "0px",
+                        pl: 2,
+                        marginLeft: "-7px",
+                      }}
+                      onClick={passwordHideshowfunc}
+                    >
+                      {passwordHideshow ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  }
                 />
-
+                {/* </Box> */}
                 <Button
                   onClick={loginHandler}
                   type="submit"

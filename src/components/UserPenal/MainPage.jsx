@@ -50,7 +50,7 @@ export default function MainPage() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [alldata, setAlldatastate] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [baseURL, setBaseURLstate] = useState("");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -87,11 +87,11 @@ export default function MainPage() {
       console.log("Likes error", error);
     }
   };
-
   // image upload from server
   const handleFile = async (event) => {
     let file = event.target.files[0];
     setUserfile(file);
+    const urlFILE = URL.createObjectURL(file);
   };
   const handlerSubmit = async (e) => {
     e.preventDefault();
@@ -112,18 +112,10 @@ export default function MainPage() {
       console.log("error upload", error);
     }
   };
-
   // fetch all records post
   useEffect(() => {
     id && fetchallrecord();
   }, [id]);
-  // date difference between twoo dates
-  const currentdate = new Date().toLocaleDateString();
-  const joindate = new Date(userProfilestate?.addedAt).toLocaleDateString();
-  const date1 = moment(joindate, "YYYY-MM-DD");
-  const date2 = moment(currentdate, "YYYY-MM-DD");
-  let diff = moment.preciseDiff(date2, date1, true);
-
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
@@ -169,13 +161,17 @@ export default function MainPage() {
                           />
                         </label>
 
-                        <input
-                          id="file-input"
-                          type="file"
-                          name="file"
-                          accept="image/*"
-                          onChange={handleFile}
-                        />
+                        {user_id == id ? (
+                          <input
+                            id="file-input"
+                            type="file"
+                            name="file"
+                            accept="image/*"
+                            onChange={handleFile}
+                          />
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <Box py={1} textAlign="center">
                         {user_id == id ? (
@@ -209,13 +205,17 @@ export default function MainPage() {
                           />
                         </label>
 
-                        <input
-                          id="file-input"
-                          type="file"
-                          name="file"
-                          accept="image/*"
-                          onChange={handleFile}
-                        />
+                        {user_id == id ? (
+                          <input
+                            id="file-input"
+                            type="file"
+                            name="file"
+                            accept="image/*"
+                            onChange={handleFile}
+                          />
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <Box py={1} textAlign="center">
                         <Button
@@ -277,9 +277,7 @@ export default function MainPage() {
                       fontFamily="Open Sans"
                     >
                       Joined Date{" "}
-                      {diff?.months > 0
-                        ? new Date().toLocaleDateString()
-                        : `${diff?.days} days ago`}
+                      {moment(userProfilestate?.addedAt).format("LL")}
                     </Box>
                   </Box>
                   <Box display="flex" alignItems="center">

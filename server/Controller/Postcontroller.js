@@ -194,7 +194,7 @@ export const fetchPostDetails = async (req, res) => {
           },
         ],
       });
-    console.log(data);
+
     if (data) {
       res.send(data);
     } else {

@@ -8,10 +8,9 @@ import {
   Typography,
   styled,
   Menu,
-  InputBase,
   MenuItem,
-  Button,
 } from "@mui/material";
+import CommentEdite from "./CommentEdite";
 import { FaRegComments, FaChalkboardTeacher, FaBook } from "react-icons/fa";
 import { RiGroupFill } from "react-icons/ri";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -70,18 +69,17 @@ export default function Detail({ userId, username }) {
   const [commentValue, setcommentValue] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openCommentEdite, setCommentsection] = useState("");
-  const [editecommentValue, setEditevalue] = useState("");
   const [checkedPoll, setCheckPollstate] = useState(false);
   const [postReplyId, setPostReplyID] = useState("");
+  const [editecommentValue, setEditevalue] = useState("");
+  const [editeCommentOpen, setOpenedite] = useState(false);
   const open = Boolean(anchorEl);
   const HandleChecked = (value) => {
     setCheckPollstate(value);
   };
-
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -103,7 +101,7 @@ export default function Detail({ userId, username }) {
   };
   useEffect(() => {
     fetchdetails();
-  }, [param?.id, renderPost, checkedPoll]);
+  }, [param?.id, renderPost, checkedPoll, editeCommentOpen]);
 
   const CheckloginHandler = (title) => {
     setPostDescription(title);
@@ -177,7 +175,6 @@ export default function Detail({ userId, username }) {
       setLoading(false);
     }
   };
-
   // .....reply Hanlder , open the reply modal Box......
   const replyHandle = (commentID, commentvalue, post_id) => {
     setCommentIDstate(commentID);
@@ -189,7 +186,6 @@ export default function Detail({ userId, username }) {
       setOpenlogin(true);
     }
   };
-
   //  ......... liked reply handle ...........
   const likeReplyHandle = async (comment_id) => {
     try {
@@ -255,22 +251,7 @@ export default function Detail({ userId, username }) {
     setEditevalue(value);
     setCommentsection(id);
     setAnchorEl(null);
-  };
-  const updateComment = async (comment_id) => {
-    try {
-      const newComment = { comment_id, comment: editecommentValue };
-      setLoading(true);
-      const { data } = await axios.put(`${url}/editcomment`, newComment);
-      data.status === "ok" && setRenderstate(!renderPost);
-      setLoading(false);
-    } catch (error) {
-      console.log("comment edite error !", error);
-      setLoading(false);
-    }
-  };
-
-  const commentEditeHandle = (e) => {
-    setEditevalue(e.target.value);
+    setOpenedite(true);
   };
 
   return (
@@ -292,6 +273,12 @@ export default function Detail({ userId, username }) {
         userid={userId}
         renderFetchpost={renderDetails}
         post_id={postReplyId}
+      />
+      <CommentEdite
+        openCommentEdite={openCommentEdite}
+        commentValue={editecommentValue}
+        setOpen={setOpenedite}
+        open={editeCommentOpen}
       />
       <Box bgcolor="primary.light">
         <Loading loading={loading} />
@@ -384,19 +371,19 @@ export default function Detail({ userId, username }) {
                         mr: 1,
                       }}
                     >
-                      {postdetails[index]?.user?.img ? (
+                      {postdetails[index]?.comments?.user?.img ? (
                         <img
                           style={{
                             width: "40px",
                             height: "40px",
                             borderRadius: "50%",
                           }}
-                          src={`${url}/upload/${postdetails[index]?.user?.img}`}
+                          src={`${url}/upload/${postdetails[index]?.comments?.user?.img}`}
                           alt="Good"
                         />
                       ) : (
                         <Avatar sx={{ width: 32, height: 32 }}>
-                          {postdetails[0]?.user?.name
+                          {postdetails[0]?.comments?.user?.name
                             ?.toUpperCase()
                             .slice(0, 1)}
                         </Avatar>
@@ -408,7 +395,7 @@ export default function Detail({ userId, username }) {
                       fontSize="18px"
                       fontWeight="800"
                     >
-                      {postdetails[index]?.user?.name}
+                      {postdetails[index]?.comments?.user?.name}
                     </Typography>
 
                     <Typography
@@ -492,10 +479,7 @@ export default function Detail({ userId, username }) {
 
                 {/* comment data and reply like */}
                 {commentData?.map(
-                  (
-                    { _id, addedAt, comment, visibility, username, userpic },
-                    index
-                  ) => {
+                  ({ _id, addedAt, comment, visibility, user }, index) => {
                     return (
                       <>
                         {visibility === true && (
@@ -508,14 +492,14 @@ export default function Detail({ userId, username }) {
                             >
                               <Stack direction="row" alignItems="center">
                                 <Box>
-                                  {userpic ? (
+                                  {user?.img ? (
                                     <img
                                       style={{
                                         width: "40px",
                                         height: "40px",
                                         borderRadius: "50%",
                                       }}
-                                      src={`${url}/upload/${userpic}`}
+                                      src={`${url}/upload/${user?.img}`}
                                       alt=""
                                     />
                                   ) : (
@@ -524,7 +508,7 @@ export default function Detail({ userId, username }) {
                                         bgcolor: "secondary.light",
                                       }}
                                     >
-                                      {username?.slice(0, 1)?.toUpperCase()}
+                                      {user?.name?.slice(0, 1)?.toUpperCase()}
                                     </Avatar>
                                   )}
                                 </Box>
@@ -534,7 +518,7 @@ export default function Detail({ userId, username }) {
                                   fontWeight="700"
                                   ml={1}
                                 >
-                                  {username}
+                                  {user?.name}
                                 </Typography>
                                 <Typography
                                   variant="body1"
@@ -604,36 +588,43 @@ export default function Detail({ userId, username }) {
                                     like
                                   </Typography>
                                 )}
-                                <Box>
-                                  <Typography
-                                    ml="30px"
-                                    variant="body1"
-                                    fontSize="14px"
-                                    mt="-2px"
-                                    color="primary.light"
-                                    sx={{ cursor: "pointer" }}
-                                    onClick={() => {
-                                      editecomment(comment, _id);
-                                    }}
-                                  >
-                                    <EditIcon />
-                                  </Typography>
-                                </Box>
-                                <Box>
-                                  <Typography
-                                    ml="30px"
-                                    variant="body1"
-                                    fontSize="14px"
-                                    mt="-2px"
-                                    color="primary.light"
-                                    sx={{ cursor: "pointer" }}
-                                    onClick={() => {
-                                      removeComment(_id);
-                                    }}
-                                  >
-                                    <DeleteIcon />
-                                  </Typography>
-                                </Box>
+                                {user_id == user?._id ? (
+                                  <>
+                                    <Box>
+                                      <Typography
+                                        ml="30px"
+                                        variant="body1"
+                                        fontSize="14px"
+                                        mt="-2px"
+                                        color="primary.light"
+                                        sx={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          editecomment(comment, _id);
+                                        }}
+                                      >
+                                        <EditIcon />
+                                      </Typography>
+                                    </Box>
+                                    <Box>
+                                      <Typography
+                                        ml="30px"
+                                        variant="body1"
+                                        fontSize="14px"
+                                        mt="-2px"
+                                        color="primary.light"
+                                        sx={{ cursor: "pointer" }}
+                                        onClick={() => {
+                                          removeComment(_id);
+                                        }}
+                                      >
+                                        <DeleteIcon />
+                                      </Typography>
+                                    </Box>
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+
                                 {/* start remove and update comment */}
                                 <Box
                                   sx={{ position: "relative", display: "none" }}
@@ -680,27 +671,96 @@ export default function Detail({ userId, username }) {
                               </Box>
                               {/* Replay start here display */}
 
-                              {commentData[index]?.reply
-                                ? commentData[index]?.reply?.map(
-                                    (replyitems, index) => {
-                                      return (
-                                        <>
-                                          <Typography
-                                            variant="subtitle2"
-                                            display={
-                                              index === 0 ? "block" : "none"
-                                            }
-                                            ml={8}
-                                            mb={-1}
-                                            color="#8055CD"
-                                          >
-                                            Replies
-                                          </Typography>
+                              {commentData[index]?.reply.length > 0 &&
+                                commentData[index]?.reply?.map(
+                                  (replyitems, index) => {
+                                    return (
+                                      <>
+                                        <Typography
+                                          variant="subtitle2"
+                                          display={
+                                            index === 0 ? "block" : "none"
+                                          }
+                                          ml={8}
+                                          mb={-1}
+                                          color="#8055CD"
+                                        >
+                                          Replies
+                                        </Typography>
+                                        <Box
+                                          pt={1.5}
+                                          pl={3}
+                                          my={1}
+                                          ml={5}
+                                          key={`${replyitems?._id}index`}
+                                          sx={{
+                                            background: "#DFDEF6",
+                                            borderRadius: "50px",
+                                            width: "80%",
+                                          }}
+                                        >
                                           <Box
-                                            pt={1.5}
-                                            pl={3}
-                                            my={1}
-                                            ml={5}
+                                            sx={{
+                                              display: "flex",
+                                              alignItems: "center",
+                                            }}
+                                          >
+                                            <Box
+                                              sx={{
+                                                width: "40px",
+                                                height: "40px",
+                                                borderRadius: "50%",
+                                                ml: 1,
+                                              }}
+                                            >
+                                              {replyitems?.userpic ? (
+                                                <img
+                                                  style={{
+                                                    width: "40px",
+                                                    height: "40px",
+                                                    borderRadius: "50%",
+                                                  }}
+                                                  src={`${url}/upload/${replyitems?.userpic}`}
+                                                  alt="Good"
+                                                />
+                                              ) : (
+                                                <Avatar
+                                                  sx={{
+                                                    width: 32,
+                                                    height: 32,
+                                                    mt: 0.5,
+                                                  }}
+                                                >
+                                                  {replyitems?.name
+                                                    ?.toUpperCase()
+                                                    .slice(0, 1)}
+                                                </Avatar>
+                                              )}
+                                            </Box>
+                                            {replyitems?.username && (
+                                              <Typography
+                                                variant="body1"
+                                                color="primary.main"
+                                                fontSize="15px"
+                                                fontWeight="600"
+                                                ml={1}
+                                              >
+                                                {replyitems?.username}
+                                              </Typography>
+                                            )}
+
+                                            <Typography
+                                              ml={1}
+                                              variant="body1"
+                                              color="primary.light"
+                                              fontSize="11px"
+                                            >
+                                              {moment(addedAt).format("LL")}
+                                            </Typography>
+                                          </Box>
+                                          <Box
+                                            py={1}
+                                            pl={7}
                                             key={`${replyitems?._id}index`}
                                             sx={{
                                               background: "#DFDEF6",
@@ -709,88 +769,18 @@ export default function Detail({ userId, username }) {
                                             }}
                                           >
                                             <Box
-                                              sx={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                              }}
+                                              pr={4}
+                                              fontSize="14px"
+                                              color="text.paragraph"
                                             >
-                                              <Box
-                                                sx={{
-                                                  width: "40px",
-                                                  height: "40px",
-                                                  borderRadius: "50%",
-                                                  ml: 1,
-                                                }}
-                                              >
-                                                {replyitems?.userpic ? (
-                                                  <img
-                                                    style={{
-                                                      width: "40px",
-                                                      height: "40px",
-                                                      borderRadius: "50%",
-                                                    }}
-                                                    src={`${url}/upload/${replyitems?.userpic}`}
-                                                    alt="Good"
-                                                  />
-                                                ) : (
-                                                  <Avatar
-                                                    sx={{
-                                                      width: 32,
-                                                      height: 32,
-                                                      mt: 0.5,
-                                                    }}
-                                                  >
-                                                    {replyitems?.name
-                                                      ?.toUpperCase()
-                                                      .slice(0, 1)}
-                                                  </Avatar>
-                                                )}
-                                              </Box>
-                                              {replyitems?.username && (
-                                                <Typography
-                                                  variant="body1"
-                                                  color="primary.main"
-                                                  fontSize="15px"
-                                                  fontWeight="600"
-                                                  ml={1}
-                                                >
-                                                  {replyitems?.username}
-                                                </Typography>
-                                              )}
-
-                                              <Typography
-                                                ml={1}
-                                                variant="body1"
-                                                color="primary.light"
-                                                fontSize="11px"
-                                              >
-                                                {moment(addedAt).format("LL")}
-                                              </Typography>
-                                            </Box>
-                                            <Box
-                                              py={1}
-                                              pl={7}
-                                              key={`${replyitems?._id}index`}
-                                              sx={{
-                                                background: "#DFDEF6",
-                                                borderRadius: "50px",
-                                                width: "80%",
-                                              }}
-                                            >
-                                              <Box
-                                                pr={4}
-                                                fontSize="14px"
-                                                color="text.paragraph"
-                                              >
-                                                {replyitems?.comment}
-                                              </Box>
+                                              {replyitems?.comment}
                                             </Box>
                                           </Box>
-                                        </>
-                                      );
-                                    }
-                                  )
-                                : ""}
+                                        </Box>
+                                      </>
+                                    );
+                                  }
+                                )}
                             </Box>
                           </div>
                         )}

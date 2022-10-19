@@ -47,6 +47,7 @@ function Commonpage(props) {
       try {
         setLoading(true);
         const { data } = await axios.get(`${url}/alldiscussion`);
+        console.log("All discussion !", data);
         setAlldescussionsstate(data.allDiscussion);
         setLoading(false);
       } catch (error) {
