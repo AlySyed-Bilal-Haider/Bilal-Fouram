@@ -258,7 +258,7 @@ export const FetchPosts = async (req, res) => {
       poll: pollLength,
       mention: mentionLength,
       comment: commentLength,
-      data: combined,
+      data: data,
     });
   } catch (error) {
     console.log(error);
