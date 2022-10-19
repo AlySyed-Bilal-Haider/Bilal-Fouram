@@ -7,16 +7,19 @@ import userModal from "./Schema/UserSchema.js";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
+import timeout from "connect-timeout";
 const __dirname = path.resolve();
 dotenv.config();
 const urlDB =
   "mongodb+srv://bilal:minerdao12345@cluster0.flytvry.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
+app.use(timeout("60000s"));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./build"));
+
 connectDB(urlDB);
 
 const storage = multer.diskStorage({
