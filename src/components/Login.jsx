@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import IconButton from "@mui/material/IconButton";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import AccountMenu from "./MenuItem";
@@ -92,19 +93,23 @@ function Login({ open, setOpenlogin, setOpensign }) {
   const loginHandler = async () => {
     console.log("userstate", userstate);
     try {
-      setLoading(true);
-      const { data } = await axios.post(`${url}/login`, userstate);
-      if (data.status == "ok") {
-        toast.success(data.message);
-        localStorage.setItem("token", data.user);
-        localStorage.setItem("name", data.name);
-        localStorage.setItem("email", data.email);
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 500);
-        handleClose();
+      if (userstate.email != "" || userstate.password != "") {
+        setLoading(true);
+        const { data } = await axios.post(`${url}/login`, userstate);
+        if (data.status == "ok") {
+          toast.success(data.message);
+          localStorage.setItem("token", data.user);
+          localStorage.setItem("name", data.name);
+          localStorage.setItem("email", data.email);
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 500);
+          handleClose();
+        } else {
+          toast.error(data.message);
+        }
       } else {
-        toast.error(data.message);
+        toast.error("Please fill login form !");
       }
       setLoading(false);
     } catch (error) {
@@ -195,7 +200,16 @@ function Login({ open, setOpenlogin, setOpensign }) {
                     autoComplete="off"
                     autoFocus
                     endAdornment={
-                      passwordHideshow ? (
+                      <IconButton
+                        style={{
+                          borderTopRightRadius: "5px",
+                          borderTopLeftRadius: "0px",
+                          borderBottomRightRadius: "5px",
+                          borderBottomLeftRadius: "0px",
+                        }}
+                        onClick={passwordHideshowfunc}
+                      >
+                        passwordHideshow ? (
                         <Visibility
                           sx={{
                             cursor: "pointer",
@@ -203,9 +217,8 @@ function Login({ open, setOpenlogin, setOpensign }) {
                             height: "30px",
                             m: 1,
                           }}
-                          onClick={passwordHideshowfunc}
                         />
-                      ) : (
+                        ) : (
                         <VisibilityOff
                           sx={{
                             cursor: "pointer",
@@ -213,9 +226,9 @@ function Login({ open, setOpenlogin, setOpensign }) {
                             height: "30px",
                             m: 1,
                           }}
-                          onClick={passwordHideshowfunc}
                         />
-                      )
+                        )
+                      </IconButton>
                     }
                   />
                 </Box>

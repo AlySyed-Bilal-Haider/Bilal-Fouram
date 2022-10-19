@@ -89,9 +89,17 @@ function Signup({ open, setOpensign, setOpenlogin }) {
   //Submit form, after filling the user form;
   const submitHandler = async () => {
     try {
-      setLoading(true);
-      const { data } = await axios.post(`${url}/usersignup`, userstate);
-      toast.success(data.message);
+      if (
+        userstate.name != "" ||
+        userstate.email != "" ||
+        userstate.password != ""
+      ) {
+        setLoading(true);
+        const { data } = await axios.post(`${url}/usersignup`, userstate);
+        toast.success(data.message);
+      } else {
+        toast.error("Please fill Signup form !");
+      }
       setLoading(false);
     } catch (error) {
       toast.error(error.message);
