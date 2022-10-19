@@ -80,6 +80,7 @@ function Post({ username, id }) {
       setLoading(true);
       const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
       data && setPoststate(data);
+      console.log("Post value", data);
       setLoading(false);
     } catch (error) {
       console.log("Discussions error:", error);
