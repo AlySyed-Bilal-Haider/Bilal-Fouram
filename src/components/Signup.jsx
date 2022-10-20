@@ -87,7 +87,10 @@ function Signup({ open, setOpensign, setOpenlogin }) {
   const [loading, setLoading] = useState(false);
   //input filed change handler;
   const changeHandler = (e) => {
-    setUserstate({ ...userstate, [e.target.name]: e.target.value });
+    setUserstate({
+      ...userstate,
+      [e.target.name]: e.target.value.toLowerCase(),
+    });
   };
 
   //Submit form, after filling the user form;
@@ -168,7 +171,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
                   }}
                 >
                   <TextInput
-                    autocomplete="false"
+                    autoComplete="false"
                     fullWidth
                     value={userstate.name || ""}
                     type="text"

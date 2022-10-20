@@ -280,10 +280,6 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                           inputProps={{
                             ...params.inputProps,
                             autoComplete: "none",
-                            "&::placeholder": {
-                              fontStyle: "italic",
-                              color: "white",
-                            },
                           }}
                           placeholder="Search...."
                         />

@@ -6,35 +6,12 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../loading";
 import Avatar from "@mui/material/Avatar";
-export default function Rejected() {
-  const [rejected, setRejectedstate] = useState([]);
+import { useNavigate } from "react-router-dom";
+export default function Rejected({ rejected, func, state }) {
+  const navigate = useNavigate();
   const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
   const [loading, setLoading] = useState(false);
   // fetch rejectd post from server
-  const fetchRejected = async () => {
-    try {
-      setLoading(true);
-      await fetch(`${url}/fetchrejectedposts`, {
-        method: "GET",
-        headers: {
-          "x-access-token": idstate,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Rejected data !", data);
-          setRejectedstate(data?.posts);
-        });
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    idstate && fetchRejected();
-  }, []);
-
   const approveHandle = async (post_id) => {
     console.log("post_id", post_id);
     try {
@@ -48,12 +25,21 @@ export default function Rejected() {
         .then((data) => {
           console.log("Approve data !");
           data?.status == "ok" && toast.success(data.message);
-          data?.status == "ok" && fetchRejected();
+          data?.status == "ok" && func(!state);
         });
     } catch (error) {
       console.log("Approved post error", error);
       toast.error(error.message);
     }
+  };
+
+  // navigate one page to another
+  const detailsHandle = (id) => {
+    navigate(`/detail/${id}`);
+  };
+
+  const profileHandle = (id) => {
+    navigate(`/profile/${id}`);
   };
   return (
     <Box pb={10}>
@@ -62,7 +48,7 @@ export default function Rejected() {
         rejected?.map(
           ({ _id, addedAt, description, status, user, tag, title }, i) => {
             return (
-              <Box key={_id + i}>
+              <Box key={_id + i} sx={{ cursor: "pointer" }}>
                 <Box pl={8} pb={3} borderBottom="1px solid #fff">
                   <Box py={2} display="flex" alignItems="center">
                     <Box
@@ -71,6 +57,9 @@ export default function Rejected() {
                         height: "40px",
                         borderRadius: "50%",
                         mr: 1,
+                      }}
+                      onClick={() => {
+                        profileHandle(user?._id);
                       }}
                     >
                       {user?.img ? (
@@ -99,11 +88,17 @@ export default function Rejected() {
                       variant="body1"
                       color="primary.main"
                       fontWeight="700"
+                      onClick={() => {
+                        profileHandle(user?._id);
+                      }}
                     >
                       {user?.name}
                     </Typography>
 
                     <Typography
+                      onClick={() => {
+                        detailsHandle(_id);
+                      }}
                       ml={2}
                       variant="body1"
                       color="primary.light"
@@ -112,6 +107,9 @@ export default function Rejected() {
                       {moment(addedAt).format("LL")}
                     </Typography>
                     <Typography
+                      onClick={() => {
+                        detailsHandle(_id);
+                      }}
                       ml={2}
                       variant="body1"
                       color="primary.light"
@@ -121,7 +119,13 @@ export default function Rejected() {
                     </Typography>
                   </Box>
 
-                  <Box fontSize="14px" color="text.paragraph">
+                  <Box
+                    fontSize="14px"
+                    color="text.paragraph"
+                    onClick={() => {
+                      detailsHandle(_id);
+                    }}
+                  >
                     {title}
                     <br />
                     <br />
@@ -136,7 +140,7 @@ export default function Rejected() {
                     justifyContent="flex-end"
                   >
                     <Button
-                      onClick={() => {
+                      onClick={(e) => {
                         approveHandle(_id);
                       }}
                       sx={{

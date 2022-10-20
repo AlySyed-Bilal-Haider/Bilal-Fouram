@@ -6,37 +6,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../loading";
 import Avatar from "@mui/material/Avatar";
-export default function Pending() {
-  const [pendingpost, setPendingpost] = useState([]);
+import { useNavigate, NavLink } from "react-router-dom";
+function Pending({ pendingpost, func, state }) {
+  const navigate = useNavigate();
   const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
   const [loading, setLoading] = useState(false);
-
-  // fetch pending post
-  const fetchPending = async () => {
-    try {
-      setLoading(true);
-      await fetch(`${url}/fetchpendingposts`, {
-        method: "GET",
-        headers: {
-          "x-access-token": idstate,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Approved data !", data);
-          setPendingpost(data?.posts);
-        });
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    idstate && fetchPending();
-  }, []);
-
   const approveAndReactHandle = async (path, post_id) => {
     console.log("post_id", post_id);
     try {
@@ -49,9 +23,8 @@ export default function Pending() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Approve data !");
           data?.status == "ok" && toast.success(data.message);
-          data?.status == "ok" && fetchPending();
+          data?.status == "ok" && func(!state);
         });
       setLoading(false);
     } catch (error) {
@@ -77,6 +50,14 @@ export default function Pending() {
     setCurrentPage(value);
   };
   const pageCount = Math.ceil(pendingpost?.length / postsPerPage);
+  // navigate one page to another
+  const detailsHandle = (id) => {
+    navigate(`/detail/${id}`);
+  };
+
+  const profileHandle = (id) => {
+    navigate(`/profile/${id}`);
+  };
   return (
     <>
       <Loading loading={loading} />
@@ -90,10 +71,13 @@ export default function Pending() {
             ?.map(
               ({ _id, addedAt, description, status, user, tag, title }, i) => {
                 return (
-                  <Box key={_id + i}>
+                  <Box sx={{ cursor: "pointer" }} key={_id + i}>
                     <Box pl={8} pb={3} borderBottom="1px solid #fff">
                       <Box py={2} display="flex" alignItems="center">
                         <Box
+                          onClick={() => {
+                            profileHandle(user?._id);
+                          }}
                           sx={{
                             width: "40px",
                             height: "40px",
@@ -123,7 +107,11 @@ export default function Pending() {
                             </Avatar>
                           )}
                         </Box>
+
                         <Typography
+                          onClick={() => {
+                            profileHandle(user?._id);
+                          }}
                           variant="body1"
                           color="primary.main"
                           fontWeight="700"
@@ -140,6 +128,9 @@ export default function Pending() {
                           {moment(addedAt).format("LL")}
                         </Typography>
                         <Typography
+                          onClick={() => {
+                            detailsHandle(_id);
+                          }}
                           ml={2}
                           variant="body1"
                           color="primary.light"
@@ -149,7 +140,13 @@ export default function Pending() {
                         </Typography>
                       </Box>
 
-                      <Box fontSize="14px" color="text.paragraph">
+                      <Box
+                        fontSize="14px"
+                        color="text.paragraph"
+                        onClick={() => {
+                          detailsHandle(_id);
+                        }}
+                      >
                         {title}
                         <br />
                         <br />
@@ -164,7 +161,7 @@ export default function Pending() {
                         justifyContent="flex-end"
                       >
                         <Button
-                          onClick={() => {
+                          onClick={(e) => {
                             approveAndReactHandle("approvepost", _id);
                           }}
                           style={btn}
@@ -188,7 +185,7 @@ export default function Pending() {
                               backgroundColor: "secondary.main",
                             },
                           }}
-                          onClick={() => {
+                          onClick={(e) => {
                             approveAndReactHandle("rejectpost", _id);
                           }}
                         >
@@ -230,3 +227,5 @@ export default function Pending() {
     </>
   );
 }
+
+export default React.memo(Pending);

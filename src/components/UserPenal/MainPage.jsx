@@ -51,6 +51,7 @@ export default function MainPage() {
   const [alldata, setAlldatastate] = useState("");
   const [loading, setLoading] = useState(false);
   const [baseURL, setBaseURLstate] = useState("");
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -70,18 +71,15 @@ export default function MainPage() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (id) {
       userProfileHandler();
     }
   }, [id]);
-
   // fetch all record from server
   const fetchallrecord = async () => {
     try {
       const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
-      console.log(data, "data--hi hsdasdfas asdfa sd-=-->");
       setAlldatastate(data);
     } catch (error) {
       console.log("Likes error", error);
@@ -118,6 +116,8 @@ export default function MainPage() {
   useEffect(() => {
     id && fetchallrecord();
   }, [id]);
+
+  console.log("alldata:", alldata);
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
@@ -494,7 +494,10 @@ export default function MainPage() {
                       <BiMessageRounded
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Post 0
+                      Post{" "}
+                      {alldata[0]?.discussion?.length > 0
+                        ? alldata[0]?.discussion?.length
+                        : 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -512,7 +515,10 @@ export default function MainPage() {
                       <BiMenu
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />{" "}
-                      Discussions 0
+                      Discussions{" "}
+                      {alldata[0]?.discussion?.length > 0
+                        ? alldata[0]?.discussion?.length
+                        : ""}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -530,7 +536,10 @@ export default function MainPage() {
                       <BiLike
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Likes 0
+                      Likes{" "}
+                      {alldata[0]?.like?.length > 0
+                        ? alldata[0]?.like?.length
+                        : 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -548,7 +557,10 @@ export default function MainPage() {
                       <AiTwotoneLike
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Votes 0
+                      Votes{" "}
+                      {alldata[0]?.poll?.length > 0
+                        ? alldata[0]?.poll?.length
+                        : 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -566,7 +578,10 @@ export default function MainPage() {
                       <MdAlternateEmail
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Mentions 0
+                      Mentions{" "}
+                      {alldata[0]?.mention?.length > 0
+                        ? alldata[0]?.mention?.length
+                        : 0}
                     </Box>
                   </Box>
                 </Box>

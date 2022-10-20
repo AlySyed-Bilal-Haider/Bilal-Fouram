@@ -121,7 +121,6 @@ function Login({ open, setOpenlogin, setOpensign }) {
       setLoading(false);
       toast.error(error.response?.data?.message);
     }
-
   };
   // const signupHandler = () => {
   //   // setOpensign(true);

@@ -139,7 +139,6 @@ const mainHeader = (locationpath) => {
   }
 };
 function AllDiscussions({ modal, setOpenlogin, username }) {
-  console.log("setOpen", modal);
   const location = useLocation();
 
   return (

@@ -17,12 +17,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import PopUp from "./UserPenal/AddPollPopup";
 import ChooseTag from "./UserPenal/ChooseTag";
-
 import { url } from "../utils";
-import { useNavigate } from "react-router-dom";
 
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -48,7 +45,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function StartDiscussionButton({ setOpenlogin }) {
-  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -66,9 +62,11 @@ function StartDiscussionButton({ setOpenlogin }) {
     setPoststate({ ...addpoststate, [e.target.name]: e.target.value });
   };
   // post discussion record here
+  const handleClose = () => {
+    setOpen(false);
+  };
   const postSubmitHandler = async () => {
     let postdata;
-    console.log("pollstate", pollstate);
 
     if (!!tagsvalue) {
       try {
@@ -83,15 +81,19 @@ function StartDiscussionButton({ setOpenlogin }) {
           const { data } = await axios.post(`${url}/posts`, postdata);
           if (data.status === "ok") {
             toast.success(data.message);
+            setPollstate("");
+            handleClose();
           } else {
             toast.error(data.message);
           }
         } else {
           postdata = { ...addpoststate, user: userid, tag: tagsvalue };
-          console.log("postdata two", postdata);
+
           const { data } = await axios.post(`${url}/posts`, postdata);
           if (data.status === "ok") {
             toast.success(data.message);
+            setPollstate("");
+            handleClose();
           } else {
             toast.error(data.message);
           }
@@ -115,12 +117,9 @@ function StartDiscussionButton({ setOpenlogin }) {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
   const CheckloginHandler = () => {
     const token = localStorage.getItem("token");
-    console.log("token", token);
+
     if (token) {
       handleClickOpen();
     } else {
@@ -133,7 +132,6 @@ function StartDiscussionButton({ setOpenlogin }) {
   };
 
   const pollHandle = (value) => {
-    console.log("poll id", value);
     setPollstate(value);
   };
 
@@ -165,7 +163,6 @@ function StartDiscussionButton({ setOpenlogin }) {
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
-        // sx={{ backgroundColor: "red" }}
         PaperProps={{
           style: {
             backgroundColor: "#d7d6f7",
@@ -198,22 +195,43 @@ function StartDiscussionButton({ setOpenlogin }) {
               >
                 {tagsvalue ? tagsvalue : "choose tags"}
               </Typography>
-              <Typography
-                onClick={handleClickOpen1}
-                ml={2}
-                sx={{
-                  border: `1px dotted ${theme.palette.primary.main}`,
-                  borderRadius: "5px",
-                  px: "6px",
-                  py: "2px",
-                  cursor: "pointer",
-                }}
-                color="primary.main"
-                variant="subtitle2"
-                component="span"
-              >
-                Add Poll
-              </Typography>
+              {pollstate ? (
+                <Typography
+                  onClick={() => {
+                    toast.error("Poll already add,Please add post !");
+                  }}
+                  ml={2}
+                  sx={{
+                    border: `1px dotted ${theme.palette.primary.main}`,
+                    borderRadius: "5px",
+                    px: "6px",
+                    py: "2px",
+                    cursor: "pointer",
+                  }}
+                  color="primary.main"
+                  variant="subtitle2"
+                  component="span"
+                >
+                  Poll save
+                </Typography>
+              ) : (
+                <Typography
+                  onClick={handleClickOpen1}
+                  ml={2}
+                  sx={{
+                    border: `1px dotted ${theme.palette.primary.main}`,
+                    borderRadius: "5px",
+                    px: "6px",
+                    py: "2px",
+                    cursor: "pointer",
+                  }}
+                  color="primary.main"
+                  variant="subtitle2"
+                  component="span"
+                >
+                  Add Poll
+                </Typography>
+              )}
 
               <Box>
                 <InputBase
@@ -231,16 +249,31 @@ function StartDiscussionButton({ setOpenlogin }) {
               </Box>
             </Box>
 
-            <IconButton
-              disableRipple={true}
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon
-                fontSize="small"
-                sx={{ color: "secondary.main", marginTop: "-45px" }}
-              />
-            </IconButton>
+            {pollstate == "" ? (
+              <IconButton
+                disableRipple={true}
+                onClick={handleClose}
+                aria-label="close"
+              >
+                <CloseIcon
+                  fontSize="small"
+                  sx={{ color: "secondary.main", marginTop: "-45px" }}
+                />
+              </IconButton>
+            ) : (
+              <IconButton
+                disableRipple={true}
+                onClick={() => {
+                  toast.error("poll already add, Please add post!");
+                }}
+                aria-label="close"
+              >
+                <CloseIcon
+                  fontSize="small"
+                  sx={{ color: "secondary.main", marginTop: "-45px" }}
+                />
+              </IconButton>
+            )}
           </Toolbar>
         </AppBar>
 

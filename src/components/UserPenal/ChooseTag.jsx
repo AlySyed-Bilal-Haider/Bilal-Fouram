@@ -77,9 +77,10 @@ function ChooseTag({ open, setOpen, getTags }) {
     settageState(e.target.value);
   };
 
-  const addTagsHandler = () => {
-    if (tagestate) {
-      getTags(tagestate);
+  const addTagsHandler = (tagvalue) => {
+    console.log("tagvalue:", tagvalue);
+    if (tagestate || tagvalue) {
+      getTags(tagestate || tagvalue);
       handleClose();
     }
 
@@ -88,6 +89,7 @@ function ChooseTag({ open, setOpen, getTags }) {
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <>
       <StyledModal
@@ -217,6 +219,7 @@ function ChooseTag({ open, setOpen, getTags }) {
               flexWrap="wrap"
             >
               <Typography
+                sx={{ cursor: "pointer" }}
                 mt={2}
                 variant="subtitle2"
                 color="primary.light"
@@ -224,11 +227,15 @@ function ChooseTag({ open, setOpen, getTags }) {
                 py={0.5}
                 backgroundColor="text.light"
                 borderRadius="50px"
+                onClick={() => {
+                  addTagsHandler("General");
+                }}
               >
                 General
               </Typography>
 
               <Typography
+                sx={{ cursor: "pointer" }}
                 mt={2}
                 ml={2}
                 variant="subtitle2"
@@ -237,11 +244,15 @@ function ChooseTag({ open, setOpen, getTags }) {
                 py={0.5}
                 backgroundColor="text.light"
                 borderRadius="50px"
+                onClick={() => {
+                  addTagsHandler("Proposal");
+                }}
               >
                 Proposal
               </Typography>
 
               <Typography
+                sx={{ cursor: "pointer" }}
                 mt={2}
                 ml={2}
                 variant="subtitle2"
@@ -250,11 +261,15 @@ function ChooseTag({ open, setOpen, getTags }) {
                 py={0.5}
                 backgroundColor="text.light"
                 borderRadius="50px"
+                onClick={() => {
+                  addTagsHandler("Knowledge Base");
+                }}
               >
                 Knowledge Base
               </Typography>
 
               <Typography
+                sx={{ cursor: "pointer" }}
                 ml={2}
                 mt={2}
                 variant="subtitle2"
@@ -263,11 +278,15 @@ function ChooseTag({ open, setOpen, getTags }) {
                 py={0.5}
                 backgroundColor="text.light"
                 borderRadius="50px"
+                onClick={() => {
+                  addTagsHandler("Community Development");
+                }}
               >
                 Community Development
               </Typography>
 
               <Typography
+                sx={{ cursor: "pointer" }}
                 ml={2}
                 mt={2}
                 variant="subtitle2"
@@ -276,10 +295,14 @@ function ChooseTag({ open, setOpen, getTags }) {
                 py={0.5}
                 backgroundColor="text.light"
                 borderRadius="50px"
+                onClick={() => {
+                  addTagsHandler("Feedback");
+                }}
               >
                 Feedback
               </Typography>
               <Typography
+                sx={{ cursor: "pointer" }}
                 ml={2}
                 mt={2}
                 variant="subtitle2"
@@ -288,6 +311,9 @@ function ChooseTag({ open, setOpen, getTags }) {
                 py={0.5}
                 backgroundColor="text.light"
                 borderRadius="50px"
+                onClick={() => {
+                  addTagsHandler("Project Proposals");
+                }}
               >
                 Project Proposals
               </Typography>
