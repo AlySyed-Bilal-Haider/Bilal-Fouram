@@ -92,7 +92,7 @@ export default function EditPopUp({ open, setOpen, postId, title }) {
               fontSize="14px"
               fontWeight="600"
             >
-              Edite Post :{title}
+              Edit Post :{title}
             </Box>
 
             <IconButton
