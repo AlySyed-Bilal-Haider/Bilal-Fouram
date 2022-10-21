@@ -57,7 +57,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
     const key = e.target.value || "";
     try {
       if (key || value?.name) {
-        const searchvalue = key.toLowerCase() || value?.name.toLowerCase();
+        const searchvalue = key ;
         console.log("searchvalue:", searchvalue);
         const { data } = await axios.get(`${url}/search/${searchvalue}`);
         console.log("data search key !", data);
