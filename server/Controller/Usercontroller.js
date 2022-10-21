@@ -162,24 +162,22 @@ export const fetchuser = async (req, res) => {
 
 export const searchHandle = async (req, res, next) => {
   try {
-    const key = req.params.key;
-    console.log("key", key);
-    const result = await userModal
-      .find({
-        $or: [
-          {
-            name: { $regex: key },
-          },
-        ],
-      })
-      .select("-password");
-    console.log("result:", result);
-    res.send(result);
+    const name = req.params.key;
+    if (name == null) {
+      userModal.find({}, function (err, data) {
+        res.send(data);
+      }).select("-password");
+    } else {
+      const regex = new RegExp(name, "i");
+      userModal.find({ name: regex }, function (err, data) {
+        res.send(data);
+      }).select("-password");
+    }
   } catch (error) {
-    console.log("search error", error);
-    res.status(404).json({
+    res.status(505).json({
       status: "error",
-      message: "Please try again!",
+      success: false,
+      message: error,
     });
   }
 };
