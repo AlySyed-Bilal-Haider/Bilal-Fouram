@@ -4,7 +4,6 @@ import userModal from "../Schema/UserSchema.js";
 export async function VerifyAdmin(req, res, next) {
   try {
     const id = req.headers["x-access-token"];
-    console.log(id);
     const admin = await userModal.findOne({ _id: id, role: "admin" });
     if (admin) {
       next();
@@ -74,9 +73,7 @@ export const FetchRejectedPosts = async (req, res) => {
 export const ApprovePost = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("Approve id", id);
     const data = await postModal.findByIdAndUpdate(id, { status: "Approved" });
-    console.log(data);
     await userModal.findByIdAndUpdate(data.user, {
       $push: { discussion: data._id },
     });
@@ -94,7 +91,6 @@ export const ApprovePost = async (req, res) => {
 export const RejectPost = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("reject id", id);
     await postModal.findByIdAndUpdate(id, { status: "Rejected" });
     res.json({
       status: "ok",

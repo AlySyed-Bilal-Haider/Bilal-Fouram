@@ -4,7 +4,6 @@ import userModal from "../Schema/UserSchema.js";
 
 export const commentHandler = async (req, res, next) => {
   try {
-    console.log("comment !", req.body);
     const { post_id, mention, username } = req.body;
     const newComment = new commentModal(req.body);
     await newComment.save();
@@ -45,7 +44,6 @@ export const commentHandler = async (req, res, next) => {
 };
 export const replyHandler = async (req, res, next) => {
   try {
-    console.log("reply body:", req.body);
     const { comment_id, mention, username, post_id } = req.body;
 
     const newComment = new commentModal(req.body);
@@ -113,7 +111,7 @@ export const likeComment = async (req, res) => {
     await commentModal.findByIdAndUpdate(comment_id, {
       $push: { like: user_id },
     });
-    const likecomment = await commentModal.findById(comment_id);
+    await commentModal.findById(comment_id);
 
     res.json({
       message: "ok",
@@ -130,7 +128,7 @@ export const unlikeComment = async (req, res) => {
     await commentModal.findByIdAndUpdate(comment_id, {
       $pull: { like: user_id },
     });
-    const unlikecomment = await commentModal.findById(comment_id);
+     await commentModal.findById(comment_id);
 
     res.json({
       message: "ok",

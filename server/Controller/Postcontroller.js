@@ -7,7 +7,6 @@ import userModal from "../Schema/UserSchema.js";
 
 export const createPost = async (req, res, next) => {
   try {
-    console.log("req.body:", req.body);
     const { tag, title, description, user, poll } = req.body;
     const newPost = new postModal({
       tag,
@@ -16,8 +15,7 @@ export const createPost = async (req, res, next) => {
       user,
       poll,
     });
-    console.log(newPost);
-
+    
     await newPost.save();
     const ref = { ref_id: newPost._id };
     await userModal.findByIdAndUpdate(user, {
@@ -92,7 +90,6 @@ export const fetchAlldiscussion = async (req, res) => {
 export const fetchcategory = async (req, res, next) => {
   try {
     const tag = req.params.tag;
-    console.log("tag:", tag);
     const data = await postModal
       .find({ tag: tag, visibility: true, status: "Approved" })
       .populate("user")
@@ -240,11 +237,9 @@ export const removepost = async (req, res) => {
 };
 
 // start update post code start here
-export const EditepostHandler = async (req, res) => {
+export const EditpostHandler = async (req, res) => {
   try {
-    console.log("req.body", req.body);
     const { id, description } = req.body;
-    console.log("id:", id, "description: ", description);
     const data = await postModal.findByIdAndUpdate(id, {
       description: description,
     });
