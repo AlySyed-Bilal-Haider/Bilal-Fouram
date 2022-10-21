@@ -7,7 +7,6 @@ export const FetchPosts = async (req, res) => {
     const data = await userModal
       .find({ _id: id })
       .select("-password")
-      .populate("discussion.ref_id")
       .populate({
         path: "discussion.ref_id",
         match: { visibility: true },
@@ -54,7 +53,6 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       })
-      .populate("like.ref_id")
       .populate({
         path: "like.ref_id",
         match: { visibility: true },
@@ -100,7 +98,6 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       })
-      .populate("poll.ref_id")
       .populate({
         path: "poll.ref_id",
         match: { visibility: true },
@@ -146,7 +143,6 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       })
-      .populate("comment.ref_id")
       .populate({
         path: "comment.ref_id",
         match: { visibility: true },
@@ -192,7 +188,6 @@ export const FetchPosts = async (req, res) => {
           },
         ],
       })
-      .populate("mention.ref_id")
       .populate({
         path: "mention.ref_id",
         match: { visibility: true },
