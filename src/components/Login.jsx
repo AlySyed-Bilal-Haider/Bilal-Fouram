@@ -122,10 +122,7 @@ function Login({ open, setOpenlogin, setOpensign }) {
       toast.error(error.response?.data?.message);
     }
   };
-  // const signupHandler = () => {
-  //   // setOpensign(true);
-  //   setloginstate(false);
-  // };
+
   const passwordHideshowfunc = () => {
     setPasswordState(!passwordHideshow);
   };

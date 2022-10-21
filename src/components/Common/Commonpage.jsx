@@ -128,6 +128,10 @@ function Commonpage(props) {
                         m: 1,
                       }}
                     >
+                      {console.log(
+                        `http://localhost:4000/upload/${alldetailsstate[i]?.user?.img}`
+                      )}
+
                       <img
                         style={{
                           width: "35px",
