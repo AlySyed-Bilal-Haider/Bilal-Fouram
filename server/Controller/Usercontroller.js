@@ -54,7 +54,6 @@ export const signupHandler = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(404).json({
       status: "error",
       message: "Please try again!",
@@ -67,10 +66,8 @@ export const signupHandler = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    console.log(req.body);
     const { email, password } = req.body;
     const user = await userModal.findOne({ email: email });
-    console.log("user", user);
     if (user) {
       var decoded = jwt_decode(user.password);
       if (decoded.password === password) {
@@ -112,7 +109,11 @@ export const login = async (req, res) => {
       });
     }
   } catch (e) {
-    console.log(e);
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+      user: false,
+    });
   }
 };
 
@@ -147,18 +148,6 @@ export const tokenVerifyHandler = async (req, res) => {
   }
 };
 
-//fetch specific data from server
-
-export const fetchuser = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const data = await userModal.findOne({ _id: id }).select("-password");
-    console.log("data user", data);
-    return res.send(data);
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 export const searchHandle = async (req, res, next) => {
   try {
@@ -185,7 +174,6 @@ export const searchHandle = async (req, res, next) => {
 export const searchHandleAll = async (req, res, next) => {
   try {
     const key = req.params.key;
-    console.log("key", key);
     const user = await userModal
       .find({
         $or: [
@@ -216,7 +204,6 @@ export const searchHandleAll = async (req, res, next) => {
       comments: comment,
     });
   } catch (error) {
-    console.log("search error", error);
     res.status(404).json({
       status: "error",
       message: "Please try again!",

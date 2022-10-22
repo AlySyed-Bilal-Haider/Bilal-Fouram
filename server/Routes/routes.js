@@ -38,7 +38,7 @@ router.delete("/removeComment/:id", Comment.removeComment);
 
 // edit post routes
 
-router.put("/editpost", Post.EditepostHandler);
+router.put("/editpost", Post.EditpostHandler);
 router.put("/editcomment", Comment.EditComment);
 router.put("/restorecomment/:id", Comment.restoreComment);
 
@@ -53,10 +53,6 @@ router.get("/rejectpost/:id", Admin.VerifyAdmin, Admin.RejectPost);
 //user panal routes
 
 router.post("/fetchuserposts/:id", UserPanal.FetchPosts);
-router.get("/fetchuserdiscussion/:id", UserPanal.FetchDiscussion);
-router.get("/fetchlikedposts/:id", UserPanal.FetchLiked);
-router.get("/fetchvotedpolls/:id", UserPanal.FetchPollPosts);
-router.get("/fetchmentions/:id", UserPanal.FetchMentionComments);
 
 //@mention related routes
 
