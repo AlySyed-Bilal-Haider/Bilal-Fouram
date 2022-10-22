@@ -15,8 +15,8 @@ export default function Like({ id }) {
       try {
         setLoading(true);
         const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
-        setlikestate(data);
-        console.log("like", data);
+        setlikestate(data?.data);
+        console.log("like", data?.data);
         setLoading(false);
       } catch (error) {
         console.log("Likes error", error);
@@ -25,7 +25,7 @@ export default function Like({ id }) {
     };
     id && fetchlikepost();
   }, [id]);
-
+  console.log("user_id:", user_id);
   return (
     <>
       <Loading loading={loading} />
@@ -34,7 +34,7 @@ export default function Like({ id }) {
           ? likestate?.map((item) => {
               return (
                 <>
-                  {item?.discussion?.map((items, i) => {
+                  {item?.like?.map((items, i) => {
                     return (
                       <>
                         {items?.ref_id?.visibility == true &&

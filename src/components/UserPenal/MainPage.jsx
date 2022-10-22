@@ -51,7 +51,7 @@ export default function MainPage() {
   const [alldata, setAlldatastate] = useState("");
   const [loading, setLoading] = useState(false);
   const [baseURL, setBaseURLstate] = useState("");
-
+  const [allLengthrecord, setAllLenghtstate] = useState("");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -63,7 +63,7 @@ export default function MainPage() {
     try {
       // setLoading(true);
       const { data } = await axios.post(`${url}/fetchuser/${id}`);
-      console.log("data", data);
+      console.log("Profile data", data);
       setProfilestate(data);
       setLoading(false);
     } catch (error) {
@@ -77,14 +77,18 @@ export default function MainPage() {
     }
   }, [id]);
   // fetch all record from server
+
   const fetchallrecord = async () => {
     try {
       const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
-      setAlldatastate(data);
+      setAlldatastate(data?.data);
+      setAllLenghtstate(data);
+      console.log("fetch all record", data);
     } catch (error) {
       console.log("Likes error", error);
     }
   };
+
   // image upload from server
   const handleFile = async (event) => {
     let file = event.target.files[0];
@@ -117,7 +121,7 @@ export default function MainPage() {
     id && fetchallrecord();
   }, [id]);
 
-  console.log("alldata:", alldata);
+  console.log("alldata:", allLengthrecord);
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
@@ -494,10 +498,7 @@ export default function MainPage() {
                       <BiMessageRounded
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Post{" "}
-                      {alldata[0]?.discussion?.length > 0
-                        ? alldata[0]?.discussion?.length
-                        : 0}
+                      Post {allLengthrecord?.discussion || 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -515,10 +516,7 @@ export default function MainPage() {
                       <BiMenu
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />{" "}
-                      Discussions{" "}
-                      {alldata[0]?.discussion?.length > 0
-                        ? alldata[0]?.discussion?.length
-                        : ""}
+                      Discussions {allLengthrecord?.discussion || 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -536,10 +534,7 @@ export default function MainPage() {
                       <BiLike
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Likes{" "}
-                      {alldata[0]?.like?.length > 0
-                        ? alldata[0]?.like?.length
-                        : 0}
+                      Likes {allLengthrecord?.like || 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -557,10 +552,7 @@ export default function MainPage() {
                       <AiTwotoneLike
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Votes{" "}
-                      {alldata[0]?.poll?.length > 0
-                        ? alldata[0]?.poll?.length
-                        : 0}
+                      Votes {allLengthrecord?.poll || 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -578,10 +570,7 @@ export default function MainPage() {
                       <MdAlternateEmail
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Mentions{" "}
-                      {alldata[0]?.mention?.length > 0
-                        ? alldata[0]?.mention?.length
-                        : 0}
+                      Mentions {allLengthrecord?.mention || 0}
                     </Box>
                   </Box>
                 </Box>

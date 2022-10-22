@@ -5,17 +5,17 @@ import axios from "axios";
 import { url } from "../../utils";
 import moment from "moment";
 import Loading from "../../loading";
-import { useNavigate, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 function Discussion({ id }) {
-  const navigate = useNavigate();
   const [descussionstate, setDescussionState] = useState([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
         setLoading(true);
         const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
-        setDescussionState(data);
+        setDescussionState(data?.data);
         console.log(data, "all descusssion");
         setLoading(false);
       } catch (error) {

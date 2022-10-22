@@ -17,8 +17,8 @@ export default function Mention({ id }) {
       try {
         setLoading(true);
         const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
-        console.log("mentions data", data);
-        setMentionState(data);
+        console.log("mentions data", data?.data);
+        setMentionState(data?.data);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -36,7 +36,7 @@ export default function Mention({ id }) {
           mentionState?.map((item) => {
             return (
               <>
-                {item?.discussion?.map((items, i) => {
+                {item?.mention?.map((items, i) => {
                   return (
                     <>
                       {items?.ref_id?.visibility == true &&
