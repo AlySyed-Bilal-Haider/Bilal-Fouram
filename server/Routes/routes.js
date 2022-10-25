@@ -5,6 +5,7 @@ import * as Comment from "../Controller/CommentController.js";
 import * as Poll from "../Controller/PollController.js";
 import * as Admin from "../Controller/AdminController.js";
 import * as UserPanal from "../Controller/UserPanalController.js";
+import * as Password from "../Controller/PasswordController.js";
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get("/category/:tag", Post.fetchcategory);
 router.get("/checklike/:post_id/:user_id", Post.CheckPostLike);
 router.get("/fetchuserpost/:id", Post.getSpecificDiscussion);
 router.get("/fetchPostDetails/:id", Post.fetchPostDetails);
-router.post("/fetchuser/:id", Users.fetchuser);
+// router.post("/fetchuser/:id", Users.fetchuser);
 router.get("/search/:key", Users.searchHandle);
 
 router.delete("/removePost/:id", Post.removepost);
@@ -57,5 +58,12 @@ router.post("/fetchuserposts/:id", UserPanal.FetchPosts);
 //@mention related routes
 
 router.post("/fetchusername", Comment.FetchUsers);
+
+
+//Password related routes
+
+router.get("/changepassword/:id", Password.VerifyUser, Password.ChangePassword);
+router.get("/resetpassword/:id/:token", Password.ResetPassword);
+router.post("/resetpassword/:id/:token", Password.PostResetPassword);
 
 export default router;

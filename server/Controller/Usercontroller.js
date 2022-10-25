@@ -149,6 +149,17 @@ export const tokenVerifyHandler = async (req, res) => {
 };
 
 
+export const fetchuser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await userModal.findOne({ _id: id }).select("-password");
+    console.log("data user", data);
+    return res.send(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const searchHandle = async (req, res, next) => {
   try {
     const name = req.params.key;
