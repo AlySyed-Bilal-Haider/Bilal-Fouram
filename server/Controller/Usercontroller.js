@@ -85,18 +85,18 @@ export const login = async (req, res) => {
             role: user.role,
           });
         } else {
-          res.setHeader("Content-Type", "application/json");
-          res.json({
-            status: "error",
-            message: "Please try again! Password  not match",
-            user: false,
-          });
+          // res.setHeader("Content-Type", "application/json");
+          // res.json({
+          //   status: "error",
+          //   message: "Please try again! Password  not match",
+          //   user: false,
+          // });
         }
       } else {
         res.setHeader("Content-Type", "application/json");
-        res.status(404).json({
+        res.json({
           status: "error",
-          message: "SignUp First..!",
+          message: "Please try again! Password  not match",
           user: false,
         });
       }
