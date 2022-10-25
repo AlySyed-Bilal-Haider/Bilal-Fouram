@@ -121,6 +121,7 @@ export const login = async (req, res) => {
 
 export const tokenVerifyHandler = async (req, res) => {
   const token = req.headers["x-access-token"];
+  console.log("token", token);
   try {
     var decoded = jwt_decode(token);
     if (decoded.id) {
@@ -148,19 +149,22 @@ export const tokenVerifyHandler = async (req, res) => {
   }
 };
 
-
 export const searchHandle = async (req, res, next) => {
   try {
     const name = req.params.key;
     if (name == null) {
-      userModal.find({}, function (err, data) {
-        res.send(data);
-      }).select("-password");
+      userModal
+        .find({}, function (err, data) {
+          res.send(data);
+        })
+        .select("-password");
     } else {
       const regex = new RegExp(name, "i");
-      userModal.find({ name: regex }, function (err, data) {
-        res.send(data);
-      }).select("-password");
+      userModal
+        .find({ name: regex }, function (err, data) {
+          res.send(data);
+        })
+        .select("-password");
     }
   } catch (error) {
     res.status(505).json({

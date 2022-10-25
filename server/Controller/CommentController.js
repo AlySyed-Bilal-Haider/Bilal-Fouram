@@ -9,7 +9,7 @@ export const commentHandler = async (req, res, next) => {
     await newComment.save();
     const user = await userModal.find({ name: username });
 
-    await commentModal.findByIdAndUpdate(newComment._id, { user: user[0]._id })
+    await commentModal.findByIdAndUpdate(newComment._id, { user: user[0]._id });
     const commentref = { ref_id: post_id };
 
     await userModal.findByIdAndUpdate(user[0]._id, {
@@ -45,24 +45,20 @@ export const commentHandler = async (req, res, next) => {
 export const replyHandler = async (req, res, next) => {
   try {
     const { comment_id, mention, username, post_id } = req.body;
-
     const newComment = new commentModal(req.body);
     await newComment.save();
     const user = await userModal.find({ name: username });
-    await commentModal.findByIdAndUpdate(newComment._id, { user: user[0]._id })
+    await commentModal.findByIdAndUpdate(newComment._id, { user: user[0]._id });
     const commentref = { ref_id: post_id };
-
     await userModal.findByIdAndUpdate(user[0]._id, {
       $push: { comment: commentref },
     });
-
     const ref = { ref_id: newComment._id };
     for (var i in mention) {
       await userModal.findByIdAndUpdate(mention[i], {
         $push: { mention: ref },
       });
     }
-
     await commentModal.findByIdAndUpdate(comment_id, {
       $push: { reply: newComment._id },
     });
@@ -128,7 +124,7 @@ export const unlikeComment = async (req, res) => {
     await commentModal.findByIdAndUpdate(comment_id, {
       $pull: { like: user_id },
     });
-     await commentModal.findById(comment_id);
+    await commentModal.findById(comment_id);
 
     res.json({
       message: "ok",
@@ -221,14 +217,18 @@ export const FetchUsers = async (req, res) => {
   try {
     const { name } = req.body;
     if (name == null) {
-      userModal.find({}, function (err, data) {
-        res.send(data);
-      }).select("-password");
+      userModal
+        .find({}, function (err, data) {
+          res.send(data);
+        })
+        .select("-password");
     } else {
       const regex = new RegExp(name, "i");
-      userModal.find({ name: regex }, function (err, data) {
-        res.send(data);
-      }).select("-password");
+      userModal
+        .find({ name: regex }, function (err, data) {
+          res.send(data);
+        })
+        .select("-password");
     }
   } catch (error) {
     res.status(505).json({
