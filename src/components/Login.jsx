@@ -75,6 +75,7 @@ function Login({ open, setOpenlogin, setOpensign }) {
   const [menuItem, setMenuitem] = useState(false);
   const [loading, setLoading] = useState(false);
   const [passwordHideshow, setPasswordState] = useState(false);
+  const user_id = localStorage.getItem("user_id");
   const [userstate, setUserstate] = React.useState({
     email: "",
     password: "",
@@ -126,6 +127,15 @@ function Login({ open, setOpenlogin, setOpensign }) {
   const passwordHideshowfunc = () => {
     setPasswordState(!passwordHideshow);
   };
+
+  const changePassword = async () => {
+    try {
+      await axios.get(`${url}/changepassword/${user_id}`);
+    } catch (error) {
+      console.log("Change password !", error);
+    }
+  };
+
   return (
     <>
       <Loading loading={loading} />
@@ -259,12 +269,25 @@ function Login({ open, setOpenlogin, setOpensign }) {
                   Sign up
                 </Typography>
               </Box>
+              <Box sx={{ textAlign: "center" }}>
+                <Typography
+                  component="span"
+                  fontWeight="700"
+                  color="text.main"
+                  textDecoration="none"
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                    changePassword();
+                  }}
+                >
+                  Change password !
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </DialogContent>
       </StyledModal>
       {menuItem && <AccountMenu />}
-      {/* {opensign && <Signup setOpensign={setOpensign} opensign={opensign} />} */}
     </>
   );
 }

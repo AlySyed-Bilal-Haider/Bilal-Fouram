@@ -15,6 +15,7 @@ export const signupHandler = async (req, res) => {
     let user1 = await userModal.findOne({
       email: email,
     });
+    console.log("user:", user);
     if (user) {
       res.status(200).json({
         status: "warning",
@@ -146,6 +147,17 @@ export const tokenVerifyHandler = async (req, res) => {
       message: "Please try again!",
       user: false,
     });
+  }
+};
+
+export const fetchuser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await userModal.findOne({ _id: id }).select("-password");
+    console.log("data user", data);
+    return res.send(data);
+  } catch (error) {
+    console.log(error);
   }
 };
 
