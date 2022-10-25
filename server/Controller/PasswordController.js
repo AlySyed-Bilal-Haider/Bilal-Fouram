@@ -143,9 +143,13 @@ export const ResetPassword = async (req, res) => {
             res.send("Invalid User...!");
         } else {
             console.log("user Found");
+            res.json({
+                status: true,
+                message: "User Verified"
+            })
 
         }
-        res.send(req.params);
+       
     } catch (error) {
         res.json({
             error: error,
