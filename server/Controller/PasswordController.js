@@ -65,20 +65,73 @@ export const ChangePassword = async (req, res) => {
   }
 };
 
+export const ForgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await userModal.findOne({ email: email });
+    console.log(user?.email);
+    if (user !== null) {
+      let userToken = { id: user._id };
+      const token = jwt.sign(userToken, config.secret, { expiresIn: "15m" });
+      const link = `http://localhost:4000/resetpassword/${user._id}/${token}`;
+      console.log(link);
+      const msg = {
+        to: user.email, // Change to your recipient
+        from: {
+          name: "Miner DAO Forum",
+          email: "skillway17@gmail.com",
+        }, // Change to your verified sender
+        subject: `Miner DAO Forum Change Password`,
+        text: `Sending mail by send grid`,
+        html: `<h2>Password Reset Link will be valid for 15 minutes </h2>               
+                    <div class="description">
+                    This is your password Reset Link 
+    
+                    </div>
+                    <p>${link} </p>`,
+      };
+      // sgMail
+      //     .send(msg)
+      //     .then(() => {
+      //         console.log("Email sent");
+      //     })
+      //     .catch((error) => {
+      //         console.error(error.message);
+      //     });
+
+      res.json({
+        user: true,
+        message: "email sent",
+      });
+    } else {
+      res.json({
+        status: "error",
+        message: "SignUp First..!",
+        user: false,
+      });
+    }
+  } catch (error) {
+    res.json({
+      error: error,
+      status: false,
+    });
+  }
+};
+
 export const ResetPassword = async (req, res) => {
   try {
     const { id, token } = req.params;
     const user = await userModal.findById({ _id: id });
+    console.log(user._id.toString());
     var decoded = jwt_decode(token);
-    console.log("user id", user._id, "decoded id", decoded.id);
-    if (user._id.toString() == decoded.id) {
+    console.log(decoded.id);
+    if (user._id.toString() !== decoded.id) {
+      res.send("Invalid User...!");
+    } else {
+      console.log("user Found");
       res.json({
         status: true,
-      });
-    } else {
-      res.json({
-        error: error,
-        status: false,
+        message: "User Verified",
       });
     }
   } catch (error) {

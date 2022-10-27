@@ -61,6 +61,8 @@ router.post("/fetchusername", Comment.FetchUsers);
 //Password related routes
 
 router.get("/changepassword/:id", Password.VerifyUser, Password.ChangePassword);
+router.post("/forgotpassword",  Password.ForgotPassword);
+
 router.get("/resetpassword/:id/:token", Password.ResetPassword);
 router.post("/resetpassword/:id/:token", Password.PostResetPassword);
 
