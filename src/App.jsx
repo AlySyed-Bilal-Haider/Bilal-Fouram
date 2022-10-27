@@ -15,6 +15,7 @@ import Detail from "./components/Detail";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import { url } from "./utils";
+import Forgetpassord from "./components/ForgetPassword.jsx";
 const PrivateRoute = ({ children, checkrole }) => {
   if (checkrole !== "admin") {
     return <Navigate to="/" />;
@@ -109,6 +110,7 @@ function App() {
             element={<Detail userId={userId} username={username} />}
           />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/resetpassword/:id/:token" element={<Forgetpassord />} />
           <Route
             path="/admin"
             element={

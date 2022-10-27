@@ -50,7 +50,6 @@ router.get("/fetchpendingposts", Admin.VerifyAdmin, Admin.FetchPendingPosts);
 router.get("/fetchrejectedposts", Admin.VerifyAdmin, Admin.FetchRejectedPosts);
 router.get("/approvepost/:id", Admin.VerifyAdmin, Admin.ApprovePost);
 router.get("/rejectpost/:id", Admin.VerifyAdmin, Admin.RejectPost);
-
 //user panal routes
 
 router.post("/fetchuserposts/:id", UserPanal.FetchPosts);
@@ -58,7 +57,6 @@ router.post("/fetchuserposts/:id", UserPanal.FetchPosts);
 //@mention related routes
 
 router.post("/fetchusername", Comment.FetchUsers);
-
 
 //Password related routes
 

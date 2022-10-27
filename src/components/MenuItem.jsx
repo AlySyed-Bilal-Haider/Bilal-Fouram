@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -10,12 +10,13 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-
+import { url } from "../utils";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 export default function AccountMenu({ name, role }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const userid = localStorage.getItem("user_id");
+  const user_id = localStorage.getItem("user_id");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -23,7 +24,15 @@ export default function AccountMenu({ name, role }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const changePassword = async () => {
+    try {
+      const { data } = await axios.get(`${url}/changepassword/${user_id}`);
+      console.log("Change password", data);
+      data?.status == "ok" && toast.success(data?.message);
+    } catch (error) {
+      console.log("Change password !", error);
+    }
+  };
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -89,7 +98,6 @@ export default function AccountMenu({ name, role }) {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <Divider />
-
         {role === "admin" && (
           <MenuItem>
             <Link
@@ -105,7 +113,7 @@ export default function AccountMenu({ name, role }) {
         )}
         <MenuItem>
           <Link
-            to={`/profile/${userid}`}
+            to={`/profile/${user_id}`}
             style={{ textDecoration: "none", color: "black" }}
           >
             <ListItemIcon>
@@ -120,6 +128,25 @@ export default function AccountMenu({ name, role }) {
               <Logout fontSize="small" />
             </ListItemIcon>
             Logout
+          </Link>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            changePassword();
+          }}
+        >
+          <Link
+            to="#"
+            style={{
+              textDecoration: "none",
+              color: "black",
+              fontSize: "14px",
+            }}
+          >
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Change password
           </Link>
         </MenuItem>
       </Menu>
