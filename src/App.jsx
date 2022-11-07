@@ -59,6 +59,7 @@ function App() {
       tokenVerfiy();
     }
   }, []);
+  ///////////check user verified "YES or NO"//////////
 
   return (
     <>
@@ -112,7 +113,7 @@ function App() {
           />
           <Route path="/logout" element={<Logout />} />
           <Route path="/resetpassword/:id/:token" element={<Forgetpassord />} />
-          <Route path="/verfiyemail" element={<Emailverfiy />} />
+          <Route path="/verifyemail/:id" element={<Emailverfiy />} />
           <Route
             path="/admin"
             element={

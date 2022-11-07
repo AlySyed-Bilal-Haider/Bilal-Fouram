@@ -68,7 +68,6 @@ export const signupHandler = async (req, res) => {
           .catch((error) => {
             console.error(error.message);
           });
-
       } else {
         const usersignup = await new userModal({
           name: name,
@@ -98,10 +97,7 @@ export const signupHandler = async (req, res) => {
             console.error(error.message);
           });
         console.log("User savedi");
-
       }
-
-
 
       res.json({
         status: "ok",
@@ -124,6 +120,7 @@ export const signupHandler = async (req, res) => {
 export const verifyemail = async (req, res) => {
   try {
     const id = req.params.id;
+    console.log("verify email", id);
     await userModal.findByIdAndUpdate(id, { verified: true });
     const user = userModal.findById(id);
     console.log(user);
@@ -134,8 +131,6 @@ export const verifyemail = async (req, res) => {
       email: user.email,
       role: user.role,
     });
-
-
   } catch (error) {
     res.status(404).json({
       status: "error",
@@ -143,7 +138,7 @@ export const verifyemail = async (req, res) => {
       user: false,
     });
   }
-}
+};
 
 export const login = async (req, res) => {
   try {
@@ -164,6 +159,7 @@ export const login = async (req, res) => {
             name: user.name,
             email: user.email,
             role: user.role,
+            varify: user.verified,
           });
         } else {
           // res.setHeader("Content-Type", "application/json");
@@ -202,7 +198,6 @@ export const login = async (req, res) => {
 
 export const tokenVerifyHandler = async (req, res) => {
   const token = req.headers["x-access-token"];
-  console.log("token", token);
   try {
     var decoded = jwt_decode(token);
     if (decoded.id) {

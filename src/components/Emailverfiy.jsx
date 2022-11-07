@@ -4,12 +4,18 @@ import verfiyimg from "../images/emailverify.svg";
 import axios from "axios";
 import { url } from "../utils";
 import Loading from "../loading";
+
+import { useParams, NavLink } from "react-router-dom";
 function Emailverfiy() {
+  const params = useParams();
   const [loading, setloading] = useState(true);
+  const [emailverify, setEmailverify] = useState();
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const { data } = await axios.post(`${url}`);
+        const { data } = await axios.get(`${url}/verifyemail/${params?.id}`);
+        console.log("email verify", data);
+        setEmailverify(data?.message);
         setloading(false);
       } catch (error) {
         setloading(false);
@@ -20,7 +26,6 @@ function Emailverfiy() {
   return (
     <>
       <Loading loading={loading} />
-
       <Box
         sx={{
           display: "flex",
@@ -42,11 +47,13 @@ function Emailverfiy() {
             p: 1,
           }}
         >
-          Your email Verify successfully !
+          {emailverify} successfully !
         </Typography>
-        <Typography textDecoration="none" sx={{ cursor: "pointer" }}>
-          Back to Home
-        </Typography>
+        <NavLink to="/">
+          <Typography textDecoration="none" sx={{ cursor: "pointer" }}>
+            Back to Home
+          </Typography>
+        </NavLink>
       </Box>
     </>
   );
