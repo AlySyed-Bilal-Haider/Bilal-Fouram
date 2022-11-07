@@ -4,7 +4,13 @@ import jwt_decode from "jwt-decode";
 
 import { config } from "./config.js";
 import postModal from "../Schema/PostSchema.js";
+import sgMail from "@sendgrid/mail";
 import commentModal from "../Schema/CommentSchema.js";
+
+const API_KEY =
+  "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";
+sgMail.setApiKey(API_KEY);
+
 // ......Signup here routes start..............
 
 export const signupHandler = async (req, res) => {
@@ -17,13 +23,13 @@ export const signupHandler = async (req, res) => {
       email: email,
     });
     console.log("user:", user);
-    if (user) {
+    if (user !== null) {
       res.status(200).json({
         status: "warning",
         message: "Username Already Exist!",
         user: false,
       });
-    } else if (user1) {
+    } else if (user1 !== null) {
       res.status(200).json({
         status: "warning",
         message: "Email Already Exist!",
@@ -32,6 +38,7 @@ export const signupHandler = async (req, res) => {
     } else {
       let userToken = { password: password };
       let token = jwt.sign(userToken, config.secret);
+
       if (email === "nabiha3802izhar@gmail.com") {
         const usersignup = await new userModal({
           name: name,
@@ -40,6 +47,28 @@ export const signupHandler = async (req, res) => {
           role: "admin",
         });
         await usersignup.save();
+        const link = `http://localhost:3000/verifyemail/${usersignup._id}`;
+        const msg = {
+          to: email, // Change to your recipient
+          from: {
+            name: "Miner DAO Forum",
+            email: "skillway17@gmail.com",
+          }, // Change to your verified sender
+          subject: `Miner DAO Forum Verify Email`,
+          text: `Sending mail by send grid`,
+          html: `<h2>Email verification link </h2>               
+                  
+                  <p>${link} </p>`,
+        };
+        sgMail
+          .send(msg)
+          .then(() => {
+            console.log("Email sent");
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+
       } else {
         const usersignup = await new userModal({
           name: name,
@@ -47,7 +76,32 @@ export const signupHandler = async (req, res) => {
           password: token,
         });
         await usersignup.save();
+        const link = `http://localhost:3000/verifyemail/${usersignup._id}`;
+        const msg = {
+          to: email, // Change to your recipient
+          from: {
+            name: "Miner DAO Forum",
+            email: "skillway17@gmail.com",
+          }, // Change to your verified sender
+          subject: `Miner DAO Forum Verify Email`,
+          text: `Sending mail by send grid`,
+          html: `<h2>Email verification link </h2>               
+                  
+                  <p>${link} </p>`,
+        };
+        sgMail
+          .send(msg)
+          .then(() => {
+            console.log("Email sent");
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+        console.log("User savedi");
+
       }
+
+
 
       res.json({
         status: "ok",
@@ -56,6 +110,7 @@ export const signupHandler = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(404).json({
       status: "error",
       message: "Please try again!",
@@ -64,7 +119,31 @@ export const signupHandler = async (req, res) => {
   }
 };
 
-// ........Login routes start...jsonwebtoken.....
+// ........Login routes start...jsonwebtoken.....(
+
+export const verifyemail = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await userModal.findByIdAndUpdate(id, { verified: true });
+    const user = userModal.findById(id);
+    console.log(user);
+    res.json({
+      status: "ok",
+      message: "User Verified!",
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
+
+
+  } catch (error) {
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+      user: false,
+    });
+  }
+}
 
 export const login = async (req, res) => {
   try {
