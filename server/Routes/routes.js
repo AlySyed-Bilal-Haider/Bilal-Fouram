@@ -10,6 +10,7 @@ import * as Password from "../Controller/PasswordController.js";
 const router = express.Router();
 
 router.post("/usersignup", Users.signupHandler);
+router.get("/verifyemail/:id",Password.VerifyUser,Users.verifyemail)
 router.post("/login", Users.login);
 router.post("/verifytoken", Users.tokenVerifyHandler);
 router.post("/posts", Post.createPost);
