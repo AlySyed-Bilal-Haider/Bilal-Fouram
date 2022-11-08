@@ -8,6 +8,7 @@ import axios from "axios";
 import { url } from "../utils";
 import { Box, styled, Checkbox, Typography } from "@mui/material";
 import Login from "./Login";
+import { toast } from "react-toastify";
 const LinearProgressBox = styled(LinearProgress)(({ theme }) => ({
   height: "100%",
   width: "100%",
@@ -54,20 +55,24 @@ const BpCheckbox = (props) => {
   );
 };
 
-function Poll({ polldetails, user_id, checkedfunc }) {
+function Poll({ polldetails, user_id, checkedfunc, Mailverified }) {
   const [checkstatus, setCheckstate] = React.useState(false);
   const userToken = localStorage.getItem("token");
   const [openstate, setOpenlogin] = React.useState(false);
   const pollApproveUnapprove = async (poll_id, answer_id, user_id) => {
     try {
-      if (userToken) {
-        const pollvalue = { poll_id, answer_id, user_id };
-        console.log("pollvalue", pollvalue);
-        const { data } = await axios.post(`${url}/votepoll`, pollvalue);
-        console.log("data", data);
-        (await data.status) === "ok" && checkedfunc(true);
+      if (Mailverified) {
+        if (userToken) {
+          const pollvalue = { poll_id, answer_id, user_id };
+          console.log("pollvalue", pollvalue);
+          const { data } = await axios.post(`${url}/votepoll`, pollvalue);
+          console.log("data", data);
+          (await data.status) === "ok" && checkedfunc(true);
+        } else {
+          setOpenlogin(true);
+        }
       } else {
-        setOpenlogin(true);
+        toast.error("Please first email verify !");
       }
     } catch (error) {
       console.log("Approve poll error !", error);

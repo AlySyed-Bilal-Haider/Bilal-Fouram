@@ -44,7 +44,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function StartDiscussionButton({ setOpenlogin }) {
+function StartDiscussionButton({ setOpenlogin, Mailverified }) {
+  console.log("Mailverified:", Mailverified);
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -67,8 +68,10 @@ function StartDiscussionButton({ setOpenlogin }) {
   };
   const postSubmitHandler = async () => {
     let postdata;
-
-    if (!!tagsvalue) {
+    if (Mailverified == false || Mailverified == undefined) {
+      toast.error("please first email verify !");
+      return false;
+    } else if (!!tagsvalue) {
       try {
         if (pollstate) {
           postdata = {
@@ -99,7 +102,8 @@ function StartDiscussionButton({ setOpenlogin }) {
           }
         }
       } catch (error) {
-        console.log(error, "error");
+        console.log("erro post:", error);
+        toast.error(error?.message);
       }
     } else {
       setOpen2(true);

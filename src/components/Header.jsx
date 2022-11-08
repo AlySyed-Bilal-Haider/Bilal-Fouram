@@ -50,14 +50,20 @@ const typostyle = {
   fontSize: "14px",
   color: "red",
 };
-export default function Header({ setOpensign, setOpenlogin, name, role }) {
+export default function Header({
+  setOpensign,
+  setOpenlogin,
+  name,
+  role,
+  verifiedValue,
+}) {
   const navigate = useNavigate();
   const [filterState, setFilterstate] = useState([]);
   const searchHandle = async (e, value) => {
     const key = e.target.value || "";
     try {
       if (key || value?.name) {
-        const searchvalue = key ;
+        const searchvalue = key;
         console.log("searchvalue:", searchvalue);
         const { data } = await axios.get(`${url}/search/${searchvalue}`);
         console.log("data search key !", data);
@@ -168,10 +174,23 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <Link to="/">
                 <img src={logo} alt="Miner dao" style={{ width: "130px" }} />
               </Link>
+              {verifiedValue == false ||
+                (verifiedValue == undefined && (
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      color: "red",
+                      ml: 2,
+                    }}
+                  >
+                    Your email not verify?
+                  </Typography>
+                ))}
             </Box>
 
             <Box display="flex" alignItems="center">

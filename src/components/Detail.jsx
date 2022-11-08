@@ -29,6 +29,7 @@ import Login from "./Login";
 import { url } from "../utils";
 import Poll from "./Poll";
 import Loading from "../loading";
+import { toast } from "react-toastify";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -52,7 +53,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function Detail({ userId, username }) {
+export default function Detail({ userId, username, Mailverified }) {
   const param = useParams();
   //close menu tag on click
   const [loading, setLoading] = useState(false);
@@ -78,7 +79,11 @@ export default function Detail({ userId, username }) {
   const [editeCommentOpen, setOpenedite] = useState(false);
   const open = Boolean(anchorEl);
   const HandleChecked = (value) => {
-    setCheckPollstate(value);
+    if (Mailverified) {
+      setCheckPollstate(value);
+    } else {
+      toast.error("First email verify,please check your Mail!");
+    }
   };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -108,26 +113,32 @@ export default function Detail({ userId, username }) {
   }, [param?.id, renderPost, checkedPoll, editeCommentOpen]);
 
   const CheckloginHandler = (title) => {
-    setPostDescription(title);
-    if (userToken) {
-      setEditPopOpen(true);
+    if (Mailverified) {
+      setPostDescription(title);
+      if (userToken) {
+        setEditPopOpen(true);
+      } else {
+        setOpenlogin(true);
+      }
     } else {
-      setOpenlogin(true);
+      toast.error("First email verify,please check your Mail!");
     }
   };
 
   // checkedlike and dislike  functionality here !
   const checkedLike = async () => {
     try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `${url}/checklike/${param?.id}/${user_id}`
-      );
-      console.log("status:", data);
-      if (data.status) {
-        setChecklikeUnlikestate(true);
-      } else {
-        setChecklikeUnlikestate(false);
+      if (user_id) {
+        setLoading(true);
+        const { data } = await axios.get(
+          `${url}/checklike/${param?.id}/${user_id}`
+        );
+        console.log("status:", data);
+        if (data.status) {
+          setChecklikeUnlikestate(true);
+        } else {
+          setChecklikeUnlikestate(false);
+        }
       }
       setLoading(false);
     } catch (error) {
@@ -163,6 +174,7 @@ export default function Detail({ userId, username }) {
   const unLikedHandler = async () => {
     try {
       const unliked = { post_id: param?.id, user_id: user_id };
+
       setLoading(true);
       if (userToken) {
         const { data } = await axios.post(`${url}/unlike`, unliked);
@@ -197,7 +209,6 @@ export default function Detail({ userId, username }) {
       setLoading(true);
       if (userToken) {
         const { data } = await axios.post(`${url}/likecomment`, likeReply);
-
         if (data.message === "ok") {
           fetchdetails();
         }
@@ -439,6 +450,7 @@ export default function Detail({ userId, username }) {
                       polldetails={postdetails[index]?.poll}
                       user_id={user_id}
                       checkedfunc={HandleChecked}
+                      Mailverified={Mailverified}
                     />
 
                     {/* start comment sections start here */}

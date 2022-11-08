@@ -208,6 +208,7 @@ export const tokenVerifyHandler = async (req, res) => {
           email: docs.email,
           id: docs._id,
           role: docs.role,
+          verified: docs.user_id,
         });
       });
     } else {
