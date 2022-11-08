@@ -45,14 +45,14 @@ export const ChangePassword = async (req, res) => {
                 </div>
                 <p>${link} </p>`,
     };
-    sgMail
-      .send(msg)
-      .then(() => {
-        console.log("Email sent");
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
+    // sgMail
+    //   .send(msg)
+    //   .then(() => {
+    //     console.log("Email sent");
+    //   })
+    //   .catch((error) => {
+    //     console.error(error.message);
+    //   });
     res.json({
       status: "ok",
       message: "please check your email !",
@@ -122,13 +122,10 @@ export const ResetPassword = async (req, res) => {
   try {
     const { id, token } = req.params;
     const user = await userModal.findById({ _id: id });
-    console.log(user._id.toString());
     var decoded = jwt_decode(token);
-    console.log(decoded.id);
     if (user._id.toString() !== decoded.id) {
       res.send("Invalid User...!");
     } else {
-      console.log("user Found");
       res.json({
         status: true,
         message: "User Verified",
@@ -156,7 +153,6 @@ export const PostResetPassword = async (req, res) => {
       let userToken = { password: password };
       let token = jwt.sign(userToken, config.secret);
       await userModal.findByIdAndUpdate(user._id, { password: token });
-      console.log("Password has been updated");
       res.json({
         status: true,
         message: "Password Successfully Reset... !",

@@ -10,7 +10,8 @@ import * as Password from "../Controller/PasswordController.js";
 const router = express.Router();
 
 router.post("/usersignup", Users.signupHandler);
-router.get("/verifyemail/:id",Password.VerifyUser,Users.verifyemail)
+router.get("/verifyemail/:id", Password.VerifyUser, Users.verifyemail);
+router.get("/resendemail/:id", Password.VerifyUser, Users.ResendEmail);
 router.post("/login", Users.login);
 router.post("/verifytoken", Users.tokenVerifyHandler);
 router.post("/posts", Post.createPost);
@@ -62,7 +63,7 @@ router.post("/fetchusername", Comment.FetchUsers);
 //Password related routes
 
 router.get("/changepassword/:id", Password.VerifyUser, Password.ChangePassword);
-router.post("/forgotpassword",  Password.ForgotPassword);
+router.post("/forgotpassword", Password.ForgotPassword);
 
 router.get("/resetpassword/:id/:token", Password.ResetPassword);
 router.post("/resetpassword/:id/:token", Password.PostResetPassword);
