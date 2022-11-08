@@ -22,7 +22,7 @@ export const signupHandler = async (req, res) => {
     let user1 = await userModal.findOne({
       email: email,
     });
-    console.log("user:", user);
+
     if (user !== null) {
       res.status(200).json({
         status: "warning",
@@ -60,14 +60,14 @@ export const signupHandler = async (req, res) => {
                   
                   <p>${link} </p>`,
         };
-        sgMail
-          .send(msg)
-          .then(() => {
-            console.log("Email sent");
-          })
-          .catch((error) => {
-            console.error(error.message);
-          });
+        // sgMail
+        //   .send(msg)
+        //   .then(() => {
+        //     console.log("Email sent");
+        //   })
+        //   .catch((error) => {
+        //     console.error(error.message);
+        //   });
       } else {
         const usersignup = await new userModal({
           name: name,
@@ -84,19 +84,21 @@ export const signupHandler = async (req, res) => {
           }, // Change to your verified sender
           subject: `Miner DAO Forum Verify Email`,
           text: `Sending mail by send grid`,
-          html: `<h2>Email verification link </h2>               
-                  
-                  <p>${link} </p>`,
+          html: `<h2>Email verification link </h2> 
+          <button><a href=${link}>Verify Email</a> </button>       
+          `
+
+
         };
-        sgMail
-          .send(msg)
-          .then(() => {
-            console.log("Email sent");
-          })
-          .catch((error) => {
-            console.error(error.message);
-          });
-        console.log("User savedi");
+        // sgMail
+        //   .send(msg)
+        //   .then(() => {
+        //     console.log("Email sent");
+        //   })
+        //   .catch((error) => {
+        //     console.error(error.message);
+        //   });
+
       }
 
       res.json({
@@ -106,7 +108,6 @@ export const signupHandler = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(404).json({
       status: "error",
       message: "Please try again!",
@@ -120,10 +121,8 @@ export const signupHandler = async (req, res) => {
 export const verifyemail = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("verify email", id);
     await userModal.findByIdAndUpdate(id, { verified: true });
     const user = userModal.findById(id);
-    console.log(user);
     res.json({
       status: "ok",
       message: "User Verified!",
@@ -139,6 +138,48 @@ export const verifyemail = async (req, res) => {
     });
   }
 };
+
+export const ResendEmail = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const link = `http://localhost:3000/verifyemail/${id}`;
+    const user = await userModal.findById(id);
+
+
+    const msg = {
+      to: user.email, // Change to your recipient
+      from: {
+        name: "Miner DAO Forum",
+        email: "skillway17@gmail.com",
+      }, // Change to your verified sender
+      subject: `Miner DAO Forum Verify Email`,
+      text: `Sending mail by send grid`,
+      html: `<h2>Email verification link </h2> 
+          <button><a href=${link}>Verify Email</a> </button>  `
+    };
+    // sgMail
+    //   .send(msg)
+    //   .then(() => {
+    //     console.log("Email sent");
+    //   })
+    //   .catch((error) => {
+    //     console.error(error.message);
+    //   });
+    res.json({
+      status: "ok",
+      success: true,
+      message: "Email Sent..!",
+    });
+
+
+
+  } catch (error) {
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+    });
+  }
+}
 
 export const login = async (req, res) => {
   try {
@@ -229,7 +270,6 @@ export const fetchuser = async (req, res) => {
   try {
     const id = req.params.id;
     const data = await userModal.findOne({ _id: id }).select("-password");
-    console.log("data user", data);
     return res.send(data);
   } catch (error) {
     console.log(error);
