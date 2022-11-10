@@ -1,7 +1,6 @@
 import userModal from "../Schema/UserSchema.js";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
-
 import { config } from "./config.js";
 import postModal from "../Schema/PostSchema.js";
 import sgMail from "@sendgrid/mail";
@@ -60,14 +59,14 @@ export const signupHandler = async (req, res) => {
                   
                   <p>${link} </p>`,
         };
-        // sgMail
-        //   .send(msg)
-        //   .then(() => {
-        //     console.log("Email sent");
-        //   })
-        //   .catch((error) => {
-        //     console.error(error.message);
-        //   });
+        sgMail
+          .send(msg)
+          .then(() => {
+            console.log("Email sent");
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
       } else {
         const usersignup = await new userModal({
           name: name,
@@ -88,20 +87,20 @@ export const signupHandler = async (req, res) => {
           <button><a href=${link}>Verify Email</a> </button>       
           `,
         };
-        // sgMail
-        //   .send(msg)
-        //   .then(() => {
-        //     console.log("Email sent");
-        //   })
-        //   .catch((error) => {
-        //     console.error(error.message);
-        //   });
+        sgMail
+          .send(msg)
+          .then(() => {
+            console.log("Email sent");
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
       }
 
       res.json({
         status: "ok",
         success: true,
-        message: "User register Successfully!",
+        message: "please check your email and user register",
       });
     }
   } catch (error) {
@@ -194,15 +193,14 @@ export const login = async (req, res) => {
             name: user.name,
             email: user.email,
             role: user.role,
-            varify: user.verified,
           });
         } else {
-          // res.setHeader("Content-Type", "application/json");
-          // res.json({
-          //   status: "error",
-          //   message: "Please try again! Password  not match",
-          //   user: false,
-          // });
+          res.setHeader("Content-Type", "application/json");
+          res.json({
+            status: "error",
+            message: "Please try again! Password  not match",
+            user: false,
+          });
         }
       } else {
         res.setHeader("Content-Type", "application/json");

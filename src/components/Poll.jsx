@@ -55,8 +55,9 @@ const BpCheckbox = (props) => {
   );
 };
 
-function Poll({ polldetails, user_id, checkedfunc, Mailverified }) {
+function Poll({ polldetails, user_id, checkedfunc }) {
   const [checkstatus, setCheckstate] = React.useState(false);
+  const Mailverified = localStorage.getItem("verified");
   const userToken = localStorage.getItem("token");
   const [openstate, setOpenlogin] = React.useState(false);
   const pollApproveUnapprove = async (poll_id, answer_id, user_id) => {

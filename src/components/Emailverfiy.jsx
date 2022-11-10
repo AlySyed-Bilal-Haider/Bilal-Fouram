@@ -18,6 +18,8 @@ function Emailverfiy() {
         setEmailverify(data?.message);
         setloading(false);
       } catch (error) {
+        console.log("error email verify", error);
+        setEmailverify(error?.message);
         setloading(false);
       }
     };
@@ -47,7 +49,7 @@ function Emailverfiy() {
             p: 1,
           }}
         >
-          {emailverify} successfully !
+          {emailverify} !
         </Typography>
         <NavLink to="/">
           <Typography textDecoration="none" sx={{ cursor: "pointer" }}>

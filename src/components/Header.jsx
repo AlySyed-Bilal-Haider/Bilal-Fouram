@@ -48,15 +48,9 @@ const Autocompletege = styled(Autocomplete)(({ theme }) => ({
   },
 }));
 
-export default function Header({
-  setOpensign,
-  setOpenlogin,
-  name,
-  role,
-  verifiedValue,
-}) {
+export default function Header({ setOpensign, setOpenlogin, name, role }) {
+  const verifiedValue = localStorage.getItem("verified");
   const user_id = localStorage.getItem("user_id");
-  console.log("user id:", user_id);
   const navigate = useNavigate();
   const [filterState, setFilterstate] = useState([]);
   const searchHandle = async (e, value) => {
@@ -196,9 +190,10 @@ export default function Header({
               <Link to="/">
                 <img src={logo} alt="Miner dao" style={{ width: "130px" }} />
               </Link>
-              {verifiedValue == false || (
+              {verifiedValue == false && (
                 <Typography
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     reSendverifyLink(user_id);
                   }}
                   sx={{

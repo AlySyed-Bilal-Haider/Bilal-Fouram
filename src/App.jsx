@@ -30,7 +30,6 @@ function App() {
   const [userId, setUserId] = useState("");
   const [username, setusernameState] = React.useState("");
   const [checkrole, setRolestate] = useState("");
-  const [verified, setVerifiedState] = useState("");
   const tokenVerfiy = async () => {
     try {
       await fetch(`${url}/verifytoken`, {
@@ -45,7 +44,6 @@ function App() {
           localStorage.setItem("user_id", data.id);
           setusernameState(data.name);
           setUserId(data.id);
-          setVerifiedState(data?.verified);
           setRolestate(data?.role);
         });
     } catch (error) {
@@ -92,7 +90,6 @@ function App() {
           setOpenlogin={setOpenLogin}
           name={username}
           role={checkrole}
-          verifiedValue={verified}
         />
         <Routes>
           <Route
@@ -104,26 +101,13 @@ function App() {
           <Route
             path="/AllDiscussions"
             element={
-              <AllDiscussions
-                setOpenlogin={setOpenLogin}
-                username={username}
-                Mailverified={verified}
-              />
+              <AllDiscussions setOpenlogin={setOpenLogin} username={username} />
             }
           />
-          <Route
-            path="/AllDiscussions/:value"
-            element={<AllDiscussions Mailverified={verified} />}
-          />
+          <Route path="/AllDiscussions/:value" element={<AllDiscussions />} />
           <Route
             path="/detail/:id"
-            element={
-              <Detail
-                userId={userId}
-                username={username}
-                Mailverified={verified}
-              />
-            }
+            element={<Detail userId={userId} username={username} />}
           />
           <Route path="/logout" element={<Logout />} />
           <Route path="/resetpassword/:id/:token" element={<Forgetpassord />} />

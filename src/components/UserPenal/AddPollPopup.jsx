@@ -50,6 +50,7 @@ const StyledModal = withStyles((theme) => ({
 }))(Dialog);
 
 function PopUp({ open, setOpen, pollHandle }) {
+  const Mailverified = localStorage.getItem("verified");
   const [addpoll, setAddpollstate] = useState({
     question: "",
     answers: [],
@@ -89,20 +90,24 @@ function PopUp({ open, setOpen, pollHandle }) {
     }, []);
     addpoll.answers = res;
     try {
-      if (
-        addpoll?.question &&
-        typeof addpoll?.answers != "undefined" &&
-        addpoll?.answers.length > 0
-      ) {
-        const { data } = await axios.post(`${url}/createpoll`, addpoll);
-        console.log("poll data", data);
-        if (data.message == "ok") {
-          toast.success("Poll add success fully ");
-          pollHandle(data.poll);
+      if (Mailverified) {
+        if (
+          addpoll?.question &&
+          typeof addpoll?.answers != "undefined" &&
+          addpoll?.answers.length > 0
+        ) {
+          const { data } = await axios.post(`${url}/createpoll`, addpoll);
+          console.log("poll data", data);
+          if (data.message == "ok") {
+            toast.success("Poll add success fully ");
+            pollHandle(data.poll);
+          }
+          await setOpen(false);
+        } else {
+          toast.error("Fill complete Poll form ! ");
         }
-        await setOpen(false);
       } else {
-        toast.error("Fill complete Poll form ! ");
+        toast.error("Please first email verfiy,and check your email ! ");
       }
     } catch (error) {
       console.log("poll error !", error);

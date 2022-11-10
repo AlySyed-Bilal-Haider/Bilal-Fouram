@@ -53,9 +53,10 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function Detail({ userId, username, Mailverified }) {
+export default function Detail({ userId, username }) {
   const param = useParams();
   //close menu tag on click
+  const Mailverified = localStorage.getItem("verified");
   const [loading, setLoading] = useState(false);
   const userToken = localStorage.getItem("token");
   const user_id = localStorage.getItem("user_id");

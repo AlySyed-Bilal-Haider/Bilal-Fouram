@@ -105,6 +105,8 @@ function Login({ open, setOpenlogin, setOpensign }) {
           localStorage.setItem("token", data.user);
           localStorage.setItem("name", data.name);
           localStorage.setItem("email", data.email);
+          localStorage.setItem("verified", data?.verified);
+          console.log("verified", data?.verified);
           setTimeout(() => {
             window.location.href = "/";
           }, 500);

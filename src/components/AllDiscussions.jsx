@@ -138,7 +138,7 @@ const mainHeader = (locationpath) => {
       return null;
   }
 };
-function AllDiscussions({ modal, setOpenlogin, username, Mailverified }) {
+function AllDiscussions({ modal, setOpenlogin, username }) {
   const location = useLocation();
 
   return (
@@ -153,7 +153,6 @@ function AllDiscussions({ modal, setOpenlogin, username, Mailverified }) {
               <StartDiscussionButton
                 setOpenlogin={setOpenlogin}
                 username={username}
-                Mailverified={Mailverified}
               />
               <Box sx={{ mt: 2, width: "100%" }}>
                 {sidebardata?.map(({ text, link, Icon }, index) => {

@@ -44,8 +44,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function StartDiscussionButton({ setOpenlogin, Mailverified }) {
-  console.log("Mailverified:", Mailverified);
+function StartDiscussionButton({ setOpenlogin }) {
+  const Mailverified = localStorage.getItem("verified");
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -84,7 +84,11 @@ function StartDiscussionButton({ setOpenlogin, Mailverified }) {
           const { data } = await axios.post(`${url}/posts`, postdata);
           if (data.status === "ok") {
             toast.success(data.message);
-            setPollstate("");
+            setPollstate({
+              tag: "",
+              title: "",
+              description: "",
+            });
             handleClose();
           } else {
             toast.error(data.message);
