@@ -23,6 +23,7 @@ import axios from "axios";
 import logo from "../images/logo.png";
 import Autocomplete from "@mui/material/Autocomplete";
 import { url } from "../utils";
+import { toast } from "react-toastify";
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -46,10 +47,7 @@ const Autocompletege = styled(Autocomplete)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
   },
 }));
-const typostyle = {
-  fontSize: "14px",
-  color: "red",
-};
+
 export default function Header({
   setOpensign,
   setOpenlogin,
@@ -57,6 +55,8 @@ export default function Header({
   role,
   verifiedValue,
 }) {
+  const user_id = localStorage.getItem("user_id");
+  console.log("user id:", user_id);
   const navigate = useNavigate();
   const [filterState, setFilterstate] = useState([]);
   const searchHandle = async (e, value) => {
@@ -93,6 +93,24 @@ export default function Header({
   const navigateHandle = (id) => {
     navigate(`/profile/${id}`);
   };
+
+  //////Resend email verifications link//////////
+  const reSendverifyLink = async (id) => {
+    try {
+      if (typeof id !== "undefined") {
+        const { data } = await axios.get(`${url}/resendemail/${id}`);
+        console.log("email verify data", data);
+        data.status == "ok" && toast.success("please check your email !");
+      } else {
+        setOpenlogin(true);
+      }
+    } catch (error) {
+      console.log("verfiy error", error);
+      toast.error(error.message);
+    }
+  };
+
+  ////////////////Resend link end here/////////
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -178,19 +196,23 @@ export default function Header({
               <Link to="/">
                 <img src={logo} alt="Miner dao" style={{ width: "130px" }} />
               </Link>
-              {verifiedValue == false ||
-                (verifiedValue == undefined && (
-                  <Typography
-                    sx={{
-                      fontSize: "14px",
-                      fontWeight: 700,
-                      color: "red",
-                      ml: 2,
-                    }}
-                  >
-                    Your email not verify?
-                  </Typography>
-                ))}
+              {verifiedValue == false || (
+                <Typography
+                  onClick={() => {
+                    reSendverifyLink(user_id);
+                  }}
+                  sx={{
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    color: "red",
+                    ml: 2,
+                  }}
+                >
+                  Your email not verify?
+                </Typography>
+              )}
             </Box>
 
             <Box display="flex" alignItems="center">
