@@ -46,7 +46,8 @@ export const signupHandler = async (req, res) => {
           role: "admin",
         });
         await usersignup.save();
-        const link = `http://localhost:3000/verifyemail/${usersignup._id}`;
+        const link = `https://minordao-forum.herokuapp.com/verifyemail/${usersignup._id}`;
+        console.log(link, "yegftu");
         const msg = {
           to: email, // Change to your recipient
           from: {
@@ -74,7 +75,9 @@ export const signupHandler = async (req, res) => {
           password: token,
         });
         await usersignup.save();
-        const link = `http://localhost:3000/verifyemail/${usersignup._id}`;
+        const link = `https://minordao-forum.herokuapp.com/verifyemail/${usersignup._id}`;
+        console.log(link, "yegftu");
+
         const msg = {
           to: email, // Change to your recipient
           from: {
@@ -118,7 +121,7 @@ export const verifyemail = async (req, res) => {
   try {
     const id = req.params.id;
     await userModal.findByIdAndUpdate(id, { verified: true });
-    const user = userModal.findById(id);
+    const user = userModal.findById({ _id: id });
     res.json({
       status: "ok",
       message: "User Verified!",
@@ -139,7 +142,7 @@ export const ResendEmail = async (req, res) => {
   try {
     const id = req.params.id;
     console.log("id:", id);
-    const link = `http://localhost:3000/verifyemail/${id}`;
+    const link = `https://minordao-forum.herokuapp.com/verifyemail/${id}`;
     const user = await userModal.findById(id);
 
     const msg = {

@@ -6,9 +6,7 @@ import * as Poll from "../Controller/PollController.js";
 import * as Admin from "../Controller/AdminController.js";
 import * as UserPanal from "../Controller/UserPanalController.js";
 import * as Password from "../Controller/PasswordController.js";
-
 const router = express.Router();
-
 router.post("/usersignup", Users.signupHandler);
 router.get("/verifyemail/:id", Password.VerifyUser, Users.verifyemail);
 router.get("/resendemail/:id", Password.VerifyUser, Users.ResendEmail);
@@ -32,7 +30,7 @@ router.get("/category/:tag", Post.fetchcategory);
 router.get("/checklike/:post_id/:user_id", Post.CheckPostLike);
 router.get("/fetchuserpost/:id", Post.getSpecificDiscussion);
 router.get("/fetchPostDetails/:id", Post.fetchPostDetails);
-// router.post("/fetchuser/:id", Users.fetchuser);
+router.post("/fetchuser/:id", Users.fetchuser);
 router.get("/search/:key", Users.searchHandle);
 
 router.delete("/removePost/:id", Post.removepost);

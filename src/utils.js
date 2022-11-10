@@ -62,8 +62,9 @@ export const gasEstimationForAll = async (account, fn, data) => {
     return calculateGasMargin(estimateGas);
   }
 };
-export const url = process.env.NODE_ENV === "production"
-    ? "https://miner-dao.herokuapp.com"
+export const url =
+  process.env.NODE_ENV === "production"
+    ? "https://minordao-forum.herokuapp.com"
     : "http://localhost:4000";
 let initialState = {
   provider: null,

@@ -120,8 +120,7 @@ export default function MainPage() {
   useEffect(() => {
     id && fetchallrecord();
   }, [id]);
-
-  console.log("alldata:", allLengthrecord);
+  console.log("userProfilestate", userProfilestate);
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
@@ -150,14 +149,14 @@ export default function MainPage() {
                     backgroundColor: "#fff",
                   }}
                 >
-                  {userProfilestate?.img ? (
+                  {userProfilestate && userProfilestate?.img ? (
                     <form onSubmit={handlerSubmit}>
                       <div className="image-show">
                         <label for="file-input">
                           {baseURL ? (
                             <img
                               src={baseURL}
-                              alt="avtar"
+                              alt="base URL image"
                               style={{
                                 width: "150px",
                                 height: "150px",
@@ -169,7 +168,7 @@ export default function MainPage() {
                           ) : (
                             <img
                               src={`${url}/upload/${userProfilestate?.img}`}
-                              alt="avtar"
+                              alt="avater image"
                               style={{
                                 width: "150px",
                                 height: "150px",
@@ -221,7 +220,7 @@ export default function MainPage() {
                           {baseURL ? (
                             <img
                               src={baseURL}
-                              alt=""
+                              alt="second Base URL"
                               style={{
                                 width: "150px",
                                 height: "150px",
@@ -232,7 +231,7 @@ export default function MainPage() {
                           ) : (
                             <img
                               src={avtar}
-                              alt=""
+                              alt="Awater"
                               style={{ width: "100%", cursor: "pointer" }}
                             />
                           )}

@@ -29,12 +29,12 @@ export const ChangePassword = async (req, res) => {
     const user = await userModal.findById({ _id: id });
     let userToken = { id: user._id };
     const token = jwt.sign(userToken, config.secret, { expiresIn: "15m" });
-    const link = `http://localhost:3000/resetpassword/${user._id}/${token}`;
+    const link = `/resetpassword/${user._id}/${token}`;
     const msg = {
       to: user.email, // Change to your recipient
       from: {
         name: "Miner DAO Forum",
-        email: "skillway17@gmail.com",
+        email: "hamza@minermoney.com",
       }, // Change to your verified sender
       subject: `Miner DAO Forum Change Password`,
       text: `Sending mail by send grid`,
@@ -45,14 +45,14 @@ export const ChangePassword = async (req, res) => {
                 </div>
                 <p>${link} </p>`,
     };
-    // sgMail
-    //   .send(msg)
-    //   .then(() => {
-    //     console.log("Email sent");
-    //   })
-    //   .catch((error) => {
-    //     console.error(error.message);
-    //   });
+    sgMail
+      .send(msg)
+      .then(() => {
+        console.log("Email sent");
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
     res.json({
       status: "ok",
       message: "please check your email !",
@@ -73,13 +73,13 @@ export const ForgotPassword = async (req, res) => {
     if (user !== null) {
       let userToken = { id: user._id };
       const token = jwt.sign(userToken, config.secret, { expiresIn: "15m" });
-      const link = `http://localhost:4000/resetpassword/${user._id}/${token}`;
+      const link = `/resetpassword/${user._id}/${token}`;
       console.log(link);
       const msg = {
         to: user.email, // Change to your recipient
         from: {
           name: "Miner DAO Forum",
-          email: "skillway17@gmail.com",
+          email: "hamza@minermoney.com",
         }, // Change to your verified sender
         subject: `Miner DAO Forum Change Password`,
         text: `Sending mail by send grid`,
@@ -90,14 +90,14 @@ export const ForgotPassword = async (req, res) => {
                     </div>
                     <p>${link} </p>`,
       };
-      // sgMail
-      //     .send(msg)
-      //     .then(() => {
-      //         console.log("Email sent");
-      //     })
-      //     .catch((error) => {
-      //         console.error(error.message);
-      //     });
+      sgMail
+        .send(msg)
+        .then(() => {
+          console.log("Email sent");
+        })
+        .catch((error) => {
+          console.error(error.message);
+        });
 
       res.json({
         user: true,
