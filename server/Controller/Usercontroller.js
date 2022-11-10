@@ -46,7 +46,7 @@ export const signupHandler = async (req, res) => {
           role: "admin",
         });
         await usersignup.save();
-        const link = `https://minordao-forum.herokuapp.com/verifyemail/${usersignup._id}`;
+        const link = `https://minordao-forum.herokuapp.com/verifications/${usersignup._id}`;
         console.log(link, "yegftu");
         const msg = {
           to: email, // Change to your recipient
@@ -75,7 +75,7 @@ export const signupHandler = async (req, res) => {
           password: token,
         });
         await usersignup.save();
-        const link = `https://minordao-forum.herokuapp.com/verifyemail/${usersignup._id}`;
+        const link = `https://minordao-forum.herokuapp.com/verifications/${usersignup._id}`;
         console.log(link, "yegftu");
 
         const msg = {
@@ -142,7 +142,7 @@ export const ResendEmail = async (req, res) => {
   try {
     const id = req.params.id;
     console.log("id:", id);
-    const link = `https://minordao-forum.herokuapp.com/verifyemail/${id}`;
+    const link = `https://minordao-forum.herokuapp.com/verifications/${id}`;
     const user = await userModal.findById(id);
 
     const msg = {

@@ -8,7 +8,7 @@ import * as UserPanal from "../Controller/UserPanalController.js";
 import * as Password from "../Controller/PasswordController.js";
 const router = express.Router();
 router.post("/usersignup", Users.signupHandler);
-router.get("/verifyemail/:id", Password.VerifyUser, Users.verifyemail);
+router.get("/verifyEmail/:id", Password.VerifyUser, Users.verifyemail);
 router.get("/resendemail/:id", Password.VerifyUser, Users.ResendEmail);
 router.post("/login", Users.login);
 router.post("/verifytoken", Users.tokenVerifyHandler);

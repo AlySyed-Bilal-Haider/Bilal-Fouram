@@ -111,7 +111,7 @@ function App() {
           />
           <Route path="/logout" element={<Logout />} />
           <Route path="/resetpassword/:id/:token" element={<Forgetpassord />} />
-          <Route path="/verifyemail/:id" element={<Emailverfiy />} />
+          <Route path="/verifications/:id" element={<Emailverfiy />} />
           <Route
             path="/admin"
             element={

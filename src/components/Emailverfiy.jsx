@@ -7,13 +7,14 @@ import Loading from "../loading";
 
 import { useParams, NavLink } from "react-router-dom";
 function Emailverfiy() {
+  console.log("hello");
   const params = useParams();
   const [loading, setloading] = useState(true);
   const [emailverify, setEmailverify] = useState();
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        const { data } = await axios.get(`${url}/verifyemail/${params?.id}`);
+        const { data } = await axios.get(`${url}/verifyEmail/${params?.id}`);
         console.log("email verify", data);
         setEmailverify(data?.message);
         setloading(false);
