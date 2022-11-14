@@ -3,6 +3,7 @@ import {
   AppBar,
   Box,
   Button,
+  Container,
   Dialog,
   Divider,
   IconButton,
@@ -20,6 +21,11 @@ import "react-toastify/dist/ReactToastify.css";
 import PopUp from "./UserPenal/AddPollPopup";
 import ChooseTag from "./UserPenal/ChooseTag";
 import { url } from "../utils";
+//editor
+import { Editor } from "react-draft-wysiwyg";
+import { convertToHTML } from "draft-convert";
+import { EditorState } from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
@@ -58,6 +64,23 @@ function StartDiscussionButton({ setOpenlogin }) {
     description:
       "Before you post this: 1. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines 2. If this proposal is going to the Proposal section, make sure you have read the Proposal  guidelines:  https://discord.com/invite/olympusdao ",
   });
+
+  //-------------------------------editor States--------------------------------
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+
+  const [convertedContent, setConvertedContent] = useState(null);
+  const handleEditorChange = (state) => {
+    setEditorState(state);
+    convertContentToHTML();
+  };
+  const convertContentToHTML = () => {
+    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+    setConvertedContent(currentContentAsHTML);
+  };
+
+  // --------------------------------------------------------------------------
   const userid = localStorage.getItem("user_id");
   const discussionHandler = (e) => {
     setPoststate({ ...addpoststate, [e.target.name]: e.target.value });
@@ -241,7 +264,7 @@ function StartDiscussionButton({ setOpenlogin }) {
                 </Typography>
               )}
 
-              <Box>
+              {/* <Box>
                 <InputBase
                   placeholder="Discussion Title"
                   type="text"
@@ -254,7 +277,7 @@ function StartDiscussionButton({ setOpenlogin }) {
                   onChange={discussionHandler}
                   required
                 />
-              </Box>
+              </Box> */}
             </Box>
 
             {pollstate == "" ? (
@@ -285,7 +308,44 @@ function StartDiscussionButton({ setOpenlogin }) {
           </Toolbar>
         </AppBar>
 
-        <Box mt={-2} mb={5} mx={4.5}>
+        {/* ---------------------Editor----------------------------- */}
+        <Container maxWidth="xl">
+          <Editor
+            editorState={editorState}
+            onEditorStateChange={handleEditorChange}
+            toolbarClassName="toolbarclassName"
+            wrapperClassName="wrapperclassName="
+            editorClassName="editorclassName="
+            toolbar={{
+              options: [
+                "inline",
+                "blockType",
+                "fontSize",
+                "textAlign",
+                "history",
+                "colorPicker",
+              ],
+
+              inline: {
+                options: ["italic", "bold"],
+                bold: { className: "demo-option-custom" },
+                italic: { className: "demo-option-custom" },
+                underline: { className: "demo-option-custom" },
+                strikethrough: { className: "demo-option-custom" },
+                monospace: { className: "demo-option-custom" },
+                superscript: { className: "demo-option-custom" },
+                subscript: { className: "demo-option-custom" },
+              },
+              blockType: {
+                className: "demo-option-custom-wide",
+                dropdownClassName: "demo-dropdown-custom",
+              },
+              fontSize: { className: "demo-option-custom-medium" },
+            }}
+          />
+        </Container>
+
+        {/* <Box mt={-2} mb={5} mx={4.5}>
           <TextInput
             type="text"
             name="description"
@@ -296,26 +356,30 @@ function StartDiscussionButton({ setOpenlogin }) {
             rows={5}
             required
           />
-        </Box>
-        <Divider />
-        <Button
-          type="submit"
-          onClick={postSubmitHandler}
-          disableRipple={true}
-          sx={{
-            backgroundColor: "secondary.main",
-            color: "text.main",
-            textTransform: "capitalize",
-            width: "150px",
-            marginTop: "20px",
-            marginLeft: "20px",
-            "&:hover": {
-              backgroundColor: "secondary.main",
-            },
-          }}
-        >
-          Post Discussion
-        </Button>
+        </Box> */}
+        <Divider sx={{ backgroundColor: "white", color: "white" }} />
+        <Container maxWidth="xl">
+          <Box sx={{ display: "flex", justifyContent: "right" }}>
+            <Button
+              type="submit"
+              onClick={postSubmitHandler}
+              disableRipple={true}
+              sx={{
+                backgroundColor: "secondary.main",
+                color: "text.main",
+                textTransform: "capitalize",
+                width: "150px",
+                marginTop: "20px",
+                marginLeft: "20px",
+                "&:hover": {
+                  backgroundColor: "secondary.main",
+                },
+              }}
+            >
+              Post Discussion
+            </Button>
+          </Box>
+        </Container>
       </Dialog>
       {/* ------------------------------------- */}
     </>
