@@ -441,9 +441,11 @@ export default function Detail({ userId, username }) {
                     </Typography>
                   </Box>
 
-                  <Box pr={4} fontSize="14px" color="text.paragraph">
-                    {items?.description}
-                  </Box>
+                  <Box
+                    fontSize="14px"
+                    color="text.paragraph"
+                    dangerouslySetInnerHTML={{ __html: items?.description }}
+                  />
 
                   {/* Poll start here, poll mean Questions and Ans */}
                   <Box pt={2} sx={{ md: 6, xs: 4 }}>

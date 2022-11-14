@@ -20,7 +20,8 @@
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "draft-convert": "^2.1.13",
-    "draft-js": "^0.11.7",
+  
+    
     "ethers": "^5.7.0",
     "gsap": "^3.11.1",
     "jsonwebtoken": "^8.5.1",
@@ -42,6 +43,7 @@
     "web3": "^1.7.5",
     "web3modal": "^1.9.9"
   },
+  "resolutions": { "draft-js": "0.11.7" },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",

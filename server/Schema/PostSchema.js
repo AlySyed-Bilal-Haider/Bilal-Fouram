@@ -12,7 +12,6 @@ const Post = new Schema({
   },
   description: {
     type: String,
-    trim: true,
     required: true,
   },
   user: {

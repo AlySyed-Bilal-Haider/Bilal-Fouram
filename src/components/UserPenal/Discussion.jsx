@@ -9,7 +9,6 @@ import { NavLink } from "react-router-dom";
 function Discussion({ id }) {
   const [descussionstate, setDescussionState] = useState([]);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -25,7 +24,6 @@ function Discussion({ id }) {
     };
     fetchPost();
   }, []);
-
   return (
     <>
       <Loading loading={loading} />
@@ -130,14 +128,18 @@ function Discussion({ id }) {
                                       {items?.ref_id?.status}
                                     </Typography>
                                   </Box>
-
                                   <Box fontSize="14px" color="text.paragraph">
                                     {items?.ref_id?.title}
                                     <br />
                                     <br />
-                                    {items?.ref_id?.description}
-                                    <br />
                                   </Box>
+                                  <Box
+                                    fontSize="14px"
+                                    color="text.paragraph"
+                                    dangerouslySetInnerHTML={{
+                                      __html: items?.ref_id?.description,
+                                    }}
+                                  />
                                 </Box>
                               </Box>
                             </NavLink>

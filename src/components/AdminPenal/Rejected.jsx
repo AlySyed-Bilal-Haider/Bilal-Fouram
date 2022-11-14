@@ -129,9 +129,15 @@ export default function Rejected({ rejected, func, state }) {
                     {title}
                     <br />
                     <br />
-                    {description}
-                    <br />
                   </Box>
+                  <Box
+                    fontSize="14px"
+                    color="text.paragraph"
+                    onClick={() => {
+                      detailsHandle(_id);
+                    }}
+                    dangerouslySetInnerHTML={{ __html: description }}
+                  />
 
                   <Box
                     mt={2}

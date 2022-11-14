@@ -17,6 +17,7 @@ import { RiGroupFill } from "react-icons/ri";
 import { CgNotes } from "react-icons/cg";
 import Loading from "../../loading";
 import { url } from "../../utils";
+import { BsBoxArrowInDownLeft } from "react-icons/bs";
 // /detail
 function Commonpage(props) {
   const naviagte = useNavigate();
@@ -128,10 +129,6 @@ function Commonpage(props) {
                         m: 1,
                       }}
                     >
-                      {console.log(
-                        `http://localhost:4000/upload/${alldetailsstate[i]?.user?.img}`
-                      )}
-
                       <img
                         style={{
                           width: "35px",
@@ -236,17 +233,15 @@ function Commonpage(props) {
                         ) : (
                           ""
                         )}
-
                         {items?.tag ? items?.tag : "All descussion"}
                       </Typography>
-
                       <Typography variant="body1" fontSize="14px" ml={2}>
                         <FaRegComment style={{ marginRight: "5px" }} /> 0
                       </Typography>
                     </Box>
                   </Box>
                 </Box>
-                <Typography
+                <Box
                   sx={{
                     color: "text.paragraph",
                     fontSize: "11px",
@@ -254,9 +249,8 @@ function Commonpage(props) {
                     m: "auto",
                     display: { md: "block", xs: "none" },
                   }}
-                >
-                  {items.description}
-                </Typography>
+                  dangerouslySetInnerHTML={{ __html: items?.description }}
+                />
               </Box>
             );
           })

@@ -13,7 +13,6 @@ function Approved({ Approvedstate, func, state }) {
   const [loading, setLoading] = useState(false);
   const rejected = async (post_id) => {
     console.log("post_id", post_id);
-
     try {
       await fetch(`${url}/rejectpost/${post_id}`, {
         method: "GET",
@@ -31,15 +30,12 @@ function Approved({ Approvedstate, func, state }) {
       toast.error(error.message);
     }
   };
-
   const detailsHandle = (id) => {
     navigate(`/detail/${id}`);
   };
-
   const profileHandle = (id) => {
     navigate(`/profile/${id}`);
   };
-
   return (
     <>
       <Loading loading={loading} />
@@ -53,7 +49,7 @@ function Approved({ Approvedstate, func, state }) {
                   <Box pl={8} pb={3} borderBottom="1px solid #fff">
                     <Box py={2} display="flex" alignItems="center">
                       <Box
-                        oClick={(e) => {
+                        onClick={(e) => {
                           profileHandle(user?._id);
                         }}
                         sx={{
@@ -118,7 +114,6 @@ function Approved({ Approvedstate, func, state }) {
                         {status}
                       </Typography>
                     </Box>
-
                     <Box
                       fontSize="14px"
                       color="text.paragraph"
@@ -127,12 +122,17 @@ function Approved({ Approvedstate, func, state }) {
                       }}
                     >
                       {title}
-                      <br />
-                      <br />
-                      {description}
-                      <br />
                     </Box>
-
+                    <br />
+                    <Box
+                      fontSize="14px"
+                      color="text.paragraph"
+                      onClick={() => {
+                        detailsHandle(_id);
+                      }}
+                      dangerouslySetInnerHTML={{ __html: description }}
+                    />
+                    <br />
                     <Box
                       mt={2}
                       display="flex"

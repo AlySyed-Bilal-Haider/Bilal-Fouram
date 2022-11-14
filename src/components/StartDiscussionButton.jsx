@@ -22,11 +22,11 @@ import PopUp from "./UserPenal/AddPollPopup";
 import ChooseTag from "./UserPenal/ChooseTag";
 import { url } from "../utils";
 //editor
+import "draft-js/dist/Draft.css";
 import { Editor } from "react-draft-wysiwyg";
 import { convertToHTML } from "draft-convert";
 import { EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
@@ -61,15 +61,12 @@ function StartDiscussionButton({ setOpenlogin }) {
   const [addpoststate, setPoststate] = useState({
     tag: "",
     title: "",
-    description:
-      "Before you post this: 1. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines 2. If this proposal is going to the Proposal section, make sure you have read the Proposal  guidelines:  https://discord.com/invite/olympusdao ",
+    description: "",
   });
-
   //-------------------------------editor States--------------------------------
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-
   const [convertedContent, setConvertedContent] = useState(null);
   const handleEditorChange = (state) => {
     setEditorState(state);
@@ -79,7 +76,6 @@ function StartDiscussionButton({ setOpenlogin }) {
     let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
     setConvertedContent(currentContentAsHTML);
   };
-
   // --------------------------------------------------------------------------
   const userid = localStorage.getItem("user_id");
   const discussionHandler = (e) => {
@@ -101,6 +97,7 @@ function StartDiscussionButton({ setOpenlogin }) {
             ...addpoststate,
             user: userid,
             tag: tagsvalue,
+            description: convertedContent,
             poll: pollstate,
           };
           console.log("postdata one", postdata);
@@ -117,8 +114,13 @@ function StartDiscussionButton({ setOpenlogin }) {
             toast.error(data.message);
           }
         } else {
-          postdata = { ...addpoststate, user: userid, tag: tagsvalue };
-
+          postdata = {
+            ...addpoststate,
+            user: userid,
+            tag: tagsvalue,
+            description: convertedContent,
+          };
+          console.log("postdata two:", postdata);
           const { data } = await axios.post(`${url}/posts`, postdata);
           if (data.status === "ok") {
             toast.success(data.message);
@@ -143,34 +145,27 @@ function StartDiscussionButton({ setOpenlogin }) {
   const handleClickOpen2 = () => {
     setOpen2(true);
   };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const CheckloginHandler = () => {
     const token = localStorage.getItem("token");
-
     if (token) {
       handleClickOpen();
     } else {
       setOpenlogin(true);
     }
   };
-
   const getTag = (value) => {
     setTagsvalue(value);
   };
-
   const pollHandle = (value) => {
     setPollstate(value);
   };
-
   return (
     <>
       <PopUp open={open1} setOpen={setOpen1} pollHandle={pollHandle} />
       <ChooseTag open={open2} setOpen={setOpen2} getTags={getTag} />
-
       <Button
         onClick={CheckloginHandler}
         sx={{
@@ -263,8 +258,7 @@ function StartDiscussionButton({ setOpenlogin }) {
                   Add Poll
                 </Typography>
               )}
-
-              {/* <Box>
+              <Box>
                 <InputBase
                   placeholder="Discussion Title"
                   type="text"
@@ -277,7 +271,7 @@ function StartDiscussionButton({ setOpenlogin }) {
                   onChange={discussionHandler}
                   required
                 />
-              </Box> */}
+              </Box>
             </Box>
 
             {pollstate == "" ? (
@@ -310,12 +304,14 @@ function StartDiscussionButton({ setOpenlogin }) {
 
         {/* ---------------------Editor----------------------------- */}
         <Container maxWidth="xl">
+          <hr style={{ color: "white" }} />
           <Editor
             editorState={editorState}
             onEditorStateChange={handleEditorChange}
             toolbarClassName="toolbarclassName"
             wrapperClassName="wrapperclassName="
             editorClassName="editorclassName="
+            placeholder="Type Post details...!"
             toolbar={{
               options: [
                 "inline",
@@ -343,6 +339,7 @@ function StartDiscussionButton({ setOpenlogin }) {
               fontSize: { className: "demo-option-custom-medium" },
             }}
           />
+          <hr style={{ color: "white" }} />
         </Container>
 
         {/* <Box mt={-2} mb={5} mx={4.5}>
@@ -357,7 +354,7 @@ function StartDiscussionButton({ setOpenlogin }) {
             required
           />
         </Box> */}
-        <Divider sx={{ backgroundColor: "white", color: "white" }} />
+
         <Container maxWidth="xl">
           <Box sx={{ display: "flex", justifyContent: "right" }}>
             <Button
