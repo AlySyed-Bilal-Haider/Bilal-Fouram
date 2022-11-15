@@ -8,18 +8,25 @@ import CssBaseline from "@mui/material/CssBaseline";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
 import { AppContextProvider } from "./utils";
-import {BrowserRouter}  from 'react-router-dom';
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
+import { BrowserRouter } from "react-router-dom";
+import { render } from "react-dom";
+
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+// root.render(
+
+// );
+
+render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <AppContextProvider>
         <CssBaseline />
         <BrowserRouter>
-        <App />
+          <App />
         </BrowserRouter>
       </AppContextProvider>
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 reportWebVitals();

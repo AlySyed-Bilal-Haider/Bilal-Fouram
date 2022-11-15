@@ -17,6 +17,7 @@ import { RiGroupFill } from "react-icons/ri";
 import { CgNotes } from "react-icons/cg";
 import Loading from "../../loading";
 import { url } from "../../utils";
+import { BsBoxArrowInDownLeft } from "react-icons/bs";
 // /detail
 function Commonpage(props) {
   const naviagte = useNavigate();
@@ -81,40 +82,7 @@ function Commonpage(props) {
   return (
     <Grid item md={10} xs={12}>
       <Loading loading={loading} />
-      {/* <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Button
-          disableRipple={true}
-          sx={{
-            width: "36px",
-            height: "36px",
-            backgroundColor: "tranparent",
-            borderRadius: "4px",
-            "&:hover": {
-              backgroundColor: "secondary.light",
-              color: "text.main",
-            },
-          }}
-        >
-          Latest
-        </Button>
-        <Button
-          sx={{
-            width: "36px",
-            height: "36px",
-            backgroundColor: "secondary.main",
-            color: "text.main",
-            border: "4px",
-          }}
-        >
-          <AutorenewIcon />
-        </Button>
-      </Box> */}
+
       {/* 
       .........start main sections here ............. */}
       {props.title && categorystate.length === 0 ? (
@@ -215,10 +183,9 @@ function Commonpage(props) {
                         <Typography
                           sx={{ color: "text.paragraph", fontSize: "11px" }}
                         >
-                          alldetailsstate
                           <strong style={{ marginRight: "5px" }}>
                             {alldetailsstate[i]?.user?.name
-                              ? [i]?.user?.name
+                              ? alldetailsstate[i]?.user?.name
                               : "Admin"}
                           </strong>
                           {items?.addedAt
@@ -266,17 +233,15 @@ function Commonpage(props) {
                         ) : (
                           ""
                         )}
-
                         {items?.tag ? items?.tag : "All descussion"}
                       </Typography>
-
                       <Typography variant="body1" fontSize="14px" ml={2}>
                         <FaRegComment style={{ marginRight: "5px" }} /> 0
                       </Typography>
                     </Box>
                   </Box>
                 </Box>
-                <Typography
+                <Box
                   sx={{
                     color: "text.paragraph",
                     fontSize: "11px",
@@ -284,9 +249,8 @@ function Commonpage(props) {
                     m: "auto",
                     display: { md: "block", xs: "none" },
                   }}
-                >
-                  {items.description}
-                </Typography>
+                  dangerouslySetInnerHTML={{ __html: items?.description }}
+                />
               </Box>
             );
           })

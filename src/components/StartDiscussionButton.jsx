@@ -3,6 +3,7 @@ import {
   AppBar,
   Box,
   Button,
+  Container,
   Dialog,
   Divider,
   IconButton,
@@ -17,13 +18,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import PopUp from "./UserPenal/AddPollPopup";
 import ChooseTag from "./UserPenal/ChooseTag";
-
 import { url } from "../utils";
-import { useNavigate } from "react-router-dom";
-
+//editor
+import "draft-js/dist/Draft.css";
+import { Editor } from "react-draft-wysiwyg";
+import { convertToHTML } from "draft-convert";
+import { EditorState } from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 const TextInput = styled(InputBase)({
   "& .MuiInputBase-input": {
     position: "relative",
@@ -48,7 +51,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function StartDiscussionButton({ setOpenlogin }) {
-  const navigate = useNavigate();
+  const Mailverified = localStorage.getItem("verified");
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -58,46 +61,78 @@ function StartDiscussionButton({ setOpenlogin }) {
   const [addpoststate, setPoststate] = useState({
     tag: "",
     title: "",
-    description:
-      "Before you post this: 1. The forum is intended for in-depth discussion only. For support tickets or general queries, please head to our Discord channel: https://forum.olympusdao.finance/d/6-proposal-rules-and-guidelines 2. If this proposal is going to the Proposal section, make sure you have read the Proposal  guidelines:  https://discord.com/invite/olympusdao ",
+    description: "",
   });
+  //-------------------------------editor States--------------------------------
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  const [convertedContent, setConvertedContent] = useState(null);
+  const handleEditorChange = (state) => {
+    setEditorState(state);
+    convertContentToHTML();
+  };
+  const convertContentToHTML = () => {
+    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+    setConvertedContent(currentContentAsHTML);
+  };
+  // --------------------------------------------------------------------------
   const userid = localStorage.getItem("user_id");
   const discussionHandler = (e) => {
     setPoststate({ ...addpoststate, [e.target.name]: e.target.value });
   };
   // post discussion record here
+  const handleClose = () => {
+    setOpen(false);
+  };
   const postSubmitHandler = async () => {
     let postdata;
-    console.log("pollstate", pollstate);
-
-    if (!!tagsvalue) {
+    if (Mailverified == false || Mailverified == undefined) {
+      toast.error("please first email verify !");
+      return false;
+    } else if (!!tagsvalue) {
       try {
         if (pollstate) {
           postdata = {
             ...addpoststate,
             user: userid,
             tag: tagsvalue,
+            description: convertedContent,
             poll: pollstate,
           };
           console.log("postdata one", postdata);
           const { data } = await axios.post(`${url}/posts`, postdata);
           if (data.status === "ok") {
             toast.success(data.message);
+            setPollstate({
+              tag: "",
+              title: "",
+              description: "",
+            });
+            handleClose();
           } else {
             toast.error(data.message);
           }
         } else {
-          postdata = { ...addpoststate, user: userid, tag: tagsvalue };
-          console.log("postdata two", postdata);
+          postdata = {
+            ...addpoststate,
+            user: userid,
+            tag: tagsvalue,
+            description: convertedContent,
+          };
+          console.log("postdata two:", postdata);
           const { data } = await axios.post(`${url}/posts`, postdata);
           if (data.status === "ok") {
             toast.success(data.message);
+            setPollstate("");
+            handleClose();
           } else {
             toast.error(data.message);
           }
         }
       } catch (error) {
-        console.log(error, "error");
+        console.log("erro post:", error);
+        toast.error(error?.message);
       }
     } else {
       setOpen2(true);
@@ -110,38 +145,27 @@ function StartDiscussionButton({ setOpenlogin }) {
   const handleClickOpen2 = () => {
     setOpen2(true);
   };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   const CheckloginHandler = () => {
     const token = localStorage.getItem("token");
-    console.log("token", token);
     if (token) {
       handleClickOpen();
     } else {
       setOpenlogin(true);
     }
   };
-
   const getTag = (value) => {
     setTagsvalue(value);
   };
-
   const pollHandle = (value) => {
-    console.log("poll id", value);
     setPollstate(value);
   };
-
   return (
     <>
       <PopUp open={open1} setOpen={setOpen1} pollHandle={pollHandle} />
       <ChooseTag open={open2} setOpen={setOpen2} getTags={getTag} />
-
       <Button
         onClick={CheckloginHandler}
         sx={{
@@ -165,7 +189,6 @@ function StartDiscussionButton({ setOpenlogin }) {
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
-        // sx={{ backgroundColor: "red" }}
         PaperProps={{
           style: {
             backgroundColor: "#d7d6f7",
@@ -198,23 +221,43 @@ function StartDiscussionButton({ setOpenlogin }) {
               >
                 {tagsvalue ? tagsvalue : "choose tags"}
               </Typography>
-              <Typography
-                onClick={handleClickOpen1}
-                ml={2}
-                sx={{
-                  border: `1px dotted ${theme.palette.primary.main}`,
-                  borderRadius: "5px",
-                  px: "6px",
-                  py: "2px",
-                  cursor: "pointer",
-                }}
-                color="primary.main"
-                variant="subtitle2"
-                component="span"
-              >
-                Add Poll
-              </Typography>
-
+              {pollstate ? (
+                <Typography
+                  onClick={() => {
+                    toast.error("Poll already add,Please add post !");
+                  }}
+                  ml={2}
+                  sx={{
+                    border: `1px dotted ${theme.palette.primary.main}`,
+                    borderRadius: "5px",
+                    px: "6px",
+                    py: "2px",
+                    cursor: "pointer",
+                  }}
+                  color="primary.main"
+                  variant="subtitle2"
+                  component="span"
+                >
+                  Poll save
+                </Typography>
+              ) : (
+                <Typography
+                  onClick={handleClickOpen1}
+                  ml={2}
+                  sx={{
+                    border: `1px dotted ${theme.palette.primary.main}`,
+                    borderRadius: "5px",
+                    px: "6px",
+                    py: "2px",
+                    cursor: "pointer",
+                  }}
+                  color="primary.main"
+                  variant="subtitle2"
+                  component="span"
+                >
+                  Add Poll
+                </Typography>
+              )}
               <Box>
                 <InputBase
                   placeholder="Discussion Title"
@@ -231,20 +274,75 @@ function StartDiscussionButton({ setOpenlogin }) {
               </Box>
             </Box>
 
-            <IconButton
-              disableRipple={true}
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon
-                fontSize="small"
-                sx={{ color: "secondary.main", marginTop: "-45px" }}
-              />
-            </IconButton>
+            {pollstate == "" ? (
+              <IconButton
+                disableRipple={true}
+                onClick={handleClose}
+                aria-label="close"
+              >
+                <CloseIcon
+                  fontSize="small"
+                  sx={{ color: "secondary.main", marginTop: "-45px" }}
+                />
+              </IconButton>
+            ) : (
+              <IconButton
+                disableRipple={true}
+                onClick={() => {
+                  toast.error("poll already add, Please add post!");
+                }}
+                aria-label="close"
+              >
+                <CloseIcon
+                  fontSize="small"
+                  sx={{ color: "secondary.main", marginTop: "-45px" }}
+                />
+              </IconButton>
+            )}
           </Toolbar>
         </AppBar>
 
-        <Box mt={-2} mb={5} mx={4.5}>
+        {/* ---------------------Editor----------------------------- */}
+        <Container maxWidth="xl">
+          <hr style={{ color: "white" }} />
+          <Editor
+            editorState={editorState}
+            onEditorStateChange={handleEditorChange}
+            toolbarClassName="toolbarclassName"
+            wrapperClassName="wrapperclassName="
+            editorClassName="editorclassName="
+            placeholder="Type Post details...!"
+            toolbar={{
+              options: [
+                "inline",
+                "blockType",
+                "fontSize",
+                "textAlign",
+                "history",
+                "colorPicker",
+              ],
+
+              inline: {
+                options: ["italic", "bold"],
+                bold: { className: "demo-option-custom" },
+                italic: { className: "demo-option-custom" },
+                underline: { className: "demo-option-custom" },
+                strikethrough: { className: "demo-option-custom" },
+                monospace: { className: "demo-option-custom" },
+                superscript: { className: "demo-option-custom" },
+                subscript: { className: "demo-option-custom" },
+              },
+              blockType: {
+                className: "demo-option-custom-wide",
+                dropdownClassName: "demo-dropdown-custom",
+              },
+              fontSize: { className: "demo-option-custom-medium" },
+            }}
+          />
+          <hr style={{ color: "white" }} />
+        </Container>
+
+        {/* <Box mt={-2} mb={5} mx={4.5}>
           <TextInput
             type="text"
             name="description"
@@ -255,26 +353,30 @@ function StartDiscussionButton({ setOpenlogin }) {
             rows={5}
             required
           />
-        </Box>
-        <Divider />
-        <Button
-          type="submit"
-          onClick={postSubmitHandler}
-          disableRipple={true}
-          sx={{
-            backgroundColor: "secondary.main",
-            color: "text.main",
-            textTransform: "capitalize",
-            width: "150px",
-            marginTop: "20px",
-            marginLeft: "20px",
-            "&:hover": {
-              backgroundColor: "secondary.main",
-            },
-          }}
-        >
-          Post Discussion
-        </Button>
+        </Box> */}
+
+        <Container maxWidth="xl">
+          <Box sx={{ display: "flex", justifyContent: "right" }}>
+            <Button
+              type="submit"
+              onClick={postSubmitHandler}
+              disableRipple={true}
+              sx={{
+                backgroundColor: "secondary.main",
+                color: "text.main",
+                textTransform: "capitalize",
+                width: "150px",
+                marginTop: "20px",
+                marginLeft: "20px",
+                "&:hover": {
+                  backgroundColor: "secondary.main",
+                },
+              }}
+            >
+              Post Discussion
+            </Button>
+          </Box>
+        </Container>
       </Dialog>
       {/* ------------------------------------- */}
     </>

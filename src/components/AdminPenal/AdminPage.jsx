@@ -12,10 +12,11 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { MdPendingActions, MdDisabledByDefault } from "react-icons/md";
 import { FcApproval } from "react-icons/fc";
-import { useNavigate } from "react-router-dom";
 import Approved from "./Approved";
 import Pending from "./Pending";
 import Rejected from "./Rejected";
+import Loading from "../../loading";
+import { url } from "../../utils";
 const useStyles = makeStyles({
   paperMenu: {
     background: "#3f385b !important",
@@ -24,14 +25,17 @@ const useStyles = makeStyles({
   },
 });
 export default function AdminPanel() {
-  const navigate = useNavigate();
   const classes = useStyles();
   const matches = useMediaQuery("(max-width:700px)");
   const [tabText, settabText] = useState("Approved");
-  //   const [userProfilestate, setProfilestate] = useState("");
-  //   const [userfile, setUserfile] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [reRenderstate, setRerenderstate] = useState(false);
   const [show, setShow] = useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
+  const [Approvedstate, setApprovedstate] = useState([]);
+  const [pendingpost, setPendingpost] = useState([]);
+  const [rejected, setRejectedstate] = useState([]);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -39,10 +43,76 @@ export default function AdminPanel() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const fetchApproved = async () => {
+    try {
+      setLoading(true);
+      await fetch(`${url}/fetchapprovedposts`, {
+        method: "GET",
+        headers: {
+          "x-access-token": idstate,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("All data !", data);
+          setApprovedstate(data?.posts);
+        });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  const fetchPending = async () => {
+    try {
+      setLoading(true);
+      await fetch(`${url}/fetchpendingposts`, {
+        method: "GET",
+        headers: {
+          "x-access-token": idstate,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Approved data !", data);
+          setPendingpost(data?.posts);
+        });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  const fetchRejected = async () => {
+    try {
+      setLoading(true);
+      await fetch(`${url}/fetchrejectedposts`, {
+        method: "GET",
+        headers: {
+          "x-access-token": idstate,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Rejected data !", data);
+          setRejectedstate(data?.posts);
+        });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    idstate && fetchApproved();
+    idstate && fetchPending();
+    idstate && fetchRejected();
+  }, [idstate, reRenderstate]);
   return (
     <>
+      <Loading loading={loading} />
       <Box bgcolor="primary.light">
-        {/* height="150px" */}
         <Container maxWidth="lg">
           <Box display="flex" justifyContent="center" flexDirection="column">
             <Box
@@ -180,7 +250,7 @@ export default function AdminPanel() {
                       <FcApproval
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Approved 0
+                      Approved {Approvedstate?.length}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -198,7 +268,7 @@ export default function AdminPanel() {
                       <MdPendingActions
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />{" "}
-                      Pending 0
+                      Pending {pendingpost?.length}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -216,7 +286,7 @@ export default function AdminPanel() {
                       <MdDisabledByDefault
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Rejected 0
+                      Rejected {rejected?.length}
                     </Box>
                   </Box>
                 </Box>
@@ -225,11 +295,23 @@ export default function AdminPanel() {
 
             <Grid item xs={12} sm={12} md={9}>
               {show === 0 ? (
-                <Approved />
+                <Approved
+                  Approvedstate={Approvedstate}
+                  func={setRerenderstate}
+                  state={reRenderstate}
+                />
               ) : show === 1 ? (
-                <Pending />
+                <Pending
+                  pendingpost={pendingpost}
+                  func={setRerenderstate}
+                  state={reRenderstate}
+                />
               ) : (
-                <Rejected />
+                <Rejected
+                  rejected={rejected}
+                  func={setRerenderstate}
+                  state={reRenderstate}
+                />
               )}
             </Grid>
           </Grid>

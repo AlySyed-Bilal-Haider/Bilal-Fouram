@@ -40,9 +40,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditPopUp({ open, setOpen, postId,title }) {
+export default function EditPopUp({ open, setOpen, postId, title }) {
   // const [editPoll, setEditPoll] = React.useState(false);
-  const [editePoststate, setEditePostState] = useState('');
+  const [editePoststate, setEditePostState] = useState("");
   const handleClose = () => {
     setOpen(false);
   };
@@ -51,15 +51,14 @@ export default function EditPopUp({ open, setOpen, postId,title }) {
   };
 
   const handlerSubmit = async () => {
-    const editepost={id:postId,description:editePoststate};
-    console.log("editepost",editepost);
+    const editepost = { id: postId, description: editePoststate };
+    console.log("editepost", editepost);
     try {
-      
-      const { data } = await axios.put(`${url}/editpost`,editepost);
+      const { data } = await axios.put(`${url}/editpost`, editepost);
       console.log("data update", data);
       if (data.status == "ok") {
         toast.success(data.message);
-        setEditePostState('');
+        setEditePostState("");
         handleClose();
       } else {
         toast.error(data.message);
@@ -67,7 +66,6 @@ export default function EditPopUp({ open, setOpen, postId,title }) {
     } catch (error) {
       console.log("Edite post server error:", error);
     }
-
   };
 
   return (
@@ -94,7 +92,7 @@ export default function EditPopUp({ open, setOpen, postId,title }) {
               fontSize="14px"
               fontWeight="600"
             >
-             Edite Post :{title}
+              Edit Post :{title}
             </Box>
 
             <IconButton
@@ -109,7 +107,7 @@ export default function EditPopUp({ open, setOpen, postId,title }) {
             </IconButton>
           </Toolbar>
         </AppBar>
-        
+
         <Box mt={-3} mb={3} mx={4.5}>
           <TextInput
             type="text"
@@ -123,29 +121,6 @@ export default function EditPopUp({ open, setOpen, postId,title }) {
             onChange={handlerInput}
           />
         </Box>
-{/* 
-        <Button
-          onClick={() => setEditPoll(true)}
-          disableRipple={true}
-          sx={{
-            backgroundColor: "body.main",
-            color: "primary.light",
-            textTransform: "capitalize",
-            fontSize: "13px",
-            width: "70px",
-            height: "23px",
-            marginLeft: 5.5,
-            marginBottom: 2,
-            "&:hover": {
-              backgroundColor: "primary.light",
-              color: "text.main",
-            },
-          }}
-        >
-          Edit Poll
-        </Button> */}
-
-       
 
         <Divider />
         <Button

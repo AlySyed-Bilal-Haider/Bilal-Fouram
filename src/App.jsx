@@ -15,13 +15,14 @@ import Detail from "./components/Detail";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import { url } from "./utils";
+import Emailverfiy from "./components/Emailverfiy";
+import Forgetpassord from "./components/ForgetPassword.jsx";
 const PrivateRoute = ({ children, checkrole }) => {
   if (checkrole !== "admin") {
     return <Navigate to="/" />;
   }
   return children;
 };
-
 function App() {
   const [open, setOpen] = useState(false);
   const [openSign, setOpenSign] = useState(false);
@@ -43,7 +44,6 @@ function App() {
           localStorage.setItem("user_id", data.id);
           setusernameState(data.name);
           setUserId(data.id);
-
           setRolestate(data?.role);
         });
     } catch (error) {
@@ -57,6 +57,7 @@ function App() {
       tokenVerfiy();
     }
   }, []);
+  ///////////check user verified "YES or NO"//////////
 
   return (
     <>
@@ -109,6 +110,8 @@ function App() {
             element={<Detail userId={userId} username={username} />}
           />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/resetpassword/:id/:token" element={<Forgetpassord />} />
+          <Route path="/verifications/:id" element={<Emailverfiy />} />
           <Route
             path="/admin"
             element={
@@ -124,5 +127,4 @@ function App() {
     </>
   );
 }
-
 export default App;

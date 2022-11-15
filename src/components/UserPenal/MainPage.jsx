@@ -51,6 +51,7 @@ export default function MainPage() {
   const [alldata, setAlldatastate] = useState("");
   const [loading, setLoading] = useState(false);
   const [baseURL, setBaseURLstate] = useState("");
+  const [allLengthrecord, setAllLenghtstate] = useState("");
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -62,7 +63,7 @@ export default function MainPage() {
     try {
       // setLoading(true);
       const { data } = await axios.post(`${url}/fetchuser/${id}`);
-      console.log("data", data);
+      console.log("Profile data", data);
       setProfilestate(data);
       setLoading(false);
     } catch (error) {
@@ -70,28 +71,30 @@ export default function MainPage() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (id) {
       userProfileHandler();
     }
   }, [id]);
-
   // fetch all record from server
+
   const fetchallrecord = async () => {
     try {
       const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
-      console.log(data, "data--hi hsdasdfas asdfa sd-=-->");
-      setAlldatastate(data);
+      setAlldatastate(data?.data);
+      setAllLenghtstate(data);
+      console.log("fetch all record", data);
     } catch (error) {
       console.log("Likes error", error);
     }
   };
+
   // image upload from server
   const handleFile = async (event) => {
     let file = event.target.files[0];
     setUserfile(file);
     const urlFILE = URL.createObjectURL(file);
+    setBaseURLstate(urlFILE);
   };
   const handlerSubmit = async (e) => {
     e.preventDefault();
@@ -101,6 +104,7 @@ export default function MainPage() {
         formData.append("id", params?.id);
         const response = await axios.post(`${url}/uploadimg`, formData);
         if (user_id && response) {
+          setBaseURLstate("");
           userProfileHandler();
           fetchallrecord();
         }
@@ -116,6 +120,7 @@ export default function MainPage() {
   useEffect(() => {
     id && fetchallrecord();
   }, [id]);
+  console.log("userProfilestate", userProfilestate);
   return (
     <>
       <Box bgcolor="primary.light" height="260px">
@@ -144,21 +149,35 @@ export default function MainPage() {
                     backgroundColor: "#fff",
                   }}
                 >
-                  {userProfilestate?.img ? (
+                  {userProfilestate && userProfilestate?.img ? (
                     <form onSubmit={handlerSubmit}>
                       <div className="image-show">
                         <label for="file-input">
-                          <img
-                            src={`${url}/upload/${userProfilestate?.img}`}
-                            alt="avtar"
-                            style={{
-                              width: "150px",
-                              height: "150px",
-                              borderRadius: "50%",
-                              cursor: "pointer",
-                            }}
-                            loading="lazy"
-                          />
+                          {baseURL ? (
+                            <img
+                              src={baseURL}
+                              alt="base URL image"
+                              style={{
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                              loading="lazy"
+                            />
+                          ) : (
+                            <img
+                              src={`${url}/upload/${userProfilestate?.img}`}
+                              alt="avater image"
+                              style={{
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                              loading="lazy"
+                            />
+                          )}
                         </label>
 
                         {user_id == id ? (
@@ -198,11 +217,24 @@ export default function MainPage() {
                     <form onSubmit={handlerSubmit}>
                       <div className="image-upload">
                         <label for="file-input">
-                          <img
-                            src={avtar}
-                            alt=""
-                            style={{ width: "100%", cursor: "pointer" }}
-                          />
+                          {baseURL ? (
+                            <img
+                              src={baseURL}
+                              alt="second Base URL"
+                              style={{
+                                width: "150px",
+                                height: "150px",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={avtar}
+                              alt="Awater"
+                              style={{ width: "100%", cursor: "pointer" }}
+                            />
+                          )}
                         </label>
 
                         {user_id == id ? (
@@ -218,20 +250,22 @@ export default function MainPage() {
                         )}
                       </div>
                       <Box py={1} textAlign="center">
-                        <Button
-                          type="submit"
-                          sx={{
-                            color: "text.main",
-                            backgroundColor: "secondary.main",
-                            textTransform: "capitalize",
-                            width: "80px",
-                            "&:hover": {
-                              backgroundColor: "secondary.light",
-                            },
-                          }}
-                        >
-                          Save
-                        </Button>
+                        {user_id == id && (
+                          <Button
+                            type="submit"
+                            sx={{
+                              color: "text.main",
+                              backgroundColor: "secondary.main",
+                              textTransform: "capitalize",
+                              width: "80px",
+                              "&:hover": {
+                                backgroundColor: "secondary.light",
+                              },
+                            }}
+                          >
+                            Save
+                          </Button>
+                        )}
                       </Box>
                     </form>
                   )}
@@ -465,7 +499,7 @@ export default function MainPage() {
                       <BiMessageRounded
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Post 0
+                      Post {allLengthrecord?.discussion || 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -483,7 +517,7 @@ export default function MainPage() {
                       <BiMenu
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />{" "}
-                      Discussions 0
+                      Discussions {allLengthrecord?.discussion || 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -501,7 +535,7 @@ export default function MainPage() {
                       <BiLike
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Likes 0
+                      Likes {allLengthrecord?.like || 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -519,7 +553,7 @@ export default function MainPage() {
                       <AiTwotoneLike
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Votes 0
+                      Votes {allLengthrecord?.poll || 0}
                     </Box>
                   </Box>
                   <Box mt={1} display="flex" alignItems="center">
@@ -537,7 +571,7 @@ export default function MainPage() {
                       <MdAlternateEmail
                         style={{ marginRight: "10px", fontSize: "20px" }}
                       />
-                      Mentions 0
+                      Mentions {allLengthrecord?.mention || 0}
                     </Box>
                   </Box>
                 </Box>

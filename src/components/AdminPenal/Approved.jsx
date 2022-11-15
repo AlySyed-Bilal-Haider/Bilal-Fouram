@@ -6,41 +6,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "../../loading";
 import Avatar from "@mui/material/Avatar";
-import { useNavigate } from "react-router-dom";
-export default function Approved() {
+import { useNavigate, NavLink } from "react-router-dom";
+function Approved({ Approvedstate, func, state }) {
   const navigate = useNavigate();
-  const [Approvedstate, setApprovedstate] = useState([]);
   const [idstate, setIdstate] = useState(localStorage.getItem("user_id"));
   const [loading, setLoading] = useState(false);
-  const [isActive, setActivestate] = useState(true);
-  // Approved post fetch
-  const fetchApproved = async () => {
-    try {
-      setLoading(true);
-      await fetch(`${url}/fetchapprovedposts`, {
-        method: "GET",
-        headers: {
-          "x-access-token": idstate,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Approved data !", data);
-          setApprovedstate(data?.posts);
-        });
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    idstate && fetchApproved();
-  }, []);
-
   const rejected = async (post_id) => {
     console.log("post_id", post_id);
-
     try {
       await fetch(`${url}/rejectpost/${post_id}`, {
         method: "GET",
@@ -52,18 +24,18 @@ export default function Approved() {
         .then((data) => {
           console.log("Rejected data !");
           data?.status == "ok" && toast.success(data.message);
-          data?.status == "ok" && fetchApproved();
+          data?.status == "ok" && func(!state);
         });
     } catch (error) {
-      console.log("Reject post error", error);
       toast.error(error.message);
     }
   };
-
   const detailsHandle = (id) => {
-    console.log("navigate:", id);
+    navigate(`/detail/${id}`);
   };
-
+  const profileHandle = (id) => {
+    navigate(`/profile/${id}`);
+  };
   return (
     <>
       <Loading loading={loading} />
@@ -73,15 +45,13 @@ export default function Approved() {
           Approvedstate?.map(
             ({ _id, addedAt, description, status, tag, title, user }, i) => {
               return (
-                <Box
-                  key={_id + i}
-                  onClick={() => {
-                    detailsHandle(_id);
-                  }}
-                >
+                <Box sx={{ cursor: "pointer" }} key={_id + i}>
                   <Box pl={8} pb={3} borderBottom="1px solid #fff">
                     <Box py={2} display="flex" alignItems="center">
                       <Box
+                        onClick={(e) => {
+                          profileHandle(user?._id);
+                        }}
                         sx={{
                           width: "40px",
                           height: "40px",
@@ -115,11 +85,16 @@ export default function Approved() {
                         variant="body1"
                         color="primary.main"
                         fontWeight="700"
+                        onClick={() => profileHandle(_id)}
+                        // onClick={(e) => profileHandle(_id)}
                       >
                         {user?.name}
                       </Typography>
 
                       <Typography
+                        onClick={() => {
+                          detailsHandle(_id);
+                        }}
                         ml={2}
                         variant="body1"
                         color="primary.light"
@@ -128,6 +103,9 @@ export default function Approved() {
                         {moment(addedAt).format("LL")}
                       </Typography>
                       <Typography
+                        onClick={() => {
+                          detailsHandle(_id);
+                        }}
                         ml={2}
                         variant="body1"
                         color="primary.light"
@@ -136,15 +114,25 @@ export default function Approved() {
                         {status}
                       </Typography>
                     </Box>
-
-                    <Box fontSize="14px" color="text.paragraph">
+                    <Box
+                      fontSize="14px"
+                      color="text.paragraph"
+                      onClick={() => {
+                        detailsHandle(_id);
+                      }}
+                    >
                       {title}
-                      <br />
-                      <br />
-                      {description}
-                      <br />
                     </Box>
-
+                    <br />
+                    <Box
+                      fontSize="14px"
+                      color="text.paragraph"
+                      onClick={() => {
+                        detailsHandle(_id);
+                      }}
+                      dangerouslySetInnerHTML={{ __html: description }}
+                    />
+                    <br />
                     <Box
                       mt={2}
                       display="flex"
@@ -152,8 +140,7 @@ export default function Approved() {
                       justifyContent="flex-end"
                     >
                       <Button
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => {
                           rejected(_id);
                         }}
                         sx={{
@@ -193,3 +180,5 @@ export default function Approved() {
     </>
   );
 }
+
+export default React.memo(Approved);

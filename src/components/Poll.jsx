@@ -7,7 +7,8 @@ import { GoCheck } from "react-icons/go";
 import axios from "axios";
 import { url } from "../utils";
 import { Box, styled, Checkbox, Typography } from "@mui/material";
-import { Co2Sharp } from "@mui/icons-material";
+import Login from "./Login";
+import { toast } from "react-toastify";
 const LinearProgressBox = styled(LinearProgress)(({ theme }) => ({
   height: "100%",
   width: "100%",
@@ -56,13 +57,24 @@ const BpCheckbox = (props) => {
 
 function Poll({ polldetails, user_id, checkedfunc }) {
   const [checkstatus, setCheckstate] = React.useState(false);
+  const Mailverified = localStorage.getItem("verified");
+  const userToken = localStorage.getItem("token");
+  const [openstate, setOpenlogin] = React.useState(false);
   const pollApproveUnapprove = async (poll_id, answer_id, user_id) => {
     try {
-      const pollvalue = { poll_id, answer_id, user_id };
-      console.log("pollvalue", pollvalue);
-      const { data } = await axios.post(`${url}/votepoll`, pollvalue);
-      console.log("data", data);
-      (await data.status) === "ok" && checkedfunc(true);
+      if (Mailverified) {
+        if (userToken) {
+          const pollvalue = { poll_id, answer_id, user_id };
+          console.log("pollvalue", pollvalue);
+          const { data } = await axios.post(`${url}/votepoll`, pollvalue);
+          console.log("data", data);
+          (await data.status) === "ok" && checkedfunc(true);
+        } else {
+          setOpenlogin(true);
+        }
+      } else {
+        toast.error("Please first email verify !");
+      }
     } catch (error) {
       console.log("Approve poll error !", error);
     }
@@ -167,11 +179,15 @@ function Poll({ polldetails, user_id, checkedfunc }) {
                       ) : (
                         <BpCheckbox
                           onClick={() => {
-                            pollApproveUnapprove(
-                              polldetails?._id,
-                              _id,
-                              user_id
-                            );
+                            {
+                              userToken
+                                ? pollApproveUnapprove(
+                                    polldetails?._id,
+                                    _id,
+                                    user_id
+                                  )
+                                : setOpenlogin(true);
+                            }
                           }}
                         />
                       )}
@@ -195,6 +211,8 @@ function Poll({ polldetails, user_id, checkedfunc }) {
           </Typography>
         </Box>
       ) : null}
+
+      {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}
     </>
   );
 }

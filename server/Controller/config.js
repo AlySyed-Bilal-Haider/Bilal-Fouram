@@ -1,3 +1,3 @@
-export const config={
-    secret: "miner"
-} 
+export const config = {
+  secret: "miner",
+};

@@ -3,7 +3,13 @@ import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
 import { config } from "./config.js";
 import postModal from "../Schema/PostSchema.js";
+import sgMail from "@sendgrid/mail";
 import commentModal from "../Schema/CommentSchema.js";
+
+const API_KEY =
+  "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";
+sgMail.setApiKey(API_KEY);
+
 // ......Signup here routes start..............
 
 export const signupHandler = async (req, res) => {
@@ -15,13 +21,14 @@ export const signupHandler = async (req, res) => {
     let user1 = await userModal.findOne({
       email: email,
     });
-    if (user) {
+
+    if (user !== null) {
       res.status(200).json({
         status: "warning",
         message: "Username Already Exist!",
         user: false,
       });
-    } else if (user1) {
+    } else if (user1 !== null) {
       res.status(200).json({
         status: "warning",
         message: "Email Already Exist!",
@@ -30,6 +37,7 @@ export const signupHandler = async (req, res) => {
     } else {
       let userToken = { password: password };
       let token = jwt.sign(userToken, config.secret);
+
       if (email === "nabiha3802izhar@gmail.com") {
         const usersignup = await new userModal({
           name: name,
@@ -38,6 +46,28 @@ export const signupHandler = async (req, res) => {
           role: "admin",
         });
         await usersignup.save();
+        const link = `https://minordao-forum.herokuapp.com/verifications/${usersignup._id}`;
+        console.log(link, "yegftu");
+        const msg = {
+          to: email, // Change to your recipient
+          from: {
+            name: "Miner DAO Forum",
+            email: "skillway17@gmail.com",
+          }, // Change to your verified sender
+          subject: `Miner DAO Forum Verify Email`,
+          text: `Sending mail by send grid`,
+          html: `<h2>Email verification link </h2>               
+                  
+                  <p>${link} </p>`,
+        };
+        sgMail
+          .send(msg)
+          .then(() => {
+            console.log("Email sent");
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
       } else {
         const usersignup = await new userModal({
           name: name,
@@ -45,16 +75,38 @@ export const signupHandler = async (req, res) => {
           password: token,
         });
         await usersignup.save();
+        const link = `https://minordao-forum.herokuapp.com/verifications/${usersignup._id}`;
+        console.log(link, "yegftu");
+
+        const msg = {
+          to: email, // Change to your recipient
+          from: {
+            name: "Miner DAO Forum",
+            email: "skillway17@gmail.com",
+          }, // Change to your verified sender
+          subject: `Miner DAO Forum Verify Email`,
+          text: `Sending mail by send grid`,
+          html: `<h2>Email verification link </h2> 
+          <button><a href=${link}>Verify Email</a> </button>       
+          `,
+        };
+        sgMail
+          .send(msg)
+          .then(() => {
+            console.log("Email sent");
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
       }
 
       res.json({
         status: "ok",
         success: true,
-        message: "User register Successfully!",
+        message: "please check your email and user register",
       });
     }
   } catch (error) {
-    console.log(error);
     res.status(404).json({
       status: "error",
       message: "Please try again!",
@@ -63,14 +115,72 @@ export const signupHandler = async (req, res) => {
   }
 };
 
-// ........Login routes start...jsonwebtoken.....
+// ........Login routes start...jsonwebtoken.....(
+
+export const verifyemail = async (req, res) => {
+  try {
+    const id = req.params.id;
+    await userModal.findByIdAndUpdate(id, { verified: true });
+    const user = userModal.findById({ _id: id });
+    res.json({
+      status: "ok",
+      message: "User Verified!",
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+      user: false,
+    });
+  }
+};
+
+export const ResendEmail = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("id:", id);
+    const link = `https://minordao-forum.herokuapp.com/verifications/${id}`;
+    const user = await userModal.findById(id);
+
+    const msg = {
+      to: user.email, // Change to your recipient
+      from: {
+        name: "Miner DAO Forum",
+        email: "skillway17@gmail.com",
+      }, // Change to your verified sender
+      subject: `Miner DAO Forum Verify Email`,
+      text: `Sending mail by send grid`,
+      html: `<h2>Email verification link </h2> 
+          <button><a href=${link}>Verify Email</a> </button>  `,
+    };
+    sgMail
+      .send(msg)
+      .then(() => {
+        console.log("Email sent");
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+    res.json({
+      status: "ok",
+      success: true,
+      message: "Email Sent..!",
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+    });
+  }
+};
 
 export const login = async (req, res) => {
   try {
-    console.log(req.body);
     const { email, password } = req.body;
     const user = await userModal.findOne({ email: email });
-    console.log("user", user);
     if (user) {
       var decoded = jwt_decode(user.password);
       if (decoded.password === password) {
@@ -97,9 +207,9 @@ export const login = async (req, res) => {
         }
       } else {
         res.setHeader("Content-Type", "application/json");
-        res.status(404).json({
+        res.json({
           status: "error",
-          message: "SignUp First..!",
+          message: "Please try again! Password  not match",
           user: false,
         });
       }
@@ -112,7 +222,11 @@ export const login = async (req, res) => {
       });
     }
   } catch (e) {
-    console.log(e);
+    res.status(404).json({
+      status: "error",
+      message: "Please try again!",
+      user: false,
+    });
   }
 };
 
@@ -130,6 +244,7 @@ export const tokenVerifyHandler = async (req, res) => {
           email: docs.email,
           id: docs._id,
           role: docs.role,
+          verified: docs.user_id,
         });
       });
     } else {
@@ -147,13 +262,10 @@ export const tokenVerifyHandler = async (req, res) => {
   }
 };
 
-//fetch specific data from server
-
 export const fetchuser = async (req, res) => {
   try {
     const id = req.params.id;
     const data = await userModal.findOne({ _id: id }).select("-password");
-    console.log("data user", data);
     return res.send(data);
   } catch (error) {
     console.log(error);
@@ -162,24 +274,26 @@ export const fetchuser = async (req, res) => {
 
 export const searchHandle = async (req, res, next) => {
   try {
-    const key = req.params.key;
-    console.log("key", key);
-    const result = await userModal
-      .find({
-        $or: [
-          {
-            name: { $regex: key },
-          },
-        ],
-      })
-      .select("-password");
-    console.log("result:", result);
-    res.send(result);
+    const name = req.params.key;
+    if (name == null) {
+      userModal
+        .find({}, function (err, data) {
+          res.send(data);
+        })
+        .select("-password");
+    } else {
+      const regex = new RegExp(name, "i");
+      userModal
+        .find({ name: regex }, function (err, data) {
+          res.send(data);
+        })
+        .select("-password");
+    }
   } catch (error) {
-    console.log("search error", error);
-    res.status(404).json({
+    res.status(505).json({
       status: "error",
-      message: "Please try again!",
+      success: false,
+      message: error,
     });
   }
 };
@@ -187,7 +301,6 @@ export const searchHandle = async (req, res, next) => {
 export const searchHandleAll = async (req, res, next) => {
   try {
     const key = req.params.key;
-    console.log("key", key);
     const user = await userModal
       .find({
         $or: [
@@ -218,7 +331,6 @@ export const searchHandleAll = async (req, res, next) => {
       comments: comment,
     });
   } catch (error) {
-    console.log("search error", error);
     res.status(404).json({
       status: "error",
       message: "Please try again!",

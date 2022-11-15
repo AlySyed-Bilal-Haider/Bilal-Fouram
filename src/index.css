@@ -174,3 +174,14 @@ code {
     width: 100%;
   }
 }
+
+
+.rdw-editor-toolbar{
+  padding: 20px 10px !important;
+  background-color: #4915B0 !important;
+}
+
+.rdw-editor-main{
+  padding: 30px 10px !important;
+ /* border-bottom: white solid !important; */
+}

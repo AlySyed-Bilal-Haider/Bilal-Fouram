@@ -28,16 +28,15 @@ function MainHeader({ title, icon, description }) {
           {title}
         </Typography>
       </Box>
-      <Typography
+      <Box
         sx={{
           fontSize: "15.5px",
           textAlign: "center",
           fontWeight: "300",
           px: 2,
         }}
-      >
-        {description}
-      </Typography>
+        dangerouslySetInnerHTML={{ __html: description }}
+      />
     </Box>
   );
 }

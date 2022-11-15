@@ -35,7 +35,6 @@ export const CreatePoll = async (req, res) => {
 };
 
 export const VotePoll = async (req, res, next) => {
-  console.log("vote", req.body);
   try {
     const { poll_id, answer_id, user_id } = req.body;
     const voteAnswer = await pollModal.findOneAndUpdate(

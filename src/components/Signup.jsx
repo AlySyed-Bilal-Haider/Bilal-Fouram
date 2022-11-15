@@ -87,20 +87,28 @@ function Signup({ open, setOpensign, setOpenlogin }) {
   const [loading, setLoading] = useState(false);
   //input filed change handler;
   const changeHandler = (e) => {
-    setUserstate({ ...userstate, [e.target.name]: e.target.value });
+    setUserstate({
+      ...userstate,
+      [e.target.name]: e.target.value.toLowerCase(),
+    });
   };
 
   //Submit form, after filling the user form;
   const submitHandler = async () => {
     try {
       if (
-        userstate.name != "" ||
-        userstate.email != "" ||
-        userstate.password != ""
+        userstate.name !== "" ||
+        userstate.email !== "" ||
+        userstate.password !== ""
       ) {
         setLoading(true);
         const { data } = await axios.post(`${url}/usersignup`, userstate);
         toast.success(data.message);
+        setUserstate({
+          name: "",
+          email: "",
+          password: "",
+        });
       } else {
         toast.error("Please fill Signup form !");
       }
@@ -109,11 +117,6 @@ function Signup({ open, setOpensign, setOpenlogin }) {
       toast.error(error.message);
       setLoading(false);
     }
-    setUserstate({
-      name: "",
-      email: "",
-      password: "",
-    });
   };
 
   const handleClose = () => {
@@ -147,7 +150,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
               align: "center",
             }}
           >
-            <FormControl onSubmit={submitHandler} onkeyPress={submitHandler}>
+            <FormControl onSubmit={submitHandler}>
               <Box sx={{ width: "100%" }}>
                 <Typography
                   sx={{
@@ -168,7 +171,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
                   }}
                 >
                   <TextInput
-                    autoComplete="off"
+                    autoComplete="false"
                     fullWidth
                     value={userstate.name || ""}
                     type="text"
@@ -180,7 +183,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
 
                   <TextInput
                     fullWidth
-                    autoComplete="off"
+                    autoComplete="false"
                     value={userstate.email || ""}
                     type="email"
                     name="email"
@@ -221,7 +224,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
                   <Button
                     onClick={submitHandler}
                     onKeyDown={(e) => {
-                      e.key == "Enter" && submitHandler();
+                      e.key === "Enter" && submitHandler();
                     }}
                     type="submit"
                     sx={{

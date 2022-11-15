@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import Comment from "../Comment";
+import { NavLink } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -10,7 +11,6 @@ import {
   Stack,
   Pagination,
 } from "@mui/material";
-import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { BsThreeDots } from "react-icons/bs";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -73,13 +73,14 @@ function Post({ username, id }) {
     if (id) {
       fetchPost();
     }
-  }, [id, editPopOpen, updatepost]);
+  }, [id, editPopOpen, updatepost, openstate]);
 
   const fetchPost = async () => {
     try {
       setLoading(true);
       const { data } = await axios.post(`${url}/fetchuserposts/${id}`);
-      data && setPoststate(data);
+      data && setPoststate(data?.data);
+      console.log("fetch post data:", data?.data);
       setLoading(false);
     } catch (error) {
       console.log("Discussions error:", error);
@@ -144,7 +145,6 @@ function Post({ username, id }) {
   // .........unliked handler section ..........
   const unLikedHandler = async (post_id) => {
     const unliked = { post_id, user_id };
-    console.log("unliked:", unliked);
     try {
       setLoading(true);
       if (userToken) {
@@ -163,14 +163,6 @@ function Post({ username, id }) {
     }
   };
 
-  // start paginations code
-  const [postsPerPage, setPostsPerPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
-  const handleChangepage = (event, value) => {
-    setCurrentPage(value);
-  };
-  const pageCount = Math.ceil(userposts?.length / postsPerPage);
-  // console.log("userposts:", userposts);
   return (
     <>
       <Loading loading={loading} />
@@ -190,18 +182,20 @@ function Post({ username, id }) {
       />
       <Box pb={10}>
         {userposts?.length > 0 ? (
-          userposts
-            ?.slice(
-              currentPage * postsPerPage - postsPerPage,
-              currentPage * postsPerPage
-            )
-            ?.map((item, i) => {
-              return (
-                <>
-                  {item?.discussion.map((items, i) => {
-                    return (
-                      <>
-                        {items?.ref_id?.visibility == true && (
+          userposts?.map((item, i) => {
+            return (
+              <>
+                {item?.discussion.map((items, i) => {
+                  return (
+                    <>
+                      {items?.ref_id?.visibility == true && (
+                        <NavLink
+                          to={`/detail/${items?.ref_id?._id}`}
+                          style={{
+                            textDecoration: "none",
+                            cursor: "pointer",
+                          }}
+                        >
                           <Box
                             mt={i === 0 ? 0 : 2}
                             key={i}
@@ -214,14 +208,6 @@ function Post({ username, id }) {
                               },
                             }}
                           >
-                            <Typography
-                              variant="body1"
-                              color="primary.main"
-                              fontWeight="700"
-                            >
-                              {/* {item} */}
-                            </Typography>
-
                             <Box pl={8} pb={3} borderBottom="1px solid #fff">
                               <Box py={2} display="flex" alignItems="center">
                                 <Box
@@ -275,14 +261,18 @@ function Post({ username, id }) {
                                   {items?.ref_id?.status}
                                 </Typography>
                               </Box>
-
                               <Box fontSize="14px" color="text.paragraph">
                                 {items?.ref_id?.title}
                                 <br />
                                 <br />
-                                {items?.ref_id?.description}
-                                <br />
                               </Box>
+                              <Box
+                                fontSize="14px"
+                                color="text.paragraph"
+                                dangerouslySetInnerHTML={{
+                                  __html: items?.ref_id?.description,
+                                }}
+                              />
 
                               {items?.ref_id?.status == "Approved" ? (
                                 <Box
@@ -390,36 +380,20 @@ function Post({ username, id }) {
                               )}
                             </Box>
                           </Box>
-                        )}
-                      </>
-                    );
-                  })}
-                </>
-              );
-            })
+                        </NavLink>
+                      )}
+                    </>
+                  );
+                })}
+              </>
+            );
+          })
         ) : (
           <Box py={5} color="primary.light" fontSize="18px" textAlign="center">
             It looks vote there are no posts here.
           </Box>
         )}
       </Box>
-      {userposts?.length > 0 ? (
-        <Box my="15px" mx="10" px>
-          <Stack
-            direction={"row"}
-            alignItems="center"
-            justifyContent="flex-end"
-          >
-            <Pagination
-              count={pageCount}
-              page={currentPage}
-              onChange={handleChangepage}
-            />
-          </Stack>
-        </Box>
-      ) : (
-        ""
-      )}
       {openstate && <Login setOpenlogin={setOpenlogin} open={openstate} />}
     </>
   );

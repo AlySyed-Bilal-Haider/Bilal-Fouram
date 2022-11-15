@@ -5,10 +5,11 @@ import * as Comment from "../Controller/CommentController.js";
 import * as Poll from "../Controller/PollController.js";
 import * as Admin from "../Controller/AdminController.js";
 import * as UserPanal from "../Controller/UserPanalController.js";
-
+import * as Password from "../Controller/PasswordController.js";
 const router = express.Router();
-
 router.post("/usersignup", Users.signupHandler);
+router.get("/verifyEmail/:id", Password.VerifyUser, Users.verifyemail);
+router.get("/resendemail/:id", Password.VerifyUser, Users.ResendEmail);
 router.post("/login", Users.login);
 router.post("/verifytoken", Users.tokenVerifyHandler);
 router.post("/posts", Post.createPost);
@@ -38,7 +39,7 @@ router.delete("/removeComment/:id", Comment.removeComment);
 
 // edit post routes
 
-router.put("/editpost", Post.EditepostHandler);
+router.put("/editpost", Post.EditpostHandler);
 router.put("/editcomment", Comment.EditComment);
 router.put("/restorecomment/:id", Comment.restoreComment);
 
@@ -49,17 +50,20 @@ router.get("/fetchpendingposts", Admin.VerifyAdmin, Admin.FetchPendingPosts);
 router.get("/fetchrejectedposts", Admin.VerifyAdmin, Admin.FetchRejectedPosts);
 router.get("/approvepost/:id", Admin.VerifyAdmin, Admin.ApprovePost);
 router.get("/rejectpost/:id", Admin.VerifyAdmin, Admin.RejectPost);
-
 //user panal routes
 
-router.post("/fetchuserposts/:id", UserPanal.FetchDatafrom);
-router.get("/fetchuserdiscussion/:id", UserPanal.FetchDiscussion);
-router.get("/fetchlikedposts/:id", UserPanal.FetchLiked);
-router.get("/fetchvotedpolls/:id", UserPanal.FetchPollPosts);
-router.get("/fetchmentions/:id", UserPanal.FetchMentionComments);
+router.post("/fetchuserposts/:id", UserPanal.FetchPosts);
 
 //@mention related routes
 
 router.post("/fetchusername", Comment.FetchUsers);
+
+//Password related routes
+
+router.get("/changepassword/:id", Password.VerifyUser, Password.ChangePassword);
+router.post("/forgotpassword", Password.ForgotPassword);
+
+router.get("/resetpassword/:id/:token", Password.ResetPassword);
+router.post("/resetpassword/:id/:token", Password.PostResetPassword);
 
 export default router;

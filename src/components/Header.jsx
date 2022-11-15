@@ -23,6 +23,7 @@ import axios from "axios";
 import logo from "../images/logo.png";
 import Autocomplete from "@mui/material/Autocomplete";
 import { url } from "../utils";
+import { toast } from "react-toastify";
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -46,18 +47,17 @@ const Autocompletege = styled(Autocomplete)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
   },
 }));
-const typostyle = {
-  fontSize: "14px",
-  color: "red",
-};
+
 export default function Header({ setOpensign, setOpenlogin, name, role }) {
+  const verifiedValue = localStorage.getItem("verified");
+  const user_id = localStorage.getItem("user_id");
   const navigate = useNavigate();
   const [filterState, setFilterstate] = useState([]);
   const searchHandle = async (e, value) => {
     const key = e.target.value || "";
     try {
       if (key || value?.name) {
-        const searchvalue = key.toLowerCase() || value?.name.toLowerCase();
+        const searchvalue = key;
         console.log("searchvalue:", searchvalue);
         const { data } = await axios.get(`${url}/search/${searchvalue}`);
         console.log("data search key !", data);
@@ -87,6 +87,24 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
   const navigateHandle = (id) => {
     navigate(`/profile/${id}`);
   };
+
+  //////Resend email verifications link//////////
+  const reSendverifyLink = async (id) => {
+    try {
+      if (typeof id !== "undefined") {
+        const { data } = await axios.get(`${url}/resendemail/${id}`);
+        console.log("email verify data", data);
+        data.status == "ok" && toast.success("please check your email !");
+      } else {
+        setOpenlogin(true);
+      }
+    } catch (error) {
+      console.log("verfiy error", error);
+      toast.error(error.message);
+    }
+  };
+
+  ////////////////Resend link end here/////////
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -168,10 +186,28 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <Link to="/">
                 <img src={logo} alt="Miner dao" style={{ width: "130px" }} />
               </Link>
+              {verifiedValue == false && (
+                <Typography
+                  onClick={(e) => {
+                    e.preventDefault();
+                    reSendverifyLink(user_id);
+                  }}
+                  sx={{
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    color: "red",
+                    ml: 2,
+                  }}
+                >
+                  Your email not verify?
+                </Typography>
+              )}
             </Box>
 
             <Box display="flex" alignItems="center">
@@ -203,7 +239,7 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                     />
 
                     <Autocompletege
-                      autoComplete="off"
+                      autocomplete="false"
                       id="grouped-demo"
                       disablePortal={true}
                       sx={{
@@ -258,8 +294,8 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                       )}
                       renderInput={(params) => (
                         <TextField
+                          autoComplete="false"
                           value=""
-                          autoComplete="off"
                           autoFocus={false}
                           sx={{
                             height: "25px",
@@ -279,10 +315,6 @@ export default function Header({ setOpensign, setOpenlogin, name, role }) {
                           inputProps={{
                             ...params.inputProps,
                             autoComplete: "none",
-                            "&::placeholder": {
-                              fontStyle: "italic",
-                              color: "white",
-                            },
                           }}
                           placeholder="Search...."
                         />

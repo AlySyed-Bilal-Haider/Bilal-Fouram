@@ -31,6 +31,10 @@ const Adduser = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user'
   },
+  verified: {
+    type: Boolean,
+    default: false
+  },
   discussion: [{
     ref_id: {
       type: Schema.Types.ObjectId,

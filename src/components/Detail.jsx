@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
+import swal from "sweetalert";
 import Comment from "./Comment";
 import Reply from "./Reply";
 import {
@@ -12,6 +13,7 @@ import {
 } from "@mui/material";
 import CommentEdite from "./CommentEdite";
 import { FaRegComments, FaChalkboardTeacher, FaBook } from "react-icons/fa";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import { RiGroupFill } from "react-icons/ri";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { CgNotes } from "react-icons/cg";
@@ -27,6 +29,7 @@ import Login from "./Login";
 import { url } from "../utils";
 import Poll from "./Poll";
 import Loading from "../loading";
+import { toast } from "react-toastify";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -53,6 +56,7 @@ const StyledMenu = styled((props) => (
 export default function Detail({ userId, username }) {
   const param = useParams();
   //close menu tag on click
+  const Mailverified = localStorage.getItem("verified");
   const [loading, setLoading] = useState(false);
   const userToken = localStorage.getItem("token");
   const user_id = localStorage.getItem("user_id");
@@ -72,10 +76,15 @@ export default function Detail({ userId, username }) {
   const [checkedPoll, setCheckPollstate] = useState(false);
   const [postReplyId, setPostReplyID] = useState("");
   const [editecommentValue, setEditevalue] = useState("");
+  const [countLikestate, setLikestate] = useState("");
   const [editeCommentOpen, setOpenedite] = useState(false);
   const open = Boolean(anchorEl);
   const HandleChecked = (value) => {
-    setCheckPollstate(value);
+    if (Mailverified) {
+      setCheckPollstate(value);
+    } else {
+      toast.error("First email verify,please check your Mail!");
+    }
   };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -88,12 +97,13 @@ export default function Detail({ userId, username }) {
     try {
       setLoading(true);
       const { data } = await axios.get(`${url}/fetchPostDetails/${param?.id}`);
-      console.log("data fetch post", data);
+      console.log("Post details:", data);
       setPostdetails(data);
       setCommentData(data[0]?.comments);
       setPostDescription(data?.description);
       setPostIdstate(data._id);
       setLoading(false);
+      setLikestate(data[0]?.like);
     } catch (error) {
       console.log("error details pages", error);
     }
@@ -104,26 +114,32 @@ export default function Detail({ userId, username }) {
   }, [param?.id, renderPost, checkedPoll, editeCommentOpen]);
 
   const CheckloginHandler = (title) => {
-    setPostDescription(title);
-    if (userToken) {
-      setEditPopOpen(true);
+    if (Mailverified) {
+      setPostDescription(title);
+      if (userToken) {
+        setEditPopOpen(true);
+      } else {
+        setOpenlogin(true);
+      }
     } else {
-      setOpenlogin(true);
+      toast.error("First email verify,please check your Mail!");
     }
   };
 
   // checkedlike and dislike  functionality here !
   const checkedLike = async () => {
     try {
-      setLoading(true);
-      const { data } = await axios.get(
-        `${url}/checklike/${param?.id}/${user_id}`
-      );
-      console.log("status:", data);
-      if (data.status) {
-        setChecklikeUnlikestate(true);
-      } else {
-        setChecklikeUnlikestate(false);
+      if (user_id) {
+        setLoading(true);
+        const { data } = await axios.get(
+          `${url}/checklike/${param?.id}/${user_id}`
+        );
+        console.log("status:", data);
+        if (data.status) {
+          setChecklikeUnlikestate(true);
+        } else {
+          setChecklikeUnlikestate(false);
+        }
       }
       setLoading(false);
     } catch (error) {
@@ -159,6 +175,7 @@ export default function Detail({ userId, username }) {
   const unLikedHandler = async () => {
     try {
       const unliked = { post_id: param?.id, user_id: user_id };
+
       setLoading(true);
       if (userToken) {
         const { data } = await axios.post(`${url}/unlike`, unliked);
@@ -193,7 +210,6 @@ export default function Detail({ userId, username }) {
       setLoading(true);
       if (userToken) {
         const { data } = await axios.post(`${url}/likecomment`, likeReply);
-
         if (data.message === "ok") {
           fetchdetails();
         }
@@ -232,13 +248,22 @@ export default function Detail({ userId, username }) {
 
   // ........remove comment here..........
 
-  const removeComment = async (id) => {
+  const removeComment = (id) => {
     try {
-      setLoading(true);
-      const { data } = await axios.delete(`${url}/removeComment/${id}`);
-      console.log("comment remove", data);
-      data.status === "ok" && setRenderstate(!renderPost);
-      setLoading(false);
+      swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then(async (willDelete) => {
+        if (willDelete) {
+          setLoading(true);
+          const { data } = await axios.delete(`${url}/removeComment/${id}`);
+          data.status === "ok" && setRenderstate(!renderPost);
+          setLoading(false);
+        }
+      });
     } catch (error) {
       console.log("remove comment error:", error);
       setLoading(false);
@@ -371,33 +396,40 @@ export default function Detail({ userId, username }) {
                         mr: 1,
                       }}
                     >
-                      {postdetails[index]?.comments?.user?.img ? (
-                        <img
-                          style={{
-                            width: "40px",
-                            height: "40px",
-                            borderRadius: "50%",
-                          }}
-                          src={`${url}/upload/${postdetails[index]?.comments?.user?.img}`}
-                          alt="Good"
-                        />
+                      {items?.user?.img ? (
+                        <NavLink
+                          to={`/profile/${items?.user?._id}`}
+                          style={{ textDecoration: "none", cursor: "pointer" }}
+                        >
+                          <img
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              borderRadius: "50%",
+                            }}
+                            src={`${url}/upload/${items?.user?.img}`}
+                            alt="Good"
+                          />
+                        </NavLink>
                       ) : (
                         <Avatar sx={{ width: 32, height: 32 }}>
-                          {postdetails[0]?.comments?.user?.name
-                            ?.toUpperCase()
-                            .slice(0, 1)}
+                          {items?.user?.name?.toUpperCase().slice(0, 1)}
                         </Avatar>
                       )}
                     </Box>
-                    <Typography
-                      variant="body1"
-                      color="primary.main"
-                      fontSize="18px"
-                      fontWeight="800"
+                    <NavLink
+                      to={`/profile/${items?.user?._id}`}
+                      style={{ textDecoration: "none", cursor: "pointer" }}
                     >
-                      {postdetails[index]?.comments?.user?.name}
-                    </Typography>
-
+                      <Typography
+                        variant="body1"
+                        color="primary.main"
+                        fontSize="18px"
+                        fontWeight="800"
+                      >
+                        {items?.user?.name}
+                      </Typography>
+                    </NavLink>
                     <Typography
                       ml={1}
                       pt={0.5}
@@ -409,71 +441,82 @@ export default function Detail({ userId, username }) {
                     </Typography>
                   </Box>
 
-                  <Box pr={4} fontSize="14px" color="text.paragraph">
-                    {items?.description}
-                  </Box>
+                  <Box
+                    fontSize="14px"
+                    color="text.paragraph"
+                    dangerouslySetInnerHTML={{ __html: items?.description }}
+                  />
 
                   {/* Poll start here, poll mean Questions and Ans */}
-                  <Box pt={2} pl={6}>
+                  <Box pt={2} sx={{ md: 6, xs: 4 }}>
                     <Poll
                       polldetails={postdetails[index]?.poll}
                       user_id={user_id}
                       checkedfunc={HandleChecked}
+                      Mailverified={Mailverified}
                     />
 
                     {/* start comment sections start here */}
                     <Box
+                      width="100%"
                       mt={2}
                       display="flex"
                       alignItems="center"
-                      justifyContent="flex-end"
+                      justifyContent="space-between"
                     >
-                      <Typography
-                        sx={{ cursor: "pointer" }}
-                        onClick={() => {
-                          CheckloginHandler(items?.description);
-                        }}
-                        ml="30px"
-                        mt="-2px"
-                        variant="body1"
-                        fontSize="14px"
-                        color="primary.light"
-                      >
-                        Comment
-                      </Typography>
                       {checklikeUnlike === true ? (
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <ThumbDownAltIcon sx={{ mr: 1, color: "#3F385B" }} />
+                          <Typography>{countLikestate?.length} </Typography>
+                        </Box>
+                      ) : (
+                        <Box />
+                      )}
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
                         <Typography
-                          onClick={unLikedHandler}
+                          sx={{ cursor: "pointer" }}
+                          onClick={() => {
+                            CheckloginHandler(items?.description);
+                          }}
                           ml="30px"
-                          mr="20px"
                           mt="-2px"
                           variant="body1"
                           fontSize="14px"
                           color="primary.light"
-                          sx={{ cursor: "pointer" }}
                         >
-                          Unlike
+                          Comment
                         </Typography>
-                      ) : (
-                        <Typography
-                          onClick={likeHandler}
-                          ml="30px"
-                          mr="20px"
-                          mt="-2px"
-                          variant="body1"
-                          sx={{
-                            cursor: "pointer",
-                            fontSize: "14px",
-                            color: "primary.light",
-                          }}
-                        >
-                          Like
-                        </Typography>
-                      )}
+                        {checklikeUnlike === true ? (
+                          <Typography
+                            onClick={unLikedHandler}
+                            ml="30px"
+                            mr="20px"
+                            mt="-2px"
+                            variant="body1"
+                            fontSize="14px"
+                            color="primary.light"
+                            sx={{ cursor: "pointer" }}
+                          >
+                            Unlike
+                          </Typography>
+                        ) : (
+                          <Typography
+                            onClick={likeHandler}
+                            ml="30px"
+                            mr="20px"
+                            mt="-2px"
+                            variant="body1"
+                            sx={{
+                              cursor: "pointer",
+                              fontSize: "14px",
+                              color: "primary.light",
+                            }}
+                          >
+                            Like
+                          </Typography>
+                        )}
+                      </Box>
                     </Box>
-                    {checklikeUnlike === true && (
-                      <Typography>This is liked !</Typography>
-                    )}
                   </Box>
                 </Box>
 
@@ -491,17 +534,25 @@ export default function Detail({ userId, username }) {
                               borderBottom="1px solid #fff"
                             >
                               <Stack direction="row" alignItems="center">
-                                <Box>
+                                <Box style={{ marginTop: "3px" }}>
                                   {user?.img ? (
-                                    <img
+                                    <NavLink
+                                      to={`/profile/${user?._id}`}
                                       style={{
-                                        width: "40px",
-                                        height: "40px",
-                                        borderRadius: "50%",
+                                        textDecoration: "none",
+                                        cursor: "pointer",
                                       }}
-                                      src={`${url}/upload/${user?.img}`}
-                                      alt=""
-                                    />
+                                    >
+                                      <img
+                                        style={{
+                                          width: "40px",
+                                          height: "40px",
+                                          borderRadius: "50%",
+                                        }}
+                                        src={`${url}/upload/${user?.img}`}
+                                        alt=""
+                                      />
+                                    </NavLink>
                                   ) : (
                                     <Avatar
                                       sx={{
@@ -512,14 +563,22 @@ export default function Detail({ userId, username }) {
                                     </Avatar>
                                   )}
                                 </Box>
-                                <Typography
-                                  variant="body1"
-                                  color="primary.main"
-                                  fontWeight="700"
-                                  ml={1}
+                                <NavLink
+                                  to={`/profile/${user?._id}`}
+                                  style={{
+                                    textDecoration: "none",
+                                    cursor: "pointer",
+                                  }}
                                 >
-                                  {user?.name}
-                                </Typography>
+                                  <Typography
+                                    variant="body1"
+                                    color="primary.main"
+                                    fontWeight="700"
+                                    ml={1}
+                                  >
+                                    {user?.name}
+                                  </Typography>
+                                </NavLink>
                                 <Typography
                                   variant="body1"
                                   color="primary.light"
@@ -676,91 +735,23 @@ export default function Detail({ userId, username }) {
                                   (replyitems, index) => {
                                     return (
                                       <>
-                                        <Typography
-                                          variant="subtitle2"
-                                          display={
-                                            index === 0 ? "block" : "none"
-                                          }
-                                          ml={8}
-                                          mb={-1}
-                                          color="#8055CD"
-                                        >
-                                          Replies
-                                        </Typography>
-                                        <Box
-                                          pt={1.5}
-                                          pl={3}
-                                          my={1}
-                                          ml={5}
-                                          key={`${replyitems?._id}index`}
-                                          sx={{
-                                            background: "#DFDEF6",
-                                            borderRadius: "50px",
-                                            width: "80%",
-                                          }}
-                                        >
-                                          <Box
-                                            sx={{
-                                              display: "flex",
-                                              alignItems: "center",
-                                            }}
+                                        <Box key={index}>
+                                          <Typography
+                                            variant="subtitle2"
+                                            display={
+                                              index === 0 ? "block" : "none"
+                                            }
+                                            ml={8}
+                                            mb={-1}
+                                            color="#8055CD"
                                           >
-                                            <Box
-                                              sx={{
-                                                width: "40px",
-                                                height: "40px",
-                                                borderRadius: "50%",
-                                                ml: 1,
-                                              }}
-                                            >
-                                              {replyitems?.userpic ? (
-                                                <img
-                                                  style={{
-                                                    width: "40px",
-                                                    height: "40px",
-                                                    borderRadius: "50%",
-                                                  }}
-                                                  src={`${url}/upload/${replyitems?.userpic}`}
-                                                  alt="Good"
-                                                />
-                                              ) : (
-                                                <Avatar
-                                                  sx={{
-                                                    width: 32,
-                                                    height: 32,
-                                                    mt: 0.5,
-                                                  }}
-                                                >
-                                                  {replyitems?.name
-                                                    ?.toUpperCase()
-                                                    .slice(0, 1)}
-                                                </Avatar>
-                                              )}
-                                            </Box>
-                                            {replyitems?.username && (
-                                              <Typography
-                                                variant="body1"
-                                                color="primary.main"
-                                                fontSize="15px"
-                                                fontWeight="600"
-                                                ml={1}
-                                              >
-                                                {replyitems?.username}
-                                              </Typography>
-                                            )}
-
-                                            <Typography
-                                              ml={1}
-                                              variant="body1"
-                                              color="primary.light"
-                                              fontSize="11px"
-                                            >
-                                              {moment(addedAt).format("LL")}
-                                            </Typography>
-                                          </Box>
+                                            Replies
+                                          </Typography>
                                           <Box
-                                            py={1}
-                                            pl={7}
+                                            pt={1.5}
+                                            pl={3}
+                                            my={1}
+                                            ml={5}
                                             key={`${replyitems?._id}index`}
                                             sx={{
                                               background: "#DFDEF6",
@@ -769,11 +760,97 @@ export default function Detail({ userId, username }) {
                                             }}
                                           >
                                             <Box
-                                              pr={4}
-                                              fontSize="14px"
-                                              color="text.paragraph"
+                                              sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                              }}
                                             >
-                                              {replyitems?.comment}
+                                              <Box
+                                                sx={{
+                                                  width: "40px",
+                                                  height: "40px",
+                                                  borderRadius: "50%",
+                                                  ml: 1,
+                                                }}
+                                              >
+                                                {replyitems?.user?.img ? (
+                                                  <NavLink
+                                                    to={`/profile/${replyitems?.user?._id}`}
+                                                    style={{
+                                                      textDecoration: "none",
+                                                      cursor: "pointer",
+                                                    }}
+                                                  >
+                                                    <img
+                                                      style={{
+                                                        width: "40px",
+                                                        height: "40px",
+                                                        borderRadius: "50%",
+                                                      }}
+                                                      src={`${url}/upload/${replyitems?.user?.img}`}
+                                                      alt="Good"
+                                                    />
+                                                  </NavLink>
+                                                ) : (
+                                                  <Avatar
+                                                    sx={{
+                                                      width: 32,
+                                                      height: 32,
+                                                      mt: 0.5,
+                                                    }}
+                                                  >
+                                                    {replyitems?.user?.name
+                                                      ?.toUpperCase()
+                                                      .slice(0, 1)}
+                                                  </Avatar>
+                                                )}
+                                              </Box>
+                                              {replyitems?.user?.name && (
+                                                <NavLink
+                                                  to={`/profile/${replyitems?.user?._id}`}
+                                                  style={{
+                                                    textDecoration: "none",
+                                                    cursor: "pointer",
+                                                  }}
+                                                >
+                                                  <Typography
+                                                    variant="body1"
+                                                    color="primary.main"
+                                                    fontSize="15px"
+                                                    fontWeight="600"
+                                                    ml={1}
+                                                  >
+                                                    {replyitems?.user?.name}
+                                                  </Typography>
+                                                </NavLink>
+                                              )}
+
+                                              <Typography
+                                                ml={1}
+                                                variant="body1"
+                                                color="primary.light"
+                                                fontSize="11px"
+                                              >
+                                                {moment(addedAt).format("LL")}
+                                              </Typography>
+                                            </Box>
+                                            <Box
+                                              py={1}
+                                              pl={7}
+                                              key={`${replyitems?._id}index`}
+                                              sx={{
+                                                background: "#DFDEF6",
+                                                borderRadius: "50px",
+                                                width: "80%",
+                                              }}
+                                            >
+                                              <Box
+                                                pr={4}
+                                                fontSize="14px"
+                                                color="text.paragraph"
+                                              >
+                                                {replyitems?.comment}
+                                              </Box>
                                             </Box>
                                           </Box>
                                         </Box>
