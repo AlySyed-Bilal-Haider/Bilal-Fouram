@@ -179,7 +179,7 @@ code {
 .rdw-editor-toolbar{
   padding: 20px 10px !important;
   background-color: #4915B0 !important;
-  border-radius: 10px !important;
+  /* border-radius: 10px !important; */
 }
 
 .rdw-editor-main{
