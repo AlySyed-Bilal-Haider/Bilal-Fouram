@@ -139,7 +139,6 @@ function Pending({ pendingpost, func, state }) {
                           {status}
                         </Typography>
                       </Box>
-
                       <Box
                         fontSize="14px"
                         color="text.paragraph"
@@ -150,9 +149,16 @@ function Pending({ pendingpost, func, state }) {
                         {title}
                         <br />
                         <br />
-                        {description}
-                        <br />
                       </Box>
+
+                      <Box
+                        fontSize="14px"
+                        color="text.paragraph"
+                        onClick={() => {
+                          detailsHandle(_id);
+                        }}
+                        dangerouslySetInnerHTML={{ __html: description }}
+                      />
 
                       <Box
                         mt={2}

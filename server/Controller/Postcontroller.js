@@ -2,10 +2,9 @@ import postModal from "../Schema/PostSchema.js";
 import commentModal from "../Schema/CommentSchema.js";
 import pollModal from "../Schema/PollSchema.js";
 import userModal from "../Schema/UserSchema.js";
-
 // ....Add discussion and Questions ,answer..........
-
 export const createPost = async (req, res, next) => {
+  console.log(" req.body:", req.body);
   try {
     const { tag, title, description, user, poll } = req.body;
     const newPost = new postModal({
@@ -15,7 +14,7 @@ export const createPost = async (req, res, next) => {
       user,
       poll,
     });
-    
+
     await newPost.save();
     const ref = { ref_id: newPost._id };
     await userModal.findByIdAndUpdate(user, {

@@ -11,7 +11,10 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Logout from "@mui/icons-material/Logout";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import { url } from "../utils";
+
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 export default function AccountMenu({ name, role }) {
@@ -105,7 +108,7 @@ export default function AccountMenu({ name, role }) {
               style={{ textDecoration: "none", color: "black" }}
             >
               <ListItemIcon>
-                <PersonAdd fontSize="small" />
+                <AdminPanelSettingsIcon fontSize="small" />
               </ListItemIcon>
               Admin
             </Link>
@@ -144,7 +147,7 @@ export default function AccountMenu({ name, role }) {
             }}
           >
             <ListItemIcon>
-              <Logout fontSize="small" />
+              <ChangeCircleIcon fontSize="small" />
             </ListItemIcon>
             Change password
           </Link>

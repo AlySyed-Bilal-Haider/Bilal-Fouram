@@ -135,8 +135,15 @@ export default function Vote({ id }) {
                               >
                                 {ref_id?.title}
                                 <br />
-                                {ref_id?.description}
                               </Box>
+                              <Box
+                                mt={1}
+                                fontSize="14px"
+                                color="text.paragraph"
+                                dangerouslySetInnerHTML={{
+                                  __html: ref_id?.description,
+                                }}
+                              />
                             </Box>
                           </>
                         ) : (

@@ -150,7 +150,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
               align: "center",
             }}
           >
-            <FormControl onSubmit={submitHandler} onkeyPress={submitHandler}>
+            <FormControl onSubmit={submitHandler}>
               <Box sx={{ width: "100%" }}>
                 <Typography
                   sx={{
@@ -183,7 +183,7 @@ function Signup({ open, setOpensign, setOpenlogin }) {
 
                   <TextInput
                     fullWidth
-                    autocomplete="false"
+                    autoComplete="false"
                     value={userstate.email || ""}
                     type="email"
                     name="email"
