@@ -196,150 +196,168 @@ function StartDiscussionButton({ setOpenlogin }) {
           },
         }}
       >
-        <AppBar
-          sx={{
-            position: "relative",
-            boxShadow: "none",
-            background: "transparent",
-            paddingY: "20px",
-          }}
-        >
-          <Toolbar>
-            <Box sx={{ ml: 2, flex: 1 }}>
-              <Typography
-                onClick={handleClickOpen2}
-                color="primary.main"
-                variant="subtitle2"
-                component="span"
-                sx={{
-                  border: `1px dotted ${theme.palette.primary.main}`,
-                  borderRadius: "5px",
-                  px: "6px",
-                  py: "2px",
-                  cursor: "pointer",
-                }}
-              >
-                {tagsvalue ? tagsvalue : "choose tags"}
-              </Typography>
-              {pollstate ? (
-                <Typography
-                  onClick={() => {
-                    toast.error("Poll already add,Please add post !");
-                  }}
-                  ml={2}
-                  sx={{
-                    border: `1px dotted ${theme.palette.primary.main}`,
-                    borderRadius: "5px",
-                    px: "6px",
-                    py: "2px",
-                    cursor: "pointer",
-                  }}
-                  color="primary.main"
-                  variant="subtitle2"
-                  component="span"
-                >
-                  Poll save
-                </Typography>
-              ) : (
-                <Typography
-                  onClick={handleClickOpen1}
-                  ml={2}
-                  sx={{
-                    border: `1px dotted ${theme.palette.primary.main}`,
-                    borderRadius: "5px",
-                    px: "6px",
-                    py: "2px",
-                    cursor: "pointer",
-                  }}
-                  color="primary.main"
-                  variant="subtitle2"
-                  component="span"
-                >
-                  Add Poll
-                </Typography>
-              )}
-              <Box>
-                <InputBase
-                  placeholder="Discussion Title"
-                  type="text"
-                  name="title"
-                  value={addpoststate.title || ""}
-                  sx={{
-                    fontSize: "18px",
-                    width: { xs: "100%", md: "40%" },
-                  }}
-                  onChange={discussionHandler}
-                  required
-                />
-              </Box>
-            </Box>
-
-            {pollstate == "" ? (
-              <IconButton
-                disableRipple={true}
-                onClick={handleClose}
-                aria-label="close"
-              >
-                <CloseIcon
-                  fontSize="small"
-                  sx={{ color: "secondary.main", marginTop: "-45px" }}
-                />
-              </IconButton>
-            ) : (
-              <IconButton
-                disableRipple={true}
-                onClick={() => {
-                  toast.error("poll already add, Please add post!");
-                }}
-                aria-label="close"
-              >
-                <CloseIcon
-                  fontSize="small"
-                  sx={{ color: "secondary.main", marginTop: "-45px" }}
-                />
-              </IconButton>
-            )}
-          </Toolbar>
-        </AppBar>
-
         {/* ---------------------Editor----------------------------- */}
         <Container maxWidth="xl">
-          <hr style={{ color: "white" }} />
-          <Editor
-            editorState={editorState}
-            onEditorStateChange={handleEditorChange}
-            toolbarClassName="toolbarclassName"
-            wrapperClassName="wrapperclassName="
-            editorClassName="editorclassName="
-            placeholder="Type Post details...!"
-            toolbar={{
-              options: [
-                "inline",
-                "blockType",
-                "fontSize",
-                "textAlign",
-                "history",
-                "colorPicker",
-              ],
+          {/* <hr style={{ color: "white" }} /> */}
+          <Container maxWidth="lg">
+            <AppBar
+              sx={{
+                position: "relative",
+                boxShadow: "none",
+                background: "transparent",
+                paddingY: "20px",
+                paddingX: "0px",
+              }}
+            >
+              <Toolbar
+                sx={{
+                  px: "0px",
+                  "&.MuiToolbar-root": {
+                    px: "0px",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    // ml: 2,
+                    flex: 1,
+                  }}
+                >
+                  <Typography
+                    onClick={handleClickOpen2}
+                    color="primary.main"
+                    variant="subtitle2"
+                    component="span"
+                    sx={{
+                      border: `1px dotted ${theme.palette.primary.main}`,
+                      borderRadius: "5px",
+                      px: "16px",
+                      py: "8px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {tagsvalue ? tagsvalue : "choose tags"}
+                  </Typography>
+                  {pollstate ? (
+                    <Typography
+                      onClick={() => {
+                        toast.error("Poll already add,Please add post !");
+                      }}
+                      ml={2}
+                      sx={{
+                        border: `1px dotted ${theme.palette.primary.main}`,
+                        borderRadius: "5px",
+                        px: "16px",
+                        py: "8px",
+                        cursor: "pointer",
+                      }}
+                      color="primary.main"
+                      variant="subtitle2"
+                      component="span"
+                    >
+                      Poll save
+                    </Typography>
+                  ) : (
+                    <Typography
+                      onClick={handleClickOpen1}
+                      ml={2}
+                      sx={{
+                        border: `1px dotted ${theme.palette.primary.main}`,
+                        borderRadius: "5px",
+                        px: "16px",
+                        py: "8px",
+                        cursor: "pointer",
+                      }}
+                      color="primary.main"
+                      variant="subtitle2"
+                      component="span"
+                    >
+                      Add Poll
+                    </Typography>
+                  )}
+                  <Box mt="10px">
+                    <InputBase
+                      placeholder="Discussion Title"
+                      type="text"
+                      name="title"
+                      value={addpoststate.title || ""}
+                      sx={{
+                        fontSize: "18px",
+                        width: { xs: "100%", md: "40%" },
+                      }}
+                      onChange={discussionHandler}
+                      required
+                    />
+                  </Box>
+                </Box>
 
-              inline: {
-                options: ["italic", "bold"],
-                bold: { className: "demo-option-custom" },
-                italic: { className: "demo-option-custom" },
-                underline: { className: "demo-option-custom" },
-                strikethrough: { className: "demo-option-custom" },
-                monospace: { className: "demo-option-custom" },
-                superscript: { className: "demo-option-custom" },
-                subscript: { className: "demo-option-custom" },
-              },
-              blockType: {
-                className: "demo-option-custom-wide",
-                dropdownClassName: "demo-dropdown-custom",
-              },
-              fontSize: { className: "demo-option-custom-medium" },
-            }}
-          />
-          <hr style={{ color: "white" }} />
+                {pollstate == "" ? (
+                  <IconButton
+                    disableRipple={true}
+                    onClick={handleClose}
+                    aria-label="close"
+                  >
+                    <CloseIcon
+                      fontSize="small"
+                      sx={{ color: "secondary.main", marginTop: "-45px" }}
+                    />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    disableRipple={true}
+                    onClick={() => {
+                      toast.error("poll already add, Please add post!");
+                    }}
+                    aria-label="close"
+                  >
+                    <CloseIcon
+                      fontSize="small"
+                      sx={{ color: "secondary.main", marginTop: "-45px" }}
+                    />
+                  </IconButton>
+                )}
+              </Toolbar>
+            </AppBar>
+            <Box sx={{ background: "white", py: "30px", borderRadius: "10px" }}>
+              {" "}
+              <Editor
+                editorState={editorState}
+                onEditorStateChange={handleEditorChange}
+                toolbarClassName="toolbarclassName"
+                wrapperClassName="wrapperclassName="
+                editorClassName="editorclassName="
+                placeholder="Type Post details...!"
+                toolbar={{
+                  options: [
+                    "inline",
+                    "blockType",
+                    "fontSize",
+                    "textAlign",
+                    "history",
+                    "colorPicker",
+                  ],
+
+                  inline: {
+                    options: ["italic", "bold"],
+                    bold: { className: "demo-option-custom" },
+                    italic: { className: "demo-option-custom" },
+                    underline: { className: "demo-option-custom" },
+                    strikethrough: { className: "demo-option-custom" },
+                    monospace: { className: "demo-option-custom" },
+                    superscript: { className: "demo-option-custom" },
+                    subscript: { className: "demo-option-custom" },
+                  },
+                  blockType: {
+                    className: "demo-option-custom-wide",
+                    dropdownClassName: "demo-dropdown-custom",
+                  },
+                  fontSize: { className: "demo-option-custom-medium" },
+                }}
+              />
+            </Box>
+          </Container>
+
+          {/* <hr style={{ color: "white" }} />s */}
         </Container>
 
         {/* <Box mt={-2} mb={5} mx={4.5}>
@@ -355,7 +373,7 @@ function StartDiscussionButton({ setOpenlogin }) {
           />
         </Box> */}
 
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box sx={{ display: "flex", justifyContent: "right" }}>
             <Button
               type="submit"
@@ -366,8 +384,8 @@ function StartDiscussionButton({ setOpenlogin }) {
                 color: "text.main",
                 textTransform: "capitalize",
                 width: "150px",
-                marginTop: "20px",
-                marginLeft: "20px",
+                marginTop: "10px",
+                // marginLeft: "20px",
                 "&:hover": {
                   backgroundColor: "secondary.main",
                 },
