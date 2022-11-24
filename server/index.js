@@ -19,9 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./build"));
-
 connectDB(urlDB);
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "upload");
@@ -31,7 +29,7 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-app.use("/upload", express.static("./upload"));
+app.use("/upload", express.static("../src/uploads"));
 // .......start route update of profile pic.........
 app.post("/uploadimg", upload.single("file"), async (req, res) => {
   try {

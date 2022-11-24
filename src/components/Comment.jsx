@@ -151,7 +151,7 @@ function Comment({ open, setOpen, post_id, title, username, renderFetchpost }) {
           </Toolbar>
         </AppBar>
         <Box mt={-5} mb={3} mx={4}>
-          <Typography sx={{ m: 1 }}>{title}</Typography>
+          <Box sx={{ m: 1 }} dangerouslySetInnerHTML={{ __html: title }} />
           {_usernamedropDown?.length > 0 && (
             <Autocomplete
               disablePortal

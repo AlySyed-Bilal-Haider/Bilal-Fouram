@@ -1,7 +1,6 @@
-
 import mongoose, { Schema } from "mongoose";
 
-const Adduser = new mongoose.Schema({
+const Adduser = new Schema({
   name: {
     type: String,
     trim: true,
@@ -28,63 +27,73 @@ const Adduser = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
-    default: 'user'
+    enum: ["user", "admin"],
+    default: "user",
   },
   verified: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  discussion: [{
-    ref_id: {
-      type: Schema.Types.ObjectId,
-      ref: "post"
+  discussion: [
+    {
+      ref_id: {
+        type: Schema.Types.ObjectId,
+        ref: "post",
+      },
+      date: {
+        type: Date,
+        default: new Date(),
+      },
     },
-    date: {
-      type: Date,
-      default: new Date(),
+  ],
+  like: [
+    {
+      ref_id: {
+        type: Schema.Types.ObjectId,
+        ref: "post",
+      },
+      date: {
+        type: Date,
+        default: new Date(),
+      },
     },
-  }],
-  like: [{
-    ref_id: {
-      type: Schema.Types.ObjectId,
-      ref: "post"
+  ],
+  poll: [
+    {
+      ref_id: {
+        type: Schema.Types.ObjectId,
+        ref: "post",
+      },
+      date: {
+        type: Date,
+        default: new Date(),
+      },
     },
-    date: {
-      type: Date,
-      default: new Date(),
+  ],
+  comment: [
+    {
+      ref_id: {
+        type: Schema.Types.ObjectId,
+        ref: "post",
+      },
+      date: {
+        type: Date,
+        default: new Date(),
+      },
     },
-  }],
-  poll: [{
-    ref_id: {
-      type: Schema.Types.ObjectId,
-      ref: "post"
+  ],
+  mention: [
+    {
+      ref_id: {
+        type: Schema.Types.ObjectId,
+        ref: "post",
+      },
+      date: {
+        type: Date,
+        default: new Date(),
+      },
     },
-    date: {
-      type: Date,
-      default: new Date(),
-    },
-  }],
-  comment: [{
-    ref_id: {
-      type: Schema.Types.ObjectId,
-      ref: "post"
-    },
-    date: {
-      type: Date,
-      default: new Date(),
-    },
-  }],
-  mention: [{
-    ref_id: {
-      type: Schema.Types.ObjectId,
-      ref: "post"
-    },
-    date: {
-      type: Date,
-      default: new Date(),
-    },
-  }],
+  ],
 });
 const userModal = mongoose.model("user", Adduser);
 export default userModal;
